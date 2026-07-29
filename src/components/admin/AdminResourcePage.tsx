@@ -86,7 +86,7 @@ export function AdminResourcePage({ eyebrow, title, description, action, rows, c
   return (
     <>
       <AdminPageHeader eyebrow={eyebrow} title={title} description={description} action={action} />
-      <AppCard className="overflow-hidden">
+      <AppCard className="overflow-hidden dark:border-white/10 dark:bg-neutral-900 dark:text-neutral-50">
         <div className="flex items-center justify-between border-b border-neutral-200 p-4 dark:border-white/10">
           <div>
             <h2 className="font-bold">{title} List</h2>

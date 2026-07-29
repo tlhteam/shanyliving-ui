@@ -76,7 +76,7 @@ export default function LoginPage() {
 
   return (
     <main className="grid min-h-screen place-items-center bg-[#eee8df] p-4 text-neutral-950 transition-colors dark:bg-neutral-950 dark:text-neutral-50">
-      <AppCard className="w-full max-w-md overflow-hidden p-0">
+      <AppCard className="w-full max-w-md overflow-hidden p-0 dark:border-white/10 dark:bg-neutral-900 dark:text-neutral-50">
         <div className="border-b border-neutral-200 bg-neutral-50 px-7 py-6 dark:border-white/10 dark:bg-neutral-950">
           <AppLogo className="justify-center dark:hidden" imageClassName="w-44" />
           <AppLogo variant="light" className="hidden justify-center dark:inline-flex" imageClassName="w-44" />
