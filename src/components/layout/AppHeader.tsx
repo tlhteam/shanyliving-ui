@@ -17,16 +17,33 @@ const items = [
   { label: "Showroom", href: "/contact" }
 ];
 
+const announcements = [
+  { text: "Custom sizes, fabrics, and colors available", icon: CheckCircle2 },
+  { text: "Personal consultation through WhatsApp", icon: MessageCircle },
+  { text: "Visit our showroom at Herzl Street 34, Tel Aviv, Israel", icon: MapPin },
+  { text: "Choose your sofa style in less than one minute", icon: CheckCircle2 },
+  { text: "Send your selection directly to WhatsApp", icon: MessageCircle }
+];
+
 export function AppHeader() {
   const [open, setOpen] = useState(false);
 
   return (
     <header className="sticky top-0 z-50 bg-white shadow-sm">
       <div className="bg-black text-white">
-        <div className="mx-auto flex max-w-7xl flex-col gap-2 px-4 py-2 text-[11px] sm:px-6 lg:flex-row lg:items-center lg:justify-center lg:gap-12 lg:px-8">
-          <span className="inline-flex items-center gap-2"><CheckCircle2 className="size-3.5" /> Custom sizes, fabrics, and colors available</span>
-          <span className="inline-flex items-center gap-2"><MessageCircle className="size-3.5" /> Personal consultation through WhatsApp</span>
-          <span className="inline-flex items-center gap-2"><MapPin className="size-3.5" /> Visit our showroom at Herzl Street 34, Tel Aviv, Israel</span>
+        <div className="mx-auto max-w-7xl overflow-hidden px-4 sm:px-6 lg:px-8">
+          <div className="flex whitespace-nowrap py-2 text-[11px] font-semibold">
+            {[0, 1].map((copy) => (
+              <div key={copy} aria-hidden={copy === 1} className="flex min-w-max animate-shany-marquee items-center gap-12 pr-12">
+                {announcements.map(({ text, icon: Icon }) => (
+                  <span key={`${copy}-${text}`} className="inline-flex items-center gap-2">
+                    <Icon className="size-3.5 shrink-0" />
+                    {text}
+                  </span>
+                ))}
+              </div>
+            ))}
+          </div>
         </div>
       </div>
       <div className="mx-auto flex min-h-20 max-w-7xl items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">

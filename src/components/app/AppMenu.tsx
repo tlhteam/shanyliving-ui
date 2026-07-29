@@ -7,7 +7,7 @@ export function AppMenu({ items, className }: { items: AppMenuItem[]; className?
   return (
     <nav className={cn("flex items-center gap-6", className)}>
       {items.map((item) => (
-        <Link key={`${item.label}-${item.href}`} href={item.href} className="text-sm font-medium text-neutral-700 hover:text-neutral-950">
+        <Link key={`${item.label}-${item.href}`} href={item.href} className="text-sm font-bold text-neutral-800 transition hover:text-neutral-950">
           {item.label}
         </Link>
       ))}
