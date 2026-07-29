@@ -1,3 +1,5 @@
+import { apiUrl } from "@/lib/api";
+
 export type CatalogCategory = {
   id: number | string;
   name: string;
@@ -53,14 +55,12 @@ export const fallbackCatalog: HomeCatalog = {
 };
 
 export async function getHomeCatalog(): Promise<HomeCatalog> {
-  const baseUrl = process.env.NEXT_PUBLIC_API_URL;
-
-  if (!baseUrl) {
+  if (!apiUrl) {
     return fallbackCatalog;
   }
 
   try {
-    const response = await fetch(`${baseUrl.replace(/\/$/, "")}/storefront/home`, {
+    const response = await fetch(`${apiUrl}/storefront/home`, {
       headers: { Accept: "application/json" },
       next: { revalidate: 60 }
     });

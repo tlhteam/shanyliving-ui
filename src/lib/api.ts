@@ -1,7 +1,10 @@
 import axios from "axios";
 
+export const apiBaseUrl = process.env.NEXT_PUBLIC_API_URL?.replace(/\/$/, "");
+export const apiUrl = apiBaseUrl ? `${apiBaseUrl}/api` : undefined;
+
 export const api = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_URL,
+  baseURL: apiUrl,
   headers: {
     Accept: "application/json",
     "Content-Type": "application/json"
