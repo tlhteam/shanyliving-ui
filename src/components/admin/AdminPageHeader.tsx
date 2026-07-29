@@ -5,9 +5,10 @@ type AdminPageHeaderProps = {
   title: string;
   description: string;
   action?: string;
+  onAction?: () => void;
 };
 
-export function AdminPageHeader({ eyebrow, title, description, action }: AdminPageHeaderProps) {
+export function AdminPageHeader({ eyebrow, title, description, action, onAction }: AdminPageHeaderProps) {
   return (
     <div className="mb-6 flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
       <div>
@@ -15,7 +16,7 @@ export function AdminPageHeader({ eyebrow, title, description, action }: AdminPa
         <h1 className="mt-2 font-serif text-3xl font-bold tracking-tight sm:text-4xl">{title}</h1>
         <p className="mt-2 max-w-2xl text-sm leading-6 text-neutral-600 dark:text-neutral-300">{description}</p>
       </div>
-      {action ? <AppButton>{action}</AppButton> : null}
+      {action ? <AppButton onClick={onAction}>{action}</AppButton> : null}
     </div>
   );
 }
