@@ -42,7 +42,7 @@ function AdminNav() {
 
 export function AdminShell({ children }: { children: React.ReactNode }) {
   return (
-    <div className="min-h-screen bg-neutral-100 text-neutral-950 dark:bg-neutral-950 dark:text-neutral-50 lg:grid lg:grid-cols-[280px_1fr]">
+    <div className="admin-theme min-h-screen bg-neutral-100 text-neutral-950 dark:bg-neutral-950 dark:text-neutral-50 lg:grid lg:grid-cols-[280px_1fr]">
       <aside className="hidden border-r border-neutral-200 bg-white p-5 dark:border-white/10 dark:bg-neutral-900 lg:block">
         <AppLogo className="dark:hidden" imageClassName="w-40" />
         <AppLogo variant="light" className="hidden dark:inline-flex" imageClassName="w-40" />

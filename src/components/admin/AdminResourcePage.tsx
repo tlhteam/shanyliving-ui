@@ -1,8 +1,9 @@
 "use client";
 
-import { FormEvent, useMemo } from "react";
+import { useEffect, useMemo } from "react";
 import type { CellContext, ColumnDef } from "@tanstack/react-table";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { Path, useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { Eye, Pencil, RefreshCcw, Trash2 } from "lucide-react";
 import { AppConfirmationDialog } from "@/components/app/AppConfirmationDialog";
@@ -29,6 +30,8 @@ type AdminResourcePageProps = {
   columns: { key: string; label: string; badge?: boolean; swatch?: boolean }[];
 };
 
+type AdminFormValues = Record<string, string>;
+
 function rowKey(row: AdminRow) {
   return String(row.id ?? row.reference ?? row.event ?? row.setting ?? row.name);
 }
@@ -38,6 +41,10 @@ function createEmptyRow(columns: AdminResourcePageProps["columns"]) {
     draft[column.key] = "";
     return draft;
   }, {});
+}
+
+function rowToFormValues(row: AdminRow) {
+  return Object.fromEntries(Object.entries(row).map(([key, value]) => [key, String(value)]));
 }
 
 function statusVariant(value: string | number): "default" | "secondary" | "destructive" {
@@ -56,8 +63,9 @@ function statusVariant(value: string | number): "default" | "secondary" | "destr
 
 export function AdminResourcePage({ eyebrow, title, description, action, rows, columns }: AdminResourcePageProps) {
   const queryClient = useQueryClient();
+  const form = useForm<AdminFormValues>({ defaultValues: {} });
   const queryKey = useMemo(() => ["admin-resource", title], [title]);
-  const { query, page, pageSize, mode, selected, draft, confirmText, setQuery, setPage, openCreate, openView, openEdit, openDelete, updateDraft, setConfirmText, close } = useAdminCrudStore();
+  const { query, page, pageSize, mode, selected, draft, confirmText, setQuery, setPage, openCreate, openView, openEdit, openDelete, setConfirmText, close } = useAdminCrudStore();
   const { data = rows, isFetching } = useQuery({
     queryKey,
     queryFn: async () => rows,
@@ -77,6 +85,12 @@ export function AdminResourcePage({ eyebrow, title, description, action, rows, c
   const pageCount = Math.max(1, Math.ceil(filteredRows.length / pageSize));
   const safePage = Math.min(page, pageCount);
   const paginatedRows = filteredRows.slice((safePage - 1) * pageSize, safePage * pageSize);
+
+  useEffect(() => {
+    if (mode === "create" || mode === "edit") {
+      form.reset(rowToFormValues(draft));
+    }
+  }, [draft, form, mode]);
 
   const saveMutation = useMutation({
     mutationFn: async (payload: AdminRow) => payload,
@@ -151,10 +165,9 @@ export function AdminResourcePage({ eyebrow, title, description, action, rows, c
     }
   ], [columns, openDelete, openEdit, openView, title]);
 
-  const handleSave = (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const fallbackKey = rowKey(selected ?? draft);
-    const payload = { ...draft };
+  const handleSave = (values: AdminFormValues) => {
+    const fallbackKey = rowKey(selected ?? values);
+    const payload: AdminRow = { ...values };
 
     if (!payload.id && !payload.reference && !payload.event && !payload.setting) {
       payload.id = `${title.slice(0, 3).toUpperCase()}-${Date.now().toString().slice(-5)}`;
@@ -217,14 +230,13 @@ export function AdminResourcePage({ eyebrow, title, description, action, rows, c
         title={mode === "create" ? `Add ${title}` : `Edit ${title}`}
         description="Enter the record details below. These admin fields are reusable for API-backed CRUD."
       >
-        <AppForm onSubmit={handleSave} submitLabel={mode === "create" ? "Create" : "Save Changes"} onCancel={close}>
+        <AppForm form={form} onSubmit={handleSave} submitLabel={mode === "create" ? "Create" : "Save Changes"} onCancel={close}>
           {formColumns.map((column) => (
-            <AppTextField
+            <AppTextField<AdminFormValues>
               key={column.key}
               label={column.label}
-              name={column.key}
-              value={String(draft[column.key] ?? "")}
-              onChange={(event) => updateDraft(column.key, event.target.value)}
+              name={column.key as Path<AdminFormValues>}
+              rules={{ required: `${column.label} is required` }}
             />
           ))}
         </AppForm>
