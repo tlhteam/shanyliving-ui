@@ -1,15 +1,18 @@
 "use client";
 
 import { flexRender, getCoreRowModel, useReactTable, type ColumnDef } from "@tanstack/react-table";
+import { AppTableSkeleton } from "@/components/app/AppTableSkeleton";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 
 type AppTableProps<TData> = {
   data: TData[];
   columns: ColumnDef<TData>[];
   emptyMessage?: string;
+  loading?: boolean;
+  skeletonRows?: number;
 };
 
-export function AppTable<TData>({ data, columns, emptyMessage = "No records found." }: AppTableProps<TData>) {
+export function AppTable<TData>({ data, columns, emptyMessage = "No records found.", loading, skeletonRows = 5 }: AppTableProps<TData>) {
   "use no memo";
 
   const table = useReactTable({
@@ -17,6 +20,10 @@ export function AppTable<TData>({ data, columns, emptyMessage = "No records foun
     columns,
     getCoreRowModel: getCoreRowModel()
   });
+
+  if (loading) {
+    return <AppTableSkeleton columns={columns.length} rows={skeletonRows} />;
+  }
 
   return (
     <Table>

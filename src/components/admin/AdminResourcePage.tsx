@@ -66,10 +66,11 @@ export function AdminResourcePage({ eyebrow, title, description, action, rows, c
   const form = useForm<AdminFormValues>({ defaultValues: {} });
   const queryKey = useMemo(() => ["admin-resource", title], [title]);
   const { query, page, pageSize, mode, selected, draft, confirmText, setQuery, setPage, openCreate, openView, openEdit, openDelete, setConfirmText, close } = useAdminCrudStore();
-  const { data = rows, isFetching } = useQuery({
+  const { data = rows, isFetching, isLoading } = useQuery({
     queryKey,
-    queryFn: async () => rows,
-    initialData: rows
+    queryFn: async () => new Promise<AdminRow[]>((resolve) => {
+      window.setTimeout(() => resolve(rows), 250);
+    })
   });
 
   const filteredRows = useMemo(() => {
@@ -190,7 +191,7 @@ export function AdminResourcePage({ eyebrow, title, description, action, rows, c
         <div className="grid gap-4 border-b border-neutral-200 p-4 dark:border-white/10 lg:grid-cols-[1fr_320px] lg:items-center">
           <div>
             <h2 className="font-bold">{title} List</h2>
-            <p className="text-sm text-neutral-500 dark:text-neutral-400">{filteredRows.length} of {data.length} records ready for management</p>
+            <p className="text-sm text-neutral-500 dark:text-neutral-400">{isLoading ? "Loading records for management" : `${filteredRows.length} of ${data.length} records ready for management`}</p>
           </div>
           <div className="flex flex-col gap-2 sm:flex-row">
             <AppSearch onSearch={setQuery} placeholder={`Search ${title.toLowerCase()}...`} />
@@ -203,8 +204,8 @@ export function AdminResourcePage({ eyebrow, title, description, action, rows, c
             </Button>
           </div>
         </div>
-        <AppTable data={paginatedRows} columns={tableColumns} emptyMessage={isFetching ? "Loading records..." : "No matching records found."} />
-        <AppPagination page={safePage} pageSize={pageSize} total={filteredRows.length} onPageChange={setPage} />
+        <AppTable data={paginatedRows} columns={tableColumns} loading={isLoading || isFetching} skeletonRows={pageSize} emptyMessage="No matching records found." />
+        {!isLoading && !isFetching ? <AppPagination page={safePage} pageSize={pageSize} total={filteredRows.length} onPageChange={setPage} /> : null}
       </AppCard>
 
       <AppDialog
