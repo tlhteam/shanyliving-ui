@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { motion } from "motion/react";
-import { ArrowRight, Award, Gift, Heart, Lock, MapPin, MessageCircle, Palette, Ruler, Sofa, Sparkles, Star, Truck, Upload } from "lucide-react";
+import { ArrowRight, Award, CalendarCheck, Gift, Heart, Lock, MapPin, MessageCircle, Palette, Ruler, Send, Sofa, Sparkles, Star, Truck, Upload } from "lucide-react";
 import { AppButton } from "@/components/app/AppButton";
 import { AppCard } from "@/components/app/AppCard";
 import { AppSection } from "@/components/app/AppSection";
@@ -17,6 +17,12 @@ const fadeUp = {
 };
 
 const looks = ["Modern Elegance", "Warm Minimalism", "Urban Luxury"];
+
+const nextSteps = [
+  { title: "Build your sofa", text: "Choose size, layout, fabric, and color from the configurator.", icon: Sofa },
+  { title: "Send to WhatsApp", text: "Your selections are packaged for a personal consultation.", icon: Send },
+  { title: "Confirm showroom fit", text: "Review comfort, delivery timing, and final details with the team.", icon: CalendarCheck }
+];
 
 const features = [
   { title: "Premium Craftsmanship", text: "Built to last", icon: Award },
@@ -122,6 +128,27 @@ export function HomeExperience({ catalog }: { catalog: HomeCatalog }) {
         <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
           {catalog.featuredProducts.map((product) => <ProductCard key={product.slug} product={product} />)}
         </div>
+      </AppSection>
+
+      <AppSection className="pt-0">
+        <motion.div className="grid overflow-hidden rounded-lg border border-neutral-200 bg-neutral-950 text-white shadow-sm lg:grid-cols-[280px_1fr]" {...fadeUp}>
+          <div className="border-b border-white/15 p-6 lg:border-b-0 lg:border-r">
+            <p className="text-xs font-bold uppercase tracking-[0.2em] text-neutral-400">What goes next</p>
+            <h2 className="mt-3 font-serif text-3xl font-bold">From sofa choice to showroom-ready details</h2>
+          </div>
+          <div className="grid gap-px bg-white/15 md:grid-cols-3">
+            {nextSteps.map((step, index) => (
+              <div key={step.title} className="bg-neutral-950 p-6">
+                <div className="flex items-center justify-between">
+                  <step.icon className="size-7 stroke-[1.5]" />
+                  <span className="grid size-8 place-items-center rounded-full bg-white text-sm font-bold text-neutral-950">{index + 1}</span>
+                </div>
+                <h3 className="mt-6 font-bold">{step.title}</h3>
+                <p className="mt-2 text-sm leading-6 text-neutral-300">{step.text}</p>
+              </div>
+            ))}
+          </div>
+        </motion.div>
       </AppSection>
 
       <section className="bg-neutral-100">
