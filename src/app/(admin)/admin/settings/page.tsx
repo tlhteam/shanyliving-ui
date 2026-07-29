@@ -1,10 +1,19 @@
-import { AppCard } from "@/components/app/AppCard";
+import { AdminResourcePage } from "@/components/admin/AdminResourcePage";
+import { settingsRows } from "@/lib/admin-data";
+
 export default function Page() {
-    return
-    <>
-        <h1 className="text-3xl font-semibold">Settings</h1>
-        <AppCard className="mt-8 p-6">
-            <p className="text-neutral-600">Settings management UI is ready for API integration.</p>
-        </AppCard>
-    </>
+  return (
+    <AdminResourcePage
+      eyebrow="System"
+      title="Settings"
+      description="Configure WhatsApp, language, tracking, legal content and launch readiness items."
+      action="Update Settings"
+      rows={settingsRows}
+      columns={[
+        { key: "setting", label: "Setting" },
+        { key: "value", label: "Value" },
+        { key: "status", label: "Status", badge: true }
+      ]}
+    />
+  );
 }

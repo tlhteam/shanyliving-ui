@@ -1,10 +1,22 @@
-import { AppCard } from "@/components/app/AppCard";
+import { AdminResourcePage } from "@/components/admin/AdminResourcePage";
+import { leads } from "@/lib/admin-data";
+
 export default function Page() {
-    return
-    <>
-        <h1 className="text-3xl font-semibold">Leads</h1>
-        <AppCard className="mt-8 p-6">
-            <p className="text-neutral-600">Leads management UI is ready for API integration.</p>
-        </AppCard>
-    </>
+  return (
+    <AdminResourcePage
+      eyebrow="Sales Flow"
+      title="Leads"
+      description="Review qualified WhatsApp conversations and move each lead toward quote, showroom visit or sale."
+      action="Add Lead"
+      rows={leads}
+      columns={[
+        { key: "reference", label: "Reference" },
+        { key: "name", label: "Customer" },
+        { key: "product", label: "Product" },
+        { key: "source", label: "Source" },
+        { key: "status", label: "Status", badge: true },
+        { key: "value", label: "Value" }
+      ]}
+    />
+  );
 }
