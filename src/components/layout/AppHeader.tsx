@@ -7,9 +7,12 @@ import { CheckCircle2, MapPin, Menu, MessageCircle, Search, ShoppingBag, Trash2,
 import { ChangeEvent, useEffect, useMemo, useState } from "react";
 import { AppButton } from "@/components/app/AppButton";
 import { AppDialog } from "@/components/app/AppDialog";
+import { AppImage } from "@/components/app/AppImage";
 import { AppMenu } from "@/components/app/AppMenu";
+import { WhatsappIcon } from "@/components/icons/WhatsappIcon";
 import { AppLogo } from "@/components/layout/AppLogo";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
+import { productImages } from "@/lib/images";
 
 const items = [
   { label: "Sofas", href: "/sofas" },
@@ -39,8 +42,8 @@ const searchableItems = [
 ];
 
 const cartItems = [
-  { name: "Cloud Modular", detail: "3-4 Seater, Warm Beige", price: "NIS 6,990" },
-  { name: "Performance Linen swatch", detail: "Fabric sample", price: "NIS 0" }
+  { name: "Cloud Modular", detail: "3-4 Seater, Warm Beige", price: "NIS 6,990", image: productImages["cloud-modular"] },
+  { name: "Performance Linen swatch", detail: "Fabric sample", price: "NIS 0", image: productImages["linen-cushion"] }
 ];
 
 export function AppHeader() {
@@ -105,8 +108,8 @@ export function AppHeader() {
             <ShoppingBag className="size-5" />
             <span className="absolute -right-0.5 -top-0.5 grid size-4 place-items-center rounded-full bg-black text-[10px] font-bold text-white">{cartItems.length}</span>
           </button>
-          <button aria-label="WhatsApp" className="rounded-md p-2 transition hover:bg-neutral-100" onClick={() => setWhatsappOpen(true)}>
-            <MessageCircle className="size-5" />
+          <button aria-label="WhatsApp" className="rounded-md p-2 text-[#128c4a] transition hover:bg-neutral-100" onClick={() => setWhatsappOpen(true)}>
+            <WhatsappIcon className="size-5" />
           </button>
           <button aria-label="Search" className="rounded-md p-2 transition hover:bg-neutral-100" onClick={() => setSearchOpen(true)}>
             <Search className="size-5" />
@@ -147,7 +150,7 @@ export function AppHeader() {
           <div className="flex flex-1 flex-col gap-4 p-5">
             {cartItems.map((item) => (
               <div key={item.name} className="grid grid-cols-[72px_1fr_auto] gap-4 rounded-lg border border-neutral-200 p-3">
-                <div className="rounded-md bg-[linear-gradient(135deg,#f7f3ec,#d8cec0,#f5f5f5)]" />
+                <AppImage src={item.image} alt={item.name} className="rounded-md" sizes="72px" />
                 <div>
                   <p className="font-bold">{item.name}</p>
                   <p className="mt-1 text-sm text-neutral-600">{item.detail}</p>
@@ -165,7 +168,7 @@ export function AppHeader() {
               </div>
               <AppButton className="w-full">Continue to Customize</AppButton>
               <AppButton variant="outline" className="w-full gap-2" onClick={() => setWhatsappOpen(true)}>
-                <MessageCircle className="size-4" />
+                <WhatsappIcon className="size-4 text-[#128c4a]" />
                 Ask on WhatsApp
               </AppButton>
             </div>
@@ -182,7 +185,7 @@ export function AppHeader() {
           <>
             <AppButton type="button" variant="outline" onClick={() => setWhatsappOpen(false)}>Close</AppButton>
             <Link href={whatsappHref} target={whatsappNumber ? "_blank" : undefined}>
-              <AppButton type="button" className="w-full gap-2 sm:w-auto"><MessageCircle className="size-4" /> Start Chat</AppButton>
+              <AppButton type="button" className="w-full gap-2 sm:w-auto"><WhatsappIcon className="size-4" /> Start Chat</AppButton>
             </Link>
           </>
         }

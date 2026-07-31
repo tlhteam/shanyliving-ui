@@ -1,11 +1,20 @@
 import { apiUrl } from "@/lib/api";
 
+export type CatalogImage = {
+  id?: number | string;
+  path?: string | null;
+  alt?: string | null;
+  is_primary?: boolean;
+  sort_order?: number;
+};
+
 export type CatalogCategory = {
   id: number | string;
   name: string;
   slug: string;
   description?: string;
   sort_order?: number;
+  image?: string | null;
 };
 
 export type CatalogProduct = {
@@ -21,6 +30,8 @@ export type CatalogProduct = {
   is_customizable?: boolean;
   seat_range?: string;
   colors?: string[];
+  image?: string | null;
+  images?: CatalogImage[];
 };
 
 export type HomeCatalog = {

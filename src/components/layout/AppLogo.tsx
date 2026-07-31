@@ -18,7 +18,7 @@ export function AppLogo({ variant = "dark", className, imageClassName }: AppLogo
         alt="SHANY Living"
         width={180}
         height={58}
-        priority
+        preload
         className={cn("h-auto w-32 object-contain sm:w-40", imageClassName)}
       />
     </Link>
