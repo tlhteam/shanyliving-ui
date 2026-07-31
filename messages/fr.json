@@ -1,0 +1,299 @@
+{
+    "common": {
+        "brand": "SHANY Living",
+        "explore": "Explorer",
+        "customizable": "Personnalisable",
+        "priceFrom": "À partir de ₪ {price}",
+        "price": "₪ {price}",
+        "saveItem": "Enregistrer {name}",
+        "askAbout": "Demander des informations sur {name}"
+    },
+    "language": {
+        "trigger": "Langue",
+        "label": "Choisir une langue",
+        "current": "Langue actuelle : {language}"
+    },
+    "header": {
+        "openMenu": "Ouvrir le menu",
+        "closeMenu": "Fermer le menu",
+        "cart": "Panier",
+        "whatsapp": "WhatsApp",
+        "search": "Rechercher",
+        "closeSearch": "Fermer la recherche",
+        "searchPlaceholder": "Rechercher des canapés, tissus, services ou notre showroom",
+        "announcements": [
+            "Dimensions, tissus et couleurs personnalisés disponibles",
+            "Consultation personnalisée via WhatsApp",
+            "Visitez notre showroom au 34 rue Herzl, Tel-Aviv, Israël",
+            "Choisissez le style de votre canapé en moins d’une minute",
+            "Envoyez directement votre sélection sur WhatsApp"
+        ],
+        "nav": {
+            "sofas": "Canapés",
+            "livingRoom": "Salon",
+            "dining": "Salle à manger",
+            "bedroom": "Chambre",
+            "newArrivals": "Nouveautés",
+            "inspiration": "Inspiration",
+            "customize": "Personnalisez votre canapé",
+            "showroom": "Showroom"
+        },
+        "searchTypes": {
+            "sofa": "Canapé",
+            "fabric": "Tissu",
+            "service": "Service",
+            "feature": "Caractéristique"
+        },
+        "searchResults": {
+            "cloudModular": "Canapé personnalisé 3 à 4 places",
+            "lunaSofa": "Confort modulaire aux tons chaleureux",
+            "performanceLinen": "Tissu haut de gamme facile à nettoyer",
+            "showroomVisit": "34 rue Herzl, Tel-Aviv",
+            "roomPhoto": "Télécharger une photo de votre pièce"
+        },
+        "cartPanel": {
+            "title": "Panier",
+            "remove": "Supprimer {name}",
+            "estimatedTotal": "Total estimé",
+            "continue": "Continuer la personnalisation",
+            "askOnWhatsapp": "Demander sur WhatsApp",
+            "items": {
+                "cloudModular": "3 à 4 places, beige chaud",
+                "linenSwatch": "Échantillon de tissu"
+            }
+        },
+        "whatsappDialog": {
+            "title": "Consultation WhatsApp",
+            "description": "Envoyez votre sélection de canapé ou demandez de l’aide pour choisir la taille, le tissu et la couleur.",
+            "close": "Fermer",
+            "startChat": "Commencer la discussion",
+            "adviceTitle": "Conseils personnalisés pour votre canapé",
+            "adviceText": "Partagez les dimensions de votre pièce, votre tissu préféré et le style qui vous inspire.",
+            "followUpTitle": "Suivi au showroom",
+            "followUpText": "Réservez une visite ou demandez à notre équipe de préparer des options de tissus."
+        }
+    },
+    "home": {
+        "hero": {
+            "title": "Créez votre espace de vie idéal",
+            "subtitle": "Des meubles haut de gamme conçus pour les intérieurs modernes, avec des canapés personnalisables adaptés à votre style.",
+            "primaryCta": "Personnalisez votre canapé",
+            "secondaryCta": "Découvrir la collection",
+            "imageAlt": "Espace de vie dans le showroom SHANY Living"
+        },
+        "categories": {
+            "title": "Acheter par catégorie",
+            "viewAll": "Voir toutes les catégories"
+        },
+        "featured": {
+            "title": "Collection mise en avant",
+            "viewAll": "Voir toute la collection"
+        },
+        "customization": {
+            "title": "Comment fonctionne la personnalisation",
+            "steps": {
+                "model": {
+                    "title": "Choisissez votre modèle",
+                    "text": "Sélectionnez le modèle et la structure qui correspondent à votre style."
+                },
+                "fabric": {
+                    "title": "Choisissez la taille, le tissu et la couleur",
+                    "text": "Sélectionnez la taille, le tissu et la couleur que vous aimez."
+                },
+                "whatsapp": {
+                    "title": "Envoyez votre sélection sur WhatsApp",
+                    "text": "Nous examinerons votre sélection et vous accompagnerons pour finaliser la configuration idéale."
+                }
+            }
+        },
+        "roomUpload": {
+            "title": "Téléchargez une photo de votre pièce",
+            "text": "Recevez des conseils personnalisés sur la taille, le style et la disposition de canapé adaptés à votre espace.",
+            "cta": "Télécharger une photo",
+            "note": "Facultatif et sécurisé"
+        },
+        "shopTheLook": {
+            "title": "Achetez le look",
+            "text": "Explorez des intérieurs complets et recréez le style que vous aimez.",
+            "cta": "Découvrir nos inspirations",
+            "previous": "Looks précédents",
+            "next": "Looks suivants",
+            "looks": {
+                "modernElegance": "Élégance moderne",
+                "warmMinimalism": "Minimalisme chaleureux",
+                "urbanLuxury": "Luxe urbain"
+            }
+        },
+        "bestSellers": {
+            "title": "Meilleures ventes",
+            "viewAll": "Voir tous les produits"
+        },
+        "showroom": {
+            "title": "Visitez notre showroom",
+            "address": "34 rue Herzl, Tel-Aviv, Israël",
+            "weekHours": "Dim. - Jeu. | 10:00 - 19:00",
+            "weekendHours": "Ven. | 10:00 - 14:00",
+            "bookCta": "Réserver une consultation",
+            "directionsCta": "Obtenir l’itinéraire",
+            "imageAlt": "Consultation dans le showroom SHANY Living"
+        },
+        "club": {
+            "title": "Rejoignez le club SHANY LIVING",
+            "text": "Soyez parmi les premiers à découvrir nos nouvelles collections, nos offres exclusives et nos inspirations déco.",
+            "emailLabel": "Adresse e-mail",
+            "emailPlaceholder": "Saisissez votre adresse e-mail",
+            "subscribe": "S’inscrire",
+            "perks": {
+                "offers": "Offres exclusives",
+                "arrivals": "Nouveautés",
+                "inspiration": "Inspirations déco"
+            }
+        },
+        "features": {
+            "craftsmanship": {
+                "title": "Fabrication haut de gamme",
+                "text": "Conçu pour durer"
+            },
+            "delivery": {
+                "title": "Livraison dans tout le pays",
+                "text": "Rapide et fiable"
+            },
+            "sizes": {
+                "title": "Dimensions personnalisées",
+                "text": "Adapté à votre espace"
+            },
+            "fabrics": {
+                "title": "Tissus haut de gamme",
+                "text": "Large sélection"
+            },
+            "consultation": {
+                "title": "Consultation WhatsApp",
+                "text": "Accompagnement personnalisé"
+            },
+            "payments": {
+                "title": "Paiements sécurisés",
+                "text": "Sûrs et chiffrés"
+            }
+        },
+        "whatsappFloating": "Consultation WhatsApp"
+    },
+    "sofas": {
+        "eyebrow": "Collection",
+        "title": "Canapés personnalisables",
+        "subtitle": "Choisissez un modèle, puis sélectionnez la taille, la structure, le tissu et la couleur avant de poursuivre sur WhatsApp.",
+        "imageAlt": "Collection de canapés SHANY Living",
+        "seatRange": "Disponible en {range}",
+        "customize": "Personnaliser",
+        "helpTitle": "Vous ne savez pas quel modèle convient à votre pièce ?",
+        "helpText": "Envoyez-nous une photo de votre espace et notre équipe vous recommandera la taille, le tissu et la disposition adaptés.",
+        "helpCta": "Parler à un designer"
+    },
+    "about": {
+        "eyebrow": "Notre histoire",
+        "title": "À propos de SHANY Living",
+        "subtitle": "Un showroom haut de gamme à Tel-Aviv spécialisé dans les canapés personnalisables, les meubles modernes et le service personnalisé.",
+        "imageAlt": "Showroom SHANY Living",
+        "storyTitle": "Des meubles conçus autour de votre intérieur",
+        "storyFirst": "Nous partons de votre espace, pas d’un catalogue. Apportez les dimensions ou une photo de votre pièce et notre équipe vous aidera à choisir le modèle, la structure, le tissu et la couleur adaptés à votre mode de vie.",
+        "storySecond": "Chaque sélection est regroupée dans un seul résumé WhatsApp, afin que vous puissiez examiner le confort, les délais de livraison et les derniers détails avec un interlocuteur unique, de la première visite jusqu’à l’installation.",
+        "storyCta": "Réserver une visite au showroom",
+        "teamImageAlt": "Designers SHANY Living accompagnant des clients",
+        "valuesTitle": "Nos engagements",
+        "values": {
+            "measure": {
+                "title": "Fabriqué sur mesure",
+                "text": "Chaque canapé est fabriqué selon les dimensions et la disposition de votre pièce."
+            },
+            "fabrics": {
+                "title": "Tissus haut de gamme",
+                "text": "Lin performant, bouclé et velours soigneusement sélectionnés dans notre showroom."
+            },
+            "durability": {
+                "title": "Conçu pour durer",
+                "text": "Structures en bois massif, mousse haute résilience et coutures renforcées."
+            },
+            "service": {
+                "title": "Service personnalisé",
+                "text": "Un designer dédié suit votre commande de la sélection jusqu’à la livraison."
+            }
+        },
+        "inspirationTitle": "Inspiration"
+    },
+    "contact": {
+        "eyebrow": "Contact",
+        "title": "Visitez notre showroom",
+        "subtitle": "Essayez les modèles, découvrez les tissus et concevez votre canapé avec un designer.",
+        "formTitle": "Contactez notre équipe",
+        "whatsappCta": "Discuter sur WhatsApp",
+        "browseCta": "Voir les canapés",
+        "imageAlt": "Intérieur du showroom SHANY Living",
+        "details": {
+            "showroom": {
+                "label": "Showroom",
+                "value": "34 rue Herzl, Tel-Aviv, Israël"
+            },
+            "phone": {
+                "label": "Téléphone",
+                "value": "03-1234567"
+            },
+            "email": {
+                "label": "Adresse e-mail",
+                "value": "info@shanyliving.com"
+            },
+            "hours": {
+                "label": "Horaires d’ouverture",
+                "value": "Dim. - Jeu. | 10:00 - 19:00 · Ven. | 10:00 - 14:00"
+            }
+        }
+    },
+    "footer": {
+        "shop": "Boutique",
+        "customerService": "Service client",
+        "company": "Entreprise",
+        "contact": "Contact",
+        "follow": "Suivez @shanyliving.furniture",
+        "instagramCta": "Voir Instagram",
+        "instagramAlt": "Intérieur du showroom SHANY Living",
+        "rights": "©2026 Shany Living Furniture. Tous droits réservés.",
+        "privacy": "Politique de confidentialité",
+        "terms": "Conditions générales",
+        "accessibility": "Accessibilité",
+        "shopLinks": {
+            "sofas": "Canapés",
+            "livingRoom": "Salon",
+            "diningRoom": "Salle à manger",
+            "bedroom": "Chambre",
+            "coffeeTables": "Tables basses",
+            "chairs": "Chaises",
+            "newArrivals": "Nouveautés"
+        },
+        "serviceLinks": {
+            "contact": "Contact",
+            "faq": "Questions fréquentes",
+            "shipping": "Livraison",
+            "warranty": "Garantie"
+        },
+        "companyLinks": {
+            "about": "À propos",
+            "showroom": "Showroom",
+            "privacy": "Confidentialité",
+            "terms": "Conditions"
+        },
+        "contactRows": {
+            "address": "34 rue Herzl, Tel-Aviv, Israël",
+            "phone": "03-1234567",
+            "whatsapp": "Contactez-nous sur WhatsApp",
+            "email": "info@shanyliving.com",
+            "weekHours": "Dim. - Jeu. | 10:00 - 19:00",
+            "weekendHours": "Ven. | 10:00 - 14:00"
+        }
+    },
+    "categories": {
+        "sofas": "Canapés",
+        "living-room": "Salon",
+        "dining-room": "Salle à manger",
+        "bedroom": "Chambre",
+        "chairs": "Chaises",
+        "coffee-tables": "Tables basses"
+    }
+}

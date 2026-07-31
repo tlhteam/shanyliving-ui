@@ -67,7 +67,7 @@ export default async function AboutPage() {
               <AppImage
                 src={look.image}
                 alt={tLooks(look.key)}
-                className="aspect-1.5/1"
+                className="aspect-[1.5/1]"
                 sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                 imageClassName="transition duration-500 group-hover:scale-[1.05]"
               />

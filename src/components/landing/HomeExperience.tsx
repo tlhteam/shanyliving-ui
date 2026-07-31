@@ -108,7 +108,7 @@ function CategoryTile({ category, index }: { category: CatalogCategory; index: n
         <AppImage
           src={categoryImage(category, index)}
           alt={label}
-          className="aspect-1.18/1 rounded-lg"
+          className="aspect-[1.18/1] rounded-lg"
           sizes="(max-width: 640px) 45vw, (max-width: 1024px) 30vw, 15vw"
           imageClassName="transition duration-500 group-hover:scale-[1.06]"
         />
@@ -220,7 +220,7 @@ export function HomeExperience({ catalog }: { catalog: HomeCatalog }) {
                     <AppImage
                       src={look.image}
                       alt={t(`shopTheLook.looks.${look.key}`)}
-                      className="aspect-1.6/1"
+                      className="aspect-[1.6/1]"
                       sizes="(max-width: 640px) 86vw, (max-width: 1024px) 45vw, 30vw"
                       imageClassName="transition duration-500 group-hover:scale-[1.05]"
                     />

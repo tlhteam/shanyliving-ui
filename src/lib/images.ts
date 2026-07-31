@@ -47,9 +47,9 @@ export const looks = [
 ];
 
 export const paymentMethods = [
-  { name: "Visa", image: "/images/payment-visa.jpg" },
-  { name: "American Express", image: "/images/payment-amex.webp" },
-  { name: "Mastercard", image: "/images/payment-mastercard.webp" },
+  { name: "Visa", image: "/images/payment-visa.png" },
+  { name: "American Express", image: "/images/payment-amex.png" },
+  { name: "Mastercard", image: "/images/payment-mastercard.png" },
   { name: "Google Pay", image: "/images/payment-google-pay.png" },
   { name: "Apple Pay", image: "/images/payment-apple-pay.png" }
 ];

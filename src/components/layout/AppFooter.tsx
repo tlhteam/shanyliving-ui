@@ -62,7 +62,7 @@ export async function AppFooter() {
             <AppImage
               src={siteImages.showroomInterior}
               alt={t("instagramAlt")}
-              className="aspect-3.9/1"
+              className="aspect-[3.9/1]"
               sizes="(max-width: 1024px) 100vw, 30vw"
               imageClassName="transition duration-500 group-hover:scale-[1.04]"
             />
@@ -83,10 +83,10 @@ export async function AppFooter() {
             <span aria-hidden>|</span>
             <Link href="/contact" className="transition hover:text-white">{t("accessibility")}</Link>
           </div>
-          <div className="flex flex-wrap justify-center gap-2">
+          <div className="flex flex-wrap items-center justify-center gap-2">
             {paymentMethods.map((method) => (
-              <span key={method.name} className="grid h-11 w-18 place-items-center rounded-md bg-white p-1.5 sm:h-12 sm:w-20">
-                <Image src={method.image} alt={method.name} width={80} height={48} className="h-full w-full object-contain" />
+              <span key={method.name} className="flex h-10 w-16 shrink-0 items-center justify-center overflow-hidden rounded-md bg-white px-2 sm:h-11 sm:w-18">
+                <Image src={method.image} alt={method.name} width={96} height={60} className="max-h-6 w-auto object-contain sm:max-h-7" />
               </span>
             ))}
           </div>

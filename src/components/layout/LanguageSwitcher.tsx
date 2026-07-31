@@ -6,7 +6,7 @@ import { Check, Globe } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { AppLocale, localeOption, localeOptions } from "@/i18n/config";
 import { setUserLocale } from "@/i18n/actions";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 
 export function LanguageSwitcher({ className, variant = "icon" }: { className?: string; variant?: "icon" | "inline" }) {
   const locale = useLocale();
@@ -49,17 +49,19 @@ export function LanguageSwitcher({ className, variant = "icon" }: { className?: 
         </span>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="start" className="w-44">
-        <DropdownMenuLabel className="text-xs font-bold uppercase tracking-wide text-neutral-500">{t("label")}</DropdownMenuLabel>
-        <DropdownMenuSeparator />
-        {localeOptions.map((option) => (
-          <DropdownMenuItem key={option.locale} onClick={() => select(option.locale)} className="justify-between">
-            <span>
-              {option.label}
-              <span className="ms-2 text-xs text-neutral-500">{option.short}</span>
-            </span>
-            {option.locale === locale && <Check className="size-4" />}
-          </DropdownMenuItem>
-        ))}
+        <DropdownMenuGroup>
+          <DropdownMenuLabel className="text-xs font-bold uppercase tracking-wide text-neutral-500">{t("label")}</DropdownMenuLabel>
+          <DropdownMenuSeparator />
+          {localeOptions.map((option) => (
+            <DropdownMenuItem key={option.locale} onClick={() => select(option.locale)} className="justify-between">
+              <span>
+                {option.label}
+                <span className="ms-2 text-xs text-neutral-500">{option.short}</span>
+              </span>
+              {option.locale === locale && <Check className="size-4" />}
+            </DropdownMenuItem>
+          ))}
+        </DropdownMenuGroup>
       </DropdownMenuContent>
     </DropdownMenu>
   );
