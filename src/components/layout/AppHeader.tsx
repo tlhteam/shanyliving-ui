@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import debounce from "lodash.debounce";
+import { useTranslations } from "next-intl";
 import { AnimatePresence, motion } from "motion/react";
 import { CheckCircle2, MapPin, Menu, MessageCircle, Search, ShoppingBag, Trash2, X } from "lucide-react";
 import { ChangeEvent, useEffect, useMemo, useState } from "react";
@@ -11,42 +12,38 @@ import { AppImage } from "@/components/app/AppImage";
 import { AppMenu } from "@/components/app/AppMenu";
 import { WhatsappIcon } from "@/components/icons/WhatsappIcon";
 import { AppLogo } from "@/components/layout/AppLogo";
+import { LanguageSwitcher } from "@/components/layout/LanguageSwitcher";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { productImages } from "@/lib/images";
 
-const items = [
-  { label: "Sofas", href: "/sofas" },
-  { label: "Living Room", href: "/sofas" },
-  { label: "Dining", href: "/sofas" },
-  { label: "Bedroom", href: "/sofas" },
-  { label: "New Arrivals", href: "/sofas" },
-  { label: "Inspiration", href: "/about" },
-  { label: "Customize Your Sofa", href: "/sofas" },
-  { label: "Showroom", href: "/contact" }
+const navItems = [
+  { key: "sofas", href: "/sofas" },
+  { key: "livingRoom", href: "/sofas" },
+  { key: "dining", href: "/sofas" },
+  { key: "bedroom", href: "/sofas" },
+  { key: "newArrivals", href: "/sofas" },
+  { key: "inspiration", href: "/about" },
+  { key: "customize", href: "/sofas" },
+  { key: "showroom", href: "/contact" }
 ];
 
-const announcements = [
-  { text: "Custom sizes, fabrics, and colors available", icon: CheckCircle2 },
-  { text: "Personal consultation through WhatsApp", icon: MessageCircle },
-  { text: "Visit our showroom at Herzl Street 34, Tel Aviv, Israel", icon: MapPin },
-  { text: "Choose your sofa style in less than one minute", icon: CheckCircle2 },
-  { text: "Send your selection directly to WhatsApp", icon: MessageCircle }
-];
+const announcementIcons = [CheckCircle2, MessageCircle, MapPin, CheckCircle2, MessageCircle];
 
 const searchableItems = [
-  { title: "Cloud Modular", type: "Sofa", href: "/sofas", detail: "Custom 3-4 seater" },
-  { title: "Luna Sofa", type: "Sofa", href: "/sofas", detail: "Warm modular comfort" },
-  { title: "Performance Linen", type: "Fabric", href: "/sofas", detail: "Premium easy-clean fabric" },
-  { title: "Showroom Visit", type: "Service", href: "/contact", detail: "Herzl 34, Tel Aviv" },
-  { title: "Room Photo Advice", type: "Feature", href: "/sofas", detail: "Upload a room photo" }
+  { title: "Cloud Modular", typeKey: "sofa", detailKey: "cloudModular", href: "/sofas" },
+  { title: "Luna Sofa", typeKey: "sofa", detailKey: "lunaSofa", href: "/sofas" },
+  { title: "Performance Linen", typeKey: "fabric", detailKey: "performanceLinen", href: "/sofas" },
+  { title: "Showroom Visit", typeKey: "service", detailKey: "showroomVisit", href: "/contact" },
+  { title: "Room Photo Advice", typeKey: "feature", detailKey: "roomPhoto", href: "/sofas" }
 ];
 
 const cartItems = [
-  { name: "Cloud Modular", detail: "3-4 Seater, Warm Beige", price: "NIS 6,990", image: productImages["cloud-modular"] },
-  { name: "Performance Linen swatch", detail: "Fabric sample", price: "NIS 0", image: productImages["linen-cushion"] }
+  { name: "Cloud Modular", detailKey: "cloudModular", price: "NIS 6,990", image: productImages["cloud-modular"] },
+  { name: "Performance Linen swatch", detailKey: "linenSwatch", price: "NIS 0", image: productImages["linen-cushion"] }
 ];
 
 export function AppHeader() {
+  const t = useTranslations("header");
   const [open, setOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [cartOpen, setCartOpen] = useState(false);
@@ -56,15 +53,22 @@ export function AppHeader() {
   const whatsappNumber = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER?.replace(/\D/g, "");
   const whatsappHref = whatsappNumber ? `https://wa.me/${whatsappNumber}` : "/contact";
   const debouncedQuery = useMemo(() => debounce(setQuery, 220), []);
-  const results = searchableItems.filter((item) => {
-    const normalizedQuery = query.trim().toLowerCase();
+  const announcements = (t.raw("announcements") as string[]).map((text, index) => ({
+    text,
+    icon: announcementIcons[index % announcementIcons.length]
+  }));
+  const menuItems = navItems.map((item) => ({ label: t(`nav.${item.key}`), href: item.href }));
+  const results = searchableItems
+    .map((item) => ({ ...item, type: t(`searchTypes.${item.typeKey}`), detail: t(`searchResults.${item.detailKey}`) }))
+    .filter((item) => {
+      const normalizedQuery = query.trim().toLowerCase();
 
-    if (!normalizedQuery) {
-      return true;
-    }
+      if (!normalizedQuery) {
+        return true;
+      }
 
-    return [item.title, item.type, item.detail].some((value) => value.toLowerCase().includes(normalizedQuery));
-  });
+      return [item.title, item.type, item.detail].some((value) => value.toLowerCase().includes(normalizedQuery));
+    });
 
   useEffect(() => () => debouncedQuery.cancel(), [debouncedQuery]);
 
@@ -87,7 +91,7 @@ export function AppHeader() {
         <div className="mx-auto max-w-7xl overflow-hidden px-4 sm:px-6 lg:px-8">
           <div className="flex whitespace-nowrap py-2 text-[11px] font-semibold">
             {[0, 1].map((copy) => (
-              <div key={copy} aria-hidden={copy === 1} className="flex min-w-max animate-shany-marquee items-center gap-12 pr-12">
+              <div key={copy} aria-hidden={copy === 1} className="flex min-w-max animate-shany-marquee items-center gap-12 pe-12">
                 {announcements.map(({ text, icon: Icon }) => (
                   <span key={`${copy}-${text}`} className="inline-flex items-center gap-2">
                     <Icon className="size-3.5 shrink-0" />
@@ -99,23 +103,24 @@ export function AppHeader() {
           </div>
         </div>
       </div>
-      <div className="mx-auto flex min-h-20 max-w-7xl items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center gap-2 sm:gap-4">
-          <button aria-label="Open menu" className="rounded-md p-2 transition hover:bg-neutral-100 lg:hidden" onClick={() => setOpen(true)}>
+      <div className="mx-auto flex min-h-18 max-w-7xl items-center justify-between gap-2 px-4 sm:min-h-20 sm:gap-4 sm:px-6 lg:px-8">
+        <div className="flex items-center gap-0.5 sm:gap-2">
+          <button aria-label={t("openMenu")} className="rounded-md p-2 transition hover:bg-neutral-100 lg:hidden" onClick={() => setOpen(true)}>
             <Menu className="size-5" />
           </button>
-          <button aria-label="Shopping cart" className="relative rounded-md p-2 transition hover:bg-neutral-100" onClick={() => setCartOpen(true)}>
+          <button aria-label={t("cart")} className="relative rounded-md p-2 transition hover:bg-neutral-100" onClick={() => setCartOpen(true)}>
             <ShoppingBag className="size-5" />
-            <span className="absolute -right-0.5 -top-0.5 grid size-4 place-items-center rounded-full bg-black text-[10px] font-bold text-white">{cartItems.length}</span>
+            <span className="absolute -inset-e-0.5 -top-0.5 grid size-4 place-items-center rounded-full bg-black text-[10px] font-bold text-white">{cartItems.length}</span>
           </button>
-          <button aria-label="WhatsApp" className="rounded-md p-2 text-[#128c4a] transition hover:bg-neutral-100" onClick={() => setWhatsappOpen(true)}>
+          <button aria-label={t("whatsapp")} className="rounded-md p-2 text-[#128c4a] transition hover:bg-neutral-100" onClick={() => setWhatsappOpen(true)}>
             <WhatsappIcon className="size-5" />
           </button>
-          <button aria-label="Search" className="rounded-md p-2 transition hover:bg-neutral-100" onClick={() => setSearchOpen(true)}>
+          <button aria-label={t("search")} className="rounded-md p-2 transition hover:bg-neutral-100" onClick={() => setSearchOpen(true)}>
             <Search className="size-5" />
           </button>
+          <LanguageSwitcher className="hidden sm:inline-flex" />
         </div>
-        <AppMenu items={items} className="hidden flex-1 justify-center gap-7 lg:flex" />
+        <AppMenu items={menuItems} className="hidden flex-1 justify-center gap-6 lg:flex xl:gap-7" />
         <AppLogo className="shrink-0" />
       </div>
       <AnimatePresence>
@@ -123,9 +128,9 @@ export function AppHeader() {
           <motion.div initial={{ opacity: 0, y: -12 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -12 }} transition={{ duration: 0.18 }} className="absolute inset-x-0 top-full z-40 border-t border-neutral-200 bg-white shadow-xl">
             <div className="mx-auto max-w-7xl px-4 py-5 sm:px-6 lg:px-8">
               <div className="flex items-center gap-3 rounded-md border border-neutral-300 bg-neutral-50 px-4 py-3">
-                <Search className="size-5 text-neutral-500" />
-                <input value={searchValue} onChange={handleSearch} autoFocus placeholder="Search sofas, fabrics, showroom, or services" className="h-8 flex-1 bg-transparent text-sm font-medium outline-none placeholder:text-neutral-400" />
-                <button aria-label="Close search" className="rounded-md p-1 transition hover:bg-neutral-200" onClick={closeSearch}>
+                <Search className="size-5 shrink-0 text-neutral-500" />
+                <input value={searchValue} onChange={handleSearch} autoFocus placeholder={t("searchPlaceholder")} className="h-8 min-w-0 flex-1 bg-transparent text-sm font-medium outline-none placeholder:text-neutral-400" />
+                <button aria-label={t("closeSearch")} className="rounded-md p-1 transition hover:bg-neutral-200" onClick={closeSearch}>
                   <X className="size-5" />
                 </button>
               </div>
@@ -145,7 +150,7 @@ export function AppHeader() {
       <Sheet open={cartOpen} onOpenChange={setCartOpen}>
         <SheetContent side="right" className="w-full max-w-md bg-white p-0 text-neutral-950">
           <SheetHeader className="border-b border-neutral-200">
-            <SheetTitle>Cart</SheetTitle>
+            <SheetTitle>{t("cartPanel.title")}</SheetTitle>
           </SheetHeader>
           <div className="flex flex-1 flex-col gap-4 p-5">
             {cartItems.map((item) => (
@@ -153,23 +158,23 @@ export function AppHeader() {
                 <AppImage src={item.image} alt={item.name} className="rounded-md" sizes="72px" />
                 <div>
                   <p className="font-bold">{item.name}</p>
-                  <p className="mt-1 text-sm text-neutral-600">{item.detail}</p>
+                  <p className="mt-1 text-sm text-neutral-600">{t(`cartPanel.items.${item.detailKey}`)}</p>
                   <p className="mt-2 text-sm font-bold">{item.price}</p>
                 </div>
-                <button aria-label={`Remove ${item.name}`} className="grid size-8 place-items-center rounded-md text-neutral-500 transition hover:bg-neutral-100 hover:text-red-600">
+                <button aria-label={t("cartPanel.remove", { name: item.name })} className="grid size-8 place-items-center rounded-md text-neutral-500 transition hover:bg-neutral-100 hover:text-red-600">
                   <Trash2 className="size-4" />
                 </button>
               </div>
             ))}
             <div className="mt-auto space-y-3 border-t border-neutral-200 pt-4">
               <div className="flex items-center justify-between text-sm font-bold">
-                <span>Estimated total</span>
+                <span>{t("cartPanel.estimatedTotal")}</span>
                 <span>NIS 6,990</span>
               </div>
-              <AppButton className="w-full">Continue to Customize</AppButton>
+              <AppButton className="w-full">{t("cartPanel.continue")}</AppButton>
               <AppButton variant="outline" className="w-full gap-2" onClick={() => setWhatsappOpen(true)}>
                 <WhatsappIcon className="size-4 text-[#128c4a]" />
-                Ask on WhatsApp
+                {t("cartPanel.askOnWhatsapp")}
               </AppButton>
             </div>
           </div>
@@ -178,44 +183,47 @@ export function AppHeader() {
       <AppDialog
         open={whatsappOpen}
         onOpenChange={setWhatsappOpen}
-        title="WhatsApp consultation"
-        description="Send your sofa selection or ask for help choosing size, fabric, and color."
+        title={t("whatsappDialog.title")}
+        description={t("whatsappDialog.description")}
         className="sm:max-w-md"
         footer={
           <>
-            <AppButton type="button" variant="outline" onClick={() => setWhatsappOpen(false)}>Close</AppButton>
+            <AppButton type="button" variant="outline" onClick={() => setWhatsappOpen(false)}>{t("whatsappDialog.close")}</AppButton>
             <Link href={whatsappHref} target={whatsappNumber ? "_blank" : undefined}>
-              <AppButton type="button" className="w-full gap-2 sm:w-auto"><WhatsappIcon className="size-4" /> Start Chat</AppButton>
+              <AppButton type="button" className="w-full gap-2 sm:w-auto"><WhatsappIcon className="size-4" /> {t("whatsappDialog.startChat")}</AppButton>
             </Link>
           </>
         }
       >
         <div className="space-y-3 text-sm text-neutral-700">
           <div className="rounded-lg border border-neutral-200 p-4">
-            <p className="font-bold text-neutral-950">Personal sofa advice</p>
-            <p className="mt-1">Share your room size, preferred fabric, and inspiration style.</p>
+            <p className="font-bold text-neutral-950">{t("whatsappDialog.adviceTitle")}</p>
+            <p className="mt-1">{t("whatsappDialog.adviceText")}</p>
           </div>
           <div className="rounded-lg border border-neutral-200 p-4">
-            <p className="font-bold text-neutral-950">Showroom follow-up</p>
-            <p className="mt-1">Book a visit or ask the team to prepare fabric options.</p>
+            <p className="font-bold text-neutral-950">{t("whatsappDialog.followUpTitle")}</p>
+            <p className="mt-1">{t("whatsappDialog.followUpText")}</p>
           </div>
         </div>
       </AppDialog>
       {open && (
         <div className="fixed inset-0 z-50 bg-black/40 lg:hidden" onClick={() => setOpen(false)}>
-          <div className="ml-auto flex h-full w-80 max-w-[86vw] flex-col bg-white p-5 shadow-xl" onClick={(event) => event.stopPropagation()}>
-            <div className="flex items-center justify-between">
-              <AppLogo imageClassName="w-32" />
-              <button aria-label="Close menu" className="rounded-md p-2 hover:bg-neutral-100" onClick={() => setOpen(false)}>
+          <div className="ms-auto flex h-full w-80 max-w-[86vw] flex-col overflow-y-auto bg-white p-5 shadow-xl" onClick={(event) => event.stopPropagation()}>
+            <div className="flex items-center justify-between gap-3">
+              <AppLogo imageClassName="w-28" />
+              <button aria-label={t("closeMenu")} className="rounded-md p-2 hover:bg-neutral-100" onClick={() => setOpen(false)}>
                 <X className="size-5" />
               </button>
             </div>
-            <div className="mt-8 flex flex-col gap-4">
-              {items.map((item) => (
+            <div className="mt-7 flex flex-col gap-4">
+              {menuItems.map((item) => (
                 <Link key={`${item.label}-${item.href}`} href={item.href} className="text-base font-semibold" onClick={() => setOpen(false)}>
                   {item.label}
                 </Link>
               ))}
+            </div>
+            <div className="mt-auto pt-8">
+              <LanguageSwitcher variant="inline" />
             </div>
           </div>
         </div>

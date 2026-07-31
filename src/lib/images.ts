@@ -41,9 +41,9 @@ export const sofaGallery = [
 ];
 
 export const looks = [
-  { title: "Modern Elegance", image: "/images/look-modern-elegance.png" },
-  { title: "Warm Minimalism", image: "/images/look-warm-minimalism.png" },
-  { title: "Urban Luxury", image: "/images/look-urban-luxury.png" }
+  { key: "modernElegance", image: "/images/look-modern-elegance.png" },
+  { key: "warmMinimalism", image: "/images/look-warm-minimalism.png" },
+  { key: "urbanLuxury", image: "/images/look-urban-luxury.png" }
 ];
 
 export const paymentMethods = [

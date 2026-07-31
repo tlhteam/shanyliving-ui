@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { getLocale, getTranslations } from "next-intl/server";
 import { ArrowRight, MessageCircle, Ruler } from "lucide-react";
 import { AppButton } from "@/components/app/AppButton";
 import { AppCard } from "@/components/app/AppCard";
@@ -7,25 +8,23 @@ import { AppSection } from "@/components/app/AppSection";
 import { getHomeCatalog } from "@/lib/catalog";
 import { productImage, siteImages } from "@/lib/images";
 
-function formatPrice(price: number) {
-  return new Intl.NumberFormat("he-IL").format(price);
-}
-
 export default async function SofasPage() {
+  const t = await getTranslations("sofas");
+  const tCommon = await getTranslations("common");
+  const locale = await getLocale();
   const catalog = await getHomeCatalog();
   const products = [...catalog.featuredProducts, ...catalog.bestSellers];
+  const formatPrice = (price: number) => new Intl.NumberFormat(locale).format(price);
 
   return (
     <>
       <section className="relative isolate grid min-h-70 place-items-center overflow-hidden px-4 py-16 text-center text-white sm:min-h-90">
-        <AppImage src={siteImages.hero} alt="Shany Living sofa collection" className="absolute inset-0" sizes="100vw" preload loading="eager" />
+        <AppImage src={siteImages.hero} alt={t("imageAlt")} className="absolute inset-0" sizes="100vw" preload loading="eager" />
         <div className="absolute inset-0 bg-black/50" />
         <div className="relative mx-auto max-w-2xl">
-          <p className="text-xs font-semibold uppercase tracking-[0.24em] text-white/80">Collection</p>
-          <h1 className="mt-3 font-serif text-3xl sm:text-5xl">Customizable sofas</h1>
-          <p className="mt-4 text-sm leading-6 text-white/90 sm:text-base">
-            Select a model and continue to size, structure, fabric, color and WhatsApp consultation.
-          </p>
+          <p className="text-xs font-semibold uppercase tracking-[0.24em] text-white/80">{t("eyebrow")}</p>
+          <h1 className="mt-3 font-serif text-3xl sm:text-5xl">{t("title")}</h1>
+          <p className="mt-4 text-sm leading-6 text-white/90 sm:text-base">{t("subtitle")}</p>
         </div>
       </section>
 
@@ -43,10 +42,12 @@ export default async function SofasPage() {
               <div className="p-5">
                 <div className="flex flex-wrap items-center justify-between gap-2">
                   <h2 className="font-serif text-xl font-bold">{product.name}</h2>
-                  <span className="text-sm font-bold text-neutral-700">From ₪ {formatPrice(product.price)}</span>
+                  <span className="text-sm font-bold text-neutral-700">{tCommon("priceFrom", { price: formatPrice(product.price) })}</span>
                 </div>
                 {product.seat_range && (
-                  <p className="mt-3 flex items-center gap-2 text-xs text-neutral-600"><Ruler className="size-4" /> Available in {product.seat_range}</p>
+                  <p className="mt-3 flex items-center gap-2 text-xs text-neutral-600">
+                    <Ruler className="size-4" /> {t("seatRange", { range: product.seat_range })}
+                  </p>
                 )}
                 <div className="mt-4 flex items-center gap-1.5">
                   {(product.colors?.length ? product.colors : ["#eee9df", "#715b45", "#0b5b3e"]).map((color) => (
@@ -54,8 +55,12 @@ export default async function SofasPage() {
                   ))}
                 </div>
                 <div className="mt-5 grid grid-cols-[1fr_44px] gap-3">
-                  <AppButton size="sm">Customize</AppButton>
-                  <Link href="/contact" aria-label={`Ask about ${product.name}`} className="grid h-9 place-items-center rounded-md border border-neutral-300 transition hover:bg-neutral-100">
+                  <AppButton size="sm">{t("customize")}</AppButton>
+                  <Link
+                    href="/contact"
+                    aria-label={tCommon("askAbout", { name: product.name })}
+                    className="grid h-9 place-items-center rounded-md border border-neutral-300 transition hover:bg-neutral-100"
+                  >
                     <MessageCircle className="size-4" />
                   </Link>
                 </div>
@@ -64,9 +69,11 @@ export default async function SofasPage() {
           ))}
         </div>
         <div className="mt-12 flex flex-col items-center gap-4 rounded-lg bg-neutral-100 px-6 py-10 text-center">
-          <h2 className="font-serif text-2xl font-bold">Not sure which model fits your room?</h2>
-          <p className="max-w-xl text-sm leading-6 text-neutral-700">Send us a photo of your space and our team will recommend the right size, fabric and layout.</p>
-          <Link href="/contact"><AppButton className="gap-2">Talk to a designer <ArrowRight className="size-4" /></AppButton></Link>
+          <h2 className="font-serif text-2xl font-bold">{t("helpTitle")}</h2>
+          <p className="max-w-xl text-sm leading-6 text-neutral-700">{t("helpText")}</p>
+          <Link href="/contact">
+            <AppButton className="gap-2">{t("helpCta")} <ArrowRight className="size-4 rtl:rotate-180" /></AppButton>
+          </Link>
         </div>
       </AppSection>
     </>

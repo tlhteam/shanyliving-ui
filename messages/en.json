@@ -1,0 +1,257 @@
+{
+  "common": {
+    "brand": "SHANY Living",
+    "explore": "Explore",
+    "customizable": "Customizable",
+    "priceFrom": "From ₪ {price}",
+    "price": "₪ {price}",
+    "saveItem": "Save {name}",
+    "askAbout": "Ask about {name}"
+  },
+  "language": {
+    "trigger": "Language",
+    "label": "Choose language",
+    "current": "Current language: {language}"
+  },
+  "header": {
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu",
+    "cart": "Shopping cart",
+    "whatsapp": "WhatsApp",
+    "search": "Search",
+    "closeSearch": "Close search",
+    "searchPlaceholder": "Search sofas, fabrics, showroom, or services",
+    "announcements": [
+      "Custom sizes, fabrics, and colors available",
+      "Personal consultation through WhatsApp",
+      "Visit our showroom at Herzl Street 34, Tel Aviv, Israel",
+      "Choose your sofa style in less than one minute",
+      "Send your selection directly to WhatsApp"
+    ],
+    "nav": {
+      "sofas": "Sofas",
+      "livingRoom": "Living Room",
+      "dining": "Dining",
+      "bedroom": "Bedroom",
+      "newArrivals": "New Arrivals",
+      "inspiration": "Inspiration",
+      "customize": "Customize Your Sofa",
+      "showroom": "Showroom"
+    },
+    "searchTypes": {
+      "sofa": "Sofa",
+      "fabric": "Fabric",
+      "service": "Service",
+      "feature": "Feature"
+    },
+    "searchResults": {
+      "cloudModular": "Custom 3-4 seater",
+      "lunaSofa": "Warm modular comfort",
+      "performanceLinen": "Premium easy-clean fabric",
+      "showroomVisit": "Herzl 34, Tel Aviv",
+      "roomPhoto": "Upload a room photo"
+    },
+    "cartPanel": {
+      "title": "Cart",
+      "remove": "Remove {name}",
+      "estimatedTotal": "Estimated total",
+      "continue": "Continue to Customize",
+      "askOnWhatsapp": "Ask on WhatsApp",
+      "items": {
+        "cloudModular": "3-4 Seater, Warm Beige",
+        "linenSwatch": "Fabric sample"
+      }
+    },
+    "whatsappDialog": {
+      "title": "WhatsApp consultation",
+      "description": "Send your sofa selection or ask for help choosing size, fabric, and color.",
+      "close": "Close",
+      "startChat": "Start Chat",
+      "adviceTitle": "Personal sofa advice",
+      "adviceText": "Share your room size, preferred fabric, and inspiration style.",
+      "followUpTitle": "Showroom follow-up",
+      "followUpText": "Book a visit or ask the team to prepare fabric options."
+    }
+  },
+  "home": {
+    "hero": {
+      "title": "Design Your Perfect Living Space",
+      "subtitle": "Premium furniture crafted for modern homes, with customizable sofas made to fit your style.",
+      "primaryCta": "Customize Your Sofa",
+      "secondaryCta": "Explore Collection",
+      "imageAlt": "Shany Living showroom living space"
+    },
+    "categories": {
+      "title": "Shop by Category",
+      "viewAll": "View all categories"
+    },
+    "featured": {
+      "title": "Featured Collection",
+      "viewAll": "View all Collection"
+    },
+    "customization": {
+      "title": "How Customization Works",
+      "steps": {
+        "model": {
+          "title": "Choose Your Model",
+          "text": "Select the model and structure that fits your style."
+        },
+        "fabric": {
+          "title": "Select Size, Fabric & Color",
+          "text": "Pick size, fabric, and color you love."
+        },
+        "whatsapp": {
+          "title": "Send Your Selection to WhatsApp",
+          "text": "We will review your selection and guide you to complete the perfect fit."
+        }
+      }
+    },
+    "roomUpload": {
+      "title": "Upload a Photo of Your Room",
+      "text": "Get personalized advice on the perfect sofa size, style and layout for your space.",
+      "cta": "Upload Room Photo",
+      "note": "Optional and secure"
+    },
+    "shopTheLook": {
+      "title": "Shop the Look",
+      "text": "Explore complete rooms and shop the look you love.",
+      "cta": "Explore Inspiration",
+      "previous": "Previous looks",
+      "next": "Next looks",
+      "looks": {
+        "modernElegance": "Modern Elegance",
+        "warmMinimalism": "Warm Minimalism",
+        "urbanLuxury": "Urban Luxury"
+      }
+    },
+    "bestSellers": {
+      "title": "Best Sellers",
+      "viewAll": "View all products"
+    },
+    "showroom": {
+      "title": "Visit Our Showroom",
+      "address": "Herzl 34, Tel Aviv, Israel",
+      "weekHours": "Sun - Thu | 10:00 - 19:00",
+      "weekendHours": "Fri | 10:00 - 14:00",
+      "bookCta": "Book a Consultation",
+      "directionsCta": "Get Direction",
+      "imageAlt": "Shany Living showroom consultation"
+    },
+    "club": {
+      "title": "Join the SHANY LIVING Club",
+      "text": "Be the first to discover new collections, exclusive offers, and interior inspiration.",
+      "emailLabel": "Email",
+      "emailPlaceholder": "Enter your email",
+      "subscribe": "Subscribe",
+      "perks": {
+        "offers": "Exclusive Offers",
+        "arrivals": "New Arrivals",
+        "inspiration": "Design Inspiration"
+      }
+    },
+    "features": {
+      "craftsmanship": { "title": "Premium Craftsmanship", "text": "Built to last" },
+      "delivery": { "title": "Nationwide Delivery", "text": "Fast & reliable" },
+      "sizes": { "title": "Custom Sizes Available", "text": "Made for your space" },
+      "fabrics": { "title": "Premium fabrics", "text": "Wide selection" },
+      "consultation": { "title": "WhatsApp Consultation", "text": "Personal guidance" },
+      "payments": { "title": "Secure Payments", "text": "Safe & encrypted" }
+    },
+    "whatsappFloating": "WhatsApp consultation"
+  },
+  "sofas": {
+    "eyebrow": "Collection",
+    "title": "Customizable sofas",
+    "subtitle": "Select a model and continue to size, structure, fabric, color and WhatsApp consultation.",
+    "imageAlt": "Shany Living sofa collection",
+    "seatRange": "Available in {range}",
+    "customize": "Customize",
+    "helpTitle": "Not sure which model fits your room?",
+    "helpText": "Send us a photo of your space and our team will recommend the right size, fabric and layout.",
+    "helpCta": "Talk to a designer"
+  },
+  "about": {
+    "eyebrow": "Our story",
+    "title": "About SHANY Living",
+    "subtitle": "A premium Tel Aviv furniture showroom focused on customizable sofas, modern furniture and personal service.",
+    "imageAlt": "Shany Living showroom",
+    "storyTitle": "Furniture designed around your room",
+    "storyFirst": "We start with your space, not a catalog. Bring measurements or a photo of your room and our team maps the right model, structure, fabric and color combination for how you actually live.",
+    "storySecond": "Every selection is packaged into a single WhatsApp summary, so you can review comfort, delivery timing and final details with one person from first visit to installation.",
+    "storyCta": "Book a showroom visit",
+    "teamImageAlt": "Shany Living designers with clients",
+    "valuesTitle": "What we stand for",
+    "values": {
+      "measure": { "title": "Made to measure", "text": "Every sofa is built to the size and layout of your room." },
+      "fabrics": { "title": "Premium fabrics", "text": "Performance linens, boucle and velvets selected in the showroom." },
+      "durability": { "title": "Built to last", "text": "Hardwood frames, high resilience foam and reinforced stitching." },
+      "service": { "title": "Personal service", "text": "One designer follows your order from selection to delivery." }
+    },
+    "inspirationTitle": "Inspiration"
+  },
+  "contact": {
+    "eyebrow": "Contact",
+    "title": "Visit our showroom",
+    "subtitle": "Sit on the models, feel the fabrics, and plan your sofa with a designer.",
+    "formTitle": "Talk to the team",
+    "whatsappCta": "Chat on WhatsApp",
+    "browseCta": "Browse sofas",
+    "imageAlt": "Shany Living showroom interior",
+    "details": {
+      "showroom": { "label": "Showroom", "value": "Herzl Street 34, Tel Aviv, Israel" },
+      "phone": { "label": "Phone", "value": "03-1234567" },
+      "email": { "label": "Email", "value": "info@shanyliving.com" },
+      "hours": { "label": "Opening hours", "value": "Sun - Thu | 10:00 - 19:00 · Fri | 10:00 - 14:00" }
+    }
+  },
+  "footer": {
+    "shop": "Shop",
+    "customerService": "Customer Service",
+    "company": "Company",
+    "contact": "Contact",
+    "follow": "Follow @shanyliving.furniture",
+    "instagramCta": "View Instagram",
+    "instagramAlt": "Shany Living showroom interior",
+    "rights": "©2026 Shany Living Furniture. All Rights Reserved.",
+    "privacy": "Privacy Policy",
+    "terms": "Terms & Conditions",
+    "accessibility": "Accessibility",
+    "shopLinks": {
+      "sofas": "Sofas",
+      "livingRoom": "Living Room",
+      "diningRoom": "Dining Room",
+      "bedroom": "Bedroom",
+      "coffeeTables": "Coffee Tables",
+      "chairs": "Chairs",
+      "newArrivals": "New Arrivals"
+    },
+    "serviceLinks": {
+      "contact": "Contact",
+      "faq": "FAQ",
+      "shipping": "Shipping",
+      "warranty": "Warranty"
+    },
+    "companyLinks": {
+      "about": "About",
+      "showroom": "Showroom",
+      "privacy": "Privacy",
+      "terms": "Terms"
+    },
+    "contactRows": {
+      "address": "Herzl 34, Tel Aviv, Israel",
+      "phone": "03-1234567",
+      "whatsapp": "WhatsApp Us",
+      "email": "info@shanyliving.com",
+      "weekHours": "Sun - Thu | 10:00 - 19:00",
+      "weekendHours": "Fri | 10:00 - 14:00"
+    }
+  },
+  "categories": {
+    "sofas": "Sofas",
+    "living-room": "Living Room",
+    "dining-room": "Dining Room",
+    "bedroom": "Bedroom",
+    "chairs": "Chairs",
+    "coffee-tables": "Coffee Tables"
+  }
+}
