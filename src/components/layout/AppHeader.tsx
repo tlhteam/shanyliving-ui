@@ -18,23 +18,23 @@ import { productImages } from "@/lib/images";
 
 const navItems = [
   { key: "sofas", href: "/sofas" },
-  { key: "livingRoom", href: "/sofas" },
-  { key: "dining", href: "/sofas" },
-  { key: "bedroom", href: "/sofas" },
-  { key: "newArrivals", href: "/sofas" },
-  { key: "inspiration", href: "/about" },
-  { key: "customize", href: "/sofas" },
-  { key: "showroom", href: "/contact" }
+  { key: "livingRoom", href: "/living-room" },
+  { key: "dining", href: "/dining" },
+  { key: "bedroom", href: "/bedroom" },
+  { key: "newArrivals", href: "/new-arrivals" },
+  { key: "inspiration", href: "/inspiration" },
+  { key: "customize", href: "/customize-your-sofa" },
+  { key: "showroom", href: "/showroom" }
 ];
 
 const announcementIcons = [CheckCircle2, MessageCircle, MapPin, CheckCircle2, MessageCircle];
 
 const searchableItems = [
-  { title: "Cloud Modular", typeKey: "sofa", detailKey: "cloudModular", href: "/sofas" },
-  { title: "Luna Sofa", typeKey: "sofa", detailKey: "lunaSofa", href: "/sofas" },
-  { title: "Performance Linen", typeKey: "fabric", detailKey: "performanceLinen", href: "/sofas" },
-  { title: "Showroom Visit", typeKey: "service", detailKey: "showroomVisit", href: "/contact" },
-  { title: "Room Photo Advice", typeKey: "feature", detailKey: "roomPhoto", href: "/sofas" }
+  { title: "Cloud Modular", typeKey: "sofa", detailKey: "cloudModular", href: "/sofas/cloud-modular-sofa" },
+  { title: "Luna Sofa", typeKey: "sofa", detailKey: "lunaSofa", href: "/sofas/luna-sofa" },
+  { title: "Performance Linen", typeKey: "fabric", detailKey: "performanceLinen", href: "/customize-your-sofa" },
+  { title: "Showroom Visit", typeKey: "service", detailKey: "showroomVisit", href: "/showroom" },
+  { title: "Room Photo Advice", typeKey: "feature", detailKey: "roomPhoto", href: "/customize-your-sofa" }
 ];
 
 const cartItems = [

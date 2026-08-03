@@ -8,9 +8,22 @@ import { WhatsappIcon } from "@/components/icons/WhatsappIcon";
 import { AppLogo } from "@/components/layout/AppLogo";
 import { paymentMethods, siteImages } from "@/lib/images";
 
-const shopLinks = ["sofas", "livingRoom", "diningRoom", "bedroom", "coffeeTables", "chairs", "newArrivals"];
+const shopLinks = [
+  { key: "sofas", href: "/sofas" },
+  { key: "livingRoom", href: "/living-room" },
+  { key: "diningRoom", href: "/dining" },
+  { key: "bedroom", href: "/bedroom" },
+  { key: "coffeeTables", href: "/living-room" },
+  { key: "chairs", href: "/dining" },
+  { key: "newArrivals", href: "/new-arrivals" }
+];
 const serviceLinks = ["contact", "faq", "shipping", "warranty"];
-const companyLinks = ["about", "showroom", "privacy", "terms"];
+const companyLinks = [
+  { key: "about", href: "/about" },
+  { key: "showroom", href: "/showroom" },
+  { key: "privacy", href: "/about" },
+  { key: "terms", href: "/about" }
+];
 
 const contactRows = [
   { key: "address", icon: MapPin },
@@ -30,7 +43,7 @@ export async function AppFooter() {
         <div>
           <h3 className="text-sm font-bold uppercase tracking-wide text-white">{t("shop")}</h3>
           <div className="mt-5 flex flex-col gap-3 text-sm">
-            {shopLinks.map((key) => <Link key={key} href="/sofas" className="transition hover:text-white">{t(`shopLinks.${key}`)}</Link>)}
+            {shopLinks.map((link) => <Link key={link.key} href={link.href} className="transition hover:text-white">{t(`shopLinks.${link.key}`)}</Link>)}
           </div>
         </div>
         <div>
@@ -42,7 +55,7 @@ export async function AppFooter() {
         <div>
           <h3 className="text-sm font-bold uppercase tracking-wide text-white">{t("company")}</h3>
           <div className="mt-5 flex flex-col gap-3 text-sm">
-            {companyLinks.map((key) => <Link key={key} href="/about" className="transition hover:text-white">{t(`companyLinks.${key}`)}</Link>)}
+            {companyLinks.map((link) => <Link key={link.key} href={link.href} className="transition hover:text-white">{t(`companyLinks.${link.key}`)}</Link>)}
           </div>
         </div>
         <div>
@@ -58,7 +71,7 @@ export async function AppFooter() {
         </div>
         <div className="sm:col-span-2 lg:col-span-1">
           <h3 className="text-sm font-bold uppercase tracking-wide text-white">{t("follow")}</h3>
-          <Link href="/about" className="group mt-5 block overflow-hidden rounded-lg border border-white/10">
+          <Link href="/showroom" className="group mt-5 block overflow-hidden rounded-lg border border-white/10">
             <AppImage
               src={siteImages.showroomInterior}
               alt={t("instagramAlt")}
@@ -67,7 +80,7 @@ export async function AppFooter() {
               imageClassName="transition duration-500 group-hover:scale-[1.04]"
             />
           </Link>
-          <Link href="/contact" className="mt-5 inline-flex h-10 items-center gap-2 rounded-md border border-white px-4 text-sm text-white transition hover:bg-white hover:text-neutral-950">
+          <Link href="/showroom" className="mt-5 inline-flex h-10 items-center gap-2 rounded-md border border-white px-4 text-sm text-white transition hover:bg-white hover:text-neutral-950">
             <InstagramIcon className="size-4" /> {t("instagramCta")}
           </Link>
         </div>
