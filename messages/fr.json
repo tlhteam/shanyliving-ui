@@ -16,7 +16,7 @@
     "header": {
         "openMenu": "Ouvrir le menu",
         "closeMenu": "Fermer le menu",
-        "cart": "Panier",
+        "account": "Mon compte",
         "whatsapp": "WhatsApp",
         "search": "Rechercher",
         "closeSearch": "Fermer la recherche",
@@ -50,17 +50,6 @@
             "performanceLinen": "Tissu haut de gamme facile à nettoyer",
             "showroomVisit": "34 rue Herzl, Tel-Aviv",
             "roomPhoto": "Télécharger une photo de votre pièce"
-        },
-        "cartPanel": {
-            "title": "Panier",
-            "remove": "Supprimer {name}",
-            "estimatedTotal": "Total estimé",
-            "continue": "Continuer la personnalisation",
-            "askOnWhatsapp": "Demander sur WhatsApp",
-            "items": {
-                "cloudModular": "3 à 4 places, beige chaud",
-                "linenSwatch": "Échantillon de tissu"
-            }
         },
         "whatsappDialog": {
             "title": "Consultation WhatsApp",

@@ -1,82 +1,80 @@
 import type { NextAuthOptions } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import { z } from "zod";
+import { apiUrl } from "@/lib/api";
 
 const credentialsSchema = z.object({
-  email: z
-    .string()
-    .min(1, "Email is required")
-    .email("Invalid email address"),
-  password: z
-    .string()
-    .min(1, "Password is required")
-    .min(6, "Password must be at least 6 characters"),
+  email: z.string().min(1, "Email is required").email("Invalid email address"),
+  password: z.string().min(1, "Password is required"),
+  role: z.enum(["admin", "customer"]).optional()
 });
+
+type LoginResponse = {
+  token?: string;
+  user?: { id: number | string; name?: string; email?: string; role?: string };
+};
 
 export const authOptions: NextAuthOptions = {
   secret: process.env.NEXTAUTH_SECRET,
   session: {
-    strategy: "jwt",
+    strategy: "jwt"
   },
   pages: {
-    signIn: "/login",
+    signIn: "/customer-login"
   },
   providers: [
     Credentials({
-      name: "Credentials",
+      name: "Sanctum",
       credentials: {
-        email: {
-          label: "Email",
-          type: "email",
-        },
-        password: {
-          label: "Password",
-          type: "password",
-        },
+        email: { label: "Email", type: "email" },
+        password: { label: "Password", type: "password" },
+        role: { label: "Role", type: "text" }
       },
       async authorize(credentials) {
-        const parsedCredentials =
-          credentialsSchema.safeParse(credentials);
+        const parsed = credentialsSchema.safeParse(credentials);
 
-        if (!parsedCredentials.success) {
+        if (!parsed.success || !apiUrl) {
           return null;
         }
 
-        const { email, password } = parsedCredentials.data;
+        try {
+          const response = await fetch(`${apiUrl}/auth/login`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json", Accept: "application/json" },
+            body: JSON.stringify({ ...parsed.data, device_name: "shany-web" }),
+            cache: "no-store"
+          });
 
-        if (
-          email === "admin@shanyliving.com" &&
-          password === "password"
-        ) {
+          if (!response.ok) {
+            return null;
+          }
+
+          const body = await response.json();
+          const payload: LoginResponse = body?.data ?? body;
+
+          if (!payload?.token || !payload?.user) {
+            return null;
+          }
+
           return {
-            id: "1",
-            name: "SHANY Admin",
-            email,
-            role: "admin",
+            id: String(payload.user.id),
+            name: payload.user.name ?? null,
+            email: payload.user.email ?? null,
+            role: payload.user.role === "admin" ? "admin" : "customer",
+            accessToken: payload.token
           };
+        } catch {
+          return null;
         }
-
-        if (
-          email === "customer@shanyliving.com" &&
-          password === "password"
-        ) {
-          return {
-            id: "2",
-            name: "Customer",
-            email,
-            role: "customer",
-          };
-        }
-
-        return null;
-      },
-    }),
+      }
+    })
   ],
   callbacks: {
     async jwt({ token, user }) {
       if (user) {
         token.id = user.id;
         token.role = user.role;
+        token.accessToken = user.accessToken;
       }
 
       return token;
@@ -84,11 +82,12 @@ export const authOptions: NextAuthOptions = {
     async session({ session, token }) {
       if (session.user) {
         session.user.id = String(token.id ?? token.sub ?? "");
-        session.user.role =
-          token.role === "admin" ? "admin" : "customer";
+        session.user.role = token.role === "admin" ? "admin" : "customer";
       }
 
+      session.accessToken = token.accessToken;
+
       return session;
-    },
-  },
+    }
+  }
 };

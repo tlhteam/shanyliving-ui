@@ -16,7 +16,7 @@
   "header": {
     "openMenu": "Open menu",
     "closeMenu": "Close menu",
-    "cart": "Shopping cart",
+    "account": "My account",
     "whatsapp": "WhatsApp",
     "search": "Search",
     "closeSearch": "Close search",
@@ -50,17 +50,6 @@
       "performanceLinen": "Premium easy-clean fabric",
       "showroomVisit": "Herzl 34, Tel Aviv",
       "roomPhoto": "Upload a room photo"
-    },
-    "cartPanel": {
-      "title": "Cart",
-      "remove": "Remove {name}",
-      "estimatedTotal": "Estimated total",
-      "continue": "Continue to Customize",
-      "askOnWhatsapp": "Ask on WhatsApp",
-      "items": {
-        "cloudModular": "3-4 Seater, Warm Beige",
-        "linenSwatch": "Fabric sample"
-      }
     },
     "whatsappDialog": {
       "title": "WhatsApp consultation",

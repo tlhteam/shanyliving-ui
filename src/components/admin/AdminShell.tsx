@@ -2,18 +2,20 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { LogOut, Menu, UserRound } from "lucide-react";
-import { signOut } from "next-auth/react";
-import { adminSections } from "@/lib/admin-data";
+import { useSession } from "next-auth/react";
+import { Menu, PanelLeftClose, PanelLeftOpen } from "lucide-react";
+import { useState } from "react";
+import { adminNotifications, adminSections } from "@/lib/admin-data";
+import { AppAccountMenu } from "@/components/app/AppAccountMenu";
+import { AppNotificationBell } from "@/components/app/AppNotificationBell";
 import { AppLogo } from "@/components/layout/AppLogo";
 import { AppThemeToggle } from "@/components/app/AppThemeToggle";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { cn } from "@/lib/utils";
+import { persistSidebarPreference, sidebarCookies } from "@/lib/sidebar-preference";
 
-function AdminNav() {
+function AdminNav({ collapsed = false, onNavigate }: { collapsed?: boolean; onNavigate?: () => void }) {
   const pathname = usePathname();
   const groups = [...new Set(adminSections.map((item) => item.group))];
 
@@ -21,15 +23,29 @@ function AdminNav() {
     <nav className="space-y-6">
       {groups.map((group) => (
         <div key={group}>
-          <p className="px-3 text-[11px] font-bold uppercase tracking-[0.18em] text-neutral-500 dark:text-neutral-400">{group}</p>
-          <div className="mt-2 space-y-1">
+          {collapsed ? null : (
+            <p className="px-3 text-[11px] font-bold uppercase tracking-[0.18em] text-neutral-500 dark:text-neutral-400">{group}</p>
+          )}
+          <div className={cn("space-y-1", collapsed ? "mt-0" : "mt-2")}>
             {adminSections.filter((item) => item.group === group).map(({ href, label, icon: Icon }) => {
               const active = pathname === href;
 
               return (
-                <Link key={href} href={href} className={cn("flex items-center gap-3 rounded-md px-3 py-2.5 text-sm font-semibold transition", active ? "bg-neutral-950 text-white dark:bg-white dark:text-neutral-950" : "text-neutral-700 hover:bg-neutral-100 dark:text-neutral-300 dark:hover:bg-white/10")}>
-                  <Icon className="size-4" />
-                  {label}
+                <Link
+                  key={href}
+                  href={href}
+                  onClick={onNavigate}
+                  title={collapsed ? label : undefined}
+                  className={cn(
+                    "flex items-center gap-3 rounded-md px-3 py-2.5 text-sm font-semibold transition",
+                    collapsed && "justify-center px-0",
+                    active
+                      ? "bg-neutral-950 text-white dark:bg-white dark:text-neutral-950"
+                      : "text-neutral-700 hover:bg-neutral-100 dark:text-neutral-300 dark:hover:bg-white/10"
+                  )}
+                >
+                  <Icon className="size-4 shrink-0" />
+                  {collapsed ? <span className="sr-only">{label}</span> : label}
                 </Link>
               );
             })}
@@ -40,64 +56,79 @@ function AdminNav() {
   );
 }
 
-export function AdminShell({ children }: { children: React.ReactNode }) {
+export function AdminShell({ children, defaultCollapsed = false }: { children: React.ReactNode; defaultCollapsed?: boolean }) {
+  const { data: session } = useSession();
+  const [collapsed, setCollapsed] = useState(defaultCollapsed);
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const name = session?.user?.name ?? "Shany Admin";
+  const email = session?.user?.email;
+
+  const toggleCollapsed = () => {
+    setCollapsed((previous) => {
+      const next = !previous;
+      persistSidebarPreference(sidebarCookies.admin, next);
+
+      return next;
+    });
+  };
+
   return (
-    <div className="admin-theme min-h-screen bg-neutral-100 text-neutral-950 dark:bg-neutral-950 dark:text-neutral-50 lg:grid lg:grid-cols-[280px_1fr]">
-      <aside className="hidden border-r border-neutral-200 bg-white p-5 dark:border-white/10 dark:bg-neutral-900 lg:block">
-        <AppLogo className="dark:hidden" imageClassName="w-40" />
-        <AppLogo variant="light" className="hidden dark:inline-flex" imageClassName="w-40" />
-        <div className="mt-8">
-          <AdminNav />
+    <div className="admin-theme flex min-h-screen w-full bg-neutral-100 text-neutral-950 dark:bg-neutral-950 dark:text-neutral-50">
+      <aside
+        className={cn(
+          "sticky top-0 hidden h-screen shrink-0 flex-col border-e border-neutral-200 bg-white p-4 transition-[width] duration-200 dark:border-white/10 dark:bg-neutral-900 lg:flex",
+          collapsed ? "w-20" : "w-72"
+        )}
+      >
+        <div className={cn("flex items-center", collapsed ? "justify-center" : "justify-between")}>
+          {collapsed ? null : (
+            <>
+              <AppLogo className="dark:hidden" imageClassName="w-32" />
+              <AppLogo variant="light" className="hidden dark:inline-flex" imageClassName="w-32" />
+            </>
+          )}
+          <Button variant="ghost" size="icon" aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"} onClick={toggleCollapsed}>
+            {collapsed ? <PanelLeftOpen className="size-5" /> : <PanelLeftClose className="size-5" />}
+          </Button>
+        </div>
+        <div className="mt-8 min-h-0 flex-1 overflow-y-auto">
+          <AdminNav collapsed={collapsed} />
         </div>
       </aside>
-      <div className="min-w-0">
-        <header className="sticky top-0 z-40 flex h-16 items-center justify-between border-b border-neutral-200 bg-white/90 px-4 backdrop-blur dark:border-white/10 dark:bg-neutral-900/90 sm:px-6">
-          <div className="flex items-center gap-3">
-            <Sheet>
-              <SheetTrigger render={<Button variant="outline" size="icon" className="lg:hidden" />}>
+      <div className="flex min-w-0 flex-1 flex-col">
+        <header className="sticky top-0 z-40 flex h-16 items-center justify-between gap-3 border-b border-neutral-200 bg-white/90 px-4 backdrop-blur dark:border-white/10 dark:bg-neutral-900/90 sm:px-6">
+          <div className="flex min-w-0 items-center gap-3">
+            <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
+              <SheetTrigger render={<Button variant="outline" size="icon" aria-label="Open menu" className="lg:hidden" />}>
                 <Menu className="size-4" />
               </SheetTrigger>
-              <SheetContent side="left" className="w-80 p-0">
+              <SheetContent side="left" className="w-80 max-w-[86vw] p-0">
                 <SheetHeader>
                   <SheetTitle>SHANY Admin</SheetTitle>
                 </SheetHeader>
-                <div className="px-4 pb-6">
-                  <AdminNav />
+                <div className="min-h-0 flex-1 overflow-y-auto px-4 pb-6">
+                  <AdminNav onNavigate={() => setMobileOpen(false)} />
                 </div>
               </SheetContent>
             </Sheet>
-            <div>
+            <div className="min-w-0">
               <p className="text-sm font-bold uppercase tracking-[0.16em] text-neutral-500 dark:text-neutral-400">Admin Panel</p>
-              <p className="text-xs text-neutral-500 dark:text-neutral-400">Catalog, leads and showroom operations</p>
+              <p className="truncate text-xs text-neutral-500 dark:text-neutral-400">Catalog, leads and showroom operations</p>
             </div>
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex shrink-0 items-center gap-2">
             <AppThemeToggle />
-            <DropdownMenu>
-              <DropdownMenuTrigger render={<button className="rounded-full outline-none ring-offset-2 focus-visible:ring-2 focus-visible:ring-neutral-950 dark:focus-visible:ring-white" />}>
-                <Avatar>
-                  <AvatarFallback className="bg-neutral-950 text-white dark:bg-white dark:text-neutral-950">SL</AvatarFallback>
-                </Avatar>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-56">
-                <DropdownMenuGroup>
-                  <DropdownMenuLabel>
-                    <div className="flex items-center gap-2">
-                      <UserRound className="size-4" />
-                      Shany Admin
-                    </div>
-                  </DropdownMenuLabel>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem onClick={() => signOut({ callbackUrl: "/login" })}>
-                    <LogOut className="size-4" />
-                    Logout
-                  </DropdownMenuItem>
-                </DropdownMenuGroup>
-              </DropdownMenuContent>
-            </DropdownMenu>
+            <AppNotificationBell items={adminNotifications} viewAllHref="/admin/leads" />
+            <AppAccountMenu
+              name={name}
+              email={email}
+              profileHref="/admin/profile"
+              settingsHref="/admin/settings"
+              signOutUrl="/login"
+            />
           </div>
         </header>
-        <main className="p-4 sm:p-6 lg:p-8">{children}</main>
+        <main className="min-w-0 flex-1 p-4 sm:p-6 lg:p-8">{children}</main>
       </div>
     </div>
   );

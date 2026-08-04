@@ -3,18 +3,16 @@
 import Link from "next/link";
 import debounce from "lodash.debounce";
 import { useTranslations } from "next-intl";
+import { useSession } from "next-auth/react";
 import { AnimatePresence, motion } from "motion/react";
-import { CheckCircle2, MapPin, Menu, MessageCircle, Search, ShoppingBag, Trash2, X } from "lucide-react";
+import { CheckCircle2, MapPin, Menu, MessageCircle, Search, UserRound, X } from "lucide-react";
 import { ChangeEvent, useEffect, useMemo, useState } from "react";
 import { AppButton } from "@/components/app/AppButton";
 import { AppDialog } from "@/components/app/AppDialog";
-import { AppImage } from "@/components/app/AppImage";
 import { AppMenu } from "@/components/app/AppMenu";
 import { WhatsappIcon } from "@/components/icons/WhatsappIcon";
 import { AppLogo } from "@/components/layout/AppLogo";
 import { LanguageSwitcher } from "@/components/layout/LanguageSwitcher";
-import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
-import { productImages } from "@/lib/images";
 
 const navItems = [
   { key: "sofas", href: "/sofas" },
@@ -37,19 +35,15 @@ const searchableItems = [
   { title: "Room Photo Advice", typeKey: "feature", detailKey: "roomPhoto", href: "/customize-your-sofa" }
 ];
 
-const cartItems = [
-  { name: "Cloud Modular", detailKey: "cloudModular", price: "NIS 6,990", image: productImages["cloud-modular"] },
-  { name: "Performance Linen swatch", detailKey: "linenSwatch", price: "NIS 0", image: productImages["linen-cushion"] }
-];
-
 export function AppHeader() {
   const t = useTranslations("header");
   const [open, setOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
-  const [cartOpen, setCartOpen] = useState(false);
   const [whatsappOpen, setWhatsappOpen] = useState(false);
   const [searchValue, setSearchValue] = useState("");
   const [query, setQuery] = useState("");
+  const { status } = useSession();
+  const accountHref = status === "authenticated" ? "/customer" : "/customer-login";
   const whatsappNumber = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER?.replace(/\D/g, "");
   const whatsappHref = whatsappNumber ? `https://wa.me/${whatsappNumber}` : "/contact";
   const debouncedQuery = useMemo(() => debounce(setQuery, 220), []);
@@ -108,10 +102,14 @@ export function AppHeader() {
           <button aria-label={t("openMenu")} className="rounded-md p-2 transition hover:bg-neutral-100 lg:hidden" onClick={() => setOpen(true)}>
             <Menu className="size-5" />
           </button>
-          <button aria-label={t("cart")} className="relative rounded-md p-2 transition hover:bg-neutral-100" onClick={() => setCartOpen(true)}>
-            <ShoppingBag className="size-5" />
-            <span className="absolute -inset-e-0.5 -top-0.5 grid size-4 place-items-center rounded-full bg-black text-[10px] font-bold text-white">{cartItems.length}</span>
-          </button>
+          <Link
+            href={accountHref}
+            aria-label={t("account")}
+            title={t("account")}
+            className="rounded-md p-2 transition hover:bg-neutral-100"
+          >
+            <UserRound className="size-5" />
+          </Link>
           <button aria-label={t("whatsapp")} className="rounded-md p-2 text-[#128c4a] transition hover:bg-neutral-100" onClick={() => setWhatsappOpen(true)}>
             <WhatsappIcon className="size-5" />
           </button>
@@ -147,39 +145,6 @@ export function AppHeader() {
           </motion.div>
         ) : null}
       </AnimatePresence>
-      <Sheet open={cartOpen} onOpenChange={setCartOpen}>
-        <SheetContent side="right" className="w-full max-w-md bg-white p-0 text-neutral-950">
-          <SheetHeader className="border-b border-neutral-200">
-            <SheetTitle>{t("cartPanel.title")}</SheetTitle>
-          </SheetHeader>
-          <div className="flex flex-1 flex-col gap-4 p-5">
-            {cartItems.map((item) => (
-              <div key={item.name} className="grid grid-cols-[72px_1fr_auto] gap-4 rounded-lg border border-neutral-200 p-3">
-                <AppImage src={item.image} alt={item.name} className="rounded-md" sizes="72px" />
-                <div>
-                  <p className="font-bold">{item.name}</p>
-                  <p className="mt-1 text-sm text-neutral-600">{t(`cartPanel.items.${item.detailKey}`)}</p>
-                  <p className="mt-2 text-sm font-bold">{item.price}</p>
-                </div>
-                <button aria-label={t("cartPanel.remove", { name: item.name })} className="grid size-8 place-items-center rounded-md text-neutral-500 transition hover:bg-neutral-100 hover:text-red-600">
-                  <Trash2 className="size-4" />
-                </button>
-              </div>
-            ))}
-            <div className="mt-auto space-y-3 border-t border-neutral-200 pt-4">
-              <div className="flex items-center justify-between text-sm font-bold">
-                <span>{t("cartPanel.estimatedTotal")}</span>
-                <span>NIS 6,990</span>
-              </div>
-              <AppButton className="w-full">{t("cartPanel.continue")}</AppButton>
-              <AppButton variant="outline" className="w-full gap-2" onClick={() => setWhatsappOpen(true)}>
-                <WhatsappIcon className="size-4 text-[#128c4a]" />
-                {t("cartPanel.askOnWhatsapp")}
-              </AppButton>
-            </div>
-          </div>
-        </SheetContent>
-      </Sheet>
       <AppDialog
         open={whatsappOpen}
         onOpenChange={setWhatsappOpen}

@@ -51,3 +51,10 @@ export const giftCards = [
   { id: "GIFT-1", name: "Housewarming Gift Card", balance: 500, status: "Ready soon" },
   { id: "GIFT-2", name: "Design Consultation Credit", balance: 250, status: "Ready soon" }
 ];
+
+export const customerNotifications = [
+  { id: "NTF-1", title: "Order in production", message: "Order #SL12345 moved to production.", time: "10:24 AM", unread: true, href: "/customer/orders" },
+  { id: "NTF-2", title: "New message from Anna", message: "We received your fabric selection.", time: "1d ago", unread: true, href: "/customer/messages" },
+  { id: "NTF-3", title: "Saved design updated", message: "Luna U-shape quote is ready to review.", time: "3d ago", unread: false, href: "/customer/saved-designs" },
+  { id: "NTF-4", title: "Gift card ready", message: "Your housewarming gift card is active.", time: "1w ago", unread: false, href: "/customer/gift-cards" }
+];

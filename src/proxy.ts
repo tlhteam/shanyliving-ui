@@ -1,26 +1,33 @@
-import { withAuth } from "next-auth/middleware";
+import { getToken } from "next-auth/jwt";
+import { NextResponse, type NextRequest } from "next/server";
 
-export default withAuth({
-  pages: {
-    signIn: "/customer-login",
-  },
-  callbacks: {
-    authorized: ({ token, req }) => {
-      const pathname = req.nextUrl.pathname;
+const secret = process.env.NEXTAUTH_SECRET;
 
-      if (pathname.startsWith("/admin")) {
-        return token?.role === "admin";
-      }
+function redirectToLogin(request: NextRequest, pathname: string) {
+  const url = request.nextUrl.clone();
+  url.pathname = pathname;
+  url.search = "";
+  url.searchParams.set("callbackUrl", request.nextUrl.pathname + request.nextUrl.search);
 
-      if (pathname.startsWith("/customer")) {
-        return token?.role === "admin" || token?.role === "customer";
-      }
+  return NextResponse.redirect(url);
+}
 
-      return Boolean(token);
-    },
-  },
-});
+export default async function proxy(request: NextRequest) {
+  const { pathname } = request.nextUrl;
+  const token = await getToken({ req: request, secret });
+  const role = token?.role;
+
+  if (pathname.startsWith("/admin")) {
+    return role === "admin" ? NextResponse.next() : redirectToLogin(request, "/login");
+  }
+
+  if (pathname.startsWith("/customer")) {
+    return role ? NextResponse.next() : redirectToLogin(request, "/customer-login");
+  }
+
+  return NextResponse.next();
+}
 
 export const config = {
-  matcher: ["/admin/:path*", "/customer/:path*"],
+  matcher: ["/admin/:path*", "/customer/:path*"]
 };

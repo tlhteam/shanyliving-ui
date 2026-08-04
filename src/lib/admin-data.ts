@@ -88,3 +88,9 @@ export const settingsRows: AdminRow[] = [
   { setting: "Tracking pixels", value: "GA4, Meta, TikTok", status: "Planned" },
   { setting: "Legal pages", value: "Privacy, accessibility, terms", status: "Needs review" }
 ];
+
+export const adminNotifications = [
+  { id: "ADM-1", title: "New lead from WhatsApp", message: "Maya asked about the Cloud Modular in boucle.", time: "9:12 AM", unread: true, href: "/admin/leads" },
+  { id: "ADM-2", title: "Showroom appointment", message: "Consultation booked for Thursday 16:00.", time: "Yesterday", unread: true, href: "/admin/appointments" },
+  { id: "ADM-3", title: "Configuration submitted", message: "Ella Sofa configuration ready for pricing.", time: "2d ago", unread: false, href: "/admin/configurations" }
+];

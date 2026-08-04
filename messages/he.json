@@ -16,7 +16,7 @@
     "header": {
         "openMenu": "פתיחת התפריט",
         "closeMenu": "סגירת התפריט",
-        "cart": "עגלת קניות",
+        "account": "החשבון שלי",
         "whatsapp": "וואטסאפ",
         "search": "חיפוש",
         "closeSearch": "סגירת החיפוש",
@@ -50,17 +50,6 @@
             "performanceLinen": "בד פרימיום קל לניקוי",
             "showroomVisit": "הרצל 34, תל אביב",
             "roomPhoto": "העלאת תמונה של החדר"
-        },
-        "cartPanel": {
-            "title": "עגלה",
-            "remove": "הסרת {name}",
-            "estimatedTotal": "סכום משוער",
-            "continue": "המשך להתאמה אישית",
-            "askOnWhatsapp": "שאלו בוואטסאפ",
-            "items": {
-                "cloudModular": "3–4 מושבים, בז׳ חם",
-                "linenSwatch": "דוגמת בד"
-            }
         },
         "whatsappDialog": {
             "title": "ייעוץ בוואטסאפ",

@@ -16,7 +16,7 @@
     "header": {
         "openMenu": "Apri menu",
         "closeMenu": "Chiudi menu",
-        "cart": "Carrello",
+        "account": "Il mio account",
         "whatsapp": "WhatsApp",
         "search": "Cerca",
         "closeSearch": "Chiudi ricerca",
@@ -50,17 +50,6 @@
             "performanceLinen": "Tessuto premium facile da pulire",
             "showroomVisit": "Herzl 34, Tel Aviv",
             "roomPhoto": "Carica una foto della stanza"
-        },
-        "cartPanel": {
-            "title": "Carrello",
-            "remove": "Rimuovi {name}",
-            "estimatedTotal": "Totale stimato",
-            "continue": "Continua con la personalizzazione",
-            "askOnWhatsapp": "Chiedi su WhatsApp",
-            "items": {
-                "cloudModular": "3-4 posti, beige caldo",
-                "linenSwatch": "Campione di tessuto"
-            }
         },
         "whatsappDialog": {
             "title": "Consulenza WhatsApp",
