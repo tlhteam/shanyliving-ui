@@ -14,10 +14,10 @@ export const AppButton = forwardRef<HTMLButtonElement, AppButtonProps>(
       disabled={disabled || loading}
       className={cn(
         "inline-flex items-center justify-center rounded-md font-medium transition duration-200 disabled:pointer-events-none disabled:opacity-50",
-        variant === "primary" && "bg-neutral-950 text-white hover:bg-neutral-800",
+        variant === "primary" && "bg-neutral-950 text-white hover:bg-neutral-800 dark:bg-white dark:text-neutral-950 dark:hover:bg-neutral-200",
         variant === "secondary" && "bg-[#e7ddcf] text-neutral-950 hover:bg-[#d8c9b5]",
-        variant === "outline" && "border border-neutral-300 bg-white text-neutral-950 hover:bg-neutral-100",
-        variant === "ghost" && "text-neutral-800 hover:bg-neutral-100",
+        variant === "outline" && "border border-neutral-300 bg-white text-neutral-950 hover:bg-neutral-100 dark:border-white/15 dark:bg-neutral-950 dark:text-neutral-50 dark:hover:bg-white/10",
+        variant === "ghost" && "text-neutral-800 hover:bg-neutral-100 dark:text-neutral-200 dark:hover:bg-white/10",
         variant === "danger" && "bg-red-600 text-white hover:bg-red-700",
         size === "sm" && "h-9 px-3 text-sm",
         size === "md" && "h-11 px-5 text-sm",

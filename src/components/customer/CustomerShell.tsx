@@ -46,7 +46,7 @@ function CustomerNav({ collapsed = false, onNavigate }: { collapsed?: boolean; o
             className={cn(
               "flex items-center gap-3 rounded-md px-3 py-2.5 text-sm font-semibold transition",
               collapsed && "justify-center px-0",
-              active ? "bg-neutral-950 text-white" : "text-neutral-700 hover:bg-neutral-100"
+              active ? "bg-neutral-950 text-white dark:bg-white dark:text-neutral-950" : "text-neutral-700 hover:bg-neutral-100 dark:text-neutral-300 dark:hover:bg-white/10"
             )}
           >
             <Icon className="size-5 shrink-0 stroke-[1.5]" />
@@ -61,8 +61,8 @@ function CustomerNav({ collapsed = false, onNavigate }: { collapsed?: boolean; o
 export function CustomerTopbar({ title, subtitle }: { title: string; subtitle?: string }) {
   return (
     <div className="mb-7">
-      <h1 className="font-serif text-2xl font-bold text-neutral-950 sm:text-3xl lg:text-4xl">{title}</h1>
-      {subtitle ? <p className="mt-2 text-sm text-neutral-600">{subtitle}</p> : null}
+      <h1 className="font-serif text-2xl font-bold text-neutral-950 dark:text-neutral-50 sm:text-3xl lg:text-4xl">{title}</h1>
+      {subtitle ? <p className="mt-2 text-sm text-neutral-600 dark:text-neutral-400">{subtitle}</p> : null}
     </div>
   );
 }
@@ -86,10 +86,10 @@ export function CustomerShell({ children, defaultCollapsed = false }: { children
   };
 
   return (
-    <div className="flex min-h-screen w-full bg-neutral-50 text-neutral-950">
+    <div className="customer-theme flex min-h-screen w-full bg-neutral-50 text-neutral-950 dark:bg-neutral-950 dark:text-neutral-50">
       <aside
         className={cn(
-          "sticky top-0 hidden h-screen shrink-0 flex-col border-e border-neutral-200 bg-white p-4 transition-[width] duration-200 lg:flex",
+          "sticky top-0 hidden h-screen shrink-0 flex-col border-e border-neutral-200 bg-white p-4 transition-[width] duration-200 dark:border-white/10 dark:bg-neutral-900 lg:flex",
           collapsed ? "w-20" : "w-64"
         )}
       >
@@ -104,7 +104,7 @@ export function CustomerShell({ children, defaultCollapsed = false }: { children
         </div>
       </aside>
       <div className="flex min-w-0 flex-1 flex-col">
-        <header className="sticky top-0 z-40 flex h-16 items-center justify-between gap-3 border-b border-neutral-200 bg-white/90 px-4 backdrop-blur sm:px-6">
+        <header className="sticky top-0 z-40 flex h-16 items-center justify-between gap-3 border-b border-neutral-200 bg-white/90 px-4 backdrop-blur dark:border-white/10 dark:bg-neutral-900/90 sm:px-6">
           <div className="flex min-w-0 items-center gap-3">
             <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
               <SheetTrigger render={<Button variant="outline" size="icon" aria-label="Open menu" className="lg:hidden" />}>

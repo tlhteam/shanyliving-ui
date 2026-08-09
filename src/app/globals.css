@@ -2,7 +2,7 @@
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
 
-@custom-variant dark (&:is(.dark .admin-theme, .dark .admin-theme *));
+@custom-variant dark (&:is(.dark .admin-theme, .dark .admin-theme *, .dark .customer-theme, .dark .customer-theme *));
 
 * {
   box-sizing: border-box;
@@ -129,7 +129,7 @@ a {
   --sidebar-ring: oklch(0.708 0 0);
 }
 
-.dark .admin-theme {
+.dark :is(.admin-theme, .customer-theme) {
   --background: oklch(0.145 0 0);
   --foreground: oklch(0.985 0 0);
   --card: oklch(0.205 0 0);
