@@ -7,12 +7,14 @@ import { CreditCard, Gift, Heart, Home, Mail, MapPin, Menu, Package, PanelLeftCl
 import { useState } from "react";
 import { AppAccountMenu } from "@/components/app/AppAccountMenu";
 import { AppNotificationBell } from "@/components/app/AppNotificationBell";
+import { CustomerFirstLoginTour } from "@/components/customer/CustomerFirstLoginTour";
 import { AppLogo } from "@/components/layout/AppLogo";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { persistSidebarPreference, sidebarCookies } from "@/lib/sidebar-preference";
-import { customer, customerNotifications } from "@/lib/customer-panel";
+import { useNotifications } from "@/hooks/use-notifications";
+import { customer } from "@/lib/customer-panel";
 
 const navItems = [
   { label: "Dashboard", href: "/customer", icon: Home },
@@ -31,7 +33,7 @@ function CustomerNav({ collapsed = false, onNavigate }: { collapsed?: boolean; o
   const pathname = usePathname();
 
   return (
-    <nav className="space-y-1">
+    <nav className="space-y-1" data-tour="customer-nav">
       {navItems.map(({ href, label, icon: Icon }) => {
         const active = pathname === href;
 
@@ -69,8 +71,10 @@ export function CustomerShell({ children, defaultCollapsed = false }: { children
   const { data: session } = useSession();
   const [collapsed, setCollapsed] = useState(defaultCollapsed);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const notificationsQuery = useNotifications("customer");
   const name = session?.user?.name ?? customer.name;
   const email = session?.user?.email ?? customer.email;
+  const avatar = session?.user?.image ?? customer.avatar;
 
   const toggleCollapsed = () => {
     setCollapsed((previous) => {
@@ -122,18 +126,23 @@ export function CustomerShell({ children, defaultCollapsed = false }: { children
             </div>
           </div>
           <div className="flex shrink-0 items-center gap-2 sm:gap-3">
-            <AppNotificationBell items={customerNotifications} viewAllHref="/customer/messages" />
-            <AppAccountMenu
-              name={name}
-              email={email}
-              avatar={customer.avatar}
-              profileHref="/customer/profile"
-              settingsHref="/customer/settings"
-              showName
-            />
+            <div data-tour="customer-notifications">
+              <AppNotificationBell items={notificationsQuery.data ?? []} viewAllHref="/customer/messages" />
+            </div>
+            <div data-tour="customer-profile">
+              <AppAccountMenu
+                name={name}
+                email={email}
+                avatar={avatar}
+                profileHref="/customer/profile"
+                settingsHref="/customer/settings"
+                showName
+              />
+            </div>
           </div>
         </header>
         <main className="min-w-0 flex-1 px-4 py-6 sm:px-6 sm:py-8 lg:px-8">{children}</main>
+        <CustomerFirstLoginTour />
       </div>
     </div>
   );

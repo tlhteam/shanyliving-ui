@@ -1,5 +1,6 @@
 import type { NextAuthOptions } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
+import Google from "next-auth/providers/google";
 import { z } from "zod";
 import { apiUrl } from "@/lib/api";
 
@@ -11,7 +12,7 @@ const credentialsSchema = z.object({
 
 type LoginResponse = {
   token?: string;
-  user?: { id: number | string; name?: string; email?: string; role?: string };
+  user?: { id: number | string; name?: string; email?: string; avatar?: string | null; role?: string };
 };
 
 export const authOptions: NextAuthOptions = {
@@ -23,6 +24,11 @@ export const authOptions: NextAuthOptions = {
     signIn: "/login"
   },
   providers: [
+    Google({
+      clientId: process.env.GOOGLE_CLIENT_ID ?? "",
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET ?? "",
+      authorization: { params: { prompt: "select_account", access_type: "offline", response_type: "code" } }
+    }),
     Credentials({
       name: "Sanctum",
       credentials: {
@@ -70,11 +76,48 @@ export const authOptions: NextAuthOptions = {
     })
   ],
   callbacks: {
+    async signIn({ account, user }) {
+      if (account?.provider !== "google") {
+        return true;
+      }
+
+      if (!apiUrl || !account.id_token) {
+        return false;
+      }
+
+      const response = await fetch(`${apiUrl}/auth/google`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Accept: "application/json" },
+        body: JSON.stringify({ id_token: account.id_token, device_name: "shany-google" }),
+        cache: "no-store"
+      });
+
+      if (!response.ok) {
+        return false;
+      }
+
+      const body = await response.json();
+      const payload: LoginResponse = body?.data ?? body;
+
+      if (!payload?.token || !payload?.user) {
+        return false;
+      }
+
+      user.id = String(payload.user.id);
+      user.name = payload.user.name ?? user.name;
+      user.email = payload.user.email ?? user.email;
+      user.image = payload.user.avatar ?? user.image;
+      user.role = payload.user.role === "admin" ? "admin" : "customer";
+      user.accessToken = payload.token;
+
+      return true;
+    },
     async jwt({ token, user }) {
       if (user) {
         token.id = user.id;
         token.role = user.role;
         token.accessToken = user.accessToken;
+        token.picture = user.image;
       }
 
       return token;
@@ -83,6 +126,7 @@ export const authOptions: NextAuthOptions = {
       if (session.user) {
         session.user.id = String(token.id ?? token.sub ?? "");
         session.user.role = token.role === "admin" ? "admin" : "customer";
+        session.user.image = token.picture ?? session.user.image;
       }
 
       session.accessToken = token.accessToken;

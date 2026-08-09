@@ -14,6 +14,7 @@ import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { cn } from "@/lib/utils";
 import { persistSidebarPreference, sidebarCookies } from "@/lib/sidebar-preference";
+import { useNotifications } from "@/hooks/use-notifications";
 
 function AdminNav({ collapsed = false, onNavigate }: { collapsed?: boolean; onNavigate?: () => void }) {
   const pathname = usePathname();
@@ -60,6 +61,7 @@ export function AdminShell({ children, defaultCollapsed = false }: { children: R
   const { data: session } = useSession();
   const [collapsed, setCollapsed] = useState(defaultCollapsed);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const notificationsQuery = useNotifications("admin");
   const name = session?.user?.name ?? "Shany Admin";
   const email = session?.user?.email;
 
@@ -118,7 +120,7 @@ export function AdminShell({ children, defaultCollapsed = false }: { children: R
           </div>
           <div className="flex shrink-0 items-center gap-2">
             <AppThemeToggle />
-            <AppNotificationBell items={adminNotifications} viewAllHref="/admin/leads" />
+            <AppNotificationBell items={notificationsQuery.data ?? adminNotifications} viewAllHref="/admin/leads" />
             <AppAccountMenu
               name={name}
               email={email}

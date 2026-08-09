@@ -31,7 +31,16 @@ export function CustomerLoginForm({ callbackUrl }: { callbackUrl?: string }) {
   };
 
   return (
-    <form onSubmit={form.handleSubmit(onSubmit)} className="mt-6 space-y-4" noValidate>
+    <div className="mt-6 space-y-4">
+      <AppButton type="button" variant="outline" className="w-full" onClick={() => signIn("google", { callbackUrl: callbackUrl?.startsWith("/") ? callbackUrl : "/customer" })}>
+        Continue with Google
+      </AppButton>
+      <div className="flex items-center gap-3 text-xs font-bold uppercase tracking-wide text-neutral-400">
+        <span className="h-px flex-1 bg-neutral-200" />
+        or
+        <span className="h-px flex-1 bg-neutral-200" />
+      </div>
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4" noValidate>
       <div>
         <label htmlFor="customer-email" className="mb-2 block text-sm font-semibold text-neutral-800">Email</label>
         <input
@@ -60,6 +69,7 @@ export function CustomerLoginForm({ callbackUrl }: { callbackUrl?: string }) {
         <p role="alert" className="rounded-md border border-red-200 bg-red-50 p-3 text-sm text-red-700">{form.formState.errors.root.message}</p>
       ) : null}
       <AppButton type="submit" className="w-full" loading={form.formState.isSubmitting} disabled={form.formState.isSubmitting}>Sign in</AppButton>
-    </form>
+      </form>
+    </div>
   );
 }
