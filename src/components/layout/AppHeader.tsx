@@ -43,7 +43,7 @@ export function AppHeader() {
   const [searchValue, setSearchValue] = useState("");
   const [query, setQuery] = useState("");
   const { status } = useSession();
-  const accountHref = status === "authenticated" ? "/customer" : "/customer-login";
+  const accountHref = status === "authenticated" ? "/customer" : "/login";
   const whatsappNumber = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER?.replace(/\D/g, "");
   const whatsappHref = whatsappNumber ? `https://wa.me/${whatsappNumber}` : "/contact";
   const debouncedQuery = useMemo(() => debounce(setQuery, 220), []);

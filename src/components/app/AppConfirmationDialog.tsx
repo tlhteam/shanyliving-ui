@@ -46,5 +46,5 @@ export function AppConfirmationDialog({ open, title = "Delete record", itemName 
         className="mt-4 h-11 w-full rounded-md border border-neutral-300 bg-white px-3 text-sm text-neutral-950 outline-none transition focus:border-neutral-950 focus:ring-2 focus:ring-neutral-950/10 dark:border-white/15 dark:bg-neutral-950 dark:text-neutral-50 dark:focus:border-white dark:focus:ring-white/10"
       />
     </AppDialog>
-  );
+  )
 }

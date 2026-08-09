@@ -3,9 +3,15 @@ import createNextIntlPlugin from "next-intl/plugin";
 
 const apiOrigin = process.env.NEXT_PUBLIC_API_URL?.replace(/\/$/, "");
 
+const productionImagePatterns = [
+  { protocol: "https" as const, hostname: "shanyliving.com", pathname: "/storage/**" },
+  { protocol: "https" as const, hostname: "www.shanyliving.com", pathname: "/storage/**" },
+  { protocol: "https" as const, hostname: "api.shanyliving.com", pathname: "/storage/**" }
+];
+
 function apiImagePatterns() {
   if (!apiOrigin) {
-    return [];
+    return productionImagePatterns;
   }
 
   try {
@@ -17,10 +23,11 @@ function apiImagePatterns() {
         hostname,
         port,
         pathname: "/storage/**"
-      }
+      },
+      ...productionImagePatterns
     ];
   } catch {
-    return [];
+    return productionImagePatterns;
   }
 }
 

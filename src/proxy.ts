@@ -14,15 +14,20 @@ function redirectToLogin(request: NextRequest, pathname: string) {
 
 export default async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
+
+  if (pathname === "/admin/login") {
+    return NextResponse.next();
+  }
+
   const token = await getToken({ req: request, secret });
   const role = token?.role;
 
   if (pathname.startsWith("/admin")) {
-    return role === "admin" ? NextResponse.next() : redirectToLogin(request, "/login");
+    return role === "admin" ? NextResponse.next() : redirectToLogin(request, "/admin/login");
   }
 
   if (pathname.startsWith("/customer")) {
-    return role ? NextResponse.next() : redirectToLogin(request, "/customer-login");
+    return role ? NextResponse.next() : redirectToLogin(request, "/login");
   }
 
   return NextResponse.next();

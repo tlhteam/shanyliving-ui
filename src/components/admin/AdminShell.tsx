@@ -124,7 +124,7 @@ export function AdminShell({ children, defaultCollapsed = false }: { children: R
               email={email}
               profileHref="/admin/profile"
               settingsHref="/admin/settings"
-              signOutUrl="/login"
+              signOutUrl="/admin/login"
             />
           </div>
         </header>
