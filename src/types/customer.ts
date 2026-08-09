@@ -72,3 +72,48 @@ export type CustomerProfile = {
   phone: string | null;
   avatar: string | null;
 };
+
+export type CustomerOrderItem = {
+  id?: number;
+  product_name?: string | null;
+  name?: string | null;
+  title?: string | null;
+  image?: string | null;
+  quantity?: number | null;
+  total?: number | string | null;
+  unit_price?: number | string | null;
+};
+
+export type CustomerOrder = {
+  id: number;
+  reference: string;
+  currency: string;
+  grand_total: number | string;
+  status: string;
+  payment_status: string;
+  fulfillment_status: string;
+  placed_at: string | null;
+  items?: CustomerOrderItem[];
+};
+
+export type CustomerMessage = {
+  id: string | number;
+  name?: string;
+  title?: string;
+  message?: string;
+  time?: string;
+  unread?: number | boolean;
+  avatar?: string | null;
+};
+
+export type CustomerDashboard = {
+  summary: {
+    active_orders: number;
+    saved_designs: number;
+    wishlist: number;
+    messages: number;
+  };
+  active_order: CustomerOrder | null;
+  saved_designs: CustomerSavedDesign[];
+  recent_messages: CustomerMessage[];
+};
