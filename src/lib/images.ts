@@ -80,6 +80,8 @@ export function productImage(product: CatalogProduct, index = 0) {
   const primary = product.images?.find((image) => image.is_primary) ?? product.images?.[0];
 
   return (
+    primary?.url ??
+    product.image_url ??
     storageUrl(primary?.path) ??
     storageUrl(product.image) ??
     productImages[product.slug] ??

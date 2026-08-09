@@ -3,6 +3,7 @@ import { apiUrl } from "@/lib/api";
 export type CatalogImage = {
   id?: number | string;
   path?: string | null;
+  url?: string | null;
   alt?: string | null;
   is_primary?: boolean;
   sort_order?: number;
@@ -47,6 +48,7 @@ export type CatalogProduct = {
   seat_range?: string;
   colors?: string[];
   image?: string | null;
+  image_url?: string | null;
   images?: CatalogImage[];
   collections?: CatalogCollection[];
 };

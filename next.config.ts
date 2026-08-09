@@ -3,11 +3,12 @@ import createNextIntlPlugin from "next-intl/plugin";
 
 const apiOrigin = process.env.NEXT_PUBLIC_API_URL?.replace(/\/$/, "");
 
-const productionImagePatterns = [
-  { protocol: "https" as const, hostname: "shanyliving.com", pathname: "/storage/**" },
-  { protocol: "https" as const, hostname: "www.shanyliving.com", pathname: "/storage/**" },
-  { protocol: "https" as const, hostname: "api.shanyliving.com", pathname: "/storage/**" }
-];
+const productionHosts = ["shanyliving.com", "www.shanyliving.com", "api.shanyliving.com"];
+const publicPaths = ["/storage/**", "/uploads/**"];
+
+const productionImagePatterns = productionHosts.flatMap((hostname) =>
+  publicPaths.map((pathname) => ({ protocol: "https" as const, hostname, pathname }))
+);
 
 function apiImagePatterns() {
   if (!apiOrigin) {
@@ -18,12 +19,12 @@ function apiImagePatterns() {
     const { protocol, hostname, port } = new URL(apiOrigin);
 
     return [
-      {
+      ...publicPaths.map((pathname) => ({
         protocol: protocol.replace(":", "") as "http" | "https",
         hostname,
         port,
-        pathname: "/storage/**"
-      },
+        pathname
+      })),
       ...productionImagePatterns
     ];
   } catch {
