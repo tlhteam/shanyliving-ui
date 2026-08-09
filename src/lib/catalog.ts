@@ -17,10 +17,26 @@ export type CatalogCategory = {
   image?: string | null;
 };
 
-export type CatalogProduct = {
+export type CatalogCollection = {
   id: number | string;
   name: string;
   slug: string;
+  page_slug?: string | null;
+  description?: string | null;
+  image?: string | null;
+  is_active?: boolean;
+  sort_order?: number;
+  products_count?: number;
+};
+
+export type CatalogProduct = {
+  id: number | string;
+  uuid?: string;
+  name: string;
+  slug: string;
+  sku?: string | null;
+  barcode?: string | null;
+  subcategory?: string | null;
   category?: CatalogCategory | string | null;
   description?: string;
   price: number;
@@ -32,6 +48,7 @@ export type CatalogProduct = {
   colors?: string[];
   image?: string | null;
   images?: CatalogImage[];
+  collections?: CatalogCollection[];
 };
 
 export type HomeCatalog = {
@@ -90,5 +107,29 @@ export async function getHomeCatalog(): Promise<HomeCatalog> {
     };
   } catch {
     return fallbackCatalog;
+  }
+}
+
+export async function getCollections(pageSlug?: string): Promise<CatalogCollection[]> {
+  if (!apiUrl) {
+    return [];
+  }
+
+  try {
+    const query = pageSlug ? `?page_slug=${encodeURIComponent(pageSlug)}` : "";
+    const response = await fetch(`${apiUrl}/storefront/collections${query}`, {
+      headers: { Accept: "application/json" },
+      next: { revalidate: 60 }
+    });
+
+    if (!response.ok) {
+      return [];
+    }
+
+    const body = await response.json();
+
+    return body.data ?? [];
+  } catch {
+    return [];
   }
 }
