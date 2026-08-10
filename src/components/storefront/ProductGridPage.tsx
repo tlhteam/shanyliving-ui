@@ -1,4 +1,7 @@
+"use client";
+
 import Link from "next/link";
+import { useMemo, useState } from "react";
 import { AppButton } from "@/components/app/AppButton";
 import { AppImage } from "@/components/app/AppImage";
 import { AppSection } from "@/components/app/AppSection";
@@ -7,6 +10,64 @@ import { ProductCard } from "@/components/storefront/ProductCard";
 import type { StorefrontPage } from "@/lib/storefront-pages";
 
 export function ProductGridPage({ page }: { page: StorefrontPage }) {
+  const [activeFilter, setActiveFilter] = useState("All");
+  const [sortMode, setSortMode] = useState<"featured" | "price-low" | "price-high">("featured");
+  const filters = useMemo(() => ["All", ...page.filters], [page.filters]);
+  const filteredProducts = useMemo(() => {
+    const filtered = activeFilter === "All" || activeFilter === "Sort by" || activeFilter === "Clear Filters"
+      ? page.products
+      : page.products.filter((product) => {
+        const text = `${product.name} ${product.subcategory} ${product.seatRange ?? ""} ${product.badge ?? ""}`.toLowerCase();
+        const filter = activeFilter.toLowerCase();
+
+        if (filter === "price") {
+          return true;
+        }
+
+        if (filter === "sofa type") {
+          return product.category === "sofas" || product.name.toLowerCase().includes("sofa");
+        }
+
+        if (filter === "size") {
+          return Boolean(product.seatRange) || product.subcategory.toLowerCase().includes("bed") || product.subcategory.toLowerCase().includes("table");
+        }
+
+        if (filter === "seats") {
+          return Boolean(product.seatRange) || product.subcategory.toLowerCase().includes("chair") || product.subcategory.toLowerCase().includes("bench");
+        }
+
+        return text.includes(filter);
+      });
+
+    return [...filtered].sort((a, b) => {
+      if (sortMode === "price-low") {
+        return a.price - b.price;
+      }
+
+      if (sortMode === "price-high") {
+        return b.price - a.price;
+      }
+
+      return 0;
+    });
+  }, [activeFilter, page.products, sortMode]);
+
+  const handleFilter = (filter: string) => {
+    if (filter === "Clear Filters") {
+      setActiveFilter("All");
+      setSortMode("featured");
+      return;
+    }
+
+    if (filter === "Sort by") {
+      setSortMode((current) => current === "featured" ? "price-low" : current === "price-low" ? "price-high" : "featured");
+      setActiveFilter("All");
+      return;
+    }
+
+    setActiveFilter(filter);
+  };
+
   return (
     <>
       <section className="relative isolate overflow-hidden text-white">
@@ -21,16 +82,25 @@ export function ProductGridPage({ page }: { page: StorefrontPage }) {
       <AppSection>
         <div className="-mx-4 mb-8 overflow-x-auto px-4 sm:mx-0 sm:px-0">
           <div className="flex min-w-max gap-3">
-            {page.filters.map((filter) => (
-              <button key={filter} className="inline-flex h-10 min-w-28 items-center justify-center gap-2 rounded-md border border-neutral-300 bg-white px-4 text-xs font-bold transition hover:border-neutral-950 hover:bg-neutral-950 hover:text-white">
-                {filter}
+            {filters.map((filter) => (
+              <button
+                key={filter}
+                type="button"
+                onClick={() => handleFilter(filter)}
+                className={`inline-flex h-10 min-w-28 items-center justify-center gap-2 rounded-md border px-4 text-xs font-bold transition ${activeFilter === filter || (filter === "Sort by" && sortMode !== "featured") ? "border-neutral-950 bg-neutral-950 text-white" : "border-neutral-300 bg-white hover:border-neutral-950 hover:bg-neutral-950 hover:text-white"}`}
+              >
+                {filter === "Sort by" && sortMode === "price-low" ? "Price: Low to High" : filter === "Sort by" && sortMode === "price-high" ? "Price: High to Low" : filter}
                 {["Sort by", "Sofa Type", "Size", "Seats", "Price", "Clear Filters"].includes(filter) ? <SiteIcon name="chevron-down" className="size-3.5" /> : null}
               </button>
             ))}
           </div>
         </div>
+        <div className="mb-5 flex flex-wrap items-center justify-between gap-3 text-sm text-neutral-600">
+          <p>{filteredProducts.length} product{filteredProducts.length === 1 ? "" : "s"} shown</p>
+          <p>{activeFilter === "All" ? "All categories" : activeFilter} / {sortMode === "featured" ? "Featured order" : sortMode === "price-low" ? "Lowest price first" : "Highest price first"}</p>
+        </div>
         <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-          {page.products.map((product) => (
+          {filteredProducts.map((product) => (
             <ProductCard key={product.slug} product={product} />
           ))}
         </div>
