@@ -18,7 +18,7 @@ export default async function CustomerLoginPage({ searchParams }: PageProps) {
   }
 
   return (
-    <main className="grid min-h-screen bg-neutral-100 lg:grid-cols-[1fr_520px]">
+    <main className="grid min-h-screen bg-neutral-100 dark:bg-neutral-950 lg:grid-cols-[1fr_520px]">
       <section className="relative hidden overflow-hidden bg-black text-white lg:block">
         <div className="absolute inset-0 bg-[url('/images/hero-living-room.png')] bg-cover bg-center opacity-60" />
         <div className="relative flex h-full flex-col justify-between p-12">
@@ -38,17 +38,18 @@ export default async function CustomerLoginPage({ searchParams }: PageProps) {
       </section>
       <section className="grid place-items-center p-4 sm:p-6">
         <AppCard className="w-full max-w-md p-6 sm:p-7">
-          <AppLogo className="justify-center" imageClassName="w-40 sm:w-44" />
+          <AppLogo className="justify-center dark:hidden" imageClassName="w-40 sm:w-44" />
+          <AppLogo variant="light" className="hidden justify-center dark:inline-flex" imageClassName="w-40 sm:w-44" />
           <div className="mt-8 text-center">
             <div className="mx-auto grid size-12 place-items-center rounded-full bg-black text-white">
               <LockKeyhole className="size-5" />
             </div>
             <h2 className="mt-4 font-serif text-2xl font-bold sm:text-3xl">Customer sign in</h2>
-            <p className="mt-2 text-sm text-neutral-600">Access your orders, saved designs, wishlist, messages and settings.</p>
+            <p className="mt-2 text-sm text-neutral-600 dark:text-neutral-400">Access your orders, saved designs, wishlist, messages and settings.</p>
           </div>
           <CustomerLoginForm callbackUrl={callbackUrl} />
-          <p className="mt-5 text-center text-sm text-neutral-600">
-            New to SHANY Living? <Link href="/register" className="font-bold text-neutral-950 hover:underline">Create an account</Link>
+          <p className="mt-5 text-center text-sm text-neutral-600 dark:text-neutral-400">
+            New to SHANY Living? <Link href="/register" className="font-bold text-neutral-950 hover:underline dark:text-white">Create an account</Link>
           </p>
         </AppCard>
       </section>

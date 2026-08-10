@@ -27,7 +27,7 @@ export function RecaptchaV2({ siteKey, onChange }: RecaptchaV2Props) {
     const renderWidget = () => {
       const container = document.getElementById(id);
 
-      if (!container || container.dataset.rendered || !window.grecaptcha) {
+      if (!container || container.dataset.rendered || typeof window.grecaptcha?.render !== "function") {
         return;
       }
 
@@ -39,7 +39,7 @@ export function RecaptchaV2({ siteKey, onChange }: RecaptchaV2Props) {
       container.dataset.rendered = "true";
     };
 
-    if (window.grecaptcha) {
+    if (typeof window.grecaptcha?.render === "function") {
       renderWidget();
       return;
     }

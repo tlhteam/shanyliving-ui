@@ -10,19 +10,19 @@ import { AppSwitch } from "@/components/app/AppSwitch";
 import { AppTextField } from "@/components/app/AppTextField";
 import { CustomerTopbar } from "@/components/customer/CustomerShell";
 import { useCustomerMutation, useCustomerQuery } from "@/hooks/use-customer";
+import { mediaUrl } from "@/lib/media";
 import type { CustomerAddress, CustomerProfile, CustomerSettings } from "@/types/customer";
 
 type ProfileForm = {
   name: string;
   email: string;
   phone: string;
-  avatar: string;
 };
 
 export default function ProfilePage() {
   const { update: updateSession } = useSession();
   const form = useForm<ProfileForm>({
-    defaultValues: { name: "", email: "", phone: "", avatar: "" }
+    defaultValues: { name: "", email: "", phone: "" }
   });
 
   const profileQuery = useCustomerQuery<CustomerProfile>("profile", "/customer/profile");
@@ -34,8 +34,7 @@ export default function ProfilePage() {
       form.reset({
         name: profileQuery.data.name ?? "",
         email: profileQuery.data.email ?? "",
-        phone: profileQuery.data.phone ?? "",
-        avatar: profileQuery.data.avatar ?? ""
+        phone: profileQuery.data.phone ?? ""
       });
     }
   }, [form, profileQuery.data]);
@@ -71,6 +70,7 @@ export default function ProfilePage() {
 
   const notifications = settingsQuery.data?.notifications ?? {};
   const addresses = addressesQuery.data ?? [];
+  const avatarSrc = mediaUrl(profileQuery.data?.avatar);
 
   return (
     <>
@@ -83,8 +83,8 @@ export default function ProfilePage() {
           <div className="grid gap-6 lg:grid-cols-[140px_1fr]">
             <div className="text-center">
               <div className="relative mx-auto grid size-28 place-items-center overflow-hidden rounded-full bg-neutral-200 text-3xl font-bold text-neutral-700 dark:bg-neutral-800 dark:text-neutral-100">
-                {profileQuery.data?.avatar ? (
-                  <Image src={profileQuery.data.avatar} alt={profileQuery.data.name} fill sizes="112px" className="object-cover" />
+                {avatarSrc ? (
+                  <Image src={avatarSrc} alt={profileQuery.data?.name ?? "Profile"} fill sizes="112px" className="object-cover" />
                 ) : (
                   (profileQuery.data?.name ?? "U").slice(0, 1).toUpperCase()
                 )}
@@ -104,7 +104,6 @@ export default function ProfilePage() {
               <AppTextField<ProfileForm> name="name" label="Full Name" />
               <AppTextField<ProfileForm> name="email" label="Email Address" />
               <AppTextField<ProfileForm> name="phone" label="Phone Number" />
-              <AppTextField<ProfileForm> name="avatar" label="Avatar URL" />
             </AppForm>
           </div>
         </AppCard>

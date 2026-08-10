@@ -1,11 +1,11 @@
 import Link from "next/link";
-import { MapPin, MessageCircle, Palette, Ruler, Sofa, Star, Truck, Users } from "lucide-react";
+import { BadgeCheck, MapPin, MessageCircle, Palette, Ruler, Sofa, Truck, Users } from "lucide-react";
 import { AppButton } from "@/components/app/AppButton";
 import { AppImage } from "@/components/app/AppImage";
 import { AppSection } from "@/components/app/AppSection";
 
 const stats = [
-  { value: "15+", label: "Years Experience", icon: Star },
+  { value: "15+", label: "Years Experience", icon: BadgeCheck },
   { value: "500+", label: "Custom Sofas Delivered", icon: Sofa },
   { value: "120+", label: "Premium Fabrics", icon: Palette },
   { value: "1:1", label: "Personal Design Consultation", icon: Users }
@@ -83,8 +83,14 @@ export default function ShowroomPage() {
               <AppButton variant="outline">Book a Showroom Visit</AppButton>
             </div>
           </div>
-          <div className="grid min-h-64 place-items-center rounded-lg border border-neutral-300 bg-white text-center text-sm font-bold text-neutral-500">
-            Map preview
+          <div className="overflow-hidden rounded-lg border border-neutral-300 bg-white">
+            <iframe
+              title="Shany Living showroom map"
+              src="https://www.google.com/maps?q=Herzl%2034%2C%20Tel%20Aviv%2C%20Israel&output=embed"
+              className="h-80 w-full"
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+            />
           </div>
         </div>
         <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">

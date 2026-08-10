@@ -4,7 +4,7 @@ import Link from "next/link";
 import useEmblaCarousel from "embla-carousel-react";
 import { useLocale, useTranslations } from "next-intl";
 import { motion } from "motion/react";
-import { ArrowLeft, ArrowRight, Award, Gift, Heart, Lock, MapPin, MessageCircle, Palette, Ruler, Sofa, Sparkles, Star, Truck, Upload } from "lucide-react";
+import { ArrowLeft, ArrowRight, BadgeCheck, Gem, Gift, Heart, Images, LockKeyhole, MapPin, MessageCircle, Palette, Ruler, Sofa, Truck, Upload } from "lucide-react";
 import { AppButton } from "@/components/app/AppButton";
 import { AppImage } from "@/components/app/AppImage";
 import { AppSection } from "@/components/app/AppSection";
@@ -27,17 +27,17 @@ const customizationSteps = [
 
 const clubPerks = [
   { key: "offers", icon: Gift },
-  { key: "arrivals", icon: Star },
-  { key: "inspiration", icon: Sparkles }
+  { key: "arrivals", icon: BadgeCheck },
+  { key: "inspiration", icon: Images }
 ];
 
 const features = [
-  { key: "craftsmanship", icon: Award },
+  { key: "craftsmanship", icon: Gem },
   { key: "delivery", icon: Truck },
   { key: "sizes", icon: Sofa },
   { key: "fabrics", icon: Palette },
   { key: "consultation", icon: MessageCircle },
-  { key: "payments", icon: Lock }
+  { key: "payments", icon: LockKeyhole }
 ];
 
 function FeaturedCard({ product, index }: { product: CatalogProduct; index: number }) {

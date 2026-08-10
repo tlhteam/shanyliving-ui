@@ -19,6 +19,14 @@ const productionImagePatterns = productionHosts.flatMap((hostname) =>
   }))
 );
 
+const googleAvatarPatterns = [
+  {
+    protocol: "https" as const,
+    hostname: "lh3.googleusercontent.com",
+    pathname: "/**",
+  },
+];
+
 const developmentImagePatterns = publicPaths.map((pathname) => ({
   protocol: "http" as const,
   hostname: "localhost",
@@ -58,7 +66,7 @@ function apiImagePatterns() {
 
 const nextConfig: NextConfig = {
   images: {
-    remotePatterns: apiImagePatterns(),
+    remotePatterns: [...apiImagePatterns(), ...googleAvatarPatterns],
     dangerouslyAllowLocalIP: process.env.NODE_ENV === "development",
   },
 };

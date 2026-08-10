@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { mediaUrl } from "@/lib/media";
 import { cn } from "@/lib/utils";
 
 export type AppImageProps = {
@@ -24,11 +25,13 @@ export function AppImage({
   loading,
   objectPosition
 }: AppImageProps) {
+  const resolvedSrc = mediaUrl(src);
+
   return (
     <div className={cn("relative overflow-hidden bg-[linear-gradient(135deg,#f7f3ec,#e4ddd2_48%,#f7f7f5)]", className)}>
-      {src ? (
+      {resolvedSrc ? (
         <Image
-          src={src}
+          src={resolvedSrc}
           alt={alt}
           fill
           sizes={sizes}

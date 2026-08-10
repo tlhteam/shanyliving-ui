@@ -15,7 +15,7 @@ export default async function RegisterPage() {
   }
 
   return (
-    <main className="grid min-h-screen bg-neutral-100 lg:grid-cols-[1fr_560px]">
+    <main className="grid min-h-screen bg-neutral-100 dark:bg-neutral-950 lg:grid-cols-[1fr_560px]">
       <section className="relative hidden overflow-hidden bg-black text-white lg:block">
         <div className="absolute inset-0 bg-[url('/images/look-warm-minimalism.png')] bg-cover bg-center opacity-60" />
         <div className="relative flex h-full flex-col justify-between p-12">
@@ -35,17 +35,18 @@ export default async function RegisterPage() {
       </section>
       <section className="grid place-items-center p-4 sm:p-6">
         <AppCard className="w-full max-w-lg p-6 sm:p-7">
-          <AppLogo className="justify-center" imageClassName="w-40 sm:w-44" />
+          <AppLogo className="justify-center dark:hidden" imageClassName="w-40 sm:w-44" />
+          <AppLogo variant="light" className="hidden justify-center dark:inline-flex" imageClassName="w-40 sm:w-44" />
           <div className="mt-8 text-center">
             <div className="mx-auto grid size-12 place-items-center rounded-full bg-black text-white">
               <UserPlus className="size-5" />
             </div>
             <h2 className="mt-4 font-serif text-2xl font-bold sm:text-3xl">Create an account</h2>
-            <p className="mt-2 text-sm text-neutral-600">It takes a minute and keeps every design and order together.</p>
+            <p className="mt-2 text-sm text-neutral-600 dark:text-neutral-400">It takes a minute and keeps every design and order together.</p>
           </div>
           <RegisterForm />
-          <p className="mt-5 text-center text-sm text-neutral-600">
-            Already have an account? <Link href="/login" className="font-bold text-neutral-950 hover:underline">Sign in</Link>
+          <p className="mt-5 text-center text-sm text-neutral-600 dark:text-neutral-400">
+            Already have an account? <Link href="/login" className="font-bold text-neutral-950 hover:underline dark:text-white">Sign in</Link>
           </p>
         </AppCard>
       </section>

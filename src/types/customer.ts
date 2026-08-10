@@ -55,6 +55,7 @@ export type CustomerGiftCard = {
   currency: string;
   status: string;
   expires_at: string | null;
+  user?: { id: number; name?: string | null; email?: string | null } | null;
 };
 
 export type CustomerSettings = {

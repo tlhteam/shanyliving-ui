@@ -5,6 +5,7 @@ import Link from "next/link";
 import { signOut } from "next-auth/react";
 import { LogOut, Settings, UserRound } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { mediaUrl } from "@/lib/media";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 
 type AppAccountMenuProps = {
@@ -37,6 +38,8 @@ export function AppAccountMenu({
   showName = false,
   className
 }: AppAccountMenuProps) {
+  const avatarSrc = mediaUrl(avatar);
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger
@@ -53,7 +56,7 @@ export function AppAccountMenu({
       >
         <span className="contents">
           <span className="relative grid size-10 shrink-0 place-items-center overflow-hidden rounded-full bg-neutral-950 text-xs font-bold text-white dark:bg-white dark:text-neutral-950">
-            {avatar ? <Image src={avatar} alt={name} fill sizes="40px" className="object-cover" /> : initials(name)}
+            {avatarSrc ? <Image src={avatarSrc} alt={name} fill sizes="40px" className="object-cover" /> : initials(name)}
           </span>
           {showName ? <span className="hidden max-w-32 truncate text-sm font-bold sm:block">{name}</span> : null}
         </span>
