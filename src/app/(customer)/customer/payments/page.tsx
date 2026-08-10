@@ -120,11 +120,11 @@ export default function PaymentsPage() {
             <AppCard key={method.id} className="p-6">
               <div className="flex items-start justify-between gap-4">
                 <Icon className="size-8" />
-                {method.is_default ? <span className="rounded bg-neutral-100 px-3 py-1 text-xs font-bold">Default</span> : null}
+                {method.is_default ? <span className="rounded bg-neutral-100 px-3 py-1 text-xs font-bold text-neutral-950 dark:bg-white/15 dark:text-white">Default</span> : null}
               </div>
               <h2 className="mt-6 font-serif text-2xl font-bold">{method.holder || `${method.brand ?? method.type} method`}</h2>
-              <p className="mt-2 text-sm text-neutral-600">{method.brand ?? method.type} ending in {method.last4}</p>
-              <p className="mt-1 text-sm text-neutral-600">Expires / Status: {method.expires ?? "Verified"}</p>
+              <p className="mt-2 text-sm text-neutral-600 dark:text-neutral-400">{method.brand ?? method.type} ending in {method.last4}</p>
+              <p className="mt-1 text-sm text-neutral-600 dark:text-neutral-400">Expires / Status: {method.expires ?? "Verified"}</p>
               <div className="mt-6 flex flex-wrap gap-3">
                 <AppButton
                   variant={method.is_default ? "primary" : "outline"}

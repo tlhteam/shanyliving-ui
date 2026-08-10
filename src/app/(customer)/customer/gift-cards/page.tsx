@@ -58,7 +58,7 @@ export default function GiftCardsPage() {
             <p className="relative mt-1 text-xs font-bold text-neutral-500">{card.code}</p>
             <p className="relative mt-2 text-sm text-neutral-600">Balance</p>
             <p className="relative text-3xl font-bold">{card.currency} {new Intl.NumberFormat("en").format(Number(card.balance))}</p>
-            <span className="relative mt-5 inline-flex rounded-full bg-amber-100 px-3 py-1 text-xs font-bold text-amber-800">{card.status}</span>
+            <span className="relative mt-5 inline-flex rounded-full bg-amber-100 px-3 py-1 text-xs font-bold text-amber-800 dark:bg-amber-600 dark:text-white">{card.status}</span>
           </AppCard>
         ))}
       </div>

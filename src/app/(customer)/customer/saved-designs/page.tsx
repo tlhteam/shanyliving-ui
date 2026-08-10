@@ -168,7 +168,7 @@ export default function SavedDesignsPage() {
             <div>
               <div className="flex flex-wrap items-center gap-3">
                 <h2 className="font-serif text-2xl font-bold">{design.title}</h2>
-                <span className="rounded-full bg-neutral-100 px-3 py-1 text-xs font-bold">{statusLabels[design.status] ?? design.status}</span>
+                <span className="rounded-full bg-neutral-100 px-3 py-1 text-xs font-bold text-neutral-950 dark:bg-white/15 dark:text-white">{statusLabels[design.status] ?? design.status}</span>
               </div>
               <p className="mt-1 text-xs text-neutral-600">Saved design #{design.reference}</p>
               <dl className="mt-5 grid gap-4 text-sm sm:grid-cols-4">

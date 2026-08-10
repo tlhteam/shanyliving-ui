@@ -11,12 +11,12 @@ import { useCustomerQuery } from "@/hooks/use-customer";
 import type { CustomerOrder } from "@/types/customer";
 
 const statusClasses: Record<string, string> = {
-  confirmed: "bg-blue-100 text-blue-700",
-  processing: "bg-blue-100 text-blue-700",
-  production: "bg-neutral-100 text-neutral-700",
-  completed: "bg-green-100 text-green-700",
-  delivered: "bg-green-100 text-green-700",
-  cancelled: "bg-red-100 text-red-700"
+  confirmed: "bg-blue-100 text-blue-700 dark:bg-blue-600 dark:text-white",
+  processing: "bg-blue-100 text-blue-700 dark:bg-blue-600 dark:text-white",
+  production: "bg-neutral-100 text-neutral-700 dark:bg-white/15 dark:text-white",
+  completed: "bg-green-100 text-green-700 dark:bg-emerald-600 dark:text-white",
+  delivered: "bg-green-100 text-green-700 dark:bg-emerald-600 dark:text-white",
+  cancelled: "bg-red-100 text-red-700 dark:bg-red-600 dark:text-white"
 };
 
 const orderTabs = [
@@ -107,7 +107,7 @@ export default function CustomerOrdersPage() {
                       <p className="text-sm text-neutral-600 dark:text-neutral-400">{order.fulfillment_status}</p>
                     </div>
                     <div className="flex items-center justify-between gap-4 sm:block sm:text-end">
-                      <span className={`rounded-full px-3 py-1 text-xs font-bold ${statusClasses[order.status] ?? "bg-neutral-100 text-neutral-700"}`}>{order.status}</span>
+                      <span className={`rounded-full px-3 py-1 text-xs font-bold ${statusClasses[order.status] ?? "bg-neutral-100 text-neutral-700 dark:bg-white/15 dark:text-white"}`}>{order.status}</span>
                       <p className="mt-4 font-bold">{order.currency} {new Intl.NumberFormat("en").format(Number(order.grand_total))}</p>
                       <ChevronRight className="ms-auto mt-4 hidden size-5 text-neutral-400 sm:block" />
                     </div>

@@ -34,8 +34,10 @@ const Toaster = ({ ...props }: ToasterProps) => {
           "--normal-text": "var(--popover-foreground)",
           "--normal-border": "var(--border)",
           "--border-radius": "var(--radius)",
+          "--toast-duration": "4200ms",
         } as React.CSSProperties
       }
+      duration={4200}
       toastOptions={{
         classNames: {
           toast: "cn-toast",

@@ -64,6 +64,7 @@ export function AdminShell({ children, defaultCollapsed = false }: { children: R
   const notificationsQuery = useNotifications("admin");
   const name = session?.user?.name ?? "Shany Admin";
   const email = session?.user?.email;
+  const avatar = session?.user?.image;
 
   const toggleCollapsed = () => {
     setCollapsed((previous) => {
@@ -124,6 +125,7 @@ export function AdminShell({ children, defaultCollapsed = false }: { children: R
             <AppAccountMenu
               name={name}
               email={email}
+              avatar={avatar}
               profileHref="/admin/profile"
               settingsHref="/admin/settings"
               signOutUrl="/admin/login"

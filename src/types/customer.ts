@@ -127,6 +127,16 @@ export type CustomerConversation = {
   messages?: CustomerConversationMessage[];
 };
 
+export type AdminUserAccount = {
+  id: number;
+  name: string;
+  email: string;
+  phone?: string | null;
+  avatar?: string | null;
+  role: "admin" | "customer";
+  created_at?: string | null;
+};
+
 export type CustomerMessage = {
   id: string | number;
   name?: string;

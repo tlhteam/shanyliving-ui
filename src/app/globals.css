@@ -173,6 +173,33 @@ a {
   color: oklch(0.708 0 0);
 }
 
+.cn-toast {
+  overflow: hidden;
+  position: relative;
+}
+
+.cn-toast::after {
+  position: absolute;
+  inset-inline-start: 0;
+  bottom: 0;
+  height: 3px;
+  width: 100%;
+  background: currentColor;
+  content: "";
+  opacity: 0.28;
+  transform-origin: left;
+  animation: toast-progress var(--toast-duration, 4200ms) linear forwards;
+}
+
+@keyframes toast-progress {
+  from {
+    transform: scaleX(1);
+  }
+  to {
+    transform: scaleX(0);
+  }
+}
+
 @layer base {
   * {
     @apply border-border outline-ring/50;

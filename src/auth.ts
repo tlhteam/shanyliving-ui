@@ -112,7 +112,7 @@ export const authOptions: NextAuthOptions = {
 
       return true;
     },
-    async jwt({ token, user }) {
+    async jwt({ token, user, trigger, session }) {
       if (user) {
         token.id = user.id;
         token.role = user.role;
@@ -120,11 +120,19 @@ export const authOptions: NextAuthOptions = {
         token.picture = user.image;
       }
 
+      if (trigger === "update" && session?.user) {
+        token.name = session.user.name ?? token.name;
+        token.email = session.user.email ?? token.email;
+        token.picture = session.user.image ?? token.picture;
+      }
+
       return token;
     },
     async session({ session, token }) {
       if (session.user) {
         session.user.id = String(token.id ?? token.sub ?? "");
+        session.user.name = token.name ?? session.user.name;
+        session.user.email = token.email ?? session.user.email;
         session.user.role = token.role === "admin" ? "admin" : "customer";
         session.user.image = token.picture ?? session.user.image;
       }

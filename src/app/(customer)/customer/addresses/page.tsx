@@ -112,7 +112,7 @@ export default function AddressesPage() {
       <div className="grid gap-5 lg:grid-cols-2">
         {addresses.map((address) => (
           <AppCard key={address.id} className="p-8">
-            {address.is_default ? <span className="rounded bg-neutral-100 px-3 py-1 text-xs font-bold">Default</span> : null}
+            {address.is_default ? <span className="rounded bg-neutral-100 px-3 py-1 text-xs font-bold text-neutral-950 dark:bg-white/15 dark:text-white">Default</span> : null}
             <div className="mt-5 flex items-start gap-3">
               <Home className="size-6 stroke-[1.5]" />
               <div>

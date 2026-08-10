@@ -103,7 +103,7 @@ export default function SettingsPage() {
                   <span className="font-bold">{label}</span>
                   <span className="text-neutral-600 dark:text-neutral-300">{value || "Not set"}</span>
                   {index < 2 ? (
-                    <span className="rounded bg-green-100 px-2 py-1 text-xs font-bold text-green-700">Verified</span>
+                    <span className="rounded bg-green-100 px-2 py-1 text-xs font-bold text-green-700 dark:bg-emerald-600 dark:text-white">Verified</span>
                   ) : (
                     <AppButton variant="outline" size="sm" onClick={() => setFieldDialog({ key: "language", label, value })}>Change</AppButton>
                   )}
@@ -153,7 +153,7 @@ export default function SettingsPage() {
           </AppCard>
           <AppCard className="p-5">
             <div className="flex items-start gap-3"><ShieldCheck className="size-6" /><div><h2 className="font-serif text-2xl font-bold">Two-Factor Authentication</h2><p className="text-sm text-neutral-600 dark:text-neutral-400">Add an extra layer of security to your account.</p></div></div>
-            <div className="mt-5 flex items-center justify-between"><span className="font-bold">Status</span><span className="rounded bg-green-100 px-2 py-1 text-xs font-bold text-green-700">{settings?.two_factor_enabled ? "Enabled" : "Disabled"}</span></div>
+            <div className="mt-5 flex items-center justify-between"><span className="font-bold">Status</span><span className="rounded bg-green-100 px-2 py-1 text-xs font-bold text-green-700 dark:bg-emerald-600 dark:text-white">{settings?.two_factor_enabled ? "Enabled" : "Disabled"}</span></div>
             <AppButton variant="outline" className="mt-4 w-full" onClick={() => updateSettings.mutate({ two_factor_enabled: !settings?.two_factor_enabled })}>Manage 2FA</AppButton>
           </AppCard>
         </div>

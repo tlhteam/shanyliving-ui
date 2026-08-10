@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import { useSession } from "next-auth/react";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { AppCard } from "@/components/app/AppCard";
@@ -19,6 +20,7 @@ type ProfileForm = {
 };
 
 export default function ProfilePage() {
+  const { update: updateSession } = useSession();
   const form = useForm<ProfileForm>({
     defaultValues: { name: "", email: "", phone: "", avatar: "" }
   });
@@ -41,7 +43,10 @@ export default function ProfilePage() {
   const updateProfile = useCustomerMutation<ProfileForm, CustomerProfile>(
     "profile",
     (values) => ({ path: "/customer/profile", options: { method: "PATCH", body: values } }),
-    { successMessage: "Profile updated." }
+    {
+      successMessage: "Profile updated.",
+      onSuccess: (profile) => updateSession({ user: { name: profile.name, email: profile.email, image: profile.avatar } })
+    }
   );
 
   const updateAvatar = useCustomerMutation<File, CustomerProfile>(
@@ -52,7 +57,10 @@ export default function ProfilePage() {
 
       return { path: "/customer/profile/avatar", options: { method: "POST", formData } };
     },
-    { successMessage: "Profile image updated." }
+    {
+      successMessage: "Profile image updated.",
+      onSuccess: (profile) => updateSession({ user: { name: profile.name, email: profile.email, image: profile.avatar } })
+    }
   );
 
   const updateSettings = useCustomerMutation<CustomerSettings["notifications"], CustomerSettings>(
