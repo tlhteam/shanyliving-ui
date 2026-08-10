@@ -94,7 +94,12 @@ export function CustomerShell({ children, defaultCollapsed = false }: { children
         )}
       >
         <div className={cn("flex items-center", collapsed ? "justify-center" : "justify-between")}>
-          {collapsed ? null : <AppLogo imageClassName="w-32" />}
+          {collapsed ? null : (
+            <>
+              <AppLogo className="dark:hidden" imageClassName="w-32" />
+              <AppLogo variant="light" className="hidden dark:inline-flex" imageClassName="w-32" />
+            </>
+          )}
           <Button variant="ghost" size="icon" aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"} onClick={toggleCollapsed}>
             {collapsed ? <PanelLeftOpen className="size-5" /> : <PanelLeftClose className="size-5" />}
           </Button>
@@ -119,7 +124,8 @@ export function CustomerShell({ children, defaultCollapsed = false }: { children
                 </div>
               </SheetContent>
             </Sheet>
-            <AppLogo className="lg:hidden" imageClassName="w-28" />
+            <AppLogo className="dark:hidden lg:hidden" imageClassName="w-28" />
+            <AppLogo variant="light" className="hidden dark:inline-flex lg:hidden" imageClassName="w-28" />
             <div className="hidden min-w-0 lg:block">
               <p className="text-sm font-bold uppercase tracking-[0.16em] text-neutral-500">My Account</p>
               <p className="truncate text-xs text-neutral-500">Orders, designs, wishlist and messages</p>

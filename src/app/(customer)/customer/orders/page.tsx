@@ -11,10 +11,20 @@ import { useCustomerQuery } from "@/hooks/use-customer";
 import type { CustomerOrder } from "@/types/customer";
 
 const statusClasses: Record<string, string> = {
+  confirmed: "bg-blue-100 text-blue-700",
+  processing: "bg-blue-100 text-blue-700",
+  production: "bg-neutral-100 text-neutral-700",
   completed: "bg-green-100 text-green-700",
   delivered: "bg-green-100 text-green-700",
   cancelled: "bg-red-100 text-red-700"
 };
+
+const orderTabs = [
+  { label: "All Orders", value: "all" },
+  { label: "In Progress", value: "progress" },
+  { label: "Delivered", value: "delivered" },
+  { label: "Cancelled", value: "cancelled" }
+] as const;
 
 function firstItem(order: CustomerOrder) {
   return order.items?.[0];
@@ -28,12 +38,20 @@ function itemTitle(order: CustomerOrder) {
 
 export default function CustomerOrdersPage() {
   const [search, setSearch] = useState("");
+  const [activeTab, setActiveTab] = useState<(typeof orderTabs)[number]["value"]>("all");
   const [selectedId, setSelectedId] = useState<number | null>(null);
 
   const ordersQuery = useCustomerQuery<CustomerOrder[]>("orders", "/customer/orders");
   const filteredOrders = useMemo(
-    () => (ordersQuery.data ?? []).filter((order) => `${order.reference} ${itemTitle(order)} ${order.status}`.toLowerCase().includes(search.trim().toLowerCase())),
-    [ordersQuery.data, search]
+    () => (ordersQuery.data ?? [])
+      .filter((order) => {
+        if (activeTab === "delivered") return ["delivered", "completed"].includes(order.status);
+        if (activeTab === "cancelled") return order.status === "cancelled";
+        if (activeTab === "progress") return !["delivered", "completed", "cancelled"].includes(order.status);
+        return true;
+      })
+      .filter((order) => `${order.reference} ${itemTitle(order)} ${order.status}`.toLowerCase().includes(search.trim().toLowerCase())),
+    [activeTab, ordersQuery.data, search]
   );
   const selected = filteredOrders.find((order) => order.id === selectedId) ?? filteredOrders[0];
 
@@ -42,26 +60,33 @@ export default function CustomerOrdersPage() {
       <CustomerTopbar title="My Orders" subtitle="View and track all your orders." />
       <div className="mb-5 flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
         <div className="flex gap-6 text-sm font-bold">
-          {["All Orders", "In Progress", "Delivered", "Cancelled"].map((tab, index) => (
-            <span key={tab} className={index === 0 ? "border-b-2 border-black pb-2" : "pb-2 text-neutral-500"}>{tab}</span>
+          {orderTabs.map((tab) => (
+            <button
+              key={tab.value}
+              type="button"
+              onClick={() => setActiveTab(tab.value)}
+              className={activeTab === tab.value ? "border-b-2 border-black pb-2 text-black dark:border-white dark:text-white" : "pb-2 text-neutral-500 transition hover:text-neutral-950 dark:hover:text-white"}
+            >
+              {tab.label}
+            </button>
           ))}
         </div>
         <div className="flex gap-2">
-          <input value={search} onChange={(event) => setSearch(event.target.value)} placeholder="Search order ID or product..." className="h-10 w-full rounded-md border border-neutral-300 px-3 text-sm lg:w-72" />
+          <input value={search} onChange={(event) => setSearch(event.target.value)} placeholder="Search order ID or product..." className="h-10 w-full rounded-md border border-neutral-300 bg-white px-3 text-sm outline-none focus:border-neutral-950 dark:border-white/15 dark:bg-neutral-950 dark:focus:border-white lg:w-72" />
           <AppButton variant="outline" className="gap-2"><SlidersHorizontal className="size-4" /> Filter</AppButton>
         </div>
       </div>
 
       {ordersQuery.isLoading ? (
         <div className="space-y-3">
-          {Array.from({ length: 3 }).map((_, index) => <div key={index} className="h-32 animate-pulse rounded-lg bg-neutral-200" />)}
+          {Array.from({ length: 3 }).map((_, index) => <div key={index} className="h-32 animate-pulse rounded-lg bg-neutral-200 dark:bg-neutral-800" />)}
         </div>
       ) : null}
 
       {!ordersQuery.isLoading && filteredOrders.length === 0 ? (
-        <AppCard className="grid place-items-center gap-3 p-12 text-center">
-          <Package className="size-8 text-neutral-400" />
-          <p className="text-sm text-neutral-600">No orders found.</p>
+          <AppCard className="grid place-items-center gap-3 p-12 text-center">
+            <Package className="size-8 text-neutral-400" />
+          <p className="text-sm text-neutral-600 dark:text-neutral-400">No orders found.</p>
         </AppCard>
       ) : null}
 
@@ -77,9 +102,9 @@ export default function CustomerOrdersPage() {
                     <AppImage src={item?.image ?? "/images/sofa-cloud-modular.png"} alt={itemTitle(order)} className="aspect-[1.5/1] rounded-lg" sizes="160px" />
                     <div>
                       <p className="text-xs font-bold">Order #{order.reference}</p>
-                      <p className="mt-1 text-xs text-neutral-500">{order.placed_at ? new Date(order.placed_at).toLocaleDateString() : "Date pending"}</p>
+                      <p className="mt-1 text-xs text-neutral-500 dark:text-neutral-400">{order.placed_at ? new Date(order.placed_at).toLocaleDateString() : "Date pending"}</p>
                       <h2 className="mt-3 font-bold">{itemTitle(order)}</h2>
-                      <p className="text-sm text-neutral-600">{order.fulfillment_status}</p>
+                      <p className="text-sm text-neutral-600 dark:text-neutral-400">{order.fulfillment_status}</p>
                     </div>
                     <div className="flex items-center justify-between gap-4 sm:block sm:text-end">
                       <span className={`rounded-full px-3 py-1 text-xs font-bold ${statusClasses[order.status] ?? "bg-neutral-100 text-neutral-700"}`}>{order.status}</span>
@@ -98,19 +123,19 @@ export default function CustomerOrdersPage() {
               <AppImage src={firstItem(selected)?.image ?? "/images/sofa-cloud-modular.png"} alt={itemTitle(selected)} className="size-20 rounded-lg" sizes="80px" />
               <div>
                 <p className="font-bold">{itemTitle(selected)}</p>
-                <p className="text-xs text-neutral-600">{selected.payment_status}</p>
+                <p className="text-xs text-neutral-600 dark:text-neutral-400">{selected.payment_status}</p>
                 <p className="mt-2 text-xs">Order #{selected.reference}</p>
               </div>
             </div>
             <div className="mt-5 border-t border-neutral-200 pt-5">
               {["Order Confirmed", "In Production", "Quality Check", "Ready to Ship", "Delivered"].map((step, index) => (
                 <div key={step} className="grid grid-cols-[20px_1fr_auto] gap-3 pb-4 text-sm">
-                  <span className={`mt-1 size-3 rounded-full ${index < 2 ? "bg-black" : "border border-neutral-400 bg-white"}`} />
+                  <span className={`mt-1 size-3 rounded-full ${index < 2 ? "bg-black dark:bg-white" : "border border-neutral-400 bg-white dark:bg-neutral-950"}`} />
                   <span>
                     <span className="block font-bold">{step}</span>
-                    <span className="text-xs text-neutral-600">{index < 2 ? "Your order is moving forward." : "Pending"}</span>
+                    <span className="text-xs text-neutral-600 dark:text-neutral-400">{index < 2 ? "Your order is moving forward." : "Pending"}</span>
                   </span>
-                  <span className="text-xs text-neutral-500">{index < 2 && selected.placed_at ? new Date(selected.placed_at).toLocaleDateString() : "Pending"}</span>
+                  <span className="text-xs text-neutral-500 dark:text-neutral-400">{index < 2 && selected.placed_at ? new Date(selected.placed_at).toLocaleDateString() : "Pending"}</span>
                 </div>
               ))}
             </div>

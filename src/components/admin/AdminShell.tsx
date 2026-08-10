@@ -120,7 +120,7 @@ export function AdminShell({ children, defaultCollapsed = false }: { children: R
           </div>
           <div className="flex shrink-0 items-center gap-2">
             <AppThemeToggle />
-            <AppNotificationBell items={notificationsQuery.data ?? adminNotifications} viewAllHref="/admin/leads" />
+            <AppNotificationBell items={notificationsQuery.data ?? adminNotifications} viewAllHref="/admin/messages" />
             <AppAccountMenu
               name={name}
               email={email}

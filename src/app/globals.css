@@ -2,7 +2,7 @@
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
 
-@custom-variant dark (&:is(.dark .admin-theme, .dark .admin-theme *, .dark .customer-theme, .dark .customer-theme *));
+@custom-variant dark (&:is(.dark, .dark *));
 
 * {
   box-sizing: border-box;
@@ -129,7 +129,7 @@ a {
   --sidebar-ring: oklch(0.708 0 0);
 }
 
-.dark :is(.admin-theme, .customer-theme) {
+.dark {
   --background: oklch(0.145 0 0);
   --foreground: oklch(0.985 0 0);
   --card: oklch(0.205 0 0);
@@ -161,6 +161,16 @@ a {
   --sidebar-accent-foreground: oklch(0.985 0 0);
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.556 0 0);
+}
+
+.dark :is(input, textarea, select) {
+  color: oklch(0.985 0 0);
+  background: oklch(0.145 0 0);
+  border-color: oklch(1 0 0 / 15%);
+}
+
+.dark :is(input, textarea, select)::placeholder {
+  color: oklch(0.708 0 0);
 }
 
 @layer base {

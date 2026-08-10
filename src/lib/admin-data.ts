@@ -1,4 +1,4 @@
-import { BarChart3, Boxes, CalendarClock, ContactRound, FileImage, Layers3, Palette, Settings, Sofa, SwatchBook, Users, Wand2 } from "lucide-react";
+import { BarChart3, Boxes, CalendarClock, ContactRound, FileImage, Layers3, Mail, Palette, Settings, Sofa, SwatchBook, Users, Wand2 } from "lucide-react";
 
 export type AdminRow = Record<string, string | number>;
 
@@ -11,6 +11,7 @@ export const adminSections = [
   { href: "/admin/configurations", label: "Configurations", group: "Sales Flow", icon: Wand2 },
   { href: "/admin/leads", label: "Leads", group: "Sales Flow", icon: ContactRound },
   { href: "/admin/customers", label: "Customers", group: "People", icon: Users },
+  { href: "/admin/messages", label: "Messages", group: "People", icon: Mail },
   { href: "/admin/appointments", label: "Appointments", group: "People", icon: CalendarClock },
   { href: "/admin/media", label: "Media", group: "Content", icon: FileImage },
   { href: "/admin/analytics", label: "Analytics", group: "Content", icon: Layers3 },

@@ -96,6 +96,37 @@ export type CustomerOrder = {
   items?: CustomerOrderItem[];
 };
 
+export type CustomerMessageAttachment = {
+  id: string | number;
+  name: string;
+  mime: string | null;
+  size: number;
+  url: string;
+};
+
+export type CustomerConversationMessage = {
+  id: string | number;
+  user_id: number;
+  author_name?: string | null;
+  author_avatar?: string | null;
+  body?: string | null;
+  type: string;
+  read_at?: string | null;
+  created_at?: string | null;
+  attachments?: CustomerMessageAttachment[];
+};
+
+export type CustomerConversation = {
+  id: number;
+  subject: string;
+  status: string;
+  customer?: { id: number; name?: string | null; email?: string | null; avatar?: string | null } | null;
+  assigned_user?: { id: number; name?: string | null; email?: string | null; avatar?: string | null } | null;
+  last_message?: { body?: string | null; author_name?: string | null; created_at?: string | null } | null;
+  last_message_at?: string | null;
+  messages?: CustomerConversationMessage[];
+};
+
 export type CustomerMessage = {
   id: string | number;
   name?: string;
