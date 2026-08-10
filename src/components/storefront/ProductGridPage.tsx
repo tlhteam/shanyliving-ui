@@ -1,8 +1,8 @@
 import Link from "next/link";
-import { ChevronDown } from "lucide-react";
 import { AppButton } from "@/components/app/AppButton";
 import { AppImage } from "@/components/app/AppImage";
 import { AppSection } from "@/components/app/AppSection";
+import { SiteIcon } from "@/components/icons/SiteIcon";
 import { ProductCard } from "@/components/storefront/ProductCard";
 import type { StorefrontPage } from "@/lib/storefront-pages";
 
@@ -24,7 +24,7 @@ export function ProductGridPage({ page }: { page: StorefrontPage }) {
             {page.filters.map((filter) => (
               <button key={filter} className="inline-flex h-10 min-w-28 items-center justify-center gap-2 rounded-md border border-neutral-300 bg-white px-4 text-xs font-bold transition hover:border-neutral-950 hover:bg-neutral-950 hover:text-white">
                 {filter}
-                {["Sort by", "Sofa Type", "Size", "Seats", "Price", "Clear Filters"].includes(filter) ? <ChevronDown className="size-3.5" /> : null}
+                {["Sort by", "Sofa Type", "Size", "Seats", "Price", "Clear Filters"].includes(filter) ? <SiteIcon name="chevron-down" className="size-3.5" /> : null}
               </button>
             ))}
           </div>
@@ -37,7 +37,7 @@ export function ProductGridPage({ page }: { page: StorefrontPage }) {
         <div className="mt-10 flex justify-center">
           <AppButton variant="outline" className="min-w-48 gap-2">
             Load more
-            <ChevronDown className="size-4" />
+            <SiteIcon name="chevron-down" className="size-4" />
           </AppButton>
         </div>
         <div className="mt-14 grid items-center gap-6 rounded-lg bg-neutral-100 p-6 sm:p-8 lg:grid-cols-[1fr_auto]">

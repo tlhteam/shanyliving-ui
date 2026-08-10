@@ -1,7 +1,7 @@
 import Link from "next/link";
-import { Heart, MessageCircle, Plus } from "lucide-react";
 import { AppButton } from "@/components/app/AppButton";
 import { AppImage } from "@/components/app/AppImage";
+import { SiteIcon } from "@/components/icons/SiteIcon";
 import type { StorefrontProduct } from "@/lib/storefront-pages";
 
 const formatPrice = (price: number) => new Intl.NumberFormat("en").format(price);
@@ -20,10 +20,10 @@ export function ProductCard({ product }: { product: StorefrontProduct }) {
         {product.badge ? (
           <span className="absolute start-3 top-3 rounded-full bg-white/90 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.12em] text-neutral-950">
             {product.badge}
-          </span>
-        ) : null}
+        </span>
+      ) : null}
         <span className="absolute end-3 top-3 grid size-8 place-items-center rounded-full bg-white/80 text-neutral-900 transition group-hover:bg-white">
-          <Heart className="size-4" />
+          <SiteIcon name="heart" className="size-4" />
         </span>
       </Link>
       <div className="p-4 sm:p-5">
@@ -37,7 +37,7 @@ export function ProductCard({ product }: { product: StorefrontProduct }) {
             <span key={`${product.slug}-${color}`} className="size-4 rounded-full border border-neutral-200" style={{ backgroundColor: color }} />
           ))}
           <span className="grid size-4 place-items-center rounded-full border border-neutral-300 text-neutral-500">
-            <Plus className="size-3" />
+            <SiteIcon name="plus" className="size-3" />
           </span>
         </div>
         <div className="mt-5 grid grid-cols-[1fr_48px] gap-3">
@@ -45,7 +45,7 @@ export function ProductCard({ product }: { product: StorefrontProduct }) {
             <AppButton size="sm" className="w-full">Customize</AppButton>
           </Link>
           <Link href="/showroom" aria-label={`Ask about ${product.name}`} className="grid h-9 place-items-center rounded-md border border-neutral-300 transition hover:bg-neutral-100">
-            <MessageCircle className="size-4" />
+            <SiteIcon name="message" className="size-4" />
           </Link>
         </div>
       </div>

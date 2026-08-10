@@ -1,17 +1,17 @@
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";
-import { Clock, Mail, MapPin, Phone } from "lucide-react";
 import { AppButton } from "@/components/app/AppButton";
 import { AppImage } from "@/components/app/AppImage";
 import { AppSection } from "@/components/app/AppSection";
+import { SiteIcon, SiteIconName } from "@/components/icons/SiteIcon";
 import { WhatsappIcon } from "@/components/icons/WhatsappIcon";
 import { siteImages } from "@/lib/images";
 
 const details = [
-  { key: "showroom", icon: MapPin },
-  { key: "phone", icon: Phone },
-  { key: "email", icon: Mail },
-  { key: "hours", icon: Clock }
+  { key: "showroom", icon: "map-pin" },
+  { key: "phone", icon: "phone" },
+  { key: "email", icon: "mail" },
+  { key: "hours", icon: "clock" }
 ];
 
 export default async function ContactPage() {
@@ -44,7 +44,7 @@ export default async function ContactPage() {
             {details.map((detail) => (
               <div key={detail.key} className="flex items-start gap-4">
                 <span className="grid size-10 shrink-0 place-items-center rounded-full bg-neutral-100">
-                  <detail.icon className="size-5" />
+                  <SiteIcon name={detail.icon as SiteIconName} className="size-5" />
                 </span>
                 <div>
                   <p className="text-xs font-bold uppercase tracking-[0.16em] text-neutral-500">{t(`details.${detail.key}.label`)}</p>

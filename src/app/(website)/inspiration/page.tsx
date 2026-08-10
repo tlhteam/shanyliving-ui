@@ -1,8 +1,8 @@
 import Link from "next/link";
-import { ArrowRight, LayoutGrid, Sparkles } from "lucide-react";
 import { AppButton } from "@/components/app/AppButton";
 import { AppImage } from "@/components/app/AppImage";
 import { AppSection } from "@/components/app/AppSection";
+import { SiteIcon } from "@/components/icons/SiteIcon";
 import { looks } from "@/lib/images";
 
 const rooms = [
@@ -18,7 +18,7 @@ export default function InspirationPage() {
         <AppImage src="/images/look-warm-minimalism.png" alt="Living room inspiration" className="absolute inset-0" sizes="100vw" preload loading="eager" />
         <div className="absolute inset-0 bg-black/50" />
         <div className="relative mx-auto flex min-h-80 max-w-7xl flex-col justify-end px-4 py-12 sm:min-h-96 sm:px-6 lg:px-8">
-          <p className="flex items-center gap-2 text-xs font-bold uppercase tracking-[0.24em] text-white/80"><Sparkles className="size-4" /> Inspiration</p>
+          <p className="flex items-center gap-2 text-xs font-bold uppercase tracking-[0.24em] text-white/80"><SiteIcon name="sparkle" className="size-4" /> Inspiration</p>
           <h1 className="mt-3 max-w-3xl font-serif text-4xl leading-tight sm:text-6xl">Shop complete rooms by feeling</h1>
           <p className="mt-4 max-w-xl text-sm leading-6 text-white/90 sm:text-base">Use these rooms as a starting point for sofas, fabrics, tables and finishing details.</p>
         </div>
@@ -32,14 +32,14 @@ export default function InspirationPage() {
                 <h2 className="font-serif text-2xl font-bold">{room.title}</h2>
                 <p className="mt-2 text-sm leading-6 text-neutral-700">{room.text}</p>
                 <Link href="/sofas" className="mt-5 inline-flex items-center gap-2 text-sm font-bold hover:underline">
-                  Explore products <ArrowRight className="size-4" />
+                  Explore products <SiteIcon name="arrow-right" className="size-4" />
                 </Link>
               </div>
             </article>
           ))}
         </div>
         <div className="mt-12 grid items-center gap-6 rounded-lg bg-neutral-100 p-6 sm:p-8 lg:grid-cols-[auto_1fr_auto]">
-          <LayoutGrid className="size-10" />
+          <SiteIcon name="grid" className="size-10" />
           <div>
             <h2 className="font-serif text-2xl font-bold">Build a room with us</h2>
             <p className="mt-2 text-sm leading-6 text-neutral-700">Share one inspiration room and the showroom team can match products, fabrics and colors for your space.</p>

@@ -61,9 +61,23 @@ function toPayload(form: DesignForm) {
   };
 }
 
+function configurationSummary(design: CustomerSavedDesign) {
+  if (!design.configuration) {
+    return "-";
+  }
+
+  try {
+    const parsed = JSON.parse(design.configuration) as { product?: string; modules?: unknown[]; roomSize?: string; style?: string; color?: string; leg?: string };
+    return [parsed.product, parsed.modules ? `${parsed.modules.length} modules` : null, parsed.roomSize, parsed.style, parsed.color, parsed.leg].filter(Boolean).join(" / ");
+  } catch {
+    return design.configuration;
+  }
+}
+
 export default function SavedDesignsPage() {
   const [open, setOpen] = useState(false);
   const [editing, setEditing] = useState<CustomerSavedDesign | null>(null);
+  const [viewing, setViewing] = useState<CustomerSavedDesign | null>(null);
   const [pendingDelete, setPendingDelete] = useState<CustomerSavedDesign | null>(null);
   const [typed, setTyped] = useState("");
   const [search, setSearch] = useState("");
@@ -172,14 +186,15 @@ export default function SavedDesignsPage() {
               </div>
               <p className="mt-1 text-xs text-neutral-600">Saved design #{design.reference}</p>
               <dl className="mt-5 grid gap-4 text-sm sm:grid-cols-4">
-                <div><dt className="font-bold">Configuration</dt><dd>{design.configuration ?? "-"}</dd></div>
+                <div><dt className="font-bold">Configuration</dt><dd>{configurationSummary(design)}</dd></div>
                 <div><dt className="font-bold">Fabric</dt><dd>{design.fabric ?? "-"}</dd></div>
                 <div><dt className="font-bold">Size</dt><dd>{design.size ?? "-"}</dd></div>
                 <div><dt className="font-bold">Extras</dt><dd>{design.extras ?? "-"}</dd></div>
               </dl>
             </div>
             <div className="space-y-2">
-              <Link href="/customize-your-sofa"><AppButton className="w-full" size="sm">Continue Editing</AppButton></Link>
+              <Link href={`/customize-your-sofa?design=${design.id}`}><AppButton className="w-full" size="sm">Continue Editing</AppButton></Link>
+              <AppButton variant="outline" className="w-full" size="sm" onClick={() => setViewing(design)}>View Design</AppButton>
               <AppButton variant="outline" className="w-full" size="sm" loading={consultationMutation.isPending} onClick={() => consultationMutation.mutate(design)}>Request Consultation</AppButton>
               <AppButton variant="outline" className="w-full" size="sm" onClick={() => startEdit(design)}>Edit Design</AppButton>
               <AppButton variant="outline" className="w-full" size="sm" onClick={() => { setPendingDelete(design); setTyped(""); }}>Delete</AppButton>
@@ -223,6 +238,38 @@ export default function SavedDesignsPage() {
             />
           ))}
         </div>
+      </AppDialog>
+
+      <AppDialog
+        open={Boolean(viewing)}
+        onOpenChange={(next) => !next && setViewing(null)}
+        title={viewing?.title ?? "Saved Design"}
+        description={viewing ? `Saved design #${viewing.reference}` : undefined}
+        footer={
+          viewing ? (
+            <>
+              <AppButton variant="outline" onClick={() => setViewing(null)}>Close</AppButton>
+              <Link href={`/customize-your-sofa?design=${viewing.id}`}>
+                <AppButton>Open Editor</AppButton>
+              </Link>
+            </>
+          ) : null
+        }
+      >
+        {viewing ? (
+          <div className="space-y-5">
+            <AppImage src={viewing.image ?? "/images/sofa-cloud-modular.png"} alt={viewing.title} className="aspect-[1.7/1] rounded-lg" sizes="560px" />
+            <dl className="grid gap-4 text-sm sm:grid-cols-2">
+              <div><dt className="font-bold">Status</dt><dd>{statusLabels[viewing.status] ?? viewing.status}</dd></div>
+              <div><dt className="font-bold">Configuration</dt><dd>{configurationSummary(viewing)}</dd></div>
+              <div><dt className="font-bold">Fabric</dt><dd>{viewing.fabric ?? "-"}</dd></div>
+              <div><dt className="font-bold">Size</dt><dd>{viewing.size ?? "-"}</dd></div>
+              <div><dt className="font-bold">Extras</dt><dd>{viewing.extras ?? "-"}</dd></div>
+              <div><dt className="font-bold">Price</dt><dd>{viewing.price ? `NIS ${Number(viewing.price).toLocaleString()}` : "-"}</dd></div>
+            </dl>
+            {viewing.notes ? <p className="rounded-md bg-neutral-100 p-3 text-sm text-neutral-700 dark:bg-white/10 dark:text-neutral-200">{viewing.notes}</p> : null}
+          </div>
+        ) : null}
       </AppDialog>
 
       <AppConfirmationDialog

@@ -1,9 +1,9 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ChevronRight, Heart, MessageCircle, ShieldCheck, Star, Truck } from "lucide-react";
 import { AppButton } from "@/components/app/AppButton";
 import { AppImage } from "@/components/app/AppImage";
 import { AppSection } from "@/components/app/AppSection";
+import { SiteIcon, SiteIconName } from "@/components/icons/SiteIcon";
 import { ProductCard } from "@/components/storefront/ProductCard";
 import { getStorefrontProduct, storefrontProducts } from "@/lib/storefront-pages";
 
@@ -14,10 +14,10 @@ type ProductDetailPageProps = {
 const fabricImages = ["/images/category-sofas.png", "/images/look-warm-minimalism.png", "/images/sofa-noa.png", "/images/category-living-room.png", "/images/look-urban-luxury.png", "/images/showroom-interior.png"];
 
 const benefits = [
-  { title: "Personal Consultation", text: "We are here to help", icon: MessageCircle },
-  { title: "Premium Fabrics", text: "Made to order", icon: Star },
-  { title: "Warranty", text: "3 years", icon: ShieldCheck },
-  { title: "Nationwide delivery", text: "Fast & Reliable", icon: Truck }
+  { title: "Personal Consultation", text: "We are here to help", icon: "message" },
+  { title: "Premium Fabrics", text: "Made to order", icon: "fabric" },
+  { title: "Warranty", text: "3 years", icon: "shield" },
+  { title: "Nationwide delivery", text: "Fast & Reliable", icon: "truck" }
 ];
 
 export default async function ProductDetailPage({ params }: ProductDetailPageProps) {
@@ -38,7 +38,7 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
             <div className="relative overflow-hidden rounded-lg">
               <AppImage src={product.image} alt={product.name} className="aspect-[1.15/1]" sizes="(max-width: 1024px) 100vw, 55vw" preload loading="eager" imageClassName="object-cover" />
               <span className="absolute start-4 top-4 rounded-full bg-white px-4 py-1 text-xs font-bold">{product.badge ?? "New"}</span>
-              <span className="absolute end-4 top-4 grid size-9 place-items-center rounded-full bg-white/80"><Heart className="size-5" /></span>
+              <span className="absolute end-4 top-4 grid size-9 place-items-center rounded-full bg-white/80"><SiteIcon name="heart" className="size-5" /></span>
             </div>
             <div className="mt-4 grid grid-cols-5 gap-3">
               {[product.image, "/images/sofa-luna.png", "/images/sofa-noa.png", "/images/sofa-ella.png", "/images/look-modern-elegance.png"].map((image) => (
@@ -49,15 +49,15 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
           <aside>
             <nav className="mb-6 flex flex-wrap items-center gap-2 text-xs font-bold text-neutral-600">
               <Link href="/">Home</Link>
-              <ChevronRight className="size-3" />
+              <SiteIcon name="chevron-right" className="size-3" />
               <Link href="/sofas">Sofas</Link>
-              <ChevronRight className="size-3" />
+              <SiteIcon name="chevron-right" className="size-3" />
               <span className="text-neutral-950">{product.name}</span>
             </nav>
             <h1 className="font-serif text-4xl font-bold sm:text-5xl">{product.name}</h1>
             <div className="mt-4 flex items-center gap-3 text-sm">
               <span className="rounded-full bg-neutral-100 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.12em]">{product.badge ?? "Customizable"}</span>
-              <span className="flex items-center gap-1">★★★★★</span>
+              <span className="rounded-full bg-neutral-100 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.12em]">Trusted showroom pick</span>
               <span>4.8 (36 reviews)</span>
             </div>
             <p className="mt-5 max-w-md text-sm leading-6 text-neutral-700">{product.description ?? "A modern sofa with deep cushions, refined proportions and made-to-order comfort for everyday living."}</p>
@@ -70,7 +70,7 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
                     <span className="block text-sm font-bold">{item}</span>
                     <span className="text-xs text-neutral-600">Choose your preference</span>
                   </span>
-                  <ChevronRight className="size-4" />
+                  <SiteIcon name="chevron-right" className="size-4" />
                 </button>
               ))}
             </div>
@@ -83,7 +83,7 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
         <div className="mx-auto grid max-w-7xl grid-cols-2 gap-4 px-4 py-6 sm:px-6 lg:grid-cols-4 lg:px-8">
           {benefits.map((benefit) => (
             <div key={benefit.title} className="flex items-center justify-center gap-3 text-center">
-              <benefit.icon className="size-7 stroke-[1.5]" />
+              <SiteIcon name={benefit.icon as SiteIconName} className="size-7" />
               <div>
                 <p className="text-xs font-bold">{benefit.title}</p>
                 <p className="text-[11px] text-neutral-600">{benefit.text}</p>

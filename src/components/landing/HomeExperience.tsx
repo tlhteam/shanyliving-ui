@@ -4,10 +4,10 @@ import Link from "next/link";
 import useEmblaCarousel from "embla-carousel-react";
 import { useLocale, useTranslations } from "next-intl";
 import { motion } from "motion/react";
-import { ArrowLeft, ArrowRight, BadgeCheck, Gem, Gift, Heart, Images, LockKeyhole, MapPin, MessageCircle, Palette, Ruler, Sofa, Truck, Upload } from "lucide-react";
 import { AppButton } from "@/components/app/AppButton";
 import { AppImage } from "@/components/app/AppImage";
 import { AppSection } from "@/components/app/AppSection";
+import { SiteIcon, SiteIconName } from "@/components/icons/SiteIcon";
 import { WhatsappIcon } from "@/components/icons/WhatsappIcon";
 import { categoryImage, looks, productImage, siteImages } from "@/lib/images";
 import type { HomeCatalog, CatalogCategory, CatalogProduct } from "@/lib/catalog";
@@ -20,24 +20,24 @@ const fadeUp = {
 };
 
 const customizationSteps = [
-  { key: "model", icon: Sofa },
-  { key: "fabric", icon: Ruler },
-  { key: "whatsapp", icon: MessageCircle }
+  { key: "model", icon: "sofa" },
+  { key: "fabric", icon: "ruler" },
+  { key: "whatsapp", icon: "message" }
 ];
 
 const clubPerks = [
-  { key: "offers", icon: Gift },
-  { key: "arrivals", icon: BadgeCheck },
-  { key: "inspiration", icon: Images }
+  { key: "offers", icon: "gift" },
+  { key: "arrivals", icon: "check" },
+  { key: "inspiration", icon: "image" }
 ];
 
 const features = [
-  { key: "craftsmanship", icon: Gem },
-  { key: "delivery", icon: Truck },
-  { key: "sizes", icon: Sofa },
-  { key: "fabrics", icon: Palette },
-  { key: "consultation", icon: MessageCircle },
-  { key: "payments", icon: LockKeyhole }
+  { key: "craftsmanship", icon: "gem" },
+  { key: "delivery", icon: "truck" },
+  { key: "sizes", icon: "sofa" },
+  { key: "fabrics", icon: "palette" },
+  { key: "consultation", icon: "message" },
+  { key: "payments", icon: "lock" }
 ];
 
 function FeaturedCard({ product, index }: { product: CatalogProduct; index: number }) {
@@ -88,7 +88,7 @@ function BestSeller({ product, index }: { product: CatalogProduct; index: number
             imageClassName="transition duration-500 group-hover:scale-[1.05]"
           />
           <span aria-hidden className="absolute end-2 top-2 grid size-8 place-items-center rounded-full bg-white/85 text-neutral-800 transition group-hover:bg-white">
-            <Heart className="size-4" />
+            <SiteIcon name="heart" className="size-4" />
           </span>
         </div>
         <h3 className="mt-3 text-sm font-bold">{product.name}</h3>
@@ -147,7 +147,7 @@ export function HomeExperience({ catalog }: { catalog: HomeCatalog }) {
         <div className="mb-7 flex flex-wrap items-end justify-between gap-3">
           <h2 className="font-serif text-2xl font-bold sm:text-3xl">{t("categories.title")}</h2>
           <Link href="/sofas" className="inline-flex items-center gap-2 text-sm font-bold hover:underline">
-            {t("categories.viewAll")} <ArrowRight className="size-4 rtl:rotate-180" />
+            {t("categories.viewAll")} <SiteIcon name="arrow-right" className="size-4 rtl:rotate-180" />
           </Link>
         </div>
         <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6">
@@ -161,7 +161,7 @@ export function HomeExperience({ catalog }: { catalog: HomeCatalog }) {
         <div className="mb-7 flex flex-wrap items-end justify-between gap-3">
           <h2 className="font-serif text-2xl font-bold sm:text-3xl">{t("featured.title")}</h2>
           <Link href="/sofas" className="inline-flex items-center gap-2 text-sm font-bold hover:underline">
-            {t("featured.viewAll")} <ArrowRight className="size-4 rtl:rotate-180" />
+            {t("featured.viewAll")} <SiteIcon name="arrow-right" className="size-4 rtl:rotate-180" />
           </Link>
         </div>
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4 lg:gap-5">
@@ -179,7 +179,7 @@ export function HomeExperience({ catalog }: { catalog: HomeCatalog }) {
               <motion.div key={step.key} className="px-4 text-center" {...fadeUp}>
                 <div className="mx-auto flex max-w-xs flex-col items-center">
                   <span className="grid size-9 place-items-center rounded-full bg-black text-sm font-bold text-white">{index + 1}</span>
-                  <step.icon className="mt-4 size-12 stroke-[1.5]" />
+                  <SiteIcon name={step.icon as SiteIconName} className="mt-4 size-12" />
                   <h3 className="mt-6 font-bold">{t(`customization.steps.${step.key}.title`)}</h3>
                   <p className="mt-3 text-xs leading-5 text-neutral-600">{t(`customization.steps.${step.key}.text`)}</p>
                 </div>
@@ -192,14 +192,14 @@ export function HomeExperience({ catalog }: { catalog: HomeCatalog }) {
       <section className="bg-neutral-50">
         <AppSection className="grid items-center gap-6 py-10 lg:grid-cols-[1fr_360px] lg:py-12">
           <div className="flex items-center gap-4 sm:gap-5">
-            <Sofa className="size-10 shrink-0 stroke-[1.5] sm:size-12" />
+            <SiteIcon name="sofa" className="size-10 sm:size-12" />
             <div>
               <h2 className="font-serif text-xl font-bold sm:text-2xl">{t("roomUpload.title")}</h2>
               <p className="mt-2 max-w-lg text-sm leading-6 text-neutral-700">{t("roomUpload.text")}</p>
             </div>
           </div>
           <div className="text-center">
-            <AppButton className="w-full gap-2"><Upload className="size-4" /> {t("roomUpload.cta")}</AppButton>
+            <AppButton className="w-full gap-2"><SiteIcon name="upload" className="size-4" /> {t("roomUpload.cta")}</AppButton>
             <p className="mt-3 text-xs text-neutral-600">{t("roomUpload.note")}</p>
           </div>
         </AppSection>
@@ -236,14 +236,14 @@ export function HomeExperience({ catalog }: { catalog: HomeCatalog }) {
             onClick={() => lookApi?.scrollPrev()}
             className="absolute -start-3 top-1/2 grid size-9 -translate-y-1/2 place-items-center rounded-full bg-white text-neutral-900 shadow-md transition hover:bg-neutral-900 hover:text-white"
           >
-            <ArrowLeft className="size-4 rtl:rotate-180" />
+            <SiteIcon name="arrow-left" className="size-4 rtl:rotate-180" />
           </button>
           <button
             aria-label={t("shopTheLook.next")}
             onClick={() => lookApi?.scrollNext()}
             className="absolute -end-3 top-1/2 grid size-9 -translate-y-1/2 place-items-center rounded-full bg-white text-neutral-900 shadow-md transition hover:bg-neutral-900 hover:text-white"
           >
-            <ArrowRight className="size-4 rtl:rotate-180" />
+            <SiteIcon name="arrow-right" className="size-4 rtl:rotate-180" />
           </button>
         </div>
       </AppSection>
@@ -252,7 +252,7 @@ export function HomeExperience({ catalog }: { catalog: HomeCatalog }) {
         <div className="mb-7 flex flex-wrap items-end justify-between gap-3">
           <h2 className="font-serif text-2xl font-bold sm:text-3xl">{t("bestSellers.title")}</h2>
           <Link href="/sofas" className="inline-flex items-center gap-2 text-sm font-bold hover:underline">
-            {t("bestSellers.viewAll")} <ArrowRight className="size-4 rtl:rotate-180" />
+            {t("bestSellers.viewAll")} <SiteIcon name="arrow-right" className="size-4 rtl:rotate-180" />
           </Link>
         </div>
         <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6 lg:gap-5">
@@ -275,7 +275,7 @@ export function HomeExperience({ catalog }: { catalog: HomeCatalog }) {
           <div className="hidden lg:block" />
           <motion.div className="text-center lg:text-start" {...fadeUp}>
             <h2 className="font-serif text-3xl sm:text-4xl lg:text-5xl">{t("showroom.title")}</h2>
-            <p className="mt-5 flex items-center justify-center gap-2 text-sm lg:justify-start"><MapPin className="size-4" /> {t("showroom.address")}</p>
+            <p className="mt-5 flex items-center justify-center gap-2 text-sm lg:justify-start"><SiteIcon name="map-pin" className="size-4" /> {t("showroom.address")}</p>
             <p className="mt-4 text-sm leading-6 text-white/90">{t("showroom.weekHours")}<br />{t("showroom.weekendHours")}</p>
             <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:justify-center lg:justify-start">
               <Link href="/contact"><AppButton className="w-full sm:w-auto">{t("showroom.bookCta")}</AppButton></Link>
@@ -305,7 +305,7 @@ export function HomeExperience({ catalog }: { catalog: HomeCatalog }) {
           </form>
           <div className="grid grid-cols-1 gap-4 text-xs sm:grid-cols-3 sm:divide-x sm:divide-neutral-300">
             {clubPerks.map((perk) => (
-              <span key={perk.key} className="flex items-center gap-2 sm:justify-center sm:px-3"><perk.icon className="size-5 shrink-0" /> {t(`club.perks.${perk.key}`)}</span>
+              <span key={perk.key} className="flex items-center gap-2 sm:justify-center sm:px-3"><SiteIcon name={perk.icon as SiteIconName} className="size-5" /> {t(`club.perks.${perk.key}`)}</span>
             ))}
           </div>
         </AppSection>
@@ -315,7 +315,7 @@ export function HomeExperience({ catalog }: { catalog: HomeCatalog }) {
         <div className="mx-auto grid max-w-7xl grid-cols-2 gap-4 px-4 py-6 sm:grid-cols-3 lg:grid-cols-6 lg:gap-0 lg:px-8">
           {features.map((feature, index) => (
             <div key={feature.key} className={`flex items-center gap-3 px-1 lg:px-3 ${index === features.length - 1 ? "" : "lg:border-e lg:border-neutral-300"}`}>
-              <feature.icon className="size-6 shrink-0 stroke-[1.5]" />
+              <SiteIcon name={feature.icon as SiteIconName} className="size-6" />
               <div>
                 <p className="text-xs font-bold">{t(`features.${feature.key}.title`)}</p>
                 <p className="text-[11px] text-neutral-600">{t(`features.${feature.key}.text`)}</p>

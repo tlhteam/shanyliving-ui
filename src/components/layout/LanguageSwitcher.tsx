@@ -2,7 +2,7 @@
 
 import { useLocale, useTranslations } from "next-intl";
 import { useTransition } from "react";
-import { Check, Globe } from "lucide-react";
+import { SiteIcon } from "@/components/icons/SiteIcon";
 import { cn } from "@/lib/utils";
 import { AppLocale, localeOption, localeOptions } from "@/i18n/config";
 import { setUserLocale } from "@/i18n/actions";
@@ -42,7 +42,7 @@ export function LanguageSwitcher({ className, variant = "icon" }: { className?: 
         }
       >
         <span className="inline-flex items-center gap-1.5">
-          <Globe className="size-5 shrink-0" />
+          <SiteIcon name="globe" className="size-5" />
           <span className={variant === "icon" ? "hidden sm:inline" : undefined}>
             {variant === "inline" ? active.label : active.short}
           </span>
@@ -58,7 +58,7 @@ export function LanguageSwitcher({ className, variant = "icon" }: { className?: 
                 {option.label}
                 <span className="ms-2 text-xs text-neutral-500">{option.short}</span>
               </span>
-              {option.locale === locale && <Check className="size-4" />}
+              {option.locale === locale && <SiteIcon name="check" className="size-4" />}
             </DropdownMenuItem>
           ))}
         </DropdownMenuGroup>

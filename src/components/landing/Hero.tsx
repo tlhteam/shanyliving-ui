@@ -2,8 +2,8 @@
 
 import Link from "next/link";
 import { motion } from "motion/react";
-import { ArrowRight } from "lucide-react";
 import { AppButton } from "@/components/app/AppButton";
+import { SiteIcon } from "@/components/icons/SiteIcon";
 
 export function Hero() {
   return (
@@ -15,7 +15,7 @@ export function Hero() {
           <h1 className="max-w-xl text-5xl font-semibold leading-[1.05] tracking-tight text-neutral-950 sm:text-6xl">A sofa made for your home.</h1>
           <p className="mt-6 max-w-xl text-lg leading-8 text-neutral-600">Choose your model, size, structure, fabric and color. Our team will help you complete the perfect selection through WhatsApp.</p>
           <div className="mt-8 flex flex-wrap gap-3">
-            <Link href="/sofas"><AppButton size="lg">Customize Your Sofa <ArrowRight className="ml-2 size-4" /></AppButton></Link>
+            <Link href="/sofas"><AppButton size="lg">Customize Your Sofa <SiteIcon name="arrow-right" className="ml-2 size-4" /></AppButton></Link>
             <Link href="/sofas"><AppButton size="lg" variant="outline">Explore Collection</AppButton></Link>
           </div>
         </motion.div>

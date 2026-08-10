@@ -5,11 +5,11 @@ import debounce from "lodash.debounce";
 import { useTranslations } from "next-intl";
 import { useSession } from "next-auth/react";
 import { AnimatePresence, motion } from "motion/react";
-import { CheckCircle2, MapPin, Menu, MessageCircle, Search, UserRound, X } from "lucide-react";
 import { ChangeEvent, useEffect, useMemo, useState } from "react";
 import { AppButton } from "@/components/app/AppButton";
 import { AppDialog } from "@/components/app/AppDialog";
 import { AppMenu } from "@/components/app/AppMenu";
+import { SiteIcon } from "@/components/icons/SiteIcon";
 import { WhatsappIcon } from "@/components/icons/WhatsappIcon";
 import { AppLogo } from "@/components/layout/AppLogo";
 import { LanguageSwitcher } from "@/components/layout/LanguageSwitcher";
@@ -25,7 +25,7 @@ const navItems = [
   { key: "showroom", href: "/showroom" }
 ];
 
-const announcementIcons = [CheckCircle2, MessageCircle, MapPin, CheckCircle2, MessageCircle];
+const announcementIcons = ["check", "message", "map-pin", "check", "message"] as const;
 
 const searchableItems = [
   { title: "Cloud Modular", typeKey: "sofa", detailKey: "cloudModular", href: "/sofas/cloud-modular-sofa" },
@@ -86,9 +86,9 @@ export function AppHeader() {
           <div className="flex whitespace-nowrap py-2 text-[11px] font-semibold">
             {[0, 1].map((copy) => (
               <div key={copy} aria-hidden={copy === 1} className="flex min-w-max animate-shany-marquee items-center gap-12 pe-12">
-                {announcements.map(({ text, icon: Icon }) => (
+                {announcements.map(({ text, icon }) => (
                   <span key={`${copy}-${text}`} className="inline-flex items-center gap-2">
-                    <Icon className="size-3.5 shrink-0" />
+                    <SiteIcon name={icon} className="size-3.5" />
                     {text}
                   </span>
                 ))}
@@ -100,7 +100,7 @@ export function AppHeader() {
       <div className="mx-auto flex min-h-18 max-w-7xl items-center justify-between gap-2 px-4 sm:min-h-20 sm:gap-4 sm:px-6 lg:px-8">
         <div className="flex items-center gap-0.5 sm:gap-2">
           <button aria-label={t("openMenu")} className="rounded-md p-2 transition hover:bg-neutral-100 lg:hidden" onClick={() => setOpen(true)}>
-            <Menu className="size-5" />
+            <SiteIcon name="menu" className="size-5" />
           </button>
           <Link
             href={accountHref}
@@ -108,13 +108,13 @@ export function AppHeader() {
             title={t("account")}
             className="rounded-md p-2 transition hover:bg-neutral-100"
           >
-            <UserRound className="size-5" />
+            <SiteIcon name="user" className="size-5" />
           </Link>
           <button aria-label={t("whatsapp")} className="rounded-md p-2 text-[#128c4a] transition hover:bg-neutral-100" onClick={() => setWhatsappOpen(true)}>
             <WhatsappIcon className="size-5" />
           </button>
           <button aria-label={t("search")} className="rounded-md p-2 transition hover:bg-neutral-100" onClick={() => setSearchOpen(true)}>
-            <Search className="size-5" />
+            <SiteIcon name="search" className="size-5" />
           </button>
           <LanguageSwitcher className="hidden sm:inline-flex" />
         </div>
@@ -126,10 +126,10 @@ export function AppHeader() {
           <motion.div initial={{ opacity: 0, y: -12 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -12 }} transition={{ duration: 0.18 }} className="absolute inset-x-0 top-full z-40 border-t border-neutral-200 bg-white shadow-xl">
             <div className="mx-auto max-w-7xl px-4 py-5 sm:px-6 lg:px-8">
               <div className="flex items-center gap-3 rounded-md border border-neutral-300 bg-neutral-50 px-4 py-3">
-                <Search className="size-5 shrink-0 text-neutral-500" />
+                <SiteIcon name="search" className="size-5 text-neutral-500" />
                 <input value={searchValue} onChange={handleSearch} autoFocus placeholder={t("searchPlaceholder")} className="h-8 min-w-0 flex-1 bg-transparent text-sm font-medium outline-none placeholder:text-neutral-400" />
                 <button aria-label={t("closeSearch")} className="rounded-md p-1 transition hover:bg-neutral-200" onClick={closeSearch}>
-                  <X className="size-5" />
+                  <SiteIcon name="x" className="size-5" />
                 </button>
               </div>
               <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
@@ -177,7 +177,7 @@ export function AppHeader() {
             <div className="flex items-center justify-between gap-3">
               <AppLogo imageClassName="w-28" />
               <button aria-label={t("closeMenu")} className="rounded-md p-2 hover:bg-neutral-100" onClick={() => setOpen(false)}>
-                <X className="size-5" />
+                <SiteIcon name="x" className="size-5" />
               </button>
             </div>
             <div className="mt-7 flex flex-col gap-4">

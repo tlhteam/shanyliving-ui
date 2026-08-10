@@ -2,37 +2,17 @@
 
 import Link from "next/link";
 import { useEffect, useMemo, useRef, useState } from "react";
+import { useSearchParams } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import * as THREE from "three";
-import {
-  Armchair,
-  Bot,
-  Check,
-  ChevronLeft,
-  ChevronRight,
-  Copy,
-  Grid3X3,
-  Layers3,
-  LogIn,
-  MessageCircle,
-  Minus,
-  Move3D,
-  Palette,
-  Plus,
-  Ruler,
-  Save,
-  Sofa,
-  Sparkles,
-  Trash2,
-  ZoomIn,
-  ZoomOut
-} from "lucide-react";
 import { toast } from "sonner";
 import { AppButton } from "@/components/app/AppButton";
 import { AppDialog } from "@/components/app/AppDialog";
 import { SocialAuthButtons } from "@/components/auth/SocialAuthButtons";
+import { SiteIcon, SiteIconName } from "@/components/icons/SiteIcon";
 import { useApi } from "@/hooks/use-api";
+import type { CustomerSavedDesign } from "@/types/customer";
 
 type ModuleKind = "seat" | "chaise" | "corner" | "ottoman";
 
@@ -152,6 +132,22 @@ const presets: ProductPreset[] = [
 
 function clamp(value: number, min: number, max: number) {
   return Math.min(max, Math.max(min, value));
+}
+
+function ToolbarButton({ label, icon, active, onClick }: { label: string; icon: SiteIconName; active?: boolean; onClick: () => void }) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className={`group relative grid size-10 place-items-center rounded-md border ${active ? "border-white bg-white text-neutral-950" : "border-white/15 text-white hover:bg-white/10"}`}
+      aria-label={label}
+    >
+      <SiteIcon name={icon} className="size-4" />
+      <span className="pointer-events-none absolute -bottom-9 left-1/2 z-20 -translate-x-1/2 whitespace-nowrap rounded-md bg-white px-2 py-1 text-xs font-bold text-neutral-950 opacity-0 shadow-lg transition group-hover:opacity-100">
+        {label}
+      </span>
+    </button>
+  );
 }
 
 function SofaScene({ modules, selectedId, color, fabric, leg, zoom, autoRotate, onSelect, onChange, onZoomChange }: SceneProps) {
@@ -471,9 +467,11 @@ function SofaScene({ modules, selectedId, color, fabric, leg, zoom, autoRotate, 
 }
 
 export default function CustomizeYourSofaPage() {
+  const searchParams = useSearchParams();
   const { data: session } = useSession();
   const { request } = useApi();
   const queryClient = useQueryClient();
+  const designId = searchParams.get("design");
   const [activePresetId, setActivePresetId] = useState(presets[0].id);
   const [modules, setModules] = useState<SofaModule[]>(presets[0].modules);
   const [selectedId, setSelectedId] = useState(presets[0].modules[0].id);
@@ -485,6 +483,7 @@ export default function CustomizeYourSofaPage() {
   const [zoom, setZoom] = useState(0.52);
   const [autoRotate, setAutoRotate] = useState(false);
   const [authOpen, setAuthOpen] = useState(false);
+  const [loadedDesignId, setLoadedDesignId] = useState<string | null>(null);
 
   const activePreset = presets.find((preset) => preset.id === activePresetId) ?? presets[0];
   const selectedModule = modules.find((module) => module.id === selectedId) ?? modules[0];
@@ -497,10 +496,7 @@ export default function CustomizeYourSofaPage() {
   const price = useMemo(() => 4600 + modules.length * 610 + (leg === "Black Metal" ? 420 : leg === "Hidden" ? 0 : 280) + Math.round(totalWidth * 5.5), [leg, modules.length, totalWidth]);
   const configuration = useMemo(() => JSON.stringify({ product: activePreset.name, modules, fabric, color, leg, roomSize, style, zoom }), [activePreset.name, color, fabric, leg, modules, roomSize, style, zoom]);
 
-  const saveMutation = useMutation({
-    mutationFn: () => request("/customer/saved-designs", {
-      method: "POST",
-      body: {
+  const savePayload = useMemo(() => ({
         title,
         status: "in_progress",
         configuration,
@@ -511,14 +507,78 @@ export default function CustomizeYourSofaPage() {
         image: activePreset.image,
         price,
         notes: "Saved from 3D sofa studio"
-      }
+  }), [activePreset.image, color, configuration, fabric, leg, price, roomSize, style, title, totalWidth]);
+
+  const saveMutation = useMutation({
+    mutationFn: () => request(loadedDesignId ? `/customer/saved-designs/${loadedDesignId}` : "/customer/saved-designs", {
+      method: loadedDesignId ? "PATCH" : "POST",
+      body: savePayload
     }),
     onSuccess: () => {
-      toast.success("Design saved to your account.");
+      toast.success(loadedDesignId ? "Design updated in your account." : "Design saved to your account.");
       queryClient.invalidateQueries({ queryKey: ["customer", "saved-designs"] });
     },
     onError: (error: Error) => toast.error(error.message)
   });
+
+  useEffect(() => {
+    if (!designId || !session?.user || loadedDesignId === designId) {
+      return;
+    }
+
+    let mounted = true;
+
+    const loadDesign = async () => {
+      try {
+        const designs = await request<CustomerSavedDesign[]>("/customer/saved-designs");
+        const design = designs.find((item) => String(item.id) === designId);
+
+        if (!mounted || !design) {
+          return;
+        }
+
+        const parsed = design.configuration ? JSON.parse(design.configuration) as Partial<{
+          product: string;
+          modules: SofaModule[];
+          fabric: string;
+          color: string;
+          leg: string;
+          roomSize: string;
+          style: string;
+          zoom: number;
+        }> : null;
+
+        if (parsed?.product) {
+          const preset = presets.find((item) => item.name === parsed.product);
+          if (preset) {
+            setActivePresetId(preset.id);
+          }
+        }
+
+        if (Array.isArray(parsed?.modules) && parsed.modules.length > 0) {
+          setModules(parsed.modules);
+          setSelectedId(parsed.modules[0].id);
+        }
+
+        setFabric(parsed?.fabric ?? design.fabric ?? fabrics[0]);
+        setColor(parsed?.color ?? colors[0]);
+        setLeg(parsed?.leg ?? "Hidden");
+        setRoomSize(parsed?.roomSize ?? roomSizes[1]);
+        setStyle(parsed?.style ?? styles[0]);
+        setZoom(typeof parsed?.zoom === "number" ? parsed.zoom : 0.52);
+        setLoadedDesignId(designId);
+        toast.success("Saved design loaded in the editor.");
+      } catch (error) {
+        toast.error(error instanceof Error ? error.message : "Could not load saved design.");
+      }
+    };
+
+    void loadDesign();
+
+    return () => {
+      mounted = false;
+    };
+  }, [designId, loadedDesignId, request, session?.user]);
 
   const applyPreset = (preset: ProductPreset) => {
     setActivePresetId(preset.id);
@@ -630,14 +690,14 @@ export default function CustomizeYourSofaPage() {
           </div>
 
           <AppButton className="mt-4 w-full gap-2" onClick={aiConfigure}>
-            <Sparkles className="size-4" />
+            <SiteIcon name="sparkle" className="size-4" />
             AI Configure
           </AppButton>
 
           <div className="mt-5 grid grid-cols-2 gap-2">
             {(["seat", "chaise", "corner", "ottoman"] as const).map((kind) => (
               <button key={kind} type="button" onClick={() => addModule(kind)} className="rounded-md border border-neutral-200 bg-white p-3 text-sm font-bold hover:border-neutral-950 dark:border-white/10 dark:bg-neutral-900 dark:hover:border-white">
-                <Armchair className="mb-2 size-5" />
+                <SiteIcon name="sofa" className="mb-2 size-5" />
                 {kind === "seat" ? "Seat" : kind === "chaise" ? "Chaise" : kind === "corner" ? "Corner" : "Ottoman"}
               </button>
             ))}
@@ -667,27 +727,21 @@ export default function CustomizeYourSofaPage() {
         <section className="min-w-0 bg-neutral-950">
           <div className="flex flex-wrap items-center justify-between gap-3 border-b border-white/10 p-3">
             <div className="flex items-center gap-2 text-white">
-              <Move3D className="size-5" />
+              <SiteIcon name="move-3d" className="size-5" />
               <span className="text-sm font-bold">3D Layout</span>
             </div>
             <div className="flex items-center gap-2">
-              <button type="button" onClick={() => setZoom((value) => clamp(value - 0.08, 0, 1))} className="grid size-10 place-items-center rounded-md border border-white/15 text-white hover:bg-white/10" aria-label="Zoom out">
-                <ZoomOut className="size-4" />
-              </button>
+              <ToolbarButton label="Zoom out" icon="zoom-out" onClick={() => setZoom((value) => clamp(value - 0.08, 0, 1))} />
               <input type="range" min={0} max={1} step={0.01} value={zoom} onChange={(event) => setZoom(Number(event.target.value))} className="w-28 accent-white" aria-label="Zoom" />
-              <button type="button" onClick={() => setZoom((value) => clamp(value + 0.08, 0, 1))} className="grid size-10 place-items-center rounded-md border border-white/15 text-white hover:bg-white/10" aria-label="Zoom in">
-                <ZoomIn className="size-4" />
-              </button>
-              <button type="button" onClick={() => setAutoRotate((value) => !value)} className={`grid size-10 place-items-center rounded-md border ${autoRotate ? "border-white bg-white text-neutral-950" : "border-white/15 text-white hover:bg-white/10"}`} aria-label="Auto rotate">
-                <Bot className="size-4" />
-              </button>
+              <ToolbarButton label="Zoom in" icon="zoom-in" onClick={() => setZoom((value) => clamp(value + 0.08, 0, 1))} />
+              <ToolbarButton label="Auto rotate" icon="bot" active={autoRotate} onClick={() => setAutoRotate((value) => !value)} />
             </div>
           </div>
           <SofaScene modules={modules} selectedId={selectedId} color={color} fabric={fabric} leg={leg} zoom={zoom} autoRotate={autoRotate} onSelect={setSelectedId} onChange={setModules} onZoomChange={setZoom} />
           <div className="flex gap-3 overflow-x-auto border-t border-white/10 bg-neutral-950 p-3">
             {modules.map((module) => (
               <button key={module.id} type="button" onClick={() => setSelectedId(module.id)} className={`min-w-40 rounded-md border p-3 text-left text-sm font-bold ${selectedId === module.id ? "border-white bg-white text-neutral-950" : "border-white/15 bg-neutral-900 text-white"}`}>
-                <span className="flex items-center gap-2"><Layers3 className="size-4" /> {module.label}</span>
+                <span className="flex items-center gap-2"><SiteIcon name="grid" className="size-4" /> {module.label}</span>
                 <span className="mt-1 block text-xs font-medium opacity-70">X {module.x.toFixed(1)} / Z {module.z.toFixed(1)}</span>
               </button>
             ))}
@@ -698,14 +752,14 @@ export default function CustomizeYourSofaPage() {
           <h2 className="font-serif text-2xl font-bold">Design Summary</h2>
           <div className="mt-4 space-y-3">
             {[
-              [Sofa, "Model", activePreset.name],
-              [Ruler, "Width", `${totalWidth} cm`],
-              [Palette, "Fabric", fabric],
-              [Grid3X3, "Color", color],
-              [Armchair, "Legs", leg]
-            ].map(([Icon, label, value]) => (
+              ["sofa", "Model", activePreset.name],
+              ["ruler", "Width", `${totalWidth} cm`],
+              ["palette", "Fabric", fabric],
+              ["grid", "Color", color],
+              ["sofa", "Legs", leg]
+            ].map(([icon, label, value]) => (
               <div key={String(label)} className="flex items-center gap-3 rounded-md border border-neutral-200 bg-white p-3 dark:border-white/10 dark:bg-neutral-900">
-                <Icon className="size-5" />
+                <SiteIcon name={icon as SiteIconName} className="size-5" />
                 <div>
                   <p className="text-xs font-bold text-neutral-500 dark:text-neutral-400">{String(label)}</p>
                   <p className="font-bold">{String(value)}</p>
@@ -723,30 +777,30 @@ export default function CustomizeYourSofaPage() {
                   <p className="text-sm text-neutral-600 dark:text-neutral-300">{selectedModule.width.toFixed(1)}m x {selectedModule.depth.toFixed(1)}m</p>
                 </div>
                 <div className="flex gap-2">
-                  <button type="button" onClick={() => setModules((current) => current.map((module) => module.id === selectedId ? { ...module, x: module.x - 0.2 } : module))} className="grid size-9 place-items-center rounded-md border border-neutral-200 dark:border-white/10" aria-label="Move left">
-                    <ChevronLeft className="size-4" />
+                  <button type="button" title="Move left" onClick={() => setModules((current) => current.map((module) => module.id === selectedId ? { ...module, x: module.x - 0.2 } : module))} className="grid size-9 place-items-center rounded-md border border-neutral-200 dark:border-white/10" aria-label="Move left">
+                    <SiteIcon name="chevron-left" className="size-4" />
                   </button>
-                  <button type="button" onClick={() => setModules((current) => current.map((module) => module.id === selectedId ? { ...module, x: module.x + 0.2 } : module))} className="grid size-9 place-items-center rounded-md border border-neutral-200 dark:border-white/10" aria-label="Move right">
-                    <ChevronRight className="size-4" />
+                  <button type="button" title="Move right" onClick={() => setModules((current) => current.map((module) => module.id === selectedId ? { ...module, x: module.x + 0.2 } : module))} className="grid size-9 place-items-center rounded-md border border-neutral-200 dark:border-white/10" aria-label="Move right">
+                    <SiteIcon name="chevron-right" className="size-4" />
                   </button>
                 </div>
               </div>
               <div className="mt-3 grid grid-cols-3 gap-2">
                 <button type="button" onClick={() => setModules((current) => current.map((module) => module.id === selectedId ? { ...module, z: module.z - 0.2 } : module))} className="rounded-md border border-neutral-200 p-2 text-xs font-bold dark:border-white/10">
-                  <Minus className="mx-auto mb-1 size-4" />
+                  <SiteIcon name="minus" className="mx-auto mb-1 size-4" />
                   Depth
                 </button>
                 <button type="button" onClick={duplicateSelected} className="rounded-md border border-neutral-200 p-2 text-xs font-bold dark:border-white/10">
-                  <Copy className="mx-auto mb-1 size-4" />
+                  <SiteIcon name="copy" className="mx-auto mb-1 size-4" />
                   Copy
                 </button>
                 <button type="button" onClick={() => setModules((current) => current.map((module) => module.id === selectedId ? { ...module, z: module.z + 0.2 } : module))} className="rounded-md border border-neutral-200 p-2 text-xs font-bold dark:border-white/10">
-                  <Plus className="mx-auto mb-1 size-4" />
+                  <SiteIcon name="plus" className="mx-auto mb-1 size-4" />
                   Depth
                 </button>
               </div>
               <AppButton variant="outline" className="mt-3 w-full gap-2" onClick={removeSelected} disabled={modules.length <= 1}>
-                <Trash2 className="size-4" />
+                <SiteIcon name="trash" className="size-4" />
                 Remove Module
               </AppButton>
             </div>
@@ -754,12 +808,12 @@ export default function CustomizeYourSofaPage() {
 
           <p className="mt-5 font-serif text-3xl font-bold">NIS {price.toLocaleString()}</p>
           <AppButton className="mt-4 w-full gap-2" loading={saveMutation.isPending} onClick={saveDesign}>
-            <Save className="size-4" />
+            <SiteIcon name="save" className="size-4" />
             Save My Design
           </AppButton>
           <Link href="/showroom">
             <AppButton variant="outline" className="mt-3 w-full gap-2">
-              <MessageCircle className="size-4" />
+              <SiteIcon name="message" className="size-4" />
               Ask for Help
             </AppButton>
           </Link>
@@ -772,13 +826,13 @@ export default function CustomizeYourSofaPage() {
           <div className="grid gap-3 sm:grid-cols-2">
             <Link href="/login?callbackUrl=/customize-your-sofa">
               <AppButton variant="outline" className="w-full gap-2">
-                <LogIn className="size-4" />
+                <SiteIcon name="user" className="size-4" />
                 Sign In
               </AppButton>
             </Link>
             <Link href="/register">
               <AppButton className="w-full gap-2">
-                <Check className="size-4" />
+                <SiteIcon name="check" className="size-4" />
                 Create Account
               </AppButton>
             </Link>

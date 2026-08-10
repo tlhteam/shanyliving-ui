@@ -1,21 +1,21 @@
 import Link from "next/link";
-import { BadgeCheck, MapPin, MessageCircle, Palette, Ruler, Sofa, Truck, Users } from "lucide-react";
 import { AppButton } from "@/components/app/AppButton";
 import { AppImage } from "@/components/app/AppImage";
 import { AppSection } from "@/components/app/AppSection";
+import { SiteIcon, SiteIconName } from "@/components/icons/SiteIcon";
 
 const stats = [
-  { value: "15+", label: "Years Experience", icon: BadgeCheck },
-  { value: "500+", label: "Custom Sofas Delivered", icon: Sofa },
-  { value: "120+", label: "Premium Fabrics", icon: Palette },
-  { value: "1:1", label: "Personal Design Consultation", icon: Users }
+  { value: "15+", label: "Years Experience", icon: "check" },
+  { value: "500+", label: "Custom Sofas Delivered", icon: "sofa" },
+  { value: "120+", label: "Premium Fabrics", icon: "palette" },
+  { value: "1:1", label: "Personal Design Consultation", icon: "users" }
 ];
 
 const services = [
-  { title: "Personal Consultation", text: "One-on-one guidance from our design experts.", icon: Users },
-  { title: "Fabric Selection", text: "Explore a wide range of premium fabrics.", icon: Palette },
-  { title: "Size Planning", text: "We help you choose the perfect size.", icon: Ruler },
-  { title: "Delivery Advice", text: "We guide you through delivery and installation.", icon: Truck }
+  { title: "Personal Consultation", text: "One-on-one guidance from our design experts.", icon: "users" },
+  { title: "Fabric Selection", text: "Explore a wide range of premium fabrics.", icon: "palette" },
+  { title: "Size Planning", text: "We help you choose the perfect size.", icon: "ruler" },
+  { title: "Delivery Advice", text: "We guide you through delivery and installation.", icon: "truck" }
 ];
 
 export default function ShowroomPage() {
@@ -28,7 +28,7 @@ export default function ShowroomPage() {
           <h1 className="max-w-2xl font-serif text-4xl leading-tight sm:text-6xl">Experience Comfort Before You Decide</h1>
           <p className="mt-4 max-w-xl text-sm leading-6 text-white/90">Feel every fabric, compare finishes and customize your sofa live with our design specialists.</p>
           <div className="mt-6 flex flex-col gap-3 sm:flex-row">
-            <Link href="#book"><AppButton className="gap-2"><MessageCircle className="size-4" /> Chat on WhatsApp</AppButton></Link>
+            <Link href="#book"><AppButton className="gap-2"><SiteIcon name="message" className="size-4" /> Chat on WhatsApp</AppButton></Link>
             <Link href="#book"><AppButton variant="outline" className="border-white bg-white/10 text-white hover:bg-white hover:text-neutral-950">Book a Showroom Visit</AppButton></Link>
           </div>
         </div>
@@ -37,7 +37,7 @@ export default function ShowroomPage() {
         <div className="mx-auto grid max-w-7xl grid-cols-2 gap-4 px-4 py-7 sm:px-6 lg:grid-cols-4 lg:px-8">
           {stats.map((stat) => (
             <div key={stat.label} className="flex items-center gap-3">
-              <stat.icon className="size-8 stroke-[1.5]" />
+              <SiteIcon name={stat.icon as SiteIconName} className="size-8" />
               <div>
                 <p className="font-serif text-2xl font-bold">{stat.value}</p>
                 <p className="text-xs font-bold">{stat.label}</p>
@@ -72,7 +72,7 @@ export default function ShowroomPage() {
           <div>
             <h2 className="font-serif text-2xl font-bold">Book Your Visit</h2>
             <div className="mt-5 space-y-3 text-sm text-neutral-700">
-              <p className="flex gap-2"><MapPin className="size-4" /> Herzl 34, Tel Aviv, Israel</p>
+              <p className="flex gap-2"><SiteIcon name="map-pin" className="size-4" /> Herzl 34, Tel Aviv, Israel</p>
               <p>03-1234567</p>
               <p>info@shanyliving.com</p>
               <p>Sun - Thu | 10:00 - 19:00</p>
@@ -96,7 +96,7 @@ export default function ShowroomPage() {
         <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {services.map((service) => (
             <div key={service.title} className="rounded-lg border border-neutral-200 bg-white p-5">
-              <service.icon className="size-7 stroke-[1.5]" />
+              <SiteIcon name={service.icon as SiteIconName} className="size-7" />
               <h3 className="mt-4 font-bold">{service.title}</h3>
               <p className="mt-2 text-sm leading-6 text-neutral-700">{service.text}</p>
             </div>

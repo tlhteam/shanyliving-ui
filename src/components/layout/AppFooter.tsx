@@ -1,9 +1,9 @@
 import Image from "next/image";
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";
-import { Clock, Mail, MapPin, Phone } from "lucide-react";
 import { AppImage } from "@/components/app/AppImage";
 import { InstagramIcon } from "@/components/icons/InstagramIcon";
+import { SiteIcon, SiteIconName } from "@/components/icons/SiteIcon";
 import { WhatsappIcon } from "@/components/icons/WhatsappIcon";
 import { AppLogo } from "@/components/layout/AppLogo";
 import { paymentMethods, siteImages } from "@/lib/images";
@@ -26,12 +26,12 @@ const companyLinks = [
 ];
 
 const contactRows = [
-  { key: "address", icon: MapPin },
-  { key: "phone", icon: Phone },
-  { key: "whatsapp", icon: WhatsappIcon },
-  { key: "email", icon: Mail },
-  { key: "weekHours", icon: Clock },
-  { key: "weekendHours", icon: Clock }
+  { key: "address", icon: "map-pin" },
+  { key: "phone", icon: "phone" },
+  { key: "whatsapp", icon: "whatsapp" },
+  { key: "email", icon: "mail" },
+  { key: "weekHours", icon: "clock" },
+  { key: "weekendHours", icon: "clock" }
 ];
 
 export async function AppFooter() {
@@ -63,7 +63,7 @@ export async function AppFooter() {
           <div className="mt-5 flex flex-col gap-3 text-sm">
             {contactRows.map((row) => (
               <span key={row.key} className="flex items-start gap-2.5">
-                <row.icon className="mt-0.5 size-4 shrink-0" />
+                {row.icon === "whatsapp" ? <WhatsappIcon className="mt-0.5 size-4 shrink-0" /> : <SiteIcon name={row.icon as SiteIconName} className="mt-0.5 size-4" />}
                 {t(`contactRows.${row.key}`)}
               </span>
             ))}
