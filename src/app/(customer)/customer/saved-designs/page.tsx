@@ -178,7 +178,7 @@ export default function SavedDesignsPage() {
       <div className="space-y-4">
         {filteredDesigns.map((design) => (
           <AppCard key={design.id} className="grid gap-4 p-4 lg:grid-cols-[240px_1fr_180px] lg:items-center">
-            <AppImage src={design.image ?? "/images/sofa-cloud-modular.png"} alt={design.title} className="aspect-[1.6/1] rounded-lg" sizes="240px" />
+            <AppImage src={design.image ?? null} alt={design.title} className="aspect-[1.6/1] rounded-lg" sizes="240px" />
             <div>
               <div className="flex flex-wrap items-center gap-3">
                 <h2 className="font-serif text-2xl font-bold">{design.title}</h2>
@@ -258,7 +258,7 @@ export default function SavedDesignsPage() {
       >
         {viewing ? (
           <div className="space-y-5">
-            <AppImage src={viewing.image ?? "/images/sofa-cloud-modular.png"} alt={viewing.title} className="aspect-[1.7/1] rounded-lg" sizes="560px" />
+            <AppImage src={viewing.image ?? null} alt={viewing.title} className="aspect-[1.7/1] rounded-lg" sizes="560px" />
             <dl className="grid gap-4 text-sm sm:grid-cols-2">
               <div><dt className="font-bold">Status</dt><dd>{statusLabels[viewing.status] ?? viewing.status}</dd></div>
               <div><dt className="font-bold">Configuration</dt><dd>{configurationSummary(viewing)}</dd></div>

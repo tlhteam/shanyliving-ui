@@ -53,7 +53,7 @@ export default function CustomerDashboardPage() {
           <h2 className="font-bold">Active Order</h2>
           {activeOrder ? (
             <div className="mt-4 grid gap-4 sm:grid-cols-[180px_1fr]">
-              <AppImage src={activeItem?.image ?? "/images/sofa-cloud-modular.png"} alt={itemTitle(activeItem, activeOrder)} className="aspect-[1.45/1] rounded-lg" sizes="180px" />
+              <AppImage src={activeItem?.image ?? null} alt={itemTitle(activeItem, activeOrder)} className="aspect-[1.45/1] rounded-lg" sizes="180px" />
               <div>
                 <h3 className="font-serif text-2xl font-bold">{itemTitle(activeItem, activeOrder)}</h3>
                 <p className="mt-1 text-xs text-neutral-600">Order #{activeOrder.reference} · {activeOrder.status}</p>
@@ -99,7 +99,7 @@ export default function CustomerDashboardPage() {
           <div className="mt-4 grid gap-4 sm:grid-cols-3">
             {(dashboard?.saved_designs ?? []).slice(0, 3).map((design) => (
               <Link key={design.id} href="/customer/saved-designs" className="group">
-                <AppImage src={design.image ?? "/images/sofa-cloud-modular.png"} alt={design.title} className="aspect-[1.5/1] rounded-lg" sizes="220px" imageClassName="transition duration-500 group-hover:scale-[1.04]" />
+                <AppImage src={design.image ?? null} alt={design.title} className="aspect-[1.5/1] rounded-lg" sizes="220px" imageClassName="transition duration-500 group-hover:scale-[1.04]" />
                 <p className="mt-2 text-sm font-bold">{design.title}</p>
                 <p className="text-xs text-neutral-600">{design.fabric}</p>
               </Link>

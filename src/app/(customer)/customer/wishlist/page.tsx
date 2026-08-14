@@ -73,7 +73,7 @@ export default function WishlistPage() {
         {items.map((item) => (
           <AppCard key={item.id} className="overflow-hidden p-0">
             <div className="relative">
-              <AppImage src={item.image ?? "/images/sofa-cloud-modular.png"} alt={item.title} className="aspect-[1.15/1]" sizes="25vw" />
+              <AppImage src={item.image ?? null} alt={item.title} className="aspect-[1.15/1]" sizes="25vw" />
               <button
                 type="button"
                 aria-label={`Remove ${item.title} from wishlist`}

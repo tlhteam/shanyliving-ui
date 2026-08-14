@@ -99,7 +99,7 @@ export default function CustomerOrdersPage() {
               return (
                 <button key={order.id} type="button" onClick={() => setSelectedId(order.id)} className="block w-full text-start">
                   <AppCard className="grid gap-4 p-3 sm:grid-cols-[160px_1fr_auto] sm:items-center">
-                    <AppImage src={item?.image ?? "/images/sofa-cloud-modular.png"} alt={itemTitle(order)} className="aspect-[1.5/1] rounded-lg" sizes="160px" />
+                    <AppImage src={item?.image ?? null} alt={itemTitle(order)} className="aspect-[1.5/1] rounded-lg" sizes="160px" />
                     <div>
                       <p className="text-xs font-bold">Order #{order.reference}</p>
                       <p className="mt-1 text-xs text-neutral-500 dark:text-neutral-400">{order.placed_at ? new Date(order.placed_at).toLocaleDateString() : "Date pending"}</p>
@@ -120,7 +120,7 @@ export default function CustomerOrdersPage() {
           <AppCard className="h-fit p-5">
             <h2 className="font-serif text-2xl font-bold">Order Details</h2>
             <div className="mt-4 flex gap-3">
-              <AppImage src={firstItem(selected)?.image ?? "/images/sofa-cloud-modular.png"} alt={itemTitle(selected)} className="size-20 rounded-lg" sizes="80px" />
+              <AppImage src={firstItem(selected)?.image ?? null} alt={itemTitle(selected)} className="size-20 rounded-lg" sizes="80px" />
               <div>
                 <p className="font-bold">{itemTitle(selected)}</p>
                 <p className="text-xs text-neutral-600 dark:text-neutral-400">{selected.payment_status}</p>
