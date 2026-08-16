@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Script from "next/script";
 import { NextIntlClientProvider } from "next-intl";
 import { getLocale } from "next-intl/server";
 import { AppProviders } from "@/components/app/AppProviders";
@@ -25,11 +24,6 @@ export default async function RootLayout({
 
   return (
     <html lang={locale} dir={localeDirection(locale)} className="h-full antialiased" suppressHydrationWarning>
-      <head>
-        <Script id="shany-theme-init" strategy="beforeInteractive">
-          {`try{var raw=localStorage.getItem("shany-customer-commerce");var saved=raw?JSON.parse(raw):null;var theme=saved&&saved.state?saved.state.theme:null;var system=window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light";var next=theme?theme==="system"?system:theme:"light";document.documentElement.classList.toggle("dark",next==="dark");document.documentElement.style.colorScheme=next;}catch(e){}`}
-        </Script>
-      </head>
       <body className="min-h-full flex flex-col">
         <NextIntlClientProvider>
           <AppProviders>{children}</AppProviders>

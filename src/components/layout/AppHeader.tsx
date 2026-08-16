@@ -6,8 +6,6 @@ import { useTranslations } from "next-intl";
 import { useSession } from "next-auth/react";
 import { AnimatePresence, motion } from "motion/react";
 import { ChangeEvent, useEffect, useMemo, useRef, useState } from "react";
-import { AppButton } from "@/components/app/AppButton";
-import { AppDialog } from "@/components/app/AppDialog";
 import { AppMenu } from "@/components/app/AppMenu";
 import { SiteIcon } from "@/components/icons/SiteIcon";
 import { WhatsappIcon } from "@/components/icons/WhatsappIcon";
@@ -39,13 +37,11 @@ export function AppHeader() {
   const t = useTranslations("header");
   const [open, setOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
-  const [whatsappOpen, setWhatsappOpen] = useState(false);
   const [searchValue, setSearchValue] = useState("");
   const [query, setQuery] = useState("");
   const searchInputRef = useRef<HTMLInputElement>(null);
   const { status } = useSession();
   const cartCount = useCustomerCommerceStore((state) => state.cart.reduce((sum, item) => sum + item.quantity, 0));
-  const openCart = useCustomerCommerceStore((state) => state.openCart);
   const accountHref = status === "authenticated" ? "/customer" : "/login";
   const whatsappNumber = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER?.replace(/\D/g, "");
   const whatsappHref = whatsappNumber ? `https://wa.me/${whatsappNumber}` : "/contact";
@@ -119,16 +115,25 @@ export function AppHeader() {
           >
             <SiteIcon name="user" className="size-5" />
           </Link>
-          <button aria-label={t("whatsapp")} className="rounded-md p-2 text-[#128c4a] transition hover:bg-neutral-100 dark:hover:bg-white/10" onClick={() => setWhatsappOpen(true)}>
+          <Link href={whatsappHref} target={whatsappNumber ? "_blank" : undefined} aria-label={t("whatsapp")} title={t("whatsapp")} className="rounded-md p-2 text-[#128c4a] transition hover:bg-neutral-100 dark:hover:bg-white/10">
             <WhatsappIcon className="size-5" />
-          </button>
-          <button aria-label={t("search")} className="rounded-md p-2 text-neutral-950 transition hover:bg-neutral-100 dark:text-neutral-50 dark:hover:bg-white/10" onClick={() => setSearchOpen(true)}>
+          </Link>
+          <Link
+            href="/sofas"
+            aria-label={t("search")}
+            title={t("search")}
+            className="rounded-md p-2 text-neutral-950 transition hover:bg-neutral-100 dark:text-neutral-50 dark:hover:bg-white/10"
+            onClick={(event) => {
+              event.preventDefault();
+              setSearchOpen(true);
+            }}
+          >
             <SiteIcon name="search" className="size-5" />
-          </button>
-          <button type="button" onClick={openCart} onDoubleClick={() => window.location.assign("/cart")} aria-label="Cart" title="Cart" className="relative rounded-md p-2 text-neutral-950 transition hover:bg-neutral-100 dark:text-neutral-50 dark:hover:bg-white/10">
+          </Link>
+          <Link href="/cart" aria-label="Cart" title="Cart" className="relative rounded-md p-2 text-neutral-950 transition hover:bg-neutral-100 dark:text-neutral-50 dark:hover:bg-white/10">
             <SiteIcon name="bag" className="size-5" />
             {cartCount > 0 ? <span className="absolute end-0 top-0 grid size-4 place-items-center rounded-full bg-neutral-950 text-[10px] font-bold text-white dark:bg-white dark:text-neutral-950">{cartCount}</span> : null}
-          </button>
+          </Link>
           <LanguageSwitcher className="hidden sm:inline-flex" />
         </div>
         <AppMenu items={menuItems} className="hidden flex-1 justify-center gap-6 lg:flex xl:gap-7" />
@@ -158,32 +163,6 @@ export function AppHeader() {
           </motion.div>
         ) : null}
       </AnimatePresence>
-      <AppDialog
-        open={whatsappOpen}
-        onOpenChange={setWhatsappOpen}
-        title={t("whatsappDialog.title")}
-        description={t("whatsappDialog.description")}
-        className="sm:max-w-md"
-        footer={
-          <>
-            <AppButton type="button" variant="outline" onClick={() => setWhatsappOpen(false)}>{t("whatsappDialog.close")}</AppButton>
-            <Link href={whatsappHref} target={whatsappNumber ? "_blank" : undefined}>
-              <AppButton type="button" className="w-full gap-2 sm:w-auto"><WhatsappIcon className="size-4" /> {t("whatsappDialog.startChat")}</AppButton>
-            </Link>
-          </>
-        }
-      >
-        <div className="space-y-3 text-sm text-neutral-700 dark:text-neutral-300">
-          <div className="rounded-lg border border-neutral-200 p-4 dark:border-white/10">
-            <p className="font-bold text-neutral-950 dark:text-neutral-50">{t("whatsappDialog.adviceTitle")}</p>
-            <p className="mt-1">{t("whatsappDialog.adviceText")}</p>
-          </div>
-          <div className="rounded-lg border border-neutral-200 p-4 dark:border-white/10">
-            <p className="font-bold text-neutral-950 dark:text-neutral-50">{t("whatsappDialog.followUpTitle")}</p>
-            <p className="mt-1">{t("whatsappDialog.followUpText")}</p>
-          </div>
-        </div>
-      </AppDialog>
       {open && (
         <div className="fixed inset-0 z-50 bg-black/40 lg:hidden" onClick={() => setOpen(false)}>
           <div className="ms-auto flex h-full w-80 max-w-[86vw] flex-col overflow-y-auto bg-white p-5 text-neutral-950 shadow-xl dark:bg-neutral-950 dark:text-neutral-50" onClick={(event) => event.stopPropagation()}>
