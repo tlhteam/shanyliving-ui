@@ -124,7 +124,7 @@ export default function SettingsPage() {
                     key={value}
                     type="button"
                     onClick={() => updateAppearance(value)}
-                    className={`rounded-lg border p-4 text-center transition hover:border-black dark:hover:border-white ${(settings?.appearance ?? commerceTheme) === value ? "border-black bg-neutral-950 text-white dark:border-white dark:bg-white dark:text-neutral-950" : "border-neutral-200 dark:border-white/15"}`}
+                    className={`rounded-lg border p-4 text-center transition hover:border-black dark:hover:border-white ${commerceTheme === value ? "border-black bg-neutral-950 text-white dark:border-white dark:bg-white dark:text-neutral-950" : "border-neutral-200 dark:border-white/15"}`}
                   >
                     <Icon className="mx-auto size-6" />
                     <span className="mt-2 block text-sm font-bold">{label}</span>
@@ -136,7 +136,7 @@ export default function SettingsPage() {
           <AppCard className="h-fit p-5">
             <h2 className="font-serif text-2xl font-bold">Current Preferences</h2>
             <div className="mt-4 space-y-3 text-sm">
-              <p className="flex justify-between"><span className="font-bold">Theme</span><span className="text-neutral-600 dark:text-neutral-300">{settings?.appearance ?? commerceTheme}</span></p>
+              <p className="flex justify-between"><span className="font-bold">Theme</span><span className="text-neutral-600 dark:text-neutral-300">{commerceTheme}</span></p>
               <p className="flex justify-between"><span className="font-bold">Language</span><span className="text-neutral-600 dark:text-neutral-300">{settings?.language ?? "he"}</span></p>
               <p className="flex justify-between"><span className="font-bold">Tour</span><span className="text-neutral-600 dark:text-neutral-300">{settings?.tour_completed ? "Completed" : "Pending"}</span></p>
             </div>

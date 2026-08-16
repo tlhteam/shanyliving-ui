@@ -22,7 +22,6 @@ const navItems = [
   { key: "bedroom", href: "/bedroom" },
   { key: "newArrivals", href: "/new-arrivals" },
   { key: "inspiration", href: "/inspiration" },
-  { key: "customize", href: "/customize-your-sofa" },
   { key: "showroom", href: "/showroom" }
 ];
 
@@ -130,21 +129,21 @@ export function AppHeader() {
       </div>
       <AnimatePresence>
         {searchOpen ? (
-          <motion.div initial={{ opacity: 0, y: -12 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -12 }} transition={{ duration: 0.18 }} className="absolute inset-x-0 top-full z-40 border-t border-neutral-200 bg-white shadow-xl">
+          <motion.div initial={{ opacity: 0, y: -12 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -12 }} transition={{ duration: 0.18 }} className="absolute inset-x-0 top-full z-40 border-t border-neutral-200 bg-white text-neutral-950 shadow-xl dark:border-white/10 dark:bg-neutral-950 dark:text-neutral-50">
             <div className="mx-auto max-w-7xl px-4 py-5 sm:px-6 lg:px-8">
-              <div className="flex items-center gap-3 rounded-md border border-neutral-300 bg-neutral-50 px-4 py-3">
-                <SiteIcon name="search" className="size-5 text-neutral-500" />
-                <input value={searchValue} onChange={handleSearch} autoFocus placeholder={t("searchPlaceholder")} className="h-8 min-w-0 flex-1 bg-transparent text-sm font-medium outline-none placeholder:text-neutral-400" />
-                <button aria-label={t("closeSearch")} className="rounded-md p-1 transition hover:bg-neutral-200" onClick={closeSearch}>
+              <div className="flex items-center gap-3 rounded-md border border-neutral-300 bg-neutral-50 px-4 py-3 dark:border-white/15 dark:bg-neutral-900">
+                <SiteIcon name="search" className="size-5 text-neutral-500 dark:text-neutral-300" />
+                <input value={searchValue} onChange={handleSearch} autoFocus placeholder={t("searchPlaceholder")} className="h-8 min-w-0 flex-1 bg-transparent text-sm font-medium text-neutral-950 outline-none placeholder:text-neutral-400 dark:text-neutral-50 dark:placeholder:text-neutral-500" />
+                <button aria-label={t("closeSearch")} className="rounded-md p-1 transition hover:bg-neutral-200 dark:hover:bg-white/10" onClick={closeSearch}>
                   <SiteIcon name="x" className="size-5" />
                 </button>
               </div>
               <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
                 {results.map((item) => (
-                  <Link key={item.title} href={item.href} onClick={closeSearch} className="rounded-lg border border-neutral-200 p-4 transition hover:-translate-y-0.5 hover:border-neutral-900 hover:shadow-md">
-                    <span className="text-[11px] font-bold uppercase tracking-[0.18em] text-neutral-500">{item.type}</span>
+                  <Link key={item.title} href={item.href} onClick={closeSearch} className="rounded-lg border border-neutral-200 p-4 transition hover:-translate-y-0.5 hover:border-neutral-900 hover:shadow-md dark:border-white/10 dark:hover:border-white">
+                    <span className="text-[11px] font-bold uppercase tracking-[0.18em] text-neutral-500 dark:text-neutral-400">{item.type}</span>
                     <p className="mt-2 font-bold">{item.title}</p>
-                    <p className="mt-1 text-sm text-neutral-600">{item.detail}</p>
+                    <p className="mt-1 text-sm text-neutral-600 dark:text-neutral-300">{item.detail}</p>
                   </Link>
                 ))}
               </div>
@@ -167,23 +166,23 @@ export function AppHeader() {
           </>
         }
       >
-        <div className="space-y-3 text-sm text-neutral-700">
-          <div className="rounded-lg border border-neutral-200 p-4">
-            <p className="font-bold text-neutral-950">{t("whatsappDialog.adviceTitle")}</p>
+        <div className="space-y-3 text-sm text-neutral-700 dark:text-neutral-300">
+          <div className="rounded-lg border border-neutral-200 p-4 dark:border-white/10">
+            <p className="font-bold text-neutral-950 dark:text-neutral-50">{t("whatsappDialog.adviceTitle")}</p>
             <p className="mt-1">{t("whatsappDialog.adviceText")}</p>
           </div>
-          <div className="rounded-lg border border-neutral-200 p-4">
-            <p className="font-bold text-neutral-950">{t("whatsappDialog.followUpTitle")}</p>
+          <div className="rounded-lg border border-neutral-200 p-4 dark:border-white/10">
+            <p className="font-bold text-neutral-950 dark:text-neutral-50">{t("whatsappDialog.followUpTitle")}</p>
             <p className="mt-1">{t("whatsappDialog.followUpText")}</p>
           </div>
         </div>
       </AppDialog>
       {open && (
         <div className="fixed inset-0 z-50 bg-black/40 lg:hidden" onClick={() => setOpen(false)}>
-          <div className="ms-auto flex h-full w-80 max-w-[86vw] flex-col overflow-y-auto bg-white p-5 shadow-xl" onClick={(event) => event.stopPropagation()}>
+          <div className="ms-auto flex h-full w-80 max-w-[86vw] flex-col overflow-y-auto bg-white p-5 text-neutral-950 shadow-xl dark:bg-neutral-950 dark:text-neutral-50" onClick={(event) => event.stopPropagation()}>
             <div className="flex items-center justify-between gap-3">
               <AppLogo imageClassName="w-28" />
-              <button aria-label={t("closeMenu")} className="rounded-md p-2 hover:bg-neutral-100" onClick={() => setOpen(false)}>
+              <button aria-label={t("closeMenu")} className="rounded-md p-2 hover:bg-neutral-100 dark:hover:bg-white/10" onClick={() => setOpen(false)}>
                 <SiteIcon name="x" className="size-5" />
               </button>
             </div>
