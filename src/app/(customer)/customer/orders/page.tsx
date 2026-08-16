@@ -38,6 +38,7 @@ function itemTitle(order: CustomerOrder) {
 
 export default function CustomerOrdersPage() {
   const [search, setSearch] = useState("");
+  const [page, setPage] = useState(1);
   const [activeTab, setActiveTab] = useState<(typeof orderTabs)[number]["value"]>("all");
   const [selectedId, setSelectedId] = useState<number | null>(null);
 
@@ -53,6 +54,10 @@ export default function CustomerOrdersPage() {
       .filter((order) => `${order.reference} ${itemTitle(order)} ${order.status}`.toLowerCase().includes(search.trim().toLowerCase())),
     [activeTab, ordersQuery.data, search]
   );
+  const pageSize = 10;
+  const pageCount = Math.max(1, Math.ceil(filteredOrders.length / pageSize));
+  const safePage = Math.min(page, pageCount);
+  const paginatedOrders = filteredOrders.slice((safePage - 1) * pageSize, safePage * pageSize);
   const selected = filteredOrders.find((order) => order.id === selectedId) ?? filteredOrders[0];
 
   return (
@@ -64,7 +69,10 @@ export default function CustomerOrdersPage() {
             <button
               key={tab.value}
               type="button"
-              onClick={() => setActiveTab(tab.value)}
+              onClick={() => {
+                setActiveTab(tab.value);
+                setPage(1);
+              }}
               className={activeTab === tab.value ? "border-b-2 border-black pb-2 text-black dark:border-white dark:text-white" : "pb-2 text-neutral-500 transition hover:text-neutral-950 dark:hover:text-white"}
             >
               {tab.label}
@@ -72,7 +80,10 @@ export default function CustomerOrdersPage() {
           ))}
         </div>
         <div className="flex gap-2">
-          <input value={search} onChange={(event) => setSearch(event.target.value)} placeholder="Search order ID or product..." className="h-10 w-full rounded-md border border-neutral-300 bg-white px-3 text-sm outline-none focus:border-neutral-950 dark:border-white/15 dark:bg-neutral-950 dark:focus:border-white lg:w-72" />
+          <input value={search} onChange={(event) => {
+            setSearch(event.target.value);
+            setPage(1);
+          }} placeholder="Search order ID or product..." className="h-10 w-full rounded-md border border-neutral-300 bg-white px-3 text-sm outline-none focus:border-neutral-950 dark:border-white/15 dark:bg-neutral-950 dark:focus:border-white lg:w-72" />
           <AppButton variant="outline" className="gap-2"><SlidersHorizontal className="size-4" /> Filter</AppButton>
         </div>
       </div>
@@ -93,7 +104,7 @@ export default function CustomerOrdersPage() {
       {filteredOrders.length > 0 ? (
         <div className="grid gap-5 xl:grid-cols-[1fr_360px]">
           <div className="space-y-3">
-            {filteredOrders.map((order) => {
+            {paginatedOrders.map((order) => {
               const item = firstItem(order);
 
               return (
@@ -115,7 +126,7 @@ export default function CustomerOrdersPage() {
                 </button>
               );
             })}
-            <AppPagination page={1} pageSize={filteredOrders.length || 1} total={filteredOrders.length} onPageChange={() => undefined} />
+            <AppPagination page={safePage} pageSize={pageSize} total={filteredOrders.length} onPageChange={setPage} />
           </div>
           <AppCard className="h-fit p-5">
             <h2 className="font-serif text-2xl font-bold">Order Details</h2>

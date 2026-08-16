@@ -27,7 +27,7 @@ type AdminCrudState = {
 export const useAdminCrudStore = create<AdminCrudState>((set) => ({
   query: "",
   page: 1,
-  pageSize: 5,
+  pageSize: 10,
   mode: null,
   selected: null,
   draft: {},

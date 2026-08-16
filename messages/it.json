@@ -96,10 +96,10 @@
             }
         },
         "roomUpload": {
-            "title": "Carica una foto della tua stanza",
-            "text": "Ricevi consigli personalizzati sulla misura, sullo stile e sulla disposizione del divano più adatti al tuo spazio.",
-            "cta": "Carica foto della stanza",
-            "note": "Facoltativo e sicuro"
+            "title": "Consulenza design in showroom",
+            "text": "Ricevi consigli personalizzati su misura, tessuto, colore e disposizione prima di ordinare.",
+            "cta": "Prenota una visita in showroom",
+            "note": "Personale, pratica e adatta al tuo spazio"
         },
         "shopTheLook": {
             "title": "Acquista il look",

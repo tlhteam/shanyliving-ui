@@ -135,7 +135,7 @@ export function HomeExperience({ catalog }: { catalog: HomeCatalog }) {
         </div>
       </section>
 
-      <AppSection>
+      <AppSection className="text-neutral-950 dark:text-neutral-50">
         <div className="mb-7 flex flex-wrap items-end justify-between gap-3">
           <h2 className="font-serif text-2xl font-bold sm:text-3xl">{t("categories.title")}</h2>
           <Link href="/sofas" className="inline-flex items-center gap-2 text-sm font-bold hover:underline">
@@ -149,7 +149,7 @@ export function HomeExperience({ catalog }: { catalog: HomeCatalog }) {
         </div>
       </AppSection>
 
-      <AppSection className="pt-0">
+      <AppSection className="pt-0 text-neutral-950 dark:text-neutral-50">
         <div className="mb-7 flex flex-wrap items-end justify-between gap-3">
           <h2 className="font-serif text-2xl font-bold sm:text-3xl">{t("featured.title")}</h2>
           <Link href="/sofas" className="inline-flex items-center gap-2 text-sm font-bold hover:underline">
@@ -163,17 +163,17 @@ export function HomeExperience({ catalog }: { catalog: HomeCatalog }) {
         </div>
       </AppSection>
 
-      <section className="bg-neutral-100">
+      <section className="bg-neutral-100 text-neutral-950 transition-colors dark:bg-neutral-900 dark:text-neutral-50">
         <AppSection>
           <h2 className="text-center font-serif text-2xl font-bold sm:text-3xl">{t("customization.title")}</h2>
-          <div className="mt-10 grid gap-10 lg:grid-cols-3 lg:gap-0 lg:divide-x lg:divide-neutral-300">
+          <div className="mt-10 grid gap-10 lg:grid-cols-3 lg:gap-0 lg:divide-x lg:divide-neutral-300 dark:lg:divide-white/10">
             {customizationSteps.map((step, index) => (
               <div key={step.key} className="px-4 text-center">
                 <div className="mx-auto flex max-w-xs flex-col items-center">
-                  <span className="grid size-9 place-items-center rounded-full bg-black text-sm font-bold text-white">{index + 1}</span>
-                  <SiteIcon name={step.icon as SiteIconName} className="mt-4 size-12" />
+                  <span className="grid size-9 place-items-center rounded-full bg-black text-sm font-bold text-white dark:bg-white dark:text-neutral-950">{index + 1}</span>
+                  <SiteIcon name={step.icon as SiteIconName} className="mt-4 size-12 text-neutral-800 dark:text-neutral-100" />
                   <h3 className="mt-6 font-bold">{t(`customization.steps.${step.key}.title`)}</h3>
-                  <p className="mt-3 text-xs leading-5 text-neutral-600">{t(`customization.steps.${step.key}.text`)}</p>
+                  <p className="mt-3 text-xs leading-5 text-neutral-600 dark:text-neutral-300">{t(`customization.steps.${step.key}.text`)}</p>
                 </div>
               </div>
             ))}
@@ -181,26 +181,26 @@ export function HomeExperience({ catalog }: { catalog: HomeCatalog }) {
         </AppSection>
       </section>
 
-      <section className="bg-neutral-50">
+      <section className="bg-white text-neutral-950 transition-colors dark:bg-neutral-950 dark:text-neutral-50">
         <AppSection className="grid items-center gap-6 py-10 lg:grid-cols-[1fr_360px] lg:py-12">
           <div className="flex items-center gap-4 sm:gap-5">
-            <SiteIcon name="sofa" className="size-10 sm:size-12" />
+            <SiteIcon name="message" className="size-10 text-neutral-800 dark:text-neutral-100 sm:size-12" />
             <div>
               <h2 className="font-serif text-xl font-bold sm:text-2xl">{t("roomUpload.title")}</h2>
-              <p className="mt-2 max-w-lg text-sm leading-6 text-neutral-700">{t("roomUpload.text")}</p>
+              <p className="mt-2 max-w-lg text-sm leading-6 text-neutral-700 dark:text-neutral-300">{t("roomUpload.text")}</p>
             </div>
           </div>
           <div className="text-center">
-            <AppButton className="w-full gap-2"><SiteIcon name="upload" className="size-4" /> {t("roomUpload.cta")}</AppButton>
-            <p className="mt-3 text-xs text-neutral-600">{t("roomUpload.note")}</p>
+            <Link href="/showroom"><AppButton className="w-full gap-2"><SiteIcon name="map-pin" className="size-4" /> {t("roomUpload.cta")}</AppButton></Link>
+            <p className="mt-3 text-xs text-neutral-600 dark:text-neutral-400">{t("roomUpload.note")}</p>
           </div>
         </AppSection>
       </section>
 
-      <AppSection className="grid gap-8 lg:grid-cols-[220px_1fr] lg:items-center">
+      <AppSection className="grid gap-8 text-neutral-950 dark:text-neutral-50 lg:grid-cols-[220px_1fr] lg:items-center">
         <div>
           <h2 className="font-serif text-2xl font-bold">{t("shopTheLook.title")}</h2>
-          <p className="mt-4 text-sm leading-6 text-neutral-700">{t("shopTheLook.text")}</p>
+          <p className="mt-4 text-sm leading-6 text-neutral-700 dark:text-neutral-300">{t("shopTheLook.text")}</p>
           <Link href="/about"><AppButton className="mt-6 w-full sm:w-auto">{t("shopTheLook.cta")}</AppButton></Link>
         </div>
         <div className="relative">

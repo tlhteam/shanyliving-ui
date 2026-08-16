@@ -96,10 +96,10 @@
             }
         },
         "roomUpload": {
-            "title": "Téléchargez une photo de votre pièce",
-            "text": "Recevez des conseils personnalisés sur la taille, le style et la disposition de canapé adaptés à votre espace.",
-            "cta": "Télécharger une photo",
-            "note": "Facultatif et sécurisé"
+            "title": "Conseils design depuis le showroom",
+            "text": "Recevez un accompagnement personnalisé sur la taille, le tissu, la couleur et l'agencement avant de commander.",
+            "cta": "Réserver une visite showroom",
+            "note": "Personnel, pratique et adapté à votre espace"
         },
         "shopTheLook": {
             "title": "Achetez le look",

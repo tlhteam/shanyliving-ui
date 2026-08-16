@@ -52,6 +52,22 @@ function isImageValue(value: unknown) {
   return typeof value === "string" && (value.startsWith("data:image") || value.startsWith("/") || value.startsWith("http"));
 }
 
+function hasDisplayValue(value: unknown) {
+  return value !== undefined && value !== null && String(value).trim() !== "";
+}
+
+function EmptyValue({ image = false }: { image?: boolean }) {
+  if (image) {
+    return (
+      <div className="grid h-12 w-16 place-items-center rounded-md border border-dashed border-neutral-300 bg-neutral-50 px-2 text-center text-[10px] font-semibold leading-tight text-neutral-500 dark:border-white/15 dark:bg-neutral-950 dark:text-neutral-400">
+        No image found
+      </div>
+    );
+  }
+
+  return <span className="font-mono text-xs text-neutral-500 dark:text-neutral-400">null</span>;
+}
+
 function filesToDataUrls(files: FileList | null) {
   return Promise.all(Array.from(files ?? []).map((file) => new Promise<string>((resolve, reject) => {
     const reader = new FileReader();
@@ -61,7 +77,7 @@ function filesToDataUrls(files: FileList | null) {
   })));
 }
 
-function statusVariant(value: string | number): "default" | "secondary" | "destructive" {
+function statusVariant(value: unknown): "default" | "secondary" | "destructive" {
   const text = String(value).toLowerCase();
 
   if (text.includes("active") || text.includes("booked") || text.includes("sent") || text.includes("yes")) {
@@ -141,6 +157,10 @@ export function AdminResourcePage({ eyebrow, title, description, action, rows, c
         const value = row.original[column.key];
 
         if (column.swatch) {
+          if (!hasDisplayValue(value)) {
+            return <EmptyValue />;
+          }
+
           return (
             <div className="flex items-center gap-2">
               <span className="size-5 rounded-full border border-neutral-300" style={{ backgroundColor: String(value) }} />
@@ -150,11 +170,17 @@ export function AdminResourcePage({ eyebrow, title, description, action, rows, c
         }
 
         if (column.badge) {
+          if (!hasDisplayValue(value)) {
+            return <EmptyValue />;
+          }
+
           return <Badge variant={statusVariant(value)}>{String(value)}</Badge>;
         }
 
-        if (column.input === "image" && isImageValue(value)) {
-          return <AppImage src={String(value)} alt={String(row.original.name ?? column.label)} className="h-12 w-16 rounded-md" sizes="64px" />;
+        if (column.input === "image") {
+          return isImageValue(value)
+            ? <AppImage src={String(value)} alt={String(row.original.name ?? column.label)} className="h-12 w-16 rounded-md" sizes="64px" />
+            : <EmptyValue image />;
         }
 
         if (column.input === "images") {
@@ -167,7 +193,11 @@ export function AdminResourcePage({ eyebrow, title, description, action, rows, c
               ))}
               {images.length > 3 ? <span className="grid size-10 place-items-center rounded-md bg-neutral-100 text-xs font-bold dark:bg-neutral-800">+{images.length - 3}</span> : null}
             </div>
-          ) : <span className="text-neutral-500">No images</span>;
+          ) : <EmptyValue image />;
+        }
+
+        if (!hasDisplayValue(value)) {
+          return <EmptyValue />;
         }
 
         return <span className="font-medium">{String(value)}</span>;
@@ -259,7 +289,7 @@ export function AdminResourcePage({ eyebrow, title, description, action, rows, c
           {selected ? Object.entries(selected).map(([key, value]) => (
             <div key={key} className="rounded-md border border-neutral-200 p-3 dark:border-white/10">
               <p className="text-xs font-bold uppercase tracking-[0.14em] text-neutral-500 dark:text-neutral-400">{key.replace(/([A-Z])/g, " $1")}</p>
-              <p className="mt-1 font-semibold">{String(value)}</p>
+              <p className="mt-1 font-semibold">{hasDisplayValue(value) ? String(value) : "null"}</p>
             </div>
           )) : null}
         </div>

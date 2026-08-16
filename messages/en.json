@@ -96,10 +96,10 @@
       }
     },
     "roomUpload": {
-      "title": "Upload a Photo of Your Room",
-      "text": "Get personalized advice on the perfect sofa size, style and layout for your space.",
-      "cta": "Upload Room Photo",
-      "note": "Optional and secure"
+      "title": "Design Guidance From the Showroom",
+      "text": "Get personal advice on sofa size, fabric, color, and layout before you place an order.",
+      "cta": "Book a Showroom Visit",
+      "note": "Personal, practical, and tailored to your space"
     },
     "shopTheLook": {
       "title": "Shop the Look",
