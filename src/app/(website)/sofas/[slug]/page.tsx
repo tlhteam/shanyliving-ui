@@ -6,6 +6,7 @@ import { AppSection } from "@/components/app/AppSection";
 import { SiteIcon, SiteIconName } from "@/components/icons/SiteIcon";
 import { ProductBuyActions } from "@/components/storefront/ProductBuyActions";
 import { ProductCard } from "@/components/storefront/ProductCard";
+import { ProductDetailAccordion } from "@/components/storefront/ProductDetailAccordion";
 import { getStorefrontProduct, storefrontProducts } from "@/lib/storefront-pages";
 
 type ProductDetailPageProps = {
@@ -64,17 +65,7 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
             <p className="mt-5 max-w-md text-sm leading-6 text-neutral-700 dark:text-neutral-300">{product.description ?? "A modern furniture piece with refined proportions and made-to-order comfort for everyday living."}</p>
             <p className="mt-7 text-sm font-bold">From <span className="text-3xl">NIS {new Intl.NumberFormat("en").format(product.price)}</span></p>
             <p className="mt-1 text-xs text-neutral-600 dark:text-neutral-400">Price varies by size and configuration</p>
-            <div className="mt-6 divide-y divide-neutral-300 border border-neutral-300 bg-white text-neutral-950 dark:divide-white/15 dark:border-white/20 dark:bg-neutral-950 dark:text-neutral-50">
-              {["Size & Configuration", "Fabric", "Color", "Leg Style", "Cushion Comfort"].map((item) => (
-                <button key={item} className="flex w-full items-center justify-between px-5 py-4 text-start transition hover:bg-neutral-50 dark:hover:bg-white/10">
-                  <span>
-                    <span className="block text-sm font-bold">{item}</span>
-                    <span className="text-xs text-neutral-600 dark:text-neutral-400">Choose your preference</span>
-                  </span>
-                  <SiteIcon name="chevron-right" className="size-4" />
-                </button>
-              ))}
-            </div>
+            <ProductDetailAccordion product={product} />
             <div className="mt-5">
               <ProductBuyActions product={product} />
             </div>

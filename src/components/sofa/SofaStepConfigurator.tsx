@@ -60,6 +60,7 @@ export function SofaStepConfigurator() {
   const [color, setColor] = useState(colors[0]);
   const [roomPhoto, setRoomPhoto] = useState<string | null>(null);
   const [aiReady, setAiReady] = useState(false);
+  const [aiGenerating, setAiGenerating] = useState(false);
   const [authOpen, setAuthOpen] = useState(false);
 
   const canTransact = session?.user?.role !== "admin";
@@ -108,6 +109,7 @@ export function SofaStepConfigurator() {
   };
 
   const handleRoomUpload = async (event: ChangeEvent<HTMLInputElement>) => {
+    const input = event.currentTarget;
     const file = event.target.files?.[0];
 
     if (!file) {
@@ -116,7 +118,7 @@ export function SofaStepConfigurator() {
 
     setRoomPhoto(await readFile(file));
     setAiReady(false);
-    event.currentTarget.value = "";
+    input.value = "";
   };
 
   const generateRoomPreview = () => {
@@ -125,8 +127,12 @@ export function SofaStepConfigurator() {
       return;
     }
 
-    setAiReady(true);
-    toast.success("Room preview generated.");
+    setAiGenerating(true);
+    window.setTimeout(() => {
+      setAiGenerating(false);
+      setAiReady(true);
+      toast.success("Room preview generated.");
+    }, 1600);
   };
 
   if (roomMode) {
@@ -140,8 +146,17 @@ export function SofaStepConfigurator() {
             {roomPhoto ? (
               <div className="relative">
                 <AppImage src={roomPhoto} alt="Uploaded room" className="aspect-[0.78/1]" sizes="448px" imageClassName="object-cover" />
+                {aiGenerating ? (
+                  <div className="absolute inset-0 grid place-items-center bg-black/35 text-white">
+                    <div className="rounded-lg bg-neutral-950/80 px-5 py-4 text-center shadow-xl">
+                      <SiteIcon name="fabric" className="mx-auto size-6 animate-pulse" />
+                      <p className="mt-2 text-sm font-bold">Generating realistic room preview...</p>
+                      <p className="mt-1 text-xs text-white/70">Blending sofa, fabric, and lighting</p>
+                    </div>
+                  </div>
+                ) : null}
                 {aiReady ? (
-                  <div className="absolute inset-x-4 bottom-4 rounded-lg bg-white/90 p-3 shadow-lg dark:bg-neutral-950/90">
+                  <div className="absolute inset-x-4 bottom-4 rounded-lg bg-white/90 p-3 shadow-lg backdrop-blur animate-in fade-in slide-in-from-bottom-2 dark:bg-neutral-950/90">
                     <div className="grid grid-cols-[88px_1fr] gap-3">
                       <AppImage src={product.image} alt={product.name} className="aspect-[1.25/1] rounded-md" sizes="88px" />
                       <div>
@@ -173,10 +188,10 @@ export function SofaStepConfigurator() {
               <>
                 <AppButton className="w-full" onClick={addDesignToCart}>Add to Cart</AppButton>
                 <Link href="/showroom"><AppButton variant="outline" className="w-full">Talk to Designer</AppButton></Link>
-                <AppButton variant="outline" className="w-full" onClick={() => { setRoomPhoto(null); setAiReady(false); }}>Try Another Photo</AppButton>
+                <AppButton variant="outline" className="w-full" onClick={() => { setRoomPhoto(null); setAiReady(false); setAiGenerating(false); }}>Try Another Photo</AppButton>
               </>
             ) : (
-              <AppButton className="w-full" onClick={generateRoomPreview} disabled={!roomPhoto}>Generate AI Result</AppButton>
+              <AppButton className="w-full" onClick={generateRoomPreview} disabled={!roomPhoto || aiGenerating} loading={aiGenerating}>Generate AI Result</AppButton>
             )}
           </div>
         </div>
@@ -187,9 +202,10 @@ export function SofaStepConfigurator() {
   return (
     <div className="bg-white text-neutral-950 dark:bg-neutral-950 dark:text-neutral-50">
       <div className="mx-auto min-h-screen max-w-md px-4 py-8">
-        <div className="mb-8 flex items-center justify-between">
+        <div className="relative mb-8 flex items-center justify-between">
+          <div className="absolute left-4 right-4 top-1/2 z-0 border-t border-dashed border-neutral-300 dark:border-white/25" />
           {[1, 2, 3, 4].map((item) => (
-            <button key={item} type="button" onClick={() => setStep(item as 1 | 2 | 3 | 4)} className={`grid size-9 place-items-center rounded-full border text-sm font-bold ${step === item ? "border-neutral-950 bg-neutral-950 text-white dark:border-white dark:bg-white dark:text-neutral-950" : "border-neutral-300 text-neutral-600 dark:border-white/20 dark:text-neutral-300"}`}>
+            <button key={item} type="button" onClick={() => setStep(item as 1 | 2 | 3 | 4)} className={`relative z-10 grid size-9 place-items-center rounded-full border bg-white text-sm font-bold transition hover:scale-105 dark:bg-neutral-950 ${step === item ? "border-neutral-950 bg-neutral-950 text-white dark:border-white dark:bg-white dark:text-neutral-950" : "border-neutral-300 text-neutral-600 dark:border-white/20 dark:text-neutral-300"}`}>
               {item}
             </button>
           ))}
@@ -237,16 +253,29 @@ export function SofaStepConfigurator() {
             <div className="mt-5 grid grid-cols-4 gap-3">
               {fabrics.map((item) => (
                 <button key={item.name} type="button" onClick={() => setFabric(item)} className="text-center text-xs font-bold">
-                  <AppImage src={item.image} alt={item.name} className={`aspect-square rounded-md border ${fabric.name === item.name ? "border-neutral-950 dark:border-white" : "border-neutral-200 dark:border-white/10"}`} sizes="96px" />
+                  <AppImage src={item.image} alt={item.name} className={`aspect-square rounded-md border transition hover:scale-[1.03] ${fabric.name === item.name ? "border-neutral-950 ring-2 ring-neutral-950/15 dark:border-white dark:ring-white/25" : "border-neutral-200 dark:border-white/10"}`} sizes="96px" />
                   <span className="mt-2 block">{item.name}</span>
                 </button>
               ))}
             </div>
             <h2 className="mt-8 font-bold">Choose color - {fabric.name}</h2>
-            <div className="mt-5 flex gap-4">
+            <div className="mt-5 flex flex-wrap gap-4">
               {colors.map((item) => (
-                <button key={item.name} type="button" onClick={() => setColor(item)} aria-label={item.name} className={`size-12 rounded-full border-2 ${color.name === item.name ? "border-neutral-950 dark:border-white" : "border-transparent"}`} style={{ backgroundColor: item.value }} />
+                <button key={item.name} type="button" onClick={() => setColor(item)} aria-label={item.name} title={item.name} className="group text-center text-xs font-bold">
+                  <span className={`block size-12 rounded-full border-2 transition group-hover:scale-110 ${color.name === item.name ? "border-neutral-950 ring-2 ring-neutral-950/15 dark:border-white dark:ring-white/25" : "border-transparent"}`} style={{ backgroundColor: item.value }} />
+                  <span className="mt-2 block max-w-16 text-[10px] leading-tight text-neutral-700 dark:text-neutral-300">{item.name}</span>
+                </button>
               ))}
+            </div>
+            <div className="mt-6 overflow-hidden rounded-lg border border-neutral-200 bg-neutral-50 p-3 dark:border-white/10 dark:bg-neutral-900">
+              <p className="text-xs font-bold uppercase tracking-[0.14em] text-neutral-500 dark:text-neutral-400">Preview</p>
+              <div className="mt-3 grid grid-cols-[84px_1fr] items-center gap-3">
+                <AppImage src={product.image} alt={`${fabric.name} ${color.name} preview`} className="aspect-[1.2/1] rounded-md" sizes="84px" />
+                <div>
+                  <p className="font-bold">{fabric.name} in {color.name}</p>
+                  <p className="mt-1 text-xs text-neutral-600 dark:text-neutral-400">Soft rendered preview before review.</p>
+                </div>
+              </div>
             </div>
             <AppImage src={product.image} alt={product.name} className="mt-8 aspect-[0.9/1] rounded-lg" sizes="448px" />
             <AppButton className="mt-6 w-full" onClick={() => setStep(4)}>Next</AppButton>
