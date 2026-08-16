@@ -1,6 +1,7 @@
 "use client";
 
 import { useLocale, useTranslations } from "next-intl";
+import { useRouter } from "next/navigation";
 import { useTransition } from "react";
 import { SiteIcon } from "@/components/icons/SiteIcon";
 import { cn } from "@/lib/utils";
@@ -11,6 +12,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem,
 export function LanguageSwitcher({ className, variant = "icon" }: { className?: string; variant?: "icon" | "inline" }) {
   const locale = useLocale();
   const t = useTranslations("language");
+  const router = useRouter();
   const [pending, startTransition] = useTransition();
   const active = localeOption(locale);
 
@@ -20,7 +22,7 @@ export function LanguageSwitcher({ className, variant = "icon" }: { className?: 
     }
 
     startTransition(() => {
-      void setUserLocale(next);
+      void setUserLocale(next).then(() => router.refresh());
     });
   };
 
@@ -35,6 +37,7 @@ export function LanguageSwitcher({ className, variant = "icon" }: { className?: 
             disabled={pending}
             className={cn(
               "inline-flex items-center gap-1.5 rounded-md px-2 py-2 text-xs font-bold uppercase tracking-wide transition hover:bg-neutral-100 disabled:opacity-50",
+              "text-neutral-950 dark:text-neutral-50 dark:hover:bg-white/10",
               variant === "inline" && "w-full justify-between border border-neutral-200 px-3 text-sm normal-case tracking-normal",
               className
             )}

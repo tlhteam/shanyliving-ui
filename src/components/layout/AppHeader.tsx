@@ -112,7 +112,7 @@ export function AppHeader() {
           >
             <SiteIcon name="user" className="size-5" />
           </Link>
-          <button aria-label={t("whatsapp")} className="rounded-md p-2 text-[#128c4a] transition hover:bg-neutral-100" onClick={() => setWhatsappOpen(true)}>
+          <button aria-label={t("whatsapp")} className="rounded-md p-2 text-[#128c4a] transition hover:bg-neutral-100 dark:hover:bg-white/10" onClick={() => setWhatsappOpen(true)}>
             <WhatsappIcon className="size-5" />
           </button>
           <button aria-label={t("search")} className="rounded-md p-2 text-neutral-950 transition hover:bg-neutral-100 dark:text-neutral-50 dark:hover:bg-white/10" onClick={() => setSearchOpen(true)}>

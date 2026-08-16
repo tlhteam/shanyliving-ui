@@ -3,7 +3,6 @@
 import Link from "next/link";
 import useEmblaCarousel from "embla-carousel-react";
 import { useLocale, useTranslations } from "next-intl";
-import { motion } from "motion/react";
 import { AppButton } from "@/components/app/AppButton";
 import { AppImage } from "@/components/app/AppImage";
 import { AppSection } from "@/components/app/AppSection";
@@ -11,13 +10,6 @@ import { SiteIcon, SiteIconName } from "@/components/icons/SiteIcon";
 import { WhatsappIcon } from "@/components/icons/WhatsappIcon";
 import { categoryImage, looks, productImage, siteImages } from "@/lib/images";
 import type { HomeCatalog, CatalogCategory, CatalogProduct } from "@/lib/catalog";
-
-const fadeUp = {
-  initial: { opacity: 0, y: 18 },
-  whileInView: { opacity: 1, y: 0 },
-  viewport: { once: true, margin: "-80px" },
-  transition: { duration: 0.45 }
-};
 
 const customizationSteps = [
   { key: "model", icon: "sofa" },
@@ -46,7 +38,7 @@ function FeaturedCard({ product, index }: { product: CatalogProduct; index: numb
   const price = new Intl.NumberFormat(locale).format(product.price);
 
   return (
-    <motion.div {...fadeUp}>
+    <div>
       <Link href="/sofas" className="group relative block overflow-hidden rounded-lg shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-xl">
         <AppImage
           src={productImage(product, index)}
@@ -67,7 +59,7 @@ function FeaturedCard({ product, index }: { product: CatalogProduct; index: numb
           </span>
         </div>
       </Link>
-    </motion.div>
+    </div>
   );
 }
 
@@ -77,7 +69,7 @@ function BestSeller({ product, index }: { product: CatalogProduct; index: number
   const price = new Intl.NumberFormat(locale).format(product.price);
 
   return (
-    <motion.div {...fadeUp}>
+    <div>
       <Link href="/sofas" className="group block">
         <div className="relative overflow-hidden rounded-lg">
           <AppImage
@@ -94,7 +86,7 @@ function BestSeller({ product, index }: { product: CatalogProduct; index: number
         <h3 className="mt-3 text-sm font-bold">{product.name}</h3>
         <p className="text-sm font-bold text-neutral-700">{t("price", { price })}</p>
       </Link>
-    </motion.div>
+    </div>
   );
 }
 
@@ -103,7 +95,7 @@ function CategoryTile({ category, index }: { category: CatalogCategory; index: n
   const label = t.has(category.slug) ? t(category.slug) : category.name;
 
   return (
-    <motion.div {...fadeUp}>
+    <div>
       <Link href="/sofas" className="group block text-center">
         <AppImage
           src={categoryImage(category, index)}
@@ -114,7 +106,7 @@ function CategoryTile({ category, index }: { category: CatalogCategory; index: n
         />
         <span className="mt-3 block text-sm font-bold group-hover:underline">{label}</span>
       </Link>
-    </motion.div>
+    </div>
   );
 }
 
@@ -129,7 +121,7 @@ export function HomeExperience({ catalog }: { catalog: HomeCatalog }) {
       <section className="relative isolate grid min-h-120 place-items-center overflow-hidden px-4 py-20 text-center text-white sm:min-h-140 lg:min-h-160">
         <AppImage src={siteImages.hero} alt={t("hero.imageAlt")} className="absolute inset-0" sizes="100vw" preload loading="eager" />
         <div className="absolute inset-0 bg-linear-to-b from-black/45 via-black/25 to-black/50" />
-        <motion.div initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.65 }} className="relative mx-auto max-w-3xl">
+        <div className="relative mx-auto max-w-3xl">
           <h1 className="font-serif text-4xl leading-[1.05] drop-shadow-md sm:text-6xl lg:text-7xl">{t("hero.title")}</h1>
           <p className="mx-auto mt-5 max-w-xl text-sm leading-6 text-white/90 sm:mt-6 sm:text-base">{t("hero.subtitle")}</p>
           <div className="mt-8 flex flex-col items-stretch justify-center gap-3 sm:flex-row sm:items-center">
@@ -140,7 +132,7 @@ export function HomeExperience({ catalog }: { catalog: HomeCatalog }) {
               </AppButton>
             </Link>
           </div>
-        </motion.div>
+        </div>
       </section>
 
       <AppSection>
@@ -176,14 +168,14 @@ export function HomeExperience({ catalog }: { catalog: HomeCatalog }) {
           <h2 className="text-center font-serif text-2xl font-bold sm:text-3xl">{t("customization.title")}</h2>
           <div className="mt-10 grid gap-10 lg:grid-cols-3 lg:gap-0 lg:divide-x lg:divide-neutral-300">
             {customizationSteps.map((step, index) => (
-              <motion.div key={step.key} className="px-4 text-center" {...fadeUp}>
+              <div key={step.key} className="px-4 text-center">
                 <div className="mx-auto flex max-w-xs flex-col items-center">
                   <span className="grid size-9 place-items-center rounded-full bg-black text-sm font-bold text-white">{index + 1}</span>
                   <SiteIcon name={step.icon as SiteIconName} className="mt-4 size-12" />
                   <h3 className="mt-6 font-bold">{t(`customization.steps.${step.key}.title`)}</h3>
                   <p className="mt-3 text-xs leading-5 text-neutral-600">{t(`customization.steps.${step.key}.text`)}</p>
                 </div>
-              </motion.div>
+              </div>
             ))}
           </div>
         </AppSection>
@@ -273,7 +265,7 @@ export function HomeExperience({ catalog }: { catalog: HomeCatalog }) {
         <div className="absolute inset-0 bg-black/55 lg:bg-linear-to-r lg:from-black/25 lg:via-black/40 lg:to-black/70" />
         <AppSection className="relative grid min-h-105 items-center lg:grid-cols-[1fr_480px]">
           <div className="hidden lg:block" />
-          <motion.div className="text-center lg:text-start" {...fadeUp}>
+          <div className="text-center lg:text-start">
             <h2 className="font-serif text-3xl sm:text-4xl lg:text-5xl">{t("showroom.title")}</h2>
             <p className="mt-5 flex items-center justify-center gap-2 text-sm lg:justify-start"><SiteIcon name="map-pin" className="size-4" /> {t("showroom.address")}</p>
             <p className="mt-4 text-sm leading-6 text-white/90">{t("showroom.weekHours")}<br />{t("showroom.weekendHours")}</p>
@@ -285,7 +277,7 @@ export function HomeExperience({ catalog }: { catalog: HomeCatalog }) {
                 </AppButton>
               </Link>
             </div>
-          </motion.div>
+          </div>
         </AppSection>
       </section>
 
