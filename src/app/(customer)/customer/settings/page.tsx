@@ -1,7 +1,6 @@
 "use client";
 
 import { Monitor, Moon, ShieldCheck, Sun } from "lucide-react";
-import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
 import { AppButton } from "@/components/app/AppButton";
 import { AppCard } from "@/components/app/AppCard";
@@ -37,7 +36,6 @@ export default function SettingsPage() {
   const [activeTab, setActiveTab] = useState<SettingsTab>("Account");
   const [fieldDialog, setFieldDialog] = useState<FieldDialog>(null);
   const [passwordForm, setPasswordForm] = useState<PasswordForm>({ password: "", password_confirmation: "" });
-  const { setTheme: applyTheme } = useTheme();
   const commerceTheme = useCustomerCommerceStore((state) => state.theme);
   const setCommerceTheme = useCustomerCommerceStore((state) => state.setTheme);
 
@@ -50,9 +48,8 @@ export default function SettingsPage() {
   useEffect(() => {
     if (settings?.appearance) {
       setCommerceTheme(settings.appearance);
-      applyTheme(settings.appearance);
     }
-  }, [applyTheme, setCommerceTheme, settings?.appearance]);
+  }, [setCommerceTheme, settings?.appearance]);
 
   const updateSettings = useCustomerMutation<Partial<CustomerSettings>, CustomerSettings>(
     "settings",
@@ -74,7 +71,6 @@ export default function SettingsPage() {
 
   const updateAppearance = (appearance: CustomerSettings["appearance"]) => {
     setCommerceTheme(appearance);
-    applyTheme(appearance);
     updateSettings.mutate({ appearance });
   };
 
