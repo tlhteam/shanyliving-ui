@@ -15,6 +15,7 @@ import { SocialAuthButtons } from "@/components/auth/SocialAuthButtons";
 import { SiteIcon, SiteIconName } from "@/components/icons/SiteIcon";
 import { useApi } from "@/hooks/use-api";
 import { storefrontProducts, type StorefrontProduct } from "@/lib/storefront-pages";
+import { useCustomerCommerceStore } from "@/stores/customer-commerce-store";
 import type { CustomerSavedDesign } from "@/types/customer";
 
 type ModuleKind = "seat" | "chaise" | "corner" | "ottoman" | "chair" | "table" | "bed" | "storage";
@@ -541,6 +542,8 @@ export function SofaStudioEditor() {
   const { data: session } = useSession();
   const { request } = useApi();
   const queryClient = useQueryClient();
+  const addToCart = useCustomerCommerceStore((state) => state.addToCart);
+  const openCart = useCustomerCommerceStore((state) => state.openCart);
   const designId = searchParams.get("design");
   const [activePresetId, setActivePresetId] = useState(presets[0].id);
   const [productCategory, setProductCategory] = useState<StorefrontProduct["category"] | "all">("all");
@@ -829,6 +832,44 @@ export function SofaStudioEditor() {
     }
 
     orderMutation.mutate();
+  };
+
+  const addCustomDesignToCart = () => {
+    addToCart({
+      name: activePreset.name,
+      slug: activePreset.id,
+      category: activePreset.category,
+      subcategory: activePreset.subcategory,
+      price,
+      image: activePreset.image,
+      badge: "Custom",
+      description: title,
+      seatRange: `${totalWidth} cm`,
+      colors: [colorTokens[color]]
+    }, {
+      size: `${totalWidth} cm`,
+      configuration: `${modules.length} modules`,
+      fabric,
+      color
+    });
+    toast.success(`${activePreset.name} design added to cart.`);
+    openCart();
+  };
+
+  const shareDesign = async () => {
+    const text = `${title} - ${totalWidth} cm, ${fabric}, ${color}, ${leg}.`;
+
+    try {
+      if (navigator.share) {
+        await navigator.share({ title: "Shany Living Design", text, url: window.location.href });
+        return;
+      }
+
+      await navigator.clipboard.writeText(`${text} ${window.location.href}`);
+      toast.success("Design link copied.");
+    } catch {
+      toast.error("Could not share this design.");
+    }
   };
 
   const roomPhoto = roomPhotos[0] ?? null;
@@ -1125,10 +1166,20 @@ export function SofaStudioEditor() {
           ) : null}
 
           <p className="mt-5 font-serif text-3xl font-bold">NIS {price.toLocaleString()}</p>
-          <AppButton className="mt-4 w-full gap-2" loading={saveMutation.isPending} onClick={saveDesign}>
-            <SiteIcon name="save" className="size-4" />
-            Save My Design
+          <AppButton className="mt-4 w-full gap-2" onClick={addCustomDesignToCart}>
+            <SiteIcon name="cart" className="size-4" />
+            Add to Cart
           </AppButton>
+          <div className="mt-3 grid grid-cols-2 gap-3">
+            <AppButton variant="outline" className="w-full gap-2" loading={saveMutation.isPending} onClick={saveDesign}>
+              <SiteIcon name="save" className="size-4" />
+              Save Design
+            </AppButton>
+            <AppButton variant="outline" className="w-full gap-2" onClick={shareDesign}>
+              <SiteIcon name="message" className="size-4" />
+              Share Design
+            </AppButton>
+          </div>
           <AppButton variant="secondary" className="mt-3 w-full gap-2" loading={orderMutation.isPending} onClick={createTransaction}>
             <SiteIcon name="check" className="size-4" />
             Create Transaction

@@ -34,6 +34,8 @@ type CustomerCommerceState = {
   checkout: CheckoutDetails;
   theme: "light" | "dark" | "system";
   lastOrderReference: string | null;
+  lastOrderItems: CartItem[];
+  cartOpen: boolean;
   addToCart: (product: StorefrontProduct, options?: CartItem["options"]) => void;
   updateQuantity: (slug: string, quantity: number) => void;
   removeFromCart: (slug: string) => void;
@@ -41,6 +43,9 @@ type CustomerCommerceState = {
   setCheckout: (details: Partial<CheckoutDetails>) => void;
   setTheme: (theme: CustomerCommerceState["theme"]) => void;
   setLastOrderReference: (reference: string | null) => void;
+  setLastOrderItems: (items: CartItem[]) => void;
+  openCart: () => void;
+  closeCart: () => void;
 };
 
 const emptyCheckout: CheckoutDetails = {
@@ -59,6 +64,8 @@ export const useCustomerCommerceStore = create<CustomerCommerceState>()(
       checkout: emptyCheckout,
       theme: "system",
       lastOrderReference: null,
+      lastOrderItems: [],
+      cartOpen: false,
       addToCart: (product, options) => set((state) => {
         const existing = state.cart.find((item) => item.slug === product.slug);
 
@@ -91,8 +98,20 @@ export const useCustomerCommerceStore = create<CustomerCommerceState>()(
       clearCart: () => set({ cart: [] }),
       setCheckout: (details) => set((state) => ({ checkout: { ...state.checkout, ...details } })),
       setTheme: (theme) => set({ theme }),
-      setLastOrderReference: (reference) => set({ lastOrderReference: reference })
+      setLastOrderReference: (reference) => set({ lastOrderReference: reference }),
+      setLastOrderItems: (items) => set({ lastOrderItems: items }),
+      openCart: () => set({ cartOpen: true }),
+      closeCart: () => set({ cartOpen: false })
     }),
-    { name: "shany-customer-commerce" }
+    {
+      name: "shany-customer-commerce",
+      partialize: (state) => ({
+        cart: state.cart,
+        checkout: state.checkout,
+        theme: state.theme,
+        lastOrderReference: state.lastOrderReference,
+        lastOrderItems: state.lastOrderItems
+      })
+    }
   )
 );

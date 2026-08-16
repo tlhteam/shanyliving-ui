@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import { toast } from "sonner";
 import { AppButton } from "@/components/app/AppButton";
 import { SiteIcon } from "@/components/icons/SiteIcon";
@@ -9,6 +8,7 @@ import { useCustomerCommerceStore } from "@/stores/customer-commerce-store";
 
 export function ProductBuyActions({ product, compact = false }: { product: StorefrontProduct; compact?: boolean }) {
   const addToCart = useCustomerCommerceStore((state) => state.addToCart);
+  const openCart = useCustomerCommerceStore((state) => state.openCart);
 
   const handleAdd = () => {
     addToCart(product, {
@@ -18,6 +18,7 @@ export function ProductBuyActions({ product, compact = false }: { product: Store
       color: product.colors?.[0]
     });
     toast.success(`${product.name} added to cart.`);
+    openCart();
   };
 
   if (compact) {
@@ -27,9 +28,9 @@ export function ProductBuyActions({ product, compact = false }: { product: Store
           <SiteIcon name="cart" className="size-4" />
           Add
         </AppButton>
-        <Link href="/cart" aria-label="View cart" className="grid h-9 place-items-center rounded-md border border-neutral-300 transition hover:bg-neutral-100 dark:border-white/15 dark:hover:bg-white/10">
+        <button type="button" onClick={openCart} aria-label="View cart" className="grid h-9 place-items-center rounded-md border border-neutral-300 transition hover:bg-neutral-100 dark:border-white/15 dark:hover:bg-white/10">
           <SiteIcon name="bag" className="size-4" />
-        </Link>
+        </button>
       </div>
     );
   }
@@ -40,12 +41,10 @@ export function ProductBuyActions({ product, compact = false }: { product: Store
         <SiteIcon name="cart" className="size-4" />
         Add to Cart
       </AppButton>
-      <Link href="/cart">
-        <AppButton variant="outline" className="w-full gap-2">
-          <SiteIcon name="bag" className="size-4" />
-          View Cart
-        </AppButton>
-      </Link>
+      <AppButton variant="outline" className="w-full gap-2" onClick={openCart}>
+        <SiteIcon name="bag" className="size-4" />
+        View Cart
+      </AppButton>
     </div>
   );
 }

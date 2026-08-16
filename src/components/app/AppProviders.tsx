@@ -5,6 +5,7 @@ import { SessionProvider } from "next-auth/react";
 import { useState } from "react";
 import { ThemeProvider } from "next-themes";
 import { AppThemeBridge } from "@/components/app/AppThemeBridge";
+import { CartDrawer } from "@/components/storefront/CartDrawer";
 import { Toaster } from "@/components/ui/sonner";
 
 export function AppProviders({ children }: { children: React.ReactNode }) {
@@ -16,6 +17,7 @@ export function AppProviders({ children }: { children: React.ReactNode }) {
         <QueryClientProvider client={queryClient}>
           <AppThemeBridge />
           {children}
+          <CartDrawer />
           <Toaster position="top-right" richColors closeButton />
         </QueryClientProvider>
       </ThemeProvider>

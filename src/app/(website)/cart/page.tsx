@@ -18,47 +18,47 @@ export default function CartPage() {
   const suggestions = storefrontProducts.filter((product) => !cart.some((item) => item.slug === product.slug)).slice(0, 2);
 
   return (
-    <AppSection className="max-w-5xl">
+    <AppSection className="max-w-4xl">
       <div className="mb-8 flex items-center justify-between gap-4">
         <div>
           <h1 className="font-serif text-4xl font-bold">My Cart ({cart.length})</h1>
-          <p className="mt-2 text-sm text-neutral-600">Review your pieces before checkout.</p>
+          <p className="mt-2 text-sm text-neutral-600 dark:text-neutral-400">Review your pieces before checkout.</p>
         </div>
         <Link href="/sofas"><AppButton variant="outline">Continue shopping</AppButton></Link>
       </div>
 
       {cart.length === 0 ? (
-        <div className="grid place-items-center rounded-lg border border-neutral-200 bg-white p-12 text-center">
+        <div className="grid place-items-center rounded-lg border border-neutral-200 bg-white p-12 text-center dark:border-white/10 dark:bg-neutral-900">
           <SiteIcon name="bag" className="size-10 text-neutral-400" />
           <p className="mt-3 font-bold">Your cart is empty.</p>
           <Link href="/sofas"><AppButton className="mt-5">Browse Products</AppButton></Link>
         </div>
       ) : (
-        <div className="grid gap-6 lg:grid-cols-[1fr_320px]">
+        <div className="grid gap-6 lg:grid-cols-[1fr_300px]">
           <div className="space-y-4">
             {cart.map((item) => (
-              <article key={item.slug} className="grid gap-4 rounded-lg border border-neutral-200 bg-white p-4 sm:grid-cols-[140px_1fr_auto]">
-                <AppImage src={item.image} alt={item.name} className="aspect-[1.25/1] rounded-md" sizes="140px" />
+              <article key={item.slug} className="grid gap-4 rounded-lg border border-neutral-200 bg-white p-4 shadow-sm dark:border-white/10 dark:bg-neutral-900 sm:grid-cols-[120px_1fr_auto]">
+                <AppImage src={item.image} alt={item.name} className="aspect-square rounded-md" sizes="120px" />
                 <div>
                   <h2 className="font-serif text-2xl font-bold">{item.name}</h2>
-                  <p className="mt-1 text-sm text-neutral-600">{item.options?.size ?? "Standard"} / {item.options?.configuration ?? item.subcategory}</p>
+                  <p className="mt-1 text-sm text-neutral-600 dark:text-neutral-400">{item.options?.size ?? "Standard"} / {item.options?.configuration ?? item.subcategory}</p>
                   <p className="mt-3 font-bold">{formatPrice(item.price)}</p>
-                  <button type="button" className="mt-3 text-xs font-bold text-neutral-500 underline" onClick={() => removeFromCart(item.slug)}>Remove</button>
+                  <button type="button" className="mt-3 text-xs font-bold text-neutral-500 underline dark:text-neutral-400" onClick={() => removeFromCart(item.slug)}>Remove</button>
                 </div>
                 <div className="flex items-center gap-2 self-start">
-                  <button type="button" className="grid size-9 place-items-center rounded-md border border-neutral-300" onClick={() => updateQuantity(item.slug, item.quantity - 1)}>-</button>
+                  <button type="button" className="grid size-9 place-items-center rounded-md border border-neutral-300 dark:border-white/15" onClick={() => updateQuantity(item.slug, item.quantity - 1)}>-</button>
                   <span className="grid size-9 place-items-center text-sm font-bold">{item.quantity}</span>
-                  <button type="button" className="grid size-9 place-items-center rounded-md border border-neutral-300" onClick={() => updateQuantity(item.slug, item.quantity + 1)}>+</button>
+                  <button type="button" className="grid size-9 place-items-center rounded-md border border-neutral-300 dark:border-white/15" onClick={() => updateQuantity(item.slug, item.quantity + 1)}>+</button>
                 </div>
               </article>
             ))}
           </div>
-          <aside className="h-fit rounded-lg border border-neutral-200 bg-white p-5">
+          <aside className="h-fit rounded-lg border border-neutral-200 bg-white p-5 shadow-sm dark:border-white/10 dark:bg-neutral-900">
             <h2 className="font-serif text-2xl font-bold">Order Summary</h2>
             <div className="mt-5 space-y-3 text-sm">
               <p className="flex justify-between"><span>Subtotal</span><span>{formatPrice(subtotal)}</span></p>
               <p className="flex justify-between"><span>Shipping</span><span>Calculated after review</span></p>
-              <p className="flex justify-between border-t border-neutral-200 pt-3 text-base font-bold"><span>Total</span><span>{formatPrice(subtotal)}</span></p>
+              <p className="flex justify-between border-t border-neutral-200 pt-3 text-base font-bold dark:border-white/10"><span>Total</span><span>{formatPrice(subtotal)}</span></p>
             </div>
             <Link href="/checkout"><AppButton className="mt-5 w-full">Checkout</AppButton></Link>
           </aside>
@@ -70,11 +70,11 @@ export default function CartPage() {
           <h2 className="font-serif text-2xl font-bold">You may also like</h2>
           <div className="mt-4 grid gap-4 sm:grid-cols-2">
             {suggestions.map((product) => (
-              <Link key={product.slug} href={`/sofas/${product.slug}`} className="grid grid-cols-[110px_1fr_auto] items-center gap-3 rounded-lg border border-neutral-200 bg-white p-3">
+              <Link key={product.slug} href={`/sofas/${product.slug}`} className="grid grid-cols-[96px_1fr_auto] items-center gap-3 rounded-lg border border-neutral-200 bg-white p-3 dark:border-white/10 dark:bg-neutral-900">
                 <AppImage src={product.image} alt={product.name} className="aspect-square rounded-md" sizes="110px" />
                 <div>
                   <p className="font-bold">{product.name}</p>
-                  <p className="text-sm text-neutral-600">{formatPrice(product.price)}</p>
+                  <p className="text-sm text-neutral-600 dark:text-neutral-400">{formatPrice(product.price)}</p>
                 </div>
                 <span className="grid size-9 place-items-center rounded-full bg-neutral-950 text-white"><SiteIcon name="plus" className="size-4" /></span>
               </Link>
