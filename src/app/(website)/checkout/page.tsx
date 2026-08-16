@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { useMutation } from "@tanstack/react-query";
@@ -154,6 +155,14 @@ export default function CheckoutPage() {
             <SiteIcon name="lock" className="size-4" />
             Secure order creation. Payment gateway can be connected from backend settings.
           </div>
+          {cart.length > 0 ? (
+            <Link href={`/customize-your-sofa?product=${cart[0].slug}&step=room`}>
+              <AppButton variant="outline" className="mt-5 w-full gap-2">
+                <SiteIcon name="sparkle" className="size-4" />
+                Preview with ShiputzAI
+              </AppButton>
+            </Link>
+          ) : null}
         </aside>
       </div>
     </AppSection>

@@ -83,7 +83,7 @@ export function AppHeader() {
   };
 
   return (
-    <header className="sticky top-0 z-50 bg-white shadow-sm">
+    <header className="sticky top-0 z-50 bg-white text-neutral-950 shadow-sm transition-colors dark:bg-neutral-950 dark:text-neutral-50">
       <div className="bg-black text-white">
         <div className="mx-auto max-w-7xl overflow-hidden px-4 sm:px-6 lg:px-8">
           <div className="flex whitespace-nowrap py-2 text-[11px] font-semibold">
@@ -102,26 +102,26 @@ export function AppHeader() {
       </div>
       <div className="mx-auto flex min-h-18 max-w-7xl items-center justify-between gap-2 px-4 sm:min-h-20 sm:gap-4 sm:px-6 lg:px-8">
         <div className="flex items-center gap-0.5 sm:gap-2">
-          <button aria-label={t("openMenu")} className="rounded-md p-2 transition hover:bg-neutral-100 lg:hidden" onClick={() => setOpen(true)}>
+          <button aria-label={t("openMenu")} className="rounded-md p-2 text-neutral-950 transition hover:bg-neutral-100 dark:text-neutral-50 dark:hover:bg-white/10 lg:hidden" onClick={() => setOpen(true)}>
             <SiteIcon name="menu" className="size-5" />
           </button>
           <Link
             href={accountHref}
             aria-label={t("account")}
             title={t("account")}
-            className="rounded-md p-2 transition hover:bg-neutral-100"
+            className="rounded-md p-2 text-neutral-950 transition hover:bg-neutral-100 dark:text-neutral-50 dark:hover:bg-white/10"
           >
             <SiteIcon name="user" className="size-5" />
           </Link>
           <button aria-label={t("whatsapp")} className="rounded-md p-2 text-[#128c4a] transition hover:bg-neutral-100" onClick={() => setWhatsappOpen(true)}>
             <WhatsappIcon className="size-5" />
           </button>
-          <button aria-label={t("search")} className="rounded-md p-2 transition hover:bg-neutral-100" onClick={() => setSearchOpen(true)}>
+          <button aria-label={t("search")} className="rounded-md p-2 text-neutral-950 transition hover:bg-neutral-100 dark:text-neutral-50 dark:hover:bg-white/10" onClick={() => setSearchOpen(true)}>
             <SiteIcon name="search" className="size-5" />
           </button>
-          <button type="button" onClick={openCart} aria-label="Cart" className="relative rounded-md p-2 transition hover:bg-neutral-100">
+          <button type="button" onClick={openCart} aria-label="Cart" className="relative rounded-md p-2 text-neutral-950 transition hover:bg-neutral-100 dark:text-neutral-50 dark:hover:bg-white/10">
             <SiteIcon name="bag" className="size-5" />
-            {cartCount > 0 ? <span className="absolute end-0 top-0 grid size-4 place-items-center rounded-full bg-neutral-950 text-[10px] font-bold text-white">{cartCount}</span> : null}
+            {cartCount > 0 ? <span className="absolute end-0 top-0 grid size-4 place-items-center rounded-full bg-neutral-950 text-[10px] font-bold text-white dark:bg-white dark:text-neutral-950">{cartCount}</span> : null}
           </button>
           <LanguageSwitcher className="hidden sm:inline-flex" />
         </div>

@@ -42,8 +42,8 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
               <span className="absolute end-4 top-4 grid size-9 place-items-center rounded-full bg-white/80 text-neutral-950"><SiteIcon name="heart" className="size-5" /></span>
             </div>
             <div className="mt-4 grid grid-cols-5 gap-3">
-              {[product.image, "/images/sofa-luna.png", "/images/sofa-noa.png", "/images/sofa-ella.png", "/images/look-modern-elegance.png"].map((image) => (
-                <AppImage key={image} src={image} alt={`${product.name} gallery`} className="aspect-[1.2/1] rounded-lg" sizes="20vw" />
+              {[product.image, "/images/sofa-luna.png", "/images/sofa-noa.png", "/images/sofa-ella.png", "/images/look-modern-elegance.png"].map((image, index) => (
+                <AppImage key={`${image}-${index}`} src={image} alt={`${product.name} gallery`} className="aspect-[1.2/1] rounded-lg" sizes="20vw" />
               ))}
             </div>
           </section>

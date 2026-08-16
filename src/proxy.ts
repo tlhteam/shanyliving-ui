@@ -15,6 +15,13 @@ function redirectToLogin(request: NextRequest, pathname: string) {
 export default async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
+  if (pathname === "/home") {
+    const url = request.nextUrl.clone();
+    url.pathname = "/";
+    url.search = "";
+    return NextResponse.redirect(url);
+  }
+
   if (pathname === "/admin/login") {
     return NextResponse.next();
   }
@@ -34,5 +41,5 @@ export default async function proxy(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/admin/:path*", "/customer/:path*"]
+  matcher: ["/admin/:path*", "/customer/:path*", "/home"]
 };

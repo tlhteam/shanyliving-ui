@@ -62,7 +62,7 @@ export const useCustomerCommerceStore = create<CustomerCommerceState>()(
     (set) => ({
       cart: [],
       checkout: emptyCheckout,
-      theme: "system",
+      theme: "light",
       lastOrderReference: null,
       lastOrderItems: [],
       cartOpen: false,
