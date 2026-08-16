@@ -5,7 +5,9 @@ export type SiteIconName =
   | "arrow-left"
   | "arrow-right"
   | "award"
+  | "bag"
   | "bot"
+  | "cart"
   | "check"
   | "chevron-down"
   | "chevron-left"
@@ -52,7 +54,9 @@ const paths: Record<SiteIconName, string[]> = {
   "arrow-left": ["M19 12H5", "M12 5l-7 7 7 7"],
   "arrow-right": ["M5 12h14", "M12 5l7 7-7 7"],
   award: ["M12 15a5 5 0 1 0 0-10 5 5 0 0 0 0 10Z", "M8.5 14.2 7 22l5-3 5 3-1.5-7.8"],
+  bag: ["M6 8h12l1 12H5L6 8Z", "M9 8a3 3 0 0 1 6 0"],
   bot: ["M8 8h8a3 3 0 0 1 3 3v5a3 3 0 0 1-3 3H8a3 3 0 0 1-3-3v-5a3 3 0 0 1 3-3Z", "M12 4v4", "M9 13h.01", "M15 13h.01", "M10 17h4"],
+  cart: ["M4 5h2l2.2 10.5a2 2 0 0 0 2 1.5H17a2 2 0 0 0 1.9-1.4L21 9H7", "M10 21a1 1 0 1 0 0-2 1 1 0 0 0 0 2Z", "M18 21a1 1 0 1 0 0-2 1 1 0 0 0 0 2Z"],
   check: ["M5 12.5 10 17l9-10"],
   "chevron-down": ["M7 10l5 5 5-5"],
   "chevron-left": ["M15 6l-6 6 6 6"],

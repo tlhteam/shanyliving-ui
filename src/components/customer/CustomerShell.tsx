@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useSession } from "next-auth/react";
-import { CreditCard, Gift, Heart, Home, Mail, MapPin, Menu, Package, PanelLeftClose, PanelLeftOpen, Settings, Sofa, User } from "lucide-react";
+import { CreditCard, Gift, Heart, Home, Mail, MapPin, Menu, Package, PanelLeftClose, PanelLeftOpen, Settings, ShoppingCart, Sofa, User } from "lucide-react";
 import { useState } from "react";
 import { AppAccountMenu } from "@/components/app/AppAccountMenu";
 import { AppNotificationBell } from "@/components/app/AppNotificationBell";
@@ -19,6 +19,7 @@ import { customer } from "@/lib/customer-panel";
 const navItems = [
   { label: "Dashboard", href: "/customer", icon: Home },
   { label: "My Orders", href: "/customer/orders", icon: Package },
+  { label: "Cart & Checkout", href: "/cart", icon: ShoppingCart },
   { label: "Saved Designs", href: "/customer/saved-designs", icon: Sofa },
   { label: "Wishlist", href: "/customer/wishlist", icon: Heart },
   { label: "Messages", href: "/customer/messages", icon: Mail },

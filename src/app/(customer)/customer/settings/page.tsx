@@ -9,6 +9,7 @@ import { AppDialog } from "@/components/app/AppDialog";
 import { AppSwitch } from "@/components/app/AppSwitch";
 import { CustomerTopbar } from "@/components/customer/CustomerShell";
 import { useCustomerMutation, useCustomerQuery } from "@/hooks/use-customer";
+import { useCustomerCommerceStore } from "@/stores/customer-commerce-store";
 import type { CustomerProfile, CustomerSettings } from "@/types/customer";
 
 type PasswordForm = {
@@ -36,7 +37,9 @@ export default function SettingsPage() {
   const [activeTab, setActiveTab] = useState<SettingsTab>("Account");
   const [fieldDialog, setFieldDialog] = useState<FieldDialog>(null);
   const [passwordForm, setPasswordForm] = useState<PasswordForm>({ password: "", password_confirmation: "" });
-  const { setTheme } = useTheme();
+  const { setTheme: applyTheme } = useTheme();
+  const commerceTheme = useCustomerCommerceStore((state) => state.theme);
+  const setCommerceTheme = useCustomerCommerceStore((state) => state.setTheme);
 
   const profileQuery = useCustomerQuery<CustomerProfile>("profile", "/customer/profile");
   const settingsQuery = useCustomerQuery<CustomerSettings>("settings", "/customer/settings");
@@ -46,9 +49,10 @@ export default function SettingsPage() {
 
   useEffect(() => {
     if (settings?.appearance) {
-      setTheme(settings.appearance);
+      setCommerceTheme(settings.appearance);
+      applyTheme(settings.appearance);
     }
-  }, [setTheme, settings?.appearance]);
+  }, [applyTheme, setCommerceTheme, settings?.appearance]);
 
   const updateSettings = useCustomerMutation<Partial<CustomerSettings>, CustomerSettings>(
     "settings",
@@ -69,7 +73,8 @@ export default function SettingsPage() {
   );
 
   const updateAppearance = (appearance: CustomerSettings["appearance"]) => {
-    setTheme(appearance);
+    setCommerceTheme(appearance);
+    applyTheme(appearance);
     updateSettings.mutate({ appearance });
   };
 
@@ -119,7 +124,7 @@ export default function SettingsPage() {
                     key={value}
                     type="button"
                     onClick={() => updateAppearance(value)}
-                    className={`rounded-lg border p-4 text-center transition hover:border-black dark:hover:border-white ${settings?.appearance === value ? "border-black dark:border-white" : "border-neutral-200 dark:border-white/15"}`}
+                    className={`rounded-lg border p-4 text-center transition hover:border-black dark:hover:border-white ${(settings?.appearance ?? commerceTheme) === value ? "border-black bg-neutral-950 text-white dark:border-white dark:bg-white dark:text-neutral-950" : "border-neutral-200 dark:border-white/15"}`}
                   >
                     <Icon className="mx-auto size-6" />
                     <span className="mt-2 block text-sm font-bold">{label}</span>
@@ -131,7 +136,7 @@ export default function SettingsPage() {
           <AppCard className="h-fit p-5">
             <h2 className="font-serif text-2xl font-bold">Current Preferences</h2>
             <div className="mt-4 space-y-3 text-sm">
-              <p className="flex justify-between"><span className="font-bold">Theme</span><span className="text-neutral-600 dark:text-neutral-300">{settings?.appearance ?? "system"}</span></p>
+              <p className="flex justify-between"><span className="font-bold">Theme</span><span className="text-neutral-600 dark:text-neutral-300">{settings?.appearance ?? commerceTheme}</span></p>
               <p className="flex justify-between"><span className="font-bold">Language</span><span className="text-neutral-600 dark:text-neutral-300">{settings?.language ?? "he"}</span></p>
               <p className="flex justify-between"><span className="font-bold">Tour</span><span className="text-neutral-600 dark:text-neutral-300">{settings?.tour_completed ? "Completed" : "Pending"}</span></p>
             </div>

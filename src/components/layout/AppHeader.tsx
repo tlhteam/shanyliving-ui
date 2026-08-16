@@ -13,6 +13,7 @@ import { SiteIcon } from "@/components/icons/SiteIcon";
 import { WhatsappIcon } from "@/components/icons/WhatsappIcon";
 import { AppLogo } from "@/components/layout/AppLogo";
 import { LanguageSwitcher } from "@/components/layout/LanguageSwitcher";
+import { useCustomerCommerceStore } from "@/stores/customer-commerce-store";
 
 const navItems = [
   { key: "sofas", href: "/sofas" },
@@ -43,6 +44,7 @@ export function AppHeader() {
   const [searchValue, setSearchValue] = useState("");
   const [query, setQuery] = useState("");
   const { status } = useSession();
+  const cartCount = useCustomerCommerceStore((state) => state.cart.reduce((sum, item) => sum + item.quantity, 0));
   const accountHref = status === "authenticated" ? "/customer" : "/login";
   const whatsappNumber = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER?.replace(/\D/g, "");
   const whatsappHref = whatsappNumber ? `https://wa.me/${whatsappNumber}` : "/contact";
@@ -116,6 +118,10 @@ export function AppHeader() {
           <button aria-label={t("search")} className="rounded-md p-2 transition hover:bg-neutral-100" onClick={() => setSearchOpen(true)}>
             <SiteIcon name="search" className="size-5" />
           </button>
+          <Link href="/cart" aria-label="Cart" className="relative rounded-md p-2 transition hover:bg-neutral-100">
+            <SiteIcon name="bag" className="size-5" />
+            {cartCount > 0 ? <span className="absolute end-0 top-0 grid size-4 place-items-center rounded-full bg-neutral-950 text-[10px] font-bold text-white">{cartCount}</span> : null}
+          </Link>
           <LanguageSwitcher className="hidden sm:inline-flex" />
         </div>
         <AppMenu items={menuItems} className="hidden flex-1 justify-center gap-6 lg:flex xl:gap-7" />
