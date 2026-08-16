@@ -1,14 +1,16 @@
 "use client";
 
 import Link from "next/link";
+import type { MouseEvent } from "react";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import * as THREE from "three";
 import { toast } from "sonner";
 import { AppButton } from "@/components/app/AppButton";
 import { AppDialog } from "@/components/app/AppDialog";
+import { AppImage } from "@/components/app/AppImage";
 import { SocialAuthButtons } from "@/components/auth/SocialAuthButtons";
 import { SiteIcon, SiteIconName } from "@/components/icons/SiteIcon";
 import { useApi } from "@/hooks/use-api";
@@ -45,6 +47,16 @@ type RoomPhoto = {
   id: string;
   name: string;
   url: string;
+};
+
+type PlacementPoint = {
+  x: number;
+  y: number;
+};
+
+type CustomerFlowOrder = {
+  id: number;
+  reference: string;
 };
 
 type SceneProps = {
@@ -525,6 +537,7 @@ function SofaScene({ modules, selectedId, color, fabric, leg, zoom, autoRotate, 
 
 export function SofaStudioEditor() {
   const searchParams = useSearchParams();
+  const router = useRouter();
   const { data: session } = useSession();
   const { request } = useApi();
   const queryClient = useQueryClient();
@@ -544,6 +557,9 @@ export function SofaStudioEditor() {
   const [loadedDesignId, setLoadedDesignId] = useState<string | null>(null);
   const [roomPhotos, setRoomPhotos] = useState<RoomPhoto[]>([]);
   const [roomInsights, setRoomInsights] = useState<string[]>(["Upload room photos to generate a layout direction."]);
+  const [roomFlowStep, setRoomFlowStep] = useState<1 | 2 | 3>(1);
+  const [placementPoint, setPlacementPoint] = useState<PlacementPoint | null>(null);
+  const [createdOrderReference, setCreatedOrderReference] = useState<string | null>(null);
   const roomPhotosRef = useRef<RoomPhoto[]>([]);
 
   const activePreset = presets.find((preset) => preset.id === activePresetId) ?? presets[0];
@@ -579,6 +595,49 @@ export function SofaStudioEditor() {
     onSuccess: () => {
       toast.success(loadedDesignId ? "Design updated in your account." : "Design saved to your account.");
       queryClient.invalidateQueries({ queryKey: ["customer", "saved-designs"] });
+    },
+    onError: (error: Error) => toast.error(error.message)
+  });
+
+  const orderMutation = useMutation({
+    mutationFn: () => request<CustomerFlowOrder>("/customer-flow/orders", {
+      method: "POST",
+      body: {
+        source: "sofa_studio",
+        customer_name: session?.user?.name ?? null,
+        customer_email: session?.user?.email ?? null,
+        currency: "ILS",
+        notes: "Created from Shany Living room preview editor.",
+        meta: {
+          saved_design_id: loadedDesignId,
+          room_photos: roomPhotos.map((photo) => photo.name),
+          placement: placementPoint,
+          ai_result_ready: roomFlowStep === 3,
+          configuration: JSON.parse(configuration)
+        },
+        items: [
+          {
+            name: title,
+            quantity: 1,
+            unit_price: price,
+            options: {
+              model: activePreset.name,
+              fabric,
+              color,
+              leg,
+              size: `${totalWidth} cm`,
+              room: roomSize,
+              style,
+              modules: modules.map((module) => ({ kind: module.kind, label: module.label, x: module.x, z: module.z }))
+            }
+          }
+        ]
+      }
+    }),
+    onSuccess: (order) => {
+      setCreatedOrderReference(order.reference);
+      toast.success(`Transaction created: ${order.reference}`);
+      queryClient.invalidateQueries({ queryKey: ["customer", "orders"] });
     },
     onError: (error: Error) => toast.error(error.message)
   });
@@ -676,6 +735,7 @@ export function SofaStudioEditor() {
 
     setRoomPhotos((current) => [...current, ...nextPhotos].slice(0, 8));
     setRoomInsights(["Photos ready. Run AI Configure to apply a room-aware layout."]);
+    setRoomFlowStep(2);
   };
 
   const removeRoomPhoto = (id: string) => {
@@ -746,6 +806,10 @@ export function SofaStudioEditor() {
       dining ? "Dining layout balances table clearance and paired chairs." : bedroom ? "Bedroom layout anchors the bed with side storage." : compact ? "Compact layout keeps walking space open with an ottoman." : "Lounge layout creates a deeper conversation area.",
       natural ? "Natural palette selected for softer room blending." : urban ? "High-contrast finish selected for a sharper room mood." : "Neutral palette selected for flexible styling."
     ]);
+    if (hasPhotos) {
+      setPlacementPoint((current) => current ?? { x: 56, y: 68 });
+      setRoomFlowStep(3);
+    }
     toast.success("Studio suggestion applied.");
   };
 
@@ -756,6 +820,31 @@ export function SofaStudioEditor() {
     }
 
     saveMutation.mutate();
+  };
+
+  const createTransaction = () => {
+    if (!session?.user) {
+      setAuthOpen(true);
+      return;
+    }
+
+    orderMutation.mutate();
+  };
+
+  const roomPhoto = roomPhotos[0] ?? null;
+
+  const selectPlacement = (event: MouseEvent<HTMLButtonElement>) => {
+    if (!roomPhoto) {
+      return;
+    }
+
+    const rect = event.currentTarget.getBoundingClientRect();
+    setPlacementPoint({
+      x: clamp(((event.clientX - rect.left) / rect.width) * 100, 8, 92),
+      y: clamp(((event.clientY - rect.top) / rect.height) * 100, 12, 88)
+    });
+    setRoomFlowStep(2);
+    setRoomInsights(["Placement selected. Run AI Configure to blend the product into the room."]);
   };
 
   return (
@@ -899,6 +988,82 @@ export function SofaStudioEditor() {
               </button>
             ))}
           </div>
+          <div className="border-t border-white/10 bg-neutral-950 p-3 sm:p-5">
+            <div className="rounded-md border border-white/10 bg-neutral-900 p-3 text-white sm:p-4">
+              <div className="flex flex-wrap items-center justify-between gap-3">
+                <div>
+                  <p className="text-xs font-bold uppercase tracking-[0.18em] text-white/55">See It In My Room</p>
+                  <h2 className="mt-1 font-serif text-2xl font-bold">AI room preview</h2>
+                </div>
+                <div className="flex items-center gap-2">
+                  {[1, 2, 3].map((step) => (
+                    <span key={step} className={`grid size-8 place-items-center rounded-full border text-xs font-bold ${roomFlowStep === step ? "border-white bg-white text-neutral-950" : "border-white/20 text-white/70"}`}>
+                      {step}
+                    </span>
+                  ))}
+                </div>
+              </div>
+              <div className="mt-4 grid gap-4 lg:grid-cols-[minmax(0,1fr)_220px]">
+                <button
+                  type="button"
+                  onClick={selectPlacement}
+                  className="relative min-h-[360px] overflow-hidden rounded-md border border-white/10 bg-neutral-800 text-left sm:min-h-[440px]"
+                  aria-label="Choose product placement in room photo"
+                >
+                  {roomPhoto ? (
+                    <span className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url(${roomPhoto.url})` }} />
+                  ) : (
+                    <span className="absolute inset-0 grid place-items-center bg-[linear-gradient(135deg,#f6f1e9,#ddd2c2)] text-center text-neutral-950">
+                      <span className="max-w-xs px-6">
+                        <SiteIcon name="upload" className="mx-auto size-10" />
+                        <span className="mt-3 block font-bold">Upload a room photo</span>
+                        <span className="mt-1 block text-sm text-neutral-600">The preview keeps this image space ready on mobile and desktop.</span>
+                      </span>
+                    </span>
+                  )}
+                  {roomPhoto && placementPoint ? (
+                    <span className="absolute -translate-x-1/2 -translate-y-1/2" style={{ left: `${placementPoint.x}%`, top: `${placementPoint.y}%` }}>
+                      <span className="grid size-12 place-items-center rounded-full border-2 border-white bg-black text-white shadow-xl">
+                        <SiteIcon name="map-pin" className="size-5" />
+                      </span>
+                    </span>
+                  ) : null}
+                  {roomPhoto && roomFlowStep === 3 ? (
+                    <span className="absolute inset-x-6 bottom-6 rounded-md border border-white/20 bg-black/70 p-3 shadow-2xl backdrop-blur">
+                      <span className="grid gap-3 sm:grid-cols-[120px_1fr] sm:items-center">
+                        <AppImage src={activePreset.image} alt={activePreset.name} className="aspect-[1.45/1] rounded-md" sizes="120px" />
+                        <span>
+                          <span className="block text-sm font-bold">Looks ready in your room</span>
+                          <span className="mt-1 block text-xs text-white/70">{activePreset.name} with {fabric}, {color}, {leg} legs.</span>
+                        </span>
+                      </span>
+                    </span>
+                  ) : null}
+                </button>
+                <div className="space-y-3">
+                  <div className="rounded-md border border-white/10 p-3">
+                    <p className="font-bold">1. Upload room</p>
+                    <p className="mt-1 text-xs leading-5 text-white/65">Use a well-lit image and keep the open area visible.</p>
+                  </div>
+                  <div className="rounded-md border border-white/10 p-3">
+                    <p className="font-bold">2. Tap placement</p>
+                    <p className="mt-1 text-xs leading-5 text-white/65">Click the floor/wall area where the product should appear.</p>
+                  </div>
+                  <div className="rounded-md border border-white/10 p-3">
+                    <p className="font-bold">3. AI configure</p>
+                    <p className="mt-1 text-xs leading-5 text-white/65">The editor adjusts layout, palette, and product blend direction.</p>
+                  </div>
+                  <AppButton className="w-full gap-2" onClick={aiConfigure} disabled={!roomPhoto}>
+                    <SiteIcon name="sparkle" className="size-4" />
+                    Generate Room Preview
+                  </AppButton>
+                  <AppButton variant="outline" className="w-full border-white/20 bg-transparent text-white hover:bg-white/10" onClick={() => setRoomFlowStep(1)}>
+                    Try Another Photo
+                  </AppButton>
+                </div>
+              </div>
+            </div>
+          </div>
         </section>
 
         <aside className="border-t border-neutral-200 p-4 dark:border-white/10 lg:border-l lg:border-t-0">
@@ -964,6 +1129,16 @@ export function SofaStudioEditor() {
             <SiteIcon name="save" className="size-4" />
             Save My Design
           </AppButton>
+          <AppButton variant="secondary" className="mt-3 w-full gap-2" loading={orderMutation.isPending} onClick={createTransaction}>
+            <SiteIcon name="check" className="size-4" />
+            Create Transaction
+          </AppButton>
+          {createdOrderReference ? (
+            <div className="mt-3 rounded-md border border-green-300 bg-green-50 p-3 text-sm text-green-900 dark:border-green-400/30 dark:bg-green-400/10 dark:text-green-100">
+              <p className="font-bold">Transaction {createdOrderReference} created.</p>
+              <button type="button" onClick={() => router.push("/customer/orders")} className="mt-1 text-xs font-bold underline">View in My Orders</button>
+            </div>
+          ) : null}
           <Link href="/showroom">
             <AppButton variant="outline" className="mt-3 w-full gap-2">
               <SiteIcon name="message" className="size-4" />
