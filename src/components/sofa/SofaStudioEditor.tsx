@@ -6,6 +6,8 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { driver } from "driver.js";
+import "driver.js/dist/driver.css";
 import * as THREE from "three";
 import { toast } from "sonner";
 import { AppButton } from "@/components/app/AppButton";
@@ -248,7 +250,7 @@ function SofaScene({ modules, selectedId, color, fabric, leg, zoom, autoRotate, 
 
     const camera = new THREE.PerspectiveCamera(42, 1, 0.1, 100);
     const renderer = new THREE.WebGLRenderer({ antialias: true });
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
     renderer.shadowMap.enabled = true;
     renderer.shadowMap.type = THREE.PCFSoftShadowMap;
     renderer.domElement.dataset.testid = "sofa-3d-canvas";
@@ -258,7 +260,7 @@ function SofaScene({ modules, selectedId, color, fabric, leg, zoom, autoRotate, 
     const keyLight = new THREE.DirectionalLight("#fff2dd", 2.25);
     keyLight.position.set(5, 8, 5);
     keyLight.castShadow = true;
-    keyLight.shadow.mapSize.set(2048, 2048);
+    keyLight.shadow.mapSize.set(1024, 1024);
     scene.add(ambientLight, keyLight);
 
     const floor = new THREE.Mesh(
@@ -533,7 +535,7 @@ function SofaScene({ modules, selectedId, color, fabric, leg, zoom, autoRotate, 
     };
   }, [color, fabric, leg]);
 
-  return <div ref={containerRef} className="min-h-[560px] w-full overflow-hidden bg-neutral-950 lg:min-h-[700px]" />;
+  return <div ref={containerRef} className="h-[58vh] min-h-[360px] max-h-[620px] w-full overflow-hidden bg-neutral-950 lg:min-h-[480px] xl:min-h-[560px]" />;
 }
 
 export function SofaStudioEditor() {
@@ -888,17 +890,58 @@ export function SofaStudioEditor() {
     setRoomInsights(["Placement selected. Run AI Configure to blend the product into the room."]);
   };
 
+  useEffect(() => {
+    if (typeof window === "undefined") {
+      return;
+    }
+
+    const deviceKey = "shany-device-id";
+    let deviceId = window.localStorage.getItem(deviceKey);
+
+    if (!deviceId) {
+      deviceId = window.crypto?.randomUUID?.() ?? `${Date.now()}-${Math.random().toString(16).slice(2)}`;
+      window.localStorage.setItem(deviceKey, deviceId);
+    }
+
+    const tourKey = `shany-sofa-studio-tour:${deviceId}`;
+
+    if (window.localStorage.getItem(tourKey)) {
+      return;
+    }
+
+    const tour = driver({
+      showProgress: true,
+      allowClose: true,
+      doneBtnText: "Done",
+      nextBtnText: "Next",
+      prevBtnText: "Back",
+      onDestroyed: () => window.localStorage.setItem(tourKey, "completed"),
+      steps: [
+        { element: "[data-tour='sofa-product']", popover: { title: "Choose a product", description: "Start from the real Shany Living catalog, then tune the room, finish, and modules." } },
+        { element: "[data-tour='sofa-room-upload']", popover: { title: "Upload room photos", description: "Add one or more room photos so the preview area can guide placement and styling." } },
+        { element: "[data-tour='sofa-3d']", popover: { title: "Drag the studio model", description: "Select, move, duplicate, and resize sofa modules inside the 3D layout." } },
+        { element: "[data-tour='sofa-summary']", popover: { title: "Save or transact", description: "Review the price, save the design, add it to cart, or create a transaction request." } }
+      ]
+    });
+    const timeout = window.setTimeout(() => tour.drive(), 700);
+
+    return () => {
+      window.clearTimeout(timeout);
+      tour.destroy();
+    };
+  }, []);
+
   return (
     <main className="bg-neutral-50 text-neutral-950 dark:bg-neutral-950 dark:text-neutral-50">
-      <section className="grid min-h-[calc(100vh-144px)] border-y border-neutral-200 bg-white dark:border-white/10 dark:bg-neutral-950 lg:grid-cols-[320px_minmax(0,1fr)_320px]">
-        <aside className="border-b border-neutral-200 p-4 dark:border-white/10 lg:border-b-0 lg:border-r">
+      <section className="grid min-h-[calc(100vh-144px)] border-y border-neutral-200 bg-white dark:border-white/10 dark:bg-neutral-950 xl:grid-cols-[320px_minmax(0,1fr)_320px]">
+        <aside className="border-b border-neutral-200 p-4 dark:border-white/10 xl:border-b-0 xl:border-r">
           <div>
             <p className="text-xs font-bold uppercase tracking-[0.2em] text-neutral-500 dark:text-neutral-400">3D Sofa Studio</p>
             <h1 className="mt-2 font-serif text-3xl font-bold">Customize Your Sofa</h1>
             <p className="mt-2 text-sm text-neutral-600 dark:text-neutral-300">Build from Shany Living models, tune the finish, and save the exact studio layout.</p>
           </div>
 
-          <div className="mt-5 space-y-3">
+          <div className="mt-5 space-y-3" data-tour="sofa-product">
             <label className="text-sm font-bold">Product</label>
             <div className="flex gap-2 overflow-x-auto pb-1">
               {(Object.keys(productCategoryLabels) as Array<StorefrontProduct["category"] | "all">).map((category) => (
@@ -927,7 +970,7 @@ export function SofaStudioEditor() {
             </div>
           </div>
 
-          <div className="mt-5 rounded-md border border-neutral-200 bg-neutral-50 p-3 dark:border-white/10 dark:bg-neutral-900">
+          <div className="mt-5 rounded-md border border-neutral-200 bg-neutral-50 p-3 dark:border-white/10 dark:bg-neutral-900" data-tour="sofa-room-upload">
             <div className="flex items-center justify-between gap-3">
               <div>
                 <p className="text-sm font-bold">Room Photos</p>
@@ -1007,7 +1050,7 @@ export function SofaStudioEditor() {
           </div>
         </aside>
 
-        <section className="min-w-0 bg-neutral-950">
+        <section className="min-w-0 bg-neutral-950" data-tour="sofa-3d">
           <div className="flex flex-wrap items-center justify-between gap-3 border-b border-white/10 p-3">
             <div className="flex items-center gap-2 text-white">
               <SiteIcon name="move-3d" className="size-5" />
@@ -1107,7 +1150,7 @@ export function SofaStudioEditor() {
           </div>
         </section>
 
-        <aside className="border-t border-neutral-200 p-4 dark:border-white/10 lg:border-l lg:border-t-0">
+        <aside className="border-t border-neutral-200 p-4 dark:border-white/10 xl:border-l xl:border-t-0" data-tour="sofa-summary">
           <h2 className="font-serif text-2xl font-bold">Design Summary</h2>
           <div className="mt-4 space-y-3">
             {[

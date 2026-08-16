@@ -8,7 +8,7 @@ const formatPrice = (price: number) => new Intl.NumberFormat("en").format(price)
 
 export function ProductCard({ product }: { product: StorefrontProduct }) {
   return (
-    <article className="group overflow-hidden rounded-lg border border-neutral-200 bg-white shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-xl dark:border-white/10 dark:bg-neutral-900">
+    <article className="group overflow-hidden rounded-lg border border-neutral-200 bg-white text-neutral-950 shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-xl dark:border-white/10 dark:bg-neutral-900 dark:text-neutral-50">
       <Link href={`/sofas/${product.slug}`} className="relative block overflow-hidden">
         <AppImage
           src={product.image}
@@ -27,16 +27,16 @@ export function ProductCard({ product }: { product: StorefrontProduct }) {
         </span>
       </Link>
       <div className="p-4 sm:p-5">
-        <Link href={`/sofas/${product.slug}`} className="font-bold transition hover:text-neutral-600 dark:hover:text-neutral-300">
+        <Link href={`/sofas/${product.slug}`} className="font-bold text-neutral-950 transition hover:text-neutral-600 dark:text-neutral-50 dark:hover:text-neutral-300">
           {product.name}
         </Link>
         <p className="mt-1 text-sm font-bold">NIS {formatPrice(product.price)}</p>
         {product.seatRange ? <p className="mt-4 text-xs text-neutral-600 dark:text-neutral-400">Available in {product.seatRange}</p> : <div className="mt-4 h-4" />}
         <div className="mt-3 flex items-center gap-1.5">
           {(product.colors ?? ["#eee9df", "#6a5845", "#0d5f43"]).slice(0, 3).map((color) => (
-            <span key={`${product.slug}-${color}`} className="size-4 rounded-full border border-neutral-200" style={{ backgroundColor: color }} />
+            <span key={`${product.slug}-${color}`} className="size-4 rounded-full border border-neutral-200 dark:border-white/30" style={{ backgroundColor: color }} />
           ))}
-          <span className="grid size-4 place-items-center rounded-full border border-neutral-300 text-neutral-500">
+          <span className="grid size-4 place-items-center rounded-full border border-neutral-300 text-neutral-500 dark:border-white/30 dark:text-neutral-300">
             <SiteIcon name="plus" className="size-3" />
           </span>
         </div>

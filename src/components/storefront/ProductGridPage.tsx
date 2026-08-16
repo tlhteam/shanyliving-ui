@@ -79,6 +79,7 @@ export function ProductGridPage({ page }: { page: StorefrontPage }) {
           <p className="mt-4 max-w-xl text-sm leading-6 text-white/90 sm:text-base">{page.description}</p>
         </div>
       </section>
+      <div className="bg-white text-neutral-950 dark:bg-neutral-950 dark:text-neutral-50">
       <AppSection>
         <div className="-mx-4 mb-8 overflow-x-auto px-4 sm:mx-0 sm:px-0">
           <div className="flex min-w-max gap-3">
@@ -87,7 +88,7 @@ export function ProductGridPage({ page }: { page: StorefrontPage }) {
                 key={filter}
                 type="button"
                 onClick={() => handleFilter(filter)}
-                className={`inline-flex h-10 min-w-28 items-center justify-center gap-2 rounded-md border px-4 text-xs font-bold transition ${activeFilter === filter || (filter === "Sort by" && sortMode !== "featured") ? "border-neutral-950 bg-neutral-950 text-white" : "border-neutral-300 bg-white hover:border-neutral-950 hover:bg-neutral-950 hover:text-white"}`}
+                className={`inline-flex h-10 min-w-28 items-center justify-center gap-2 rounded-md border px-4 text-xs font-bold transition ${activeFilter === filter || (filter === "Sort by" && sortMode !== "featured") ? "border-neutral-950 bg-neutral-950 text-white dark:border-white dark:bg-white dark:text-neutral-950" : "border-neutral-300 bg-white text-neutral-950 hover:border-neutral-950 hover:bg-neutral-950 hover:text-white dark:border-white/15 dark:bg-neutral-900 dark:text-neutral-100 dark:hover:border-white dark:hover:bg-white dark:hover:text-neutral-950"}`}
               >
                 {filter === "Sort by" && sortMode === "price-low" ? "Price: Low to High" : filter === "Sort by" && sortMode === "price-high" ? "Price: High to Low" : filter}
                 {["Sort by", "Sofa Type", "Size", "Seats", "Price", "Clear Filters"].includes(filter) ? <SiteIcon name="chevron-down" className="size-3.5" /> : null}
@@ -95,7 +96,7 @@ export function ProductGridPage({ page }: { page: StorefrontPage }) {
             ))}
           </div>
         </div>
-        <div className="mb-5 flex flex-wrap items-center justify-between gap-3 text-sm text-neutral-600">
+        <div className="mb-5 flex flex-wrap items-center justify-between gap-3 text-sm text-neutral-600 dark:text-neutral-400">
           <p>{filteredProducts.length} product{filteredProducts.length === 1 ? "" : "s"} shown</p>
           <p>{activeFilter === "All" ? "All categories" : activeFilter} / {sortMode === "featured" ? "Featured order" : sortMode === "price-low" ? "Lowest price first" : "Highest price first"}</p>
         </div>
@@ -110,16 +111,17 @@ export function ProductGridPage({ page }: { page: StorefrontPage }) {
             <SiteIcon name="chevron-down" className="size-4" />
           </AppButton>
         </div>
-        <div className="mt-14 grid items-center gap-6 rounded-lg bg-neutral-100 p-6 sm:p-8 lg:grid-cols-[1fr_auto]">
+        <div className="mt-14 grid items-center gap-6 rounded-lg bg-neutral-100 p-6 sm:p-8 dark:bg-neutral-900 lg:grid-cols-[1fr_auto]">
           <div>
             <h2 className="font-serif text-2xl font-bold">Need help choosing?</h2>
-            <p className="mt-2 max-w-2xl text-sm leading-6 text-neutral-700">Send a room photo, measurements, or a favorite style and the team will guide you to the right product and configuration.</p>
+            <p className="mt-2 max-w-2xl text-sm leading-6 text-neutral-700 dark:text-neutral-300">Send a room photo, measurements, or a favorite style and the team will guide you to the right product and configuration.</p>
           </div>
           <Link href="/showroom">
             <AppButton className="w-full sm:w-auto">Talk to the showroom</AppButton>
           </Link>
         </div>
       </AppSection>
+      </div>
     </>
   );
 }
