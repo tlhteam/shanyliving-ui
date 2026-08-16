@@ -5,7 +5,7 @@ import debounce from "lodash.debounce";
 import { useTranslations } from "next-intl";
 import { useSession } from "next-auth/react";
 import { AnimatePresence, motion } from "motion/react";
-import { ChangeEvent, useEffect, useMemo, useState } from "react";
+import { ChangeEvent, useEffect, useMemo, useRef, useState } from "react";
 import { AppButton } from "@/components/app/AppButton";
 import { AppDialog } from "@/components/app/AppDialog";
 import { AppMenu } from "@/components/app/AppMenu";
@@ -42,6 +42,7 @@ export function AppHeader() {
   const [whatsappOpen, setWhatsappOpen] = useState(false);
   const [searchValue, setSearchValue] = useState("");
   const [query, setQuery] = useState("");
+  const searchInputRef = useRef<HTMLInputElement>(null);
   const { status } = useSession();
   const cartCount = useCustomerCommerceStore((state) => state.cart.reduce((sum, item) => sum + item.quantity, 0));
   const openCart = useCustomerCommerceStore((state) => state.openCart);
@@ -67,6 +68,12 @@ export function AppHeader() {
     });
 
   useEffect(() => () => debouncedQuery.cancel(), [debouncedQuery]);
+
+  useEffect(() => {
+    if (searchOpen) {
+      requestAnimationFrame(() => searchInputRef.current?.focus());
+    }
+  }, [searchOpen]);
 
   const handleSearch = (event: ChangeEvent<HTMLInputElement>) => {
     const nextValue = event.target.value;
@@ -118,7 +125,7 @@ export function AppHeader() {
           <button aria-label={t("search")} className="rounded-md p-2 text-neutral-950 transition hover:bg-neutral-100 dark:text-neutral-50 dark:hover:bg-white/10" onClick={() => setSearchOpen(true)}>
             <SiteIcon name="search" className="size-5" />
           </button>
-          <button type="button" onClick={openCart} aria-label="Cart" className="relative rounded-md p-2 text-neutral-950 transition hover:bg-neutral-100 dark:text-neutral-50 dark:hover:bg-white/10">
+          <button type="button" onClick={openCart} onDoubleClick={() => window.location.assign("/cart")} aria-label="Cart" title="Cart" className="relative rounded-md p-2 text-neutral-950 transition hover:bg-neutral-100 dark:text-neutral-50 dark:hover:bg-white/10">
             <SiteIcon name="bag" className="size-5" />
             {cartCount > 0 ? <span className="absolute end-0 top-0 grid size-4 place-items-center rounded-full bg-neutral-950 text-[10px] font-bold text-white dark:bg-white dark:text-neutral-950">{cartCount}</span> : null}
           </button>
@@ -129,11 +136,11 @@ export function AppHeader() {
       </div>
       <AnimatePresence>
         {searchOpen ? (
-          <motion.div initial={{ opacity: 0, y: -12 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -12 }} transition={{ duration: 0.18 }} className="absolute inset-x-0 top-full z-40 border-t border-neutral-200 bg-white text-neutral-950 shadow-xl dark:border-white/10 dark:bg-neutral-950 dark:text-neutral-50">
+          <motion.div initial={{ opacity: 0, y: -12 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -12 }} transition={{ duration: 0.18 }} className="fixed inset-x-0 top-24 z-[70] border-t border-neutral-200 bg-white text-neutral-950 shadow-xl dark:border-white/10 dark:bg-neutral-950 dark:text-neutral-50 sm:top-28">
             <div className="mx-auto max-w-7xl px-4 py-5 sm:px-6 lg:px-8">
               <div className="flex items-center gap-3 rounded-md border border-neutral-300 bg-neutral-50 px-4 py-3 dark:border-white/15 dark:bg-neutral-900">
                 <SiteIcon name="search" className="size-5 text-neutral-500 dark:text-neutral-300" />
-                <input value={searchValue} onChange={handleSearch} autoFocus placeholder={t("searchPlaceholder")} className="h-8 min-w-0 flex-1 bg-transparent text-sm font-medium text-neutral-950 outline-none placeholder:text-neutral-400 dark:text-neutral-50 dark:placeholder:text-neutral-500" />
+                <input ref={searchInputRef} value={searchValue} onChange={handleSearch} placeholder={t("searchPlaceholder")} className="h-8 min-w-0 flex-1 bg-transparent text-sm font-medium text-neutral-950 outline-none placeholder:text-neutral-400 dark:text-neutral-50 dark:placeholder:text-neutral-500" />
                 <button aria-label={t("closeSearch")} className="rounded-md p-1 transition hover:bg-neutral-200 dark:hover:bg-white/10" onClick={closeSearch}>
                   <SiteIcon name="x" className="size-5" />
                 </button>
