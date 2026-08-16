@@ -4,7 +4,6 @@ import Link from "next/link";
 import { AppButton } from "@/components/app/AppButton";
 import { AppImage } from "@/components/app/AppImage";
 import { SiteIcon } from "@/components/icons/SiteIcon";
-import { Sheet, SheetContent, SheetFooter, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { storefrontProducts } from "@/lib/storefront-pages";
 import { useCustomerCommerceStore } from "@/stores/customer-commerce-store";
 
@@ -20,12 +19,20 @@ export function CartDrawer() {
   const subtotal = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
   const suggestions = storefrontProducts.filter((product) => !cart.some((item) => item.slug === product.slug)).slice(0, 2);
 
+  if (!open) {
+    return null;
+  }
+
   return (
-    <Sheet open={open} onOpenChange={(next) => !next && closeCart()}>
-      <SheetContent side="right" className="w-full max-w-md gap-0 border-neutral-200 bg-white p-0 text-neutral-950 dark:border-white/10 dark:bg-neutral-950 dark:text-white">
-        <SheetHeader className="border-b border-neutral-200 px-5 py-5 dark:border-white/10">
-          <SheetTitle className="font-serif text-2xl font-bold text-neutral-950 dark:text-white">My Cart ({cart.length})</SheetTitle>
-        </SheetHeader>
+    <div className="fixed inset-0 z-[90]">
+      <button type="button" aria-label="Close cart" className="absolute inset-0 bg-black/25 backdrop-blur-[1px]" onClick={closeCart} />
+      <aside className="absolute inset-y-0 end-0 flex w-full max-w-md flex-col border-s border-neutral-200 bg-white text-neutral-950 shadow-2xl dark:border-white/10 dark:bg-neutral-950 dark:text-white">
+        <header className="flex items-center justify-between gap-3 border-b border-neutral-200 px-5 py-5 dark:border-white/10">
+          <h2 className="font-serif text-2xl font-bold text-neutral-950 dark:text-white">My Cart ({cart.length})</h2>
+          <button type="button" aria-label="Close cart" onClick={closeCart} className="grid size-9 place-items-center rounded-md border border-neutral-200 transition hover:bg-neutral-100 dark:border-white/10 dark:hover:bg-white/10">
+            <SiteIcon name="x" className="size-4" />
+          </button>
+        </header>
         <div className="min-h-0 flex-1 overflow-y-auto px-5 py-5">
           {cart.length === 0 ? (
             <div className="grid min-h-72 place-items-center rounded-lg border border-dashed border-neutral-300 text-center dark:border-white/15">
@@ -77,16 +84,18 @@ export function CartDrawer() {
             </div>
           ) : null}
         </div>
-        <SheetFooter className="border-t border-neutral-200 bg-white p-5 dark:border-white/10 dark:bg-neutral-950">
+        <footer className="border-t border-neutral-200 bg-white p-5 dark:border-white/10 dark:bg-neutral-950">
           <div className="space-y-3 text-sm">
             <p className="flex justify-between"><span>Subtotal</span><span>{formatPrice(subtotal)}</span></p>
             <p className="flex justify-between"><span>Shipping</span><span>Calculated at checkout</span></p>
             <p className="flex justify-between border-t border-neutral-200 pt-3 text-base font-bold dark:border-white/10"><span>Total</span><span>{formatPrice(subtotal)}</span></p>
           </div>
-          <Link href="/checkout" onClick={closeCart}><AppButton className="w-full" disabled={cart.length === 0}>Checkout</AppButton></Link>
-          <Link href="/cart" onClick={closeCart}><AppButton variant="outline" className="w-full">Edit Cart</AppButton></Link>
-        </SheetFooter>
-      </SheetContent>
-    </Sheet>
+          <div className="mt-4 grid gap-2">
+            <Link href="/checkout" onClick={closeCart}><AppButton className="w-full" disabled={cart.length === 0}>Checkout</AppButton></Link>
+            <Link href="/cart" onClick={closeCart}><AppButton variant="outline" className="w-full">Edit Cart</AppButton></Link>
+          </div>
+        </footer>
+      </aside>
+    </div>
   );
 }
