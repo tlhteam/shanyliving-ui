@@ -1,16 +1,23 @@
 "use client";
 
 import { toast } from "sonner";
+import { useSession } from "next-auth/react";
 import { AppButton } from "@/components/app/AppButton";
 import { SiteIcon } from "@/components/icons/SiteIcon";
 import type { StorefrontProduct } from "@/lib/storefront-pages";
 import { useCustomerCommerceStore } from "@/stores/customer-commerce-store";
 
 export function ProductBuyActions({ product, compact = false }: { product: StorefrontProduct; compact?: boolean }) {
+  const { data: session } = useSession();
   const addToCart = useCustomerCommerceStore((state) => state.addToCart);
   const openCart = useCustomerCommerceStore((state) => state.openCart);
 
   const handleAdd = () => {
+    if (session?.user?.role === "admin") {
+      toast.error("Admin accounts cannot create storefront transactions. Please use a customer account.");
+      return;
+    }
+
     addToCart(product, {
       size: product.seatRange ?? "Standard",
       configuration: product.category === "sofas" ? "Standard sofa" : product.subcategory,

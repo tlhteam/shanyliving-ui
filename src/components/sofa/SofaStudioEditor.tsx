@@ -254,6 +254,7 @@ function SofaScene({ modules, selectedId, color, fabric, leg, zoom, autoRotate, 
     renderer.shadowMap.enabled = true;
     renderer.shadowMap.type = THREE.PCFSoftShadowMap;
     renderer.domElement.dataset.testid = "sofa-3d-canvas";
+    renderer.domElement.style.touchAction = "none";
     container.appendChild(renderer.domElement);
 
     const ambientLight = new THREE.HemisphereLight("#ffffff", "#8a7964", 1.45);
@@ -295,6 +296,11 @@ function SofaScene({ modules, selectedId, color, fabric, leg, zoom, autoRotate, 
     let draggedId = "";
     let pointerDown = false;
     let orbit = -0.62;
+    let spacePressed = false;
+    let panPointerId = 0;
+    let lastPanX = 0;
+    let lastPinchDistance = 0;
+    const activePointers = new Map<number, { x: number; y: number }>();
 
     const applyCamera = () => {
       const distance = 9 - zoomRef.current * 3.6;
@@ -427,6 +433,23 @@ function SofaScene({ modules, selectedId, color, fabric, leg, zoom, autoRotate, 
     };
 
     const onPointerDown = (event: PointerEvent) => {
+      activePointers.set(event.pointerId, { x: event.clientX, y: event.clientY });
+
+      if (activePointers.size === 2) {
+        const points = Array.from(activePointers.values());
+        lastPinchDistance = Math.hypot(points[0].x - points[1].x, points[0].y - points[1].y);
+        renderer.domElement.setPointerCapture(event.pointerId);
+        return;
+      }
+
+      if (spacePressed) {
+        pointerDown = true;
+        panPointerId = event.pointerId;
+        lastPanX = event.clientX;
+        renderer.domElement.setPointerCapture(event.pointerId);
+        return;
+      }
+
       const id = pickModule(event);
 
       if (!id) {
@@ -440,6 +463,28 @@ function SofaScene({ modules, selectedId, color, fabric, leg, zoom, autoRotate, 
     };
 
     const onPointerMove = (event: PointerEvent) => {
+      if (activePointers.has(event.pointerId)) {
+        activePointers.set(event.pointerId, { x: event.clientX, y: event.clientY });
+      }
+
+      if (activePointers.size === 2) {
+        const points = Array.from(activePointers.values());
+        const nextDistance = Math.hypot(points[0].x - points[1].x, points[0].y - points[1].y);
+
+        if (lastPinchDistance) {
+          onZoomChangeRef.current(clamp(zoomRef.current + (nextDistance - lastPinchDistance) / 420, 0, 1));
+        }
+
+        lastPinchDistance = nextDistance;
+        return;
+      }
+
+      if (spacePressed && pointerDown && panPointerId === event.pointerId) {
+        orbit += (event.clientX - lastPanX) * 0.006;
+        lastPanX = event.clientX;
+        return;
+      }
+
       if (!pointerDown || !draggedId) {
         return;
       }
@@ -462,6 +507,16 @@ function SofaScene({ modules, selectedId, color, fabric, leg, zoom, autoRotate, 
     };
 
     const onPointerUp = (event: PointerEvent) => {
+      activePointers.delete(event.pointerId);
+      lastPinchDistance = activePointers.size === 2 ? lastPinchDistance : 0;
+
+      if (panPointerId === event.pointerId) {
+        pointerDown = false;
+        panPointerId = 0;
+        renderer.domElement.releasePointerCapture(event.pointerId);
+        return;
+      }
+
       if (!pointerDown || !draggedId) {
         return;
       }
@@ -482,6 +537,11 @@ function SofaScene({ modules, selectedId, color, fabric, leg, zoom, autoRotate, 
     };
 
     const onKeyDown = (event: KeyboardEvent) => {
+      if (event.code === "Space") {
+        event.preventDefault();
+        spacePressed = true;
+      }
+
       if (event.key === "ArrowLeft") {
         orbit -= 0.08;
       }
@@ -491,13 +551,21 @@ function SofaScene({ modules, selectedId, color, fabric, leg, zoom, autoRotate, 
       }
     };
 
+    const onKeyUp = (event: KeyboardEvent) => {
+      if (event.code === "Space") {
+        spacePressed = false;
+      }
+    };
+
     const observer = new ResizeObserver(resize);
     observer.observe(container);
     renderer.domElement.addEventListener("pointerdown", onPointerDown);
     renderer.domElement.addEventListener("pointermove", onPointerMove);
     renderer.domElement.addEventListener("pointerup", onPointerUp);
+    renderer.domElement.addEventListener("pointercancel", onPointerUp);
     renderer.domElement.addEventListener("wheel", onWheel, { passive: false });
     window.addEventListener("keydown", onKeyDown);
+    window.addEventListener("keyup", onKeyUp);
 
     let animationId = 0;
 
@@ -527,8 +595,10 @@ function SofaScene({ modules, selectedId, color, fabric, leg, zoom, autoRotate, 
       renderer.domElement.removeEventListener("pointerdown", onPointerDown);
       renderer.domElement.removeEventListener("pointermove", onPointerMove);
       renderer.domElement.removeEventListener("pointerup", onPointerUp);
+      renderer.domElement.removeEventListener("pointercancel", onPointerUp);
       renderer.domElement.removeEventListener("wheel", onWheel);
       window.removeEventListener("keydown", onKeyDown);
+      window.removeEventListener("keyup", onKeyUp);
       sofaGroup.traverse(disposeObject);
       renderer.dispose();
       renderer.domElement.remove();
@@ -547,6 +617,8 @@ export function SofaStudioEditor() {
   const addToCart = useCustomerCommerceStore((state) => state.addToCart);
   const openCart = useCustomerCommerceStore((state) => state.openCart);
   const designId = searchParams.get("design");
+  const productSlug = searchParams.get("product");
+  const requestedStep = searchParams.get("step");
   const [activePresetId, setActivePresetId] = useState(presets[0].id);
   const [productCategory, setProductCategory] = useState<StorefrontProduct["category"] | "all">("all");
   const [modules, setModules] = useState<SofaModule[]>(presets[0].modules);
@@ -717,6 +789,35 @@ export function SofaStudioEditor() {
   };
 
   useEffect(() => {
+    if (designId || !productSlug) {
+      return;
+    }
+
+    const productPreset = presets.find((preset) => preset.id === productSlug || preset.id.replace("-sofa", "") === productSlug);
+
+    if (!productPreset || productPreset.id === activePresetId) {
+      return;
+    }
+
+    const timeout = window.setTimeout(() => applyPreset(productPreset), 0);
+
+    return () => window.clearTimeout(timeout);
+  }, [activePresetId, designId, productSlug]);
+
+  useEffect(() => {
+    if (requestedStep !== "room") {
+      return;
+    }
+
+    const timeout = window.setTimeout(() => {
+      setRoomFlowStep(1);
+      document.getElementById("studio-room")?.scrollIntoView({ behavior: "smooth", block: "start" });
+    }, 0);
+
+    return () => window.clearTimeout(timeout);
+  }, [requestedStep]);
+
+  useEffect(() => {
     roomPhotosRef.current = roomPhotos;
   }, [roomPhotos]);
 
@@ -833,10 +934,20 @@ export function SofaStudioEditor() {
       return;
     }
 
+    if (session.user.role === "admin") {
+      toast.error("Admin accounts cannot create storefront transactions. Please use a customer account.");
+      return;
+    }
+
     orderMutation.mutate();
   };
 
   const addCustomDesignToCart = () => {
+    if (session?.user?.role === "admin") {
+      toast.error("Admin accounts cannot create storefront transactions. Please use a customer account.");
+      return;
+    }
+
     addToCart({
       name: activePreset.name,
       slug: activePreset.id,
@@ -1149,13 +1260,33 @@ export function SofaStudioEditor() {
                     <p className="font-bold">3. AI configure</p>
                     <p className="mt-1 text-xs leading-5 text-white/65">The editor adjusts layout, palette, and product blend direction.</p>
                   </div>
-                  <AppButton className="w-full gap-2" onClick={aiConfigure} disabled={!roomPhoto}>
-                    <SiteIcon name="sparkle" className="size-4" />
-                    Generate Room Preview
-                  </AppButton>
-                  <AppButton variant="outline" className="w-full border-white/20 bg-transparent text-white hover:bg-white/10" onClick={() => setRoomFlowStep(1)}>
-                    Try Another Photo
-                  </AppButton>
+                  {roomFlowStep === 3 ? (
+                    <div className="space-y-3">
+                      <AppButton className="w-full gap-2" onClick={addCustomDesignToCart}>
+                        <SiteIcon name="cart" className="size-4" />
+                        Add to Cart
+                      </AppButton>
+                      <Link href="/showroom">
+                        <AppButton variant="outline" className="w-full border-white/20 bg-transparent text-white hover:bg-white/10">
+                          Talk to Designer
+                        </AppButton>
+                      </Link>
+                      <AppButton variant="outline" className="w-full border-white/20 bg-transparent text-white hover:bg-white/10" onClick={() => setRoomFlowStep(1)}>
+                        Try Another Photo
+                      </AppButton>
+                    </div>
+                  ) : (
+                    <>
+                      <AppButton className="w-full gap-2" onClick={aiConfigure} disabled={!roomPhoto}>
+                        <SiteIcon name="sparkle" className="size-4" />
+                        Generate Room Preview
+                      </AppButton>
+                      <AppButton variant="outline" className="w-full border-white/20 bg-transparent text-white hover:bg-white/10" onClick={() => setRoomFlowStep(1)}>
+                        Try Another Photo
+                      </AppButton>
+                    </>
+                  )}
+                  <p className="pt-2 text-center text-[11px] font-bold text-white/45">Powered by ShiputzAI</p>
                 </div>
               </div>
             </div>

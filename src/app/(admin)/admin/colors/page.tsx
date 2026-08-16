@@ -13,7 +13,7 @@ export default function Page() {
         { key: "id", label: "ID" },
         { key: "name", label: "Shade" },
         { key: "family", label: "Family" },
-        { key: "hex", label: "Swatch", swatch: true },
+        { key: "hex", label: "Swatch", swatch: true, input: "color" },
         { key: "status", label: "Status", badge: true }
       ]}
     />

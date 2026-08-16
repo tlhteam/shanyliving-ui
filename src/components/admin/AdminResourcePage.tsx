@@ -1,9 +1,9 @@
 "use client";
 
-import { useEffect, useMemo } from "react";
+import { ChangeEvent, useEffect, useMemo } from "react";
 import type { CellContext, ColumnDef } from "@tanstack/react-table";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { Path, useForm } from "react-hook-form";
+import { Path, useForm, useWatch } from "react-hook-form";
 import { toast } from "sonner";
 import { Eye, Pencil, RefreshCcw, Trash2 } from "lucide-react";
 import { AppConfirmationDialog } from "@/components/app/AppConfirmationDialog";
@@ -11,6 +11,7 @@ import { AppDialog } from "@/components/app/AppDialog";
 import { AppButton } from "@/components/app/AppButton";
 import { AppCard } from "@/components/app/AppCard";
 import { AppForm } from "@/components/app/AppForm";
+import { AppImage } from "@/components/app/AppImage";
 import { AppPagination } from "@/components/app/AppPagination";
 import { AppSearch } from "@/components/app/AppSearch";
 import { AppTable } from "@/components/app/AppTable";
@@ -27,7 +28,7 @@ type AdminResourcePageProps = {
   description: string;
   action: string;
   rows: AdminRow[];
-  columns: { key: string; label: string; badge?: boolean; swatch?: boolean }[];
+  columns: { key: string; label: string; badge?: boolean; swatch?: boolean; input?: "text" | "textarea" | "color" | "image" | "images" }[];
 };
 
 type AdminFormValues = Record<string, string>;
@@ -47,6 +48,19 @@ function rowToFormValues(row: AdminRow) {
   return Object.fromEntries(Object.entries(row).map(([key, value]) => [key, String(value)]));
 }
 
+function isImageValue(value: unknown) {
+  return typeof value === "string" && (value.startsWith("data:image") || value.startsWith("/") || value.startsWith("http"));
+}
+
+function filesToDataUrls(files: FileList | null) {
+  return Promise.all(Array.from(files ?? []).map((file) => new Promise<string>((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(String(reader.result));
+    reader.onerror = () => reject(reader.error);
+    reader.readAsDataURL(file);
+  })));
+}
+
 function statusVariant(value: string | number): "default" | "secondary" | "destructive" {
   const text = String(value).toLowerCase();
 
@@ -64,6 +78,7 @@ function statusVariant(value: string | number): "default" | "secondary" | "destr
 export function AdminResourcePage({ eyebrow, title, description, action, rows, columns }: AdminResourcePageProps) {
   const queryClient = useQueryClient();
   const form = useForm<AdminFormValues>({ defaultValues: {} });
+  const watchedValues = useWatch({ control: form.control });
   const queryKey = useMemo(() => ["admin-resource", title], [title]);
   const { query, page, pageSize, mode, selected, draft, confirmText, setQuery, setPage, openCreate, openView, openEdit, openDelete, setConfirmText, close } = useAdminCrudStore();
   const { data = rows, isFetching, isLoading } = useQuery({
@@ -138,6 +153,23 @@ export function AdminResourcePage({ eyebrow, title, description, action, rows, c
           return <Badge variant={statusVariant(value)}>{String(value)}</Badge>;
         }
 
+        if (column.input === "image" && isImageValue(value)) {
+          return <AppImage src={String(value)} alt={String(row.original.name ?? column.label)} className="h-12 w-16 rounded-md" sizes="64px" />;
+        }
+
+        if (column.input === "images") {
+          const images = String(value ?? "").split(",").map((item) => item.trim()).filter(Boolean);
+
+          return images.length ? (
+            <div className="flex -space-x-2">
+              {images.slice(0, 3).map((image, index) => (
+                <AppImage key={`${image}-${index}`} src={image} alt={String(row.original.name ?? column.label)} className="size-10 rounded-md border border-white dark:border-neutral-900" sizes="40px" />
+              ))}
+              {images.length > 3 ? <span className="grid size-10 place-items-center rounded-md bg-neutral-100 text-xs font-bold dark:bg-neutral-800">+{images.length - 3}</span> : null}
+            </div>
+          ) : <span className="text-neutral-500">No images</span>;
+        }
+
         return <span className="font-medium">{String(value)}</span>;
       }
     })),
@@ -183,6 +215,14 @@ export function AdminResourcePage({ eyebrow, title, description, action, rows, c
 
   const formColumns = columns.filter((column) => column.key !== "actions");
   const selectedName = selected ? String(selected.name ?? selected.id ?? selected.reference ?? selected.event ?? selected.setting ?? "this record") : "this record";
+  const handleFileInput = async (event: ChangeEvent<HTMLInputElement>, key: string, multiple: boolean) => {
+    try {
+      const files = await filesToDataUrls(event.target.files);
+      form.setValue(key as Path<AdminFormValues>, multiple ? files.join(",") : files[0] ?? "", { shouldDirty: true, shouldValidate: true });
+    } catch {
+      toast.error("Unable to read selected image.");
+    }
+  };
 
   return (
     <>
@@ -232,14 +272,43 @@ export function AdminResourcePage({ eyebrow, title, description, action, rows, c
         description="Enter the record details below. These admin fields are reusable for API-backed CRUD."
       >
         <AppForm form={form} onSubmit={handleSave} submitLabel={mode === "create" ? "Create" : "Save Changes"} onCancel={close}>
-          {formColumns.map((column) => (
-            <AppTextField<AdminFormValues>
-              key={column.key}
-              label={column.label}
-              name={column.key as Path<AdminFormValues>}
-              rules={{ required: `${column.label} is required` }}
-            />
-          ))}
+          {formColumns.map((column) => {
+            const value = watchedValues?.[column.key];
+            const images = String(value ?? "").split(",").map((item) => item.trim()).filter(Boolean);
+
+            if (column.input === "image" || column.input === "images") {
+              return (
+                <div key={column.key} className="space-y-2">
+                  <label className="text-sm font-medium text-neutral-800 dark:text-neutral-200">{column.label}</label>
+                  <input type="hidden" {...form.register(column.key as Path<AdminFormValues>, { required: `${column.label} is required` })} />
+                  <label className="flex min-h-28 cursor-pointer flex-col items-center justify-center rounded-md border border-dashed border-neutral-300 bg-white p-4 text-center text-sm font-bold text-neutral-700 hover:bg-neutral-50 dark:border-white/15 dark:bg-neutral-950 dark:text-neutral-200 dark:hover:bg-white/10">
+                    Upload {column.input === "images" ? "images" : "image"}
+                    <span className="mt-1 text-xs font-medium text-neutral-500">PNG, JPG, or WebP</span>
+                    <input type="file" accept="image/*" multiple={column.input === "images"} className="sr-only" onChange={(event) => handleFileInput(event, column.key, column.input === "images")} />
+                  </label>
+                  {images.length ? (
+                    <div className="grid grid-cols-3 gap-2">
+                      {images.map((image, index) => (
+                        <AppImage key={`${image}-${index}`} src={image} alt={`${column.label} preview`} className="aspect-square rounded-md border border-neutral-200 dark:border-white/10" sizes="120px" />
+                      ))}
+                    </div>
+                  ) : null}
+                </div>
+              );
+            }
+
+            return (
+              <AppTextField<AdminFormValues>
+                key={column.key}
+                label={column.label}
+                name={column.key as Path<AdminFormValues>}
+                type={column.input === "color" ? "color" : "text"}
+                multiline={column.input === "textarea"}
+                rules={{ required: `${column.label} is required` }}
+                className={column.input === "color" ? "h-12 p-1" : undefined}
+              />
+            );
+          })}
         </AppForm>
       </AppDialog>
 

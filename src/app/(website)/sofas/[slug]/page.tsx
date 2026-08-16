@@ -78,8 +78,15 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
             <div className="mt-5">
               <ProductBuyActions product={product} />
             </div>
-            <Link href="/customize-your-sofa"><AppButton variant="outline" className="mt-3 w-full">Customize This Sofa</AppButton></Link>
-            <p className="mt-3 text-center text-xs text-neutral-600">Add to cart for checkout, or customize if you need made-to-order details.</p>
+            <div className="mt-3 grid gap-3 sm:grid-cols-2">
+              <Link href={`/customize-your-sofa?product=${product.slug}&step=model`}>
+                <AppButton variant="outline" className="w-full">Customize Your Sofa</AppButton>
+              </Link>
+              <Link href={`/customize-your-sofa?product=${product.slug}&step=room`}>
+                <AppButton variant="outline" className="w-full">See It In My Room (AI)</AppButton>
+              </Link>
+            </div>
+            <p className="mt-3 text-center text-xs text-neutral-600 dark:text-neutral-400">Add to cart for checkout, customize in 4 steps, or preview the sofa in your room.</p>
           </aside>
         </div>
       </AppSection>

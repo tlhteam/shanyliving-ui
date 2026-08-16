@@ -11,8 +11,10 @@ export default function Page() {
       rows={fabrics}
       columns={[
         { key: "id", label: "ID" },
+        { key: "image", label: "Texture Image", input: "image" },
         { key: "name", label: "Fabric" },
         { key: "family", label: "Family" },
+        { key: "description", label: "Description", input: "textarea" },
         { key: "priceTier", label: "Price Tier", badge: true },
         { key: "status", label: "Status", badge: true }
       ]}
