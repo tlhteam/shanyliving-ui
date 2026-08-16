@@ -535,7 +535,7 @@ function SofaScene({ modules, selectedId, color, fabric, leg, zoom, autoRotate, 
     };
   }, [color, fabric, leg]);
 
-  return <div ref={containerRef} className="h-[58vh] min-h-[360px] max-h-[620px] w-full overflow-hidden bg-neutral-950 lg:min-h-[480px] xl:min-h-[560px]" />;
+  return <div ref={containerRef} className="h-[46vh] min-h-[300px] max-h-[620px] w-full overflow-hidden bg-neutral-950 sm:h-[54vh] lg:min-h-[460px] xl:min-h-[560px]" />;
 }
 
 export function SofaStudioEditor() {
@@ -932,18 +932,30 @@ export function SofaStudioEditor() {
   }, []);
 
   return (
-    <main className="bg-neutral-50 text-neutral-950 dark:bg-neutral-950 dark:text-neutral-50">
-      <section className="grid min-h-[calc(100vh-144px)] border-y border-neutral-200 bg-white dark:border-white/10 dark:bg-neutral-950 xl:grid-cols-[320px_minmax(0,1fr)_320px]">
-        <aside className="border-b border-neutral-200 p-4 dark:border-white/10 xl:border-b-0 xl:border-r">
+    <main className="overflow-x-hidden bg-neutral-50 text-neutral-950 dark:bg-neutral-950 dark:text-neutral-50">
+      <nav className="sticky top-0 z-20 flex gap-2 overflow-x-auto border-b border-neutral-200 bg-white/95 px-3 py-2 backdrop-blur dark:border-white/10 dark:bg-neutral-950/95 xl:hidden" aria-label="Sofa studio sections">
+        {[
+          ["#studio-configure", "Configure"],
+          ["#studio-3d", "3D"],
+          ["#studio-room", "Room Preview"],
+          ["#studio-summary", "Summary"]
+        ].map(([href, label]) => (
+          <a key={href} href={href} className="min-w-max rounded-full border border-neutral-200 px-3 py-2 text-xs font-bold dark:border-white/15 dark:bg-neutral-900">
+            {label}
+          </a>
+        ))}
+      </nav>
+      <section className="grid min-w-0 border-y border-neutral-200 bg-white dark:border-white/10 dark:bg-neutral-950 xl:min-h-[calc(100vh-144px)] xl:grid-cols-[320px_minmax(0,1fr)_320px]">
+        <aside id="studio-configure" className="min-w-0 scroll-mt-14 border-b border-neutral-200 p-4 dark:border-white/10 xl:border-b-0 xl:border-r">
           <div>
             <p className="text-xs font-bold uppercase tracking-[0.2em] text-neutral-500 dark:text-neutral-400">3D Sofa Studio</p>
-            <h1 className="mt-2 font-serif text-3xl font-bold">Customize Your Sofa</h1>
+            <h1 className="mt-2 text-balance font-serif text-3xl font-bold sm:text-4xl">Customize Your Sofa</h1>
             <p className="mt-2 text-sm text-neutral-600 dark:text-neutral-300">Build from Shany Living models, tune the finish, and save the exact studio layout.</p>
           </div>
 
           <div className="mt-5 space-y-3" data-tour="sofa-product">
             <label className="text-sm font-bold">Product</label>
-            <div className="flex gap-2 overflow-x-auto pb-1">
+            <div className="-mx-1 flex gap-2 overflow-x-auto px-1 pb-1">
               {(Object.keys(productCategoryLabels) as Array<StorefrontProduct["category"] | "all">).map((category) => (
                 <button
                   key={category}
@@ -955,13 +967,13 @@ export function SofaStudioEditor() {
                 </button>
               ))}
             </div>
-            <div className="flex gap-3 overflow-x-auto pb-2">
+            <div className="-mx-1 flex gap-3 overflow-x-auto px-1 pb-2">
               {visiblePresets.map((preset) => (
                 <button
                   key={preset.id}
                   type="button"
                   onClick={() => applyPreset(preset)}
-                  className={`min-w-36 rounded-md border p-2 text-left text-sm font-bold transition ${activePresetId === preset.id ? "border-neutral-950 bg-neutral-950 text-white dark:border-white dark:bg-white dark:text-neutral-950" : "border-neutral-200 bg-white hover:border-neutral-950 dark:border-white/10 dark:bg-neutral-900 dark:hover:border-white"}`}
+                  className={`min-w-32 max-w-40 rounded-md border p-2 text-left text-sm font-bold transition sm:min-w-36 ${activePresetId === preset.id ? "border-neutral-950 bg-neutral-950 text-white dark:border-white dark:bg-white dark:text-neutral-950" : "border-neutral-200 bg-white hover:border-neutral-950 dark:border-white/10 dark:bg-neutral-900 dark:hover:border-white"}`}
                 >
                   <span className="block">{preset.name}</span>
                   <span className="mt-1 block text-xs font-medium opacity-70">{productCategoryLabels[preset.category]} / {preset.subcategory}</span>
@@ -971,12 +983,12 @@ export function SofaStudioEditor() {
           </div>
 
           <div className="mt-5 rounded-md border border-neutral-200 bg-neutral-50 p-3 dark:border-white/10 dark:bg-neutral-900" data-tour="sofa-room-upload">
-            <div className="flex items-center justify-between gap-3">
+            <div className="grid gap-3 sm:grid-cols-[1fr_auto] sm:items-center">
               <div>
                 <p className="text-sm font-bold">Room Photos</p>
                 <p className="text-xs text-neutral-600 dark:text-neutral-300">Upload multiple photos for the studio suggestion.</p>
               </div>
-              <label className="inline-flex h-9 cursor-pointer items-center gap-2 rounded-md border border-neutral-300 bg-white px-3 text-xs font-bold hover:bg-neutral-100 dark:border-white/15 dark:bg-neutral-950 dark:hover:bg-white/10">
+              <label className="inline-flex h-10 w-full cursor-pointer items-center justify-center gap-2 rounded-md border border-neutral-300 bg-white px-3 text-xs font-bold hover:bg-neutral-100 dark:border-white/15 dark:bg-neutral-950 dark:hover:bg-white/10 sm:w-auto">
                 <SiteIcon name="upload" className="size-4" />
                 Upload
                 <input type="file" accept="image/*" multiple className="sr-only" onChange={(event) => { addRoomPhotos(event.target.files); event.currentTarget.value = ""; }} />
@@ -1000,7 +1012,7 @@ export function SofaStudioEditor() {
             </div>
           </div>
 
-          <div className="mt-5 grid grid-cols-2 gap-2">
+          <div className="mt-5 grid grid-cols-1 gap-2 sm:grid-cols-2">
             <label className="space-y-2 text-sm font-bold">
               Room
               <select value={roomSize} onChange={(event) => setRoomSize(event.target.value)} className="h-11 w-full rounded-md border border-neutral-300 bg-white px-3 text-sm dark:border-white/15 dark:bg-neutral-900 dark:text-white">
@@ -1022,7 +1034,7 @@ export function SofaStudioEditor() {
 
           <div className="mt-5 grid grid-cols-2 gap-2">
             {(["seat", "chaise", "corner", "ottoman"] as const).map((kind) => (
-              <button key={kind} type="button" onClick={() => addModule(kind)} className="rounded-md border border-neutral-200 bg-white p-3 text-sm font-bold hover:border-neutral-950 dark:border-white/10 dark:bg-neutral-900 dark:hover:border-white">
+              <button key={kind} type="button" onClick={() => addModule(kind)} className="min-w-0 rounded-md border border-neutral-200 bg-white p-3 text-sm font-bold hover:border-neutral-950 dark:border-white/10 dark:bg-neutral-900 dark:hover:border-white">
                 <SiteIcon name="sofa" className="mb-2 size-5" />
                 {kind === "seat" ? "Seat" : kind === "chaise" ? "Chaise" : kind === "corner" ? "Corner" : "Ottoman"}
               </button>
@@ -1035,9 +1047,9 @@ export function SofaStudioEditor() {
               {fabrics.map((item) => <option key={item}>{item}</option>)}
             </select>
             <label className="block text-sm font-bold">Color</label>
-            <div className="grid grid-cols-3 gap-2">
+            <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
               {colors.map((item) => (
-                <button key={item} type="button" onClick={() => setColor(item)} className={`rounded-md border p-2 text-left text-xs font-bold ${color === item ? "border-neutral-950 dark:border-white" : "border-neutral-200 dark:border-white/10"}`}>
+                <button key={item} type="button" onClick={() => setColor(item)} className={`min-w-0 rounded-md border p-2 text-left text-xs font-bold ${color === item ? "border-neutral-950 dark:border-white" : "border-neutral-200 dark:border-white/10"}`}>
                   <span className="mb-2 block h-8 rounded-sm border border-black/10" style={{ backgroundColor: colorTokens[item] }} />
                   {item}
                 </button>
@@ -1050,7 +1062,7 @@ export function SofaStudioEditor() {
           </div>
         </aside>
 
-        <section className="min-w-0 bg-neutral-950" data-tour="sofa-3d">
+        <section id="studio-3d" className="min-w-0 scroll-mt-14 bg-neutral-950" data-tour="sofa-3d">
           <div className="flex flex-wrap items-center justify-between gap-3 border-b border-white/10 p-3">
             <div className="flex items-center gap-2 text-white">
               <SiteIcon name="move-3d" className="size-5" />
@@ -1072,7 +1084,7 @@ export function SofaStudioEditor() {
               </button>
             ))}
           </div>
-          <div className="border-t border-white/10 bg-neutral-950 p-3 sm:p-5">
+          <div id="studio-room" className="scroll-mt-14 border-t border-white/10 bg-neutral-950 p-3 sm:p-5">
             <div className="rounded-md border border-white/10 bg-neutral-900 p-3 text-white sm:p-4">
               <div className="flex flex-wrap items-center justify-between gap-3">
                 <div>
@@ -1091,7 +1103,7 @@ export function SofaStudioEditor() {
                 <button
                   type="button"
                   onClick={selectPlacement}
-                  className="relative min-h-[360px] overflow-hidden rounded-md border border-white/10 bg-neutral-800 text-left sm:min-h-[440px]"
+                  className="relative min-h-[300px] overflow-hidden rounded-md border border-white/10 bg-neutral-800 text-left sm:min-h-[440px]"
                   aria-label="Choose product placement in room photo"
                 >
                   {roomPhoto ? (
@@ -1150,7 +1162,7 @@ export function SofaStudioEditor() {
           </div>
         </section>
 
-        <aside className="border-t border-neutral-200 p-4 dark:border-white/10 xl:border-l xl:border-t-0" data-tour="sofa-summary">
+        <aside id="studio-summary" className="min-w-0 scroll-mt-14 border-t border-neutral-200 p-4 pb-28 dark:border-white/10 xl:border-l xl:border-t-0 xl:pb-4" data-tour="sofa-summary">
           <h2 className="font-serif text-2xl font-bold">Design Summary</h2>
           <div className="mt-4 space-y-3">
             {[
@@ -1241,6 +1253,22 @@ export function SofaStudioEditor() {
           </Link>
         </aside>
       </section>
+
+      <div className="fixed inset-x-0 bottom-0 z-30 border-t border-neutral-200 bg-white/95 p-3 shadow-2xl backdrop-blur dark:border-white/10 dark:bg-neutral-950/95 xl:hidden">
+        <div className="mx-auto grid max-w-lg grid-cols-[1fr_auto_auto] items-center gap-2">
+          <div className="min-w-0">
+            <p className="text-[11px] font-bold uppercase tracking-[0.14em] text-neutral-500 dark:text-neutral-400">Total</p>
+            <p className="truncate font-serif text-xl font-bold">NIS {price.toLocaleString()}</p>
+          </div>
+          <AppButton size="sm" className="gap-2 px-4" onClick={addCustomDesignToCart}>
+            <SiteIcon name="cart" className="size-4" />
+            Add
+          </AppButton>
+          <a href="#studio-summary" className="inline-flex h-9 items-center justify-center rounded-md border border-neutral-300 px-3 text-sm font-bold dark:border-white/15">
+            Summary
+          </a>
+        </div>
+      </div>
 
       <AppDialog open={authOpen} onOpenChange={setAuthOpen} title="Save your sofa design" description="Create an account or sign in so this design appears in your Saved Designs panel.">
         <div className="space-y-4">
