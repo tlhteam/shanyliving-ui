@@ -48,28 +48,28 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
             </div>
           </section>
           <aside>
-            <nav className="mb-6 flex flex-wrap items-center gap-2 text-xs font-bold text-neutral-600">
+            <nav className="mb-6 flex flex-wrap items-center gap-2 text-xs font-bold text-neutral-600 dark:text-neutral-400">
               <Link href="/">Home</Link>
               <SiteIcon name="chevron-right" className="size-3" />
               <Link href="/sofas">Sofas</Link>
               <SiteIcon name="chevron-right" className="size-3" />
-              <span className="text-neutral-950">{product.name}</span>
+              <span className="text-neutral-950 dark:text-neutral-50">{product.name}</span>
             </nav>
             <h1 className="font-serif text-4xl font-bold sm:text-5xl">{product.name}</h1>
             <div className="mt-4 flex flex-wrap items-center gap-3 text-sm">
-              <span className="rounded-full bg-neutral-100 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.12em]">{product.badge ?? "Ready to order"}</span>
-              <span className="rounded-full bg-neutral-100 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.12em]">Trusted showroom pick</span>
+              <span className="rounded-full bg-neutral-100 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.12em] text-neutral-950 dark:bg-white/10 dark:text-white">{product.badge ?? "Ready to order"}</span>
+              <span className="rounded-full bg-neutral-100 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.12em] text-neutral-950 dark:bg-white/10 dark:text-white">Trusted showroom pick</span>
               <span>4.8 (36 reviews)</span>
             </div>
-            <p className="mt-5 max-w-md text-sm leading-6 text-neutral-700">{product.description ?? "A modern furniture piece with refined proportions and made-to-order comfort for everyday living."}</p>
+            <p className="mt-5 max-w-md text-sm leading-6 text-neutral-700 dark:text-neutral-300">{product.description ?? "A modern furniture piece with refined proportions and made-to-order comfort for everyday living."}</p>
             <p className="mt-7 text-sm font-bold">From <span className="text-3xl">NIS {new Intl.NumberFormat("en").format(product.price)}</span></p>
-            <p className="mt-1 text-xs text-neutral-600">Price varies by size and configuration</p>
-            <div className="mt-6 divide-y divide-neutral-300 border border-neutral-300">
+            <p className="mt-1 text-xs text-neutral-600 dark:text-neutral-400">Price varies by size and configuration</p>
+            <div className="mt-6 divide-y divide-neutral-300 border border-neutral-300 bg-white text-neutral-950 dark:divide-white/15 dark:border-white/20 dark:bg-neutral-950 dark:text-neutral-50">
               {["Size & Configuration", "Fabric", "Color", "Leg Style", "Cushion Comfort"].map((item) => (
-                <button key={item} className="flex w-full items-center justify-between px-5 py-4 text-start transition hover:bg-neutral-50">
+                <button key={item} className="flex w-full items-center justify-between px-5 py-4 text-start transition hover:bg-neutral-50 dark:hover:bg-white/10">
                   <span>
                     <span className="block text-sm font-bold">{item}</span>
-                    <span className="text-xs text-neutral-600">Choose your preference</span>
+                    <span className="text-xs text-neutral-600 dark:text-neutral-400">Choose your preference</span>
                   </span>
                   <SiteIcon name="chevron-right" className="size-4" />
                 </button>
@@ -90,20 +90,20 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
           </aside>
         </div>
       </AppSection>
-      <section className="border-y border-neutral-200 bg-white">
+      <section className="border-y border-neutral-200 bg-white dark:border-white/10 dark:bg-neutral-950">
         <div className="mx-auto grid max-w-7xl grid-cols-2 gap-4 px-4 py-6 sm:px-6 lg:grid-cols-4 lg:px-8">
           {benefits.map((benefit) => (
             <div key={benefit.title} className="flex items-center justify-center gap-3 text-center">
               <SiteIcon name={benefit.icon as SiteIconName} className="size-7" />
               <div>
                 <p className="text-xs font-bold">{benefit.title}</p>
-                <p className="text-[11px] text-neutral-600">{benefit.text}</p>
+                <p className="text-[11px] text-neutral-600 dark:text-neutral-400">{benefit.text}</p>
               </div>
             </div>
           ))}
         </div>
       </section>
-      <section className="bg-neutral-100">
+      <section className="bg-neutral-100 dark:bg-neutral-900">
         <AppSection className="grid items-center gap-6 py-8 lg:grid-cols-[1fr_260px]">
           <div className="grid grid-cols-3 gap-3 sm:grid-cols-6">
             {fabricImages.map((image) => (
@@ -112,7 +112,7 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
           </div>
           <div>
             <h2 className="font-serif text-2xl font-bold">Choose Your Fabric</h2>
-            <p className="mt-2 text-sm leading-6 text-neutral-700">Over 120 premium fabrics to choose from.</p>
+            <p className="mt-2 text-sm leading-6 text-neutral-700 dark:text-neutral-300">Over 120 premium fabrics to choose from.</p>
             <Link href="/customize-your-sofa"><AppButton variant="outline" className="mt-4">View all fabrics</AppButton></Link>
           </div>
         </AppSection>
@@ -125,12 +125,12 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
           ))}
         </div>
       </AppSection>
-      <section className="bg-neutral-100">
+      <section className="bg-neutral-100 dark:bg-neutral-900">
         <AppSection className="grid items-center gap-8 lg:grid-cols-[1.2fr_0.8fr]">
           <AppImage src="/images/showroom-consultation.png" alt="Custom sofa consultation" className="aspect-[1.9/1] rounded-lg" sizes="(max-width: 1024px) 100vw, 55vw" />
           <div>
             <h2 className="font-serif text-3xl font-bold">Custom Sofa, made for you</h2>
-            <p className="mt-3 text-sm leading-6 text-neutral-700">Choose your size, fabric, color and more. Our team is here to help you create the perfect sofa.</p>
+            <p className="mt-3 text-sm leading-6 text-neutral-700 dark:text-neutral-300">Choose your size, fabric, color and more. Our team is here to help you create the perfect sofa.</p>
             <Link href="/customize-your-sofa"><AppButton className="mt-6">Open Customizer</AppButton></Link>
           </div>
         </AppSection>

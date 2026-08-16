@@ -42,6 +42,26 @@ body {
   margin: 0;
 }
 
+@media (prefers-reduced-motion: no-preference) {
+  html,
+  body,
+  header,
+  main,
+  footer,
+  section,
+  aside,
+  nav,
+  article,
+  button,
+  input,
+  textarea,
+  select {
+    transition-duration: 220ms;
+    transition-property: background-color, border-color, color, fill, stroke, box-shadow;
+    transition-timing-function: ease;
+  }
+}
+
 button,
 a {
   cursor: pointer;

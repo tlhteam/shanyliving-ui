@@ -13,7 +13,7 @@ export function AppProviders({ children }: { children: React.ReactNode }) {
 
   return (
     <SessionProvider>
-      <ThemeProvider attribute="class" defaultTheme="light" enableSystem disableTransitionOnChange>
+      <ThemeProvider attribute="class" storageKey="shany-theme" defaultTheme="light" enableSystem>
         <QueryClientProvider client={queryClient}>
           <AppThemeBridge />
           {children}
