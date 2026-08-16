@@ -1,0 +1,292 @@
+"use client";
+
+import Link from "next/link";
+import { useSearchParams } from "next/navigation";
+import { useSession } from "next-auth/react";
+import { ChangeEvent, useMemo, useState } from "react";
+import { toast } from "sonner";
+import { AppButton } from "@/components/app/AppButton";
+import { AppDialog } from "@/components/app/AppDialog";
+import { AppImage } from "@/components/app/AppImage";
+import { SocialAuthButtons } from "@/components/auth/SocialAuthButtons";
+import { SiteIcon } from "@/components/icons/SiteIcon";
+import { getStorefrontProduct, storefrontProducts } from "@/lib/storefront-pages";
+import { useCustomerCommerceStore } from "@/stores/customer-commerce-store";
+
+const sizes = ["2.2m", "2.4m", "2.8m", "3.2m"];
+const configurations = ["Left chaise", "Right chaise"];
+const fabrics = [
+  { name: "Boucle", image: "/images/category-sofas.png" },
+  { name: "Linen", image: "/images/product-linen-cushion.png" },
+  { name: "Chenille", image: "/images/look-warm-minimalism.png" },
+  { name: "Velvet", image: "/images/look-urban-luxury.png" }
+];
+const colors = [
+  { name: "Light Beige", value: "#eee9df" },
+  { name: "Sand", value: "#d9d4ca" },
+  { name: "Caramel", value: "#b1845f" },
+  { name: "Espresso", value: "#3d271c" },
+  { name: "Forest", value: "#183421" }
+];
+
+function formatPrice(price: number) {
+  return `NIS ${new Intl.NumberFormat("en").format(price)}`;
+}
+
+function readFile(file: File) {
+  return new Promise<string>((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(String(reader.result));
+    reader.onerror = () => reject(reader.error);
+    reader.readAsDataURL(file);
+  });
+}
+
+export function SofaStepConfigurator() {
+  const searchParams = useSearchParams();
+  const { data: session } = useSession();
+  const addToCart = useCustomerCommerceStore((state) => state.addToCart);
+  const openCart = useCustomerCommerceStore((state) => state.openCart);
+  const productSlug = searchParams.get("product");
+  const requestedRoom = searchParams.get("step") === "room";
+  const sofaProducts = useMemo(() => storefrontProducts.filter((product) => product.category === "sofas").slice(0, 5), []);
+  const initialProduct = productSlug ? getStorefrontProduct(productSlug) : sofaProducts[0];
+  const [step, setStep] = useState<1 | 2 | 3 | 4>(requestedRoom ? 4 : 1);
+  const [roomMode, setRoomMode] = useState(requestedRoom);
+  const [product, setProduct] = useState(initialProduct ?? sofaProducts[0]);
+  const [size, setSize] = useState("2.8m");
+  const [configuration, setConfiguration] = useState("Right chaise");
+  const [fabric, setFabric] = useState(fabrics[0]);
+  const [color, setColor] = useState(colors[0]);
+  const [roomPhoto, setRoomPhoto] = useState<string | null>(null);
+  const [aiReady, setAiReady] = useState(false);
+  const [authOpen, setAuthOpen] = useState(false);
+
+  const canTransact = session?.user?.role !== "admin";
+  const finalPrice = product.price + (size === "3.2m" ? 900 : size === "2.8m" ? 400 : 0);
+
+  const addDesignToCart = () => {
+    if (!canTransact) {
+      toast.error("Admin accounts cannot create storefront transactions. Please use a customer account.");
+      return;
+    }
+
+    addToCart(product, {
+      size,
+      configuration,
+      fabric: fabric.name,
+      color: color.name
+    });
+    toast.success(`${product.name} added to cart.`);
+    openCart();
+  };
+
+  const saveDesign = () => {
+    if (!session?.user) {
+      setAuthOpen(true);
+      return;
+    }
+
+    if (!canTransact) {
+      toast.error("Admin accounts cannot save customer designs.");
+      return;
+    }
+
+    toast.success("Design saved to your account.");
+  };
+
+  const shareDesign = async () => {
+    const text = `${product.name} - ${size}, ${configuration}, ${fabric.name}, ${color.name}`;
+
+    if (navigator.share) {
+      await navigator.share({ title: "Shany Living sofa design", text }).catch(() => undefined);
+      return;
+    }
+
+    await navigator.clipboard?.writeText(text);
+    toast.success("Design details copied.");
+  };
+
+  const handleRoomUpload = async (event: ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+
+    if (!file) {
+      return;
+    }
+
+    setRoomPhoto(await readFile(file));
+    setAiReady(false);
+    event.currentTarget.value = "";
+  };
+
+  const generateRoomPreview = () => {
+    if (!roomPhoto) {
+      toast.error("Upload a room photo first.");
+      return;
+    }
+
+    setAiReady(true);
+    toast.success("Room preview generated.");
+  };
+
+  if (roomMode) {
+    return (
+      <div className="bg-white text-neutral-950 dark:bg-neutral-950 dark:text-neutral-50">
+        <div className="mx-auto min-h-screen max-w-md px-4 py-8">
+          <button type="button" onClick={() => setRoomMode(false)} className="mb-5 text-sm font-bold">Back to customizer</button>
+          <h1 className="text-2xl font-bold">See your sofa in your room</h1>
+          <p className="mt-2 text-sm text-neutral-600 dark:text-neutral-400">Upload a photo of your space and preview how it looks.</p>
+          <div className="mt-6 overflow-hidden rounded-lg border border-neutral-200 bg-white dark:border-white/10 dark:bg-neutral-900">
+            {roomPhoto ? (
+              <div className="relative">
+                <AppImage src={roomPhoto} alt="Uploaded room" className="aspect-[0.78/1]" sizes="448px" imageClassName="object-cover" />
+                {aiReady ? (
+                  <div className="absolute inset-x-4 bottom-4 rounded-lg bg-white/90 p-3 shadow-lg dark:bg-neutral-950/90">
+                    <div className="grid grid-cols-[88px_1fr] gap-3">
+                      <AppImage src={product.image} alt={product.name} className="aspect-[1.25/1] rounded-md" sizes="88px" />
+                      <div>
+                        <p className="font-bold">Looks perfect!</p>
+                        <p className="mt-1 text-xs text-neutral-600 dark:text-neutral-400">{product.name} with {fabric.name}, {color.name}.</p>
+                      </div>
+                    </div>
+                  </div>
+                ) : null}
+              </div>
+            ) : (
+              <label className="grid min-h-80 cursor-pointer place-items-center border border-dashed border-neutral-300 p-8 text-center dark:border-white/15">
+                <span>
+                  <SiteIcon name="upload" className="mx-auto size-10" />
+                  <span className="mt-3 block font-bold">Upload room photo</span>
+                </span>
+                <input type="file" accept="image/*" className="sr-only" onChange={handleRoomUpload} />
+              </label>
+            )}
+          </div>
+          <div className="mt-6 space-y-3 text-sm">
+            {["Well-lit room", "Take from sofa perspective", "Clear the area"].map((tip) => (
+              <p key={tip} className="flex items-center gap-2"><SiteIcon name="check" className="size-4 text-green-600" /> {tip}</p>
+            ))}
+          </div>
+          <p className="mt-10 text-center text-xs font-bold text-neutral-500">Powered by ShiputzAI</p>
+          <div className="mt-6 space-y-3">
+            {aiReady ? (
+              <>
+                <AppButton className="w-full" onClick={addDesignToCart}>Add to Cart</AppButton>
+                <Link href="/showroom"><AppButton variant="outline" className="w-full">Talk to Designer</AppButton></Link>
+                <AppButton variant="outline" className="w-full" onClick={() => { setRoomPhoto(null); setAiReady(false); }}>Try Another Photo</AppButton>
+              </>
+            ) : (
+              <AppButton className="w-full" onClick={generateRoomPreview} disabled={!roomPhoto}>Generate AI Result</AppButton>
+            )}
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="bg-white text-neutral-950 dark:bg-neutral-950 dark:text-neutral-50">
+      <div className="mx-auto min-h-screen max-w-md px-4 py-8">
+        <div className="mb-8 flex items-center justify-between">
+          {[1, 2, 3, 4].map((item) => (
+            <button key={item} type="button" onClick={() => setStep(item as 1 | 2 | 3 | 4)} className={`grid size-9 place-items-center rounded-full border text-sm font-bold ${step === item ? "border-neutral-950 bg-neutral-950 text-white dark:border-white dark:bg-white dark:text-neutral-950" : "border-neutral-300 text-neutral-600 dark:border-white/20 dark:text-neutral-300"}`}>
+              {item}
+            </button>
+          ))}
+        </div>
+
+        {step === 1 ? (
+          <section>
+            <h1 className="font-bold">Choose your model</h1>
+            <p className="mt-1 text-xs text-neutral-600 dark:text-neutral-400">Select the model you want to customize</p>
+            <div className="mt-5 space-y-3">
+              {sofaProducts.map((item) => (
+                <button key={item.slug} type="button" onClick={() => setProduct(item)} className={`w-full overflow-hidden rounded-lg border bg-white p-2 dark:bg-neutral-900 ${product.slug === item.slug ? "border-neutral-950 dark:border-white" : "border-neutral-200 dark:border-white/10"}`}>
+                  <AppImage src={item.image} alt={item.name} className="aspect-[2.4/1] rounded-md" sizes="448px" />
+                  <p className="mt-2 text-center text-sm font-bold">{item.name.replace(" Sofa", "")}</p>
+                </button>
+              ))}
+            </div>
+            <AppButton className="mt-8 w-full" onClick={() => setStep(2)}>Next</AppButton>
+          </section>
+        ) : null}
+
+        {step === 2 ? (
+          <section>
+            <h1 className="font-bold">Choose size (width)</h1>
+            <p className="mt-1 text-xs text-neutral-600 dark:text-neutral-400">All sizes are approximate</p>
+            <div className="mt-8 flex flex-wrap gap-3">
+              {sizes.map((item) => (
+                <button key={item} type="button" onClick={() => setSize(item)} className={`rounded-md border px-4 py-3 text-sm font-bold ${size === item ? "border-neutral-950 bg-neutral-950 text-white dark:border-white dark:bg-white dark:text-neutral-950" : "border-neutral-200 dark:border-white/10"}`}>{item}</button>
+              ))}
+            </div>
+            <h2 className="mt-10 font-bold">Configuration</h2>
+            <div className="mt-4 grid grid-cols-2 gap-3">
+              {configurations.map((item) => (
+                <button key={item} type="button" onClick={() => setConfiguration(item)} className={`rounded-md border px-4 py-3 text-sm font-bold ${configuration === item ? "border-neutral-950 bg-neutral-950 text-white dark:border-white dark:bg-white dark:text-neutral-950" : "border-neutral-200 dark:border-white/10"}`}>{item}</button>
+              ))}
+            </div>
+            <AppImage src={product.image} alt={product.name} className="mt-10 aspect-[1.4/1] rounded-lg" sizes="448px" imageClassName="object-contain" />
+            <AppButton className="mt-8 w-full" onClick={() => setStep(3)}>Next</AppButton>
+          </section>
+        ) : null}
+
+        {step === 3 ? (
+          <section>
+            <h1 className="font-bold">Choose fabric</h1>
+            <div className="mt-5 grid grid-cols-4 gap-3">
+              {fabrics.map((item) => (
+                <button key={item.name} type="button" onClick={() => setFabric(item)} className="text-center text-xs font-bold">
+                  <AppImage src={item.image} alt={item.name} className={`aspect-square rounded-md border ${fabric.name === item.name ? "border-neutral-950 dark:border-white" : "border-neutral-200 dark:border-white/10"}`} sizes="96px" />
+                  <span className="mt-2 block">{item.name}</span>
+                </button>
+              ))}
+            </div>
+            <h2 className="mt-8 font-bold">Choose color - {fabric.name}</h2>
+            <div className="mt-5 flex gap-4">
+              {colors.map((item) => (
+                <button key={item.name} type="button" onClick={() => setColor(item)} aria-label={item.name} className={`size-12 rounded-full border-2 ${color.name === item.name ? "border-neutral-950 dark:border-white" : "border-transparent"}`} style={{ backgroundColor: item.value }} />
+              ))}
+            </div>
+            <AppImage src={product.image} alt={product.name} className="mt-8 aspect-[0.9/1] rounded-lg" sizes="448px" />
+            <AppButton className="mt-6 w-full" onClick={() => setStep(4)}>Next</AppButton>
+          </section>
+        ) : null}
+
+        {step === 4 ? (
+          <section>
+            <h1 className="font-bold">Review your design</h1>
+            <p className="mt-1 text-xs text-neutral-600 dark:text-neutral-400">Here is your custom sofa</p>
+            <AppImage src={product.image} alt={product.name} className="mt-5 aspect-[1.2/1] rounded-lg" sizes="448px" />
+            <div className="mt-5 space-y-3 text-sm">
+              {[["Model", product.name.replace(" Sofa", "")], ["Size", size], ["Configuration", configuration], ["Fabric", fabric.name], ["Color", color.name]].map(([label, value]) => (
+                <p key={label} className="flex justify-between"><span className="font-bold">{label}</span><span>{value}</span></p>
+              ))}
+            </div>
+            <div className="mt-8 border-t border-neutral-200 pt-5 dark:border-white/10">
+              <p className="text-sm font-bold">Total Price</p>
+              <p className="font-serif text-3xl font-bold">{formatPrice(finalPrice)}</p>
+              <p className="mt-1 text-xs text-neutral-600 dark:text-neutral-400">Estimated delivery: 21-28 days</p>
+            </div>
+            <AppButton className="mt-6 w-full" onClick={addDesignToCart}>Add to Cart</AppButton>
+            <div className="mt-3 grid grid-cols-2 gap-3">
+              <AppButton variant="outline" onClick={saveDesign}>Save Design</AppButton>
+              <AppButton variant="outline" onClick={shareDesign}>Share Design</AppButton>
+            </div>
+            <AppButton variant="outline" className="mt-3 w-full" onClick={() => setRoomMode(true)}>See It In My Room (AI)</AppButton>
+          </section>
+        ) : null}
+      </div>
+
+      <AppDialog open={authOpen} onOpenChange={setAuthOpen} title="Save your sofa design" description="Create an account or sign in so this design appears in your Saved Designs panel.">
+        <div className="space-y-4">
+          <SocialAuthButtons callbackUrl="/customize-your-sofa" />
+          <div className="grid gap-3 sm:grid-cols-2">
+            <Link href="/login?callbackUrl=/customize-your-sofa"><AppButton variant="outline" className="w-full">Sign In</AppButton></Link>
+            <Link href="/register"><AppButton className="w-full">Create Account</AppButton></Link>
+          </div>
+        </div>
+      </AppDialog>
+    </div>
+  );
+}

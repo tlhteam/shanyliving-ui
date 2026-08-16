@@ -1,5 +1,5 @@
-import { SofaStudioEditor } from "@/components/sofa/SofaStudioEditor";
+import { SofaStepConfigurator } from "@/components/sofa/SofaStepConfigurator";
 
 export default function CustomizeYourSofaPage() {
-  return <SofaStudioEditor />;
+  return <SofaStepConfigurator />;
 }

@@ -102,7 +102,8 @@ export default function CheckoutPage() {
   const isAdmin = session?.user?.role === "admin";
 
   return (
-    <AppSection className="max-w-5xl text-neutral-950 dark:text-neutral-50">
+    <div className="bg-white text-neutral-950 dark:bg-neutral-950 dark:text-neutral-50">
+    <AppSection className="max-w-5xl">
       <div className="mb-8">
         <h1 className="font-serif text-4xl font-bold">Checkout</h1>
         <p className="mt-2 text-sm text-neutral-600 dark:text-neutral-400">Add contact and delivery details to create the order.</p>
@@ -156,5 +157,6 @@ export default function CheckoutPage() {
         </aside>
       </div>
     </AppSection>
+    </div>
   );
 }
