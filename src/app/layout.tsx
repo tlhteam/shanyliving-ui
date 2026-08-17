@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Script from "next/script";
 import { NextIntlClientProvider } from "next-intl";
 import { getLocale } from "next-intl/server";
 import { AppProviders } from "@/components/app/AppProviders";
@@ -28,6 +29,13 @@ export default async function RootLayout({
         <NextIntlClientProvider>
           <AppProviders>{children}</AppProviders>
         </NextIntlClientProvider>
+        <Script
+          src="https://shipazti.com/embed/shiputzai-storefront-v1.js"
+          strategy="afterInteractive"
+          data-store="shany-living"
+          data-locale="he"
+          data-platform="auto"
+        />
       </body>
     </html>
   );

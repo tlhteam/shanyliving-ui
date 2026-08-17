@@ -11,8 +11,14 @@ export function ProductBuyActions({ product, compact = false }: { product: Store
   const { data: session } = useSession();
   const addToCart = useCustomerCommerceStore((state) => state.addToCart);
   const openCart = useCustomerCommerceStore((state) => state.openCart);
+  const isQuoteOnly = product.price <= 0;
 
   const handleAdd = () => {
+    if (isQuoteOnly) {
+      toast.info("This item is available by showroom quote. Please ask about this piece.");
+      return;
+    }
+
     if (session?.user?.role === "admin") {
       toast.error("Admin accounts cannot create storefront transactions. Please use a customer account.");
       return;
@@ -33,7 +39,7 @@ export function ProductBuyActions({ product, compact = false }: { product: Store
       <div className="grid grid-cols-[1fr_48px] gap-3">
         <AppButton size="sm" className="w-full gap-2" onClick={handleAdd}>
           <SiteIcon name="cart" className="size-4" />
-          Add
+          {isQuoteOnly ? "Quote" : "Add"}
         </AppButton>
         <button type="button" onClick={openCart} aria-label="View cart" className="grid h-9 place-items-center rounded-md border border-neutral-300 transition hover:bg-neutral-100 dark:border-white/15 dark:hover:bg-white/10">
           <SiteIcon name="bag" className="size-4" />
@@ -46,7 +52,7 @@ export function ProductBuyActions({ product, compact = false }: { product: Store
     <div className="grid gap-3 sm:grid-cols-2">
       <AppButton className="w-full gap-2" onClick={handleAdd}>
         <SiteIcon name="cart" className="size-4" />
-        Add to Cart
+        {isQuoteOnly ? "Request Quote" : "Add to Cart"}
       </AppButton>
       <AppButton variant="outline" className="w-full gap-2" onClick={openCart}>
         <SiteIcon name="bag" className="size-4" />

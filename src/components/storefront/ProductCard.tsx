@@ -7,6 +7,8 @@ import type { StorefrontProduct } from "@/lib/storefront-pages";
 const formatPrice = (price: number) => new Intl.NumberFormat("en").format(price);
 
 export function ProductCard({ product }: { product: StorefrontProduct }) {
+  const priceLabel = product.price > 0 ? `NIS ${formatPrice(product.price)}` : "Price on request";
+
   return (
     <article className="group overflow-hidden rounded-lg border border-neutral-200 bg-white text-neutral-950 shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-xl dark:border-white/10 dark:bg-neutral-900 dark:text-neutral-50">
       <Link href={`/sofas/${product.slug}`} className="relative block overflow-hidden">
@@ -30,7 +32,7 @@ export function ProductCard({ product }: { product: StorefrontProduct }) {
         <Link href={`/sofas/${product.slug}`} className="font-bold text-neutral-950 transition hover:text-neutral-600 dark:text-neutral-50 dark:hover:text-neutral-300">
           {product.name}
         </Link>
-        <p className="mt-1 text-sm font-bold">NIS {formatPrice(product.price)}</p>
+        <p className="mt-1 text-sm font-bold">{priceLabel}</p>
         {product.seatRange ? <p className="mt-4 text-xs text-neutral-600 dark:text-neutral-400">Available in {product.seatRange}</p> : <div className="mt-4 h-4" />}
         <div className="mt-3 flex items-center gap-1.5">
           {(product.colors ?? ["#eee9df", "#6a5845", "#0d5f43"]).slice(0, 3).map((color) => (

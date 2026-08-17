@@ -31,6 +31,7 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
   }
 
   const related = storefrontProducts.filter((item) => item.slug !== product.slug).slice(0, 5);
+  const hasPrice = product.price > 0;
 
   return (
     <>
@@ -63,21 +64,47 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
               <span>4.8 (36 reviews)</span>
             </div>
             <p className="mt-5 max-w-md text-sm leading-6 text-neutral-700 dark:text-neutral-300">{product.description ?? "A modern furniture piece with refined proportions and made-to-order comfort for everyday living."}</p>
-            <p className="mt-7 text-sm font-bold">From <span className="text-3xl">NIS {new Intl.NumberFormat("en").format(product.price)}</span></p>
-            <p className="mt-1 text-xs text-neutral-600 dark:text-neutral-400">Price varies by size and configuration</p>
+            <p className="mt-7 text-sm font-bold">
+              {hasPrice ? (
+                <>From <span className="text-3xl">NIS {new Intl.NumberFormat("en").format(product.price)}</span></>
+              ) : (
+                <span className="text-3xl">Price on request</span>
+              )}
+            </p>
+            <p className="mt-1 text-xs text-neutral-600 dark:text-neutral-400">
+              {hasPrice ? "Price varies by size and configuration" : "Available by showroom quote"}
+            </p>
+            {product.dimensions || product.variants?.length ? (
+              <div className="mt-5 grid gap-3 rounded-lg border border-neutral-200 bg-neutral-50 p-4 text-sm dark:border-white/10 dark:bg-white/10">
+                {product.dimensions ? (
+                  <p><span className="font-bold">Dimensions:</span> {product.dimensions}</p>
+                ) : null}
+                {product.variants?.length ? (
+                  <p><span className="font-bold">Variations:</span> {product.variants.join(", ")}</p>
+                ) : null}
+              </div>
+            ) : null}
             <ProductDetailAccordion product={product} />
             <div className="mt-5">
               <ProductBuyActions product={product} />
             </div>
-            <div className="mt-3 grid gap-3 sm:grid-cols-2">
-              <Link href={`/customize-your-sofa?product=${product.slug}&step=model`}>
-                <AppButton variant="outline" className="w-full">Customize Your Sofa</AppButton>
+            {hasPrice ? (
+              <>
+                <div className="mt-3 grid gap-3 sm:grid-cols-2">
+                  <Link href={`/customize-your-sofa?product=${product.slug}&step=model`}>
+                    <AppButton variant="outline" className="w-full">Customize Your Sofa</AppButton>
+                  </Link>
+                  <Link href={`/customize-your-sofa?product=${product.slug}&step=room`}>
+                    <AppButton variant="outline" className="w-full">See It In My Room (AI)</AppButton>
+                  </Link>
+                </div>
+                <p className="mt-3 text-center text-xs text-neutral-600 dark:text-neutral-400">Add to cart for checkout, customize in 4 steps, or preview the sofa in your room.</p>
+              </>
+            ) : (
+              <Link href="/showroom" className="mt-3 block">
+                <AppButton variant="outline" className="w-full">Ask Showroom Team</AppButton>
               </Link>
-              <Link href={`/customize-your-sofa?product=${product.slug}&step=room`}>
-                <AppButton variant="outline" className="w-full">See It In My Room (AI)</AppButton>
-              </Link>
-            </div>
-            <p className="mt-3 text-center text-xs text-neutral-600 dark:text-neutral-400">Add to cart for checkout, customize in 4 steps, or preview the sofa in your room.</p>
+            )}
           </aside>
         </div>
       </AppSection>

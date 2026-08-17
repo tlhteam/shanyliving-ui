@@ -15,7 +15,7 @@ export default function CartPage() {
   const updateQuantity = useCustomerCommerceStore((state) => state.updateQuantity);
   const removeFromCart = useCustomerCommerceStore((state) => state.removeFromCart);
   const subtotal = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
-  const suggestions = storefrontProducts.filter((product) => !cart.some((item) => item.slug === product.slug)).slice(0, 2);
+  const suggestions = storefrontProducts.filter((product) => product.price > 0 && !cart.some((item) => item.slug === product.slug)).slice(0, 2);
 
   return (
     <AppSection className="max-w-4xl">
