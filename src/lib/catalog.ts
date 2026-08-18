@@ -135,3 +135,26 @@ export async function getCollections(pageSlug?: string): Promise<CatalogCollecti
     return [];
   }
 }
+
+export async function getCatalogProduct(slug: string): Promise<CatalogProduct | null> {
+  if (!apiUrl) {
+    return null;
+  }
+
+  try {
+    const response = await fetch(`${apiUrl}/storefront/products/${encodeURIComponent(slug)}`, {
+      headers: { Accept: "application/json" },
+      next: { revalidate: 60 }
+    });
+
+    if (!response.ok) {
+      return null;
+    }
+
+    const body = await response.json();
+
+    return body.data ?? null;
+  } catch {
+    return null;
+  }
+}

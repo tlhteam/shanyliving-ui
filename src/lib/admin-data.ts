@@ -1,6 +1,6 @@
 import { BarChart3, Boxes, CalendarClock, ContactRound, FileImage, Gift, Layers3, Mail, Palette, Settings, Sofa, SwatchBook, UserCog, Users, Wand2 } from "lucide-react";
 
-export type AdminRow = Record<string, string | number>;
+export type AdminRow = Record<string, unknown>;
 
 export const adminSections = [
   { href: "/admin", label: "Dashboard", group: "Overview", icon: BarChart3 },
@@ -21,18 +21,18 @@ export const adminSections = [
 ];
 
 export const products: AdminRow[] = [
-  { id: "SL-P001", name: "Cloud Modular", category: "Sofas", price: "₪ 6,990", status: "Active", production: "Made to Order", sizes: "3-4 Seater", fabrics: "Linen, Boucle, Easy-clean", customizable: "Yes" },
-  { id: "SL-P002", name: "Luna Sofa", category: "Sofas", price: "₪ 5,890", status: "Active", production: "Made to Order", sizes: "2-3 Seater", fabrics: "Velvet, Linen", customizable: "Yes" },
-  { id: "SL-P003", name: "Noa Sofa", category: "Sofas", price: "₪ 6,280", status: "Active", production: "Made to Order", sizes: "3-5 Seater", fabrics: "Pet-friendly, Easy-clean", customizable: "Yes" },
-  { id: "SL-P004", name: "Ella Sofa", category: "Sofas", price: "₪ 7,650", status: "Draft", production: "Made to Order", sizes: "3-5 Seater", fabrics: "Linen, Boucle", customizable: "Yes" },
-  { id: "SL-P005", name: "Marble Coffee Table", category: "Coffee Tables", price: "₪ 1,690", status: "Active", production: "Available Now", sizes: "Fixed", fabrics: "Not applicable", customizable: "No" }
+  { sku: "SL-P001", name: "Cloud Modular", category: "Sofas", price: "₪ 6,990", status: "Active", production: "Made to Order", sizes: "3-4 Seater", fabrics: "Linen, Boucle, Easy-clean", customizable: "Yes" },
+  { sku: "SL-P002", name: "Luna Sofa", category: "Sofas", price: "₪ 5,890", status: "Active", production: "Made to Order", sizes: "2-3 Seater", fabrics: "Velvet, Linen", customizable: "Yes" },
+  { sku: "SL-P003", name: "Noa Sofa", category: "Sofas", price: "₪ 6,280", status: "Active", production: "Made to Order", sizes: "3-5 Seater", fabrics: "Pet-friendly, Easy-clean", customizable: "Yes" },
+  { sku: "SL-P004", name: "Ella Sofa", category: "Sofas", price: "₪ 7,650", status: "Draft", production: "Made to Order", sizes: "3-5 Seater", fabrics: "Linen, Boucle", customizable: "Yes" },
+  { sku: "SL-P005", name: "Marble Coffee Table", category: "Coffee Tables", price: "₪ 1,690", status: "Active", production: "Available Now", sizes: "Fixed", fabrics: "Not applicable", customizable: "No" }
 ];
 
 export const categories: AdminRow[] = [
-  { id: "CAT-01", name: "Sofas", slug: "sofas", products: 4, visibility: "Visible" },
-  { id: "CAT-02", name: "Living Room", slug: "living-room", products: 3, visibility: "Visible" },
-  { id: "CAT-03", name: "Dining Room", slug: "dining-room", products: 2, visibility: "Visible" },
-  { id: "CAT-04", name: "Bedroom", slug: "bedroom", products: 1, visibility: "Hidden until launch" }
+  { categoryId: "CAT-01", name: "Sofas", slug: "sofas", products: 4, is_active: true, sort_order: 1 },
+  { categoryId: "CAT-02", name: "Living Room", slug: "living-room", products: 3, is_active: true, sort_order: 2 },
+  { categoryId: "CAT-03", name: "Dining Room", slug: "dining-room", products: 2, is_active: true, sort_order: 3 },
+  { categoryId: "CAT-04", name: "Bedroom", slug: "bedroom", products: 1, is_active: false, sort_order: 4 }
 ];
 
 export const fabrics: AdminRow[] = [

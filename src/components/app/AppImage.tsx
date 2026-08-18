@@ -26,10 +26,21 @@ export function AppImage({
   objectPosition
 }: AppImageProps) {
   const resolvedSrc = mediaUrl(src);
+  const usesNativeImage = resolvedSrc?.startsWith("data:") || resolvedSrc?.startsWith("blob:");
 
   return (
     <div className={cn("relative overflow-hidden bg-[linear-gradient(135deg,#f7f3ec,#e4ddd2_48%,#f7f7f5)]", className)}>
-      {resolvedSrc ? (
+      {resolvedSrc && usesNativeImage ? (
+        <div
+          role="img"
+          aria-label={alt}
+          style={{
+            backgroundImage: `url(${resolvedSrc})`,
+            backgroundPosition: objectPosition ?? "center"
+          }}
+          className={cn("h-full w-full bg-cover bg-center", imageClassName)}
+        />
+      ) : resolvedSrc ? (
         <Image
           src={resolvedSrc}
           alt={alt}

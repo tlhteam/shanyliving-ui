@@ -27,12 +27,14 @@ const googleAvatarPatterns = [
   },
 ];
 
-const developmentImagePatterns = publicPaths.map((pathname) => ({
-  protocol: "http" as const,
-  hostname: "localhost",
-  port: "8000",
-  pathname,
-}));
+const developmentImagePatterns = ["localhost", "127.0.0.1"].flatMap((hostname) =>
+  publicPaths.map((pathname) => ({
+    protocol: "http" as const,
+    hostname,
+    port: "8000",
+    pathname,
+  }))
+);
 
 function apiImagePatterns() {
   const patterns = [

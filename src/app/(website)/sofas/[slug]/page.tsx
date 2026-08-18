@@ -7,7 +7,11 @@ import { SiteIcon, SiteIconName } from "@/components/icons/SiteIcon";
 import { ProductBuyActions } from "@/components/storefront/ProductBuyActions";
 import { ProductCard } from "@/components/storefront/ProductCard";
 import { ProductDetailAccordion } from "@/components/storefront/ProductDetailAccordion";
+import { ProductImageSwiper } from "@/components/storefront/ProductImageSwiper";
+import { getCatalogProduct, type CatalogProduct } from "@/lib/catalog";
+import { isUsableImagePath } from "@/lib/media";
 import { getStorefrontProduct, storefrontProducts } from "@/lib/storefront-pages";
+import type { StorefrontProduct } from "@/lib/storefront-pages";
 
 type ProductDetailPageProps = {
   params: Promise<{ slug: string }>;
@@ -22,9 +26,46 @@ const benefits = [
   { title: "Secure Payments", text: "Safe and encrypted", icon: "lock" }
 ];
 
+function apiProductToStorefrontProduct(product: CatalogProduct, fallback?: StorefrontProduct): StorefrontProduct {
+  const categorySlug = typeof product.category === "object" && product.category ? product.category.slug : "sofas";
+  const category: StorefrontProduct["category"] = categorySlug === "living-room"
+    ? "living-room"
+    : categorySlug === "dining-room"
+      ? "dining"
+      : categorySlug === "bedroom"
+        ? "bedroom"
+        : "sofas";
+  const galleryImages = product.images
+    ?.slice()
+    .sort((a, b) => Number(a.sort_order ?? 0) - Number(b.sort_order ?? 0))
+    .map((image) => image.path ?? image.url ?? "")
+    .filter(isUsableImagePath);
+  const primaryImage = isUsableImagePath(product.image) ? String(product.image) : galleryImages?.[0] ?? fallback?.image ?? "";
+
+  return {
+    name: product.name,
+    slug: product.slug,
+    category,
+    subcategory: product.subcategory ?? fallback?.subcategory ?? "Showroom product",
+    price: Number(product.price ?? fallback?.price ?? 0),
+    image: primaryImage,
+    badge: product.is_best_seller ? "Best Seller" : product.is_featured ? "Featured" : fallback?.badge,
+    description: product.description ?? fallback?.description,
+    seatRange: product.seat_range ?? fallback?.seatRange,
+    dimensions: fallback?.dimensions,
+    variants: fallback?.variants,
+    colors: product.colors?.length ? product.colors : fallback?.colors,
+    colorNames: fallback?.colorNames,
+    galleryImages: galleryImages?.length ? galleryImages : fallback?.galleryImages,
+    fabricImages: fallback?.fabricImages
+  };
+}
+
 export default async function ProductDetailPage({ params }: ProductDetailPageProps) {
   const { slug } = await params;
-  const product = getStorefrontProduct(slug);
+  const fallbackProduct = getStorefrontProduct(slug);
+  const apiProduct = await getCatalogProduct(slug);
+  const product = apiProduct ? apiProductToStorefrontProduct(apiProduct, fallbackProduct) : fallbackProduct;
 
   if (!product) {
     notFound();
@@ -32,25 +73,14 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
 
   const related = storefrontProducts.filter((item) => item.slug !== product.slug).slice(0, 5);
   const hasPrice = product.price > 0;
-  const galleryImages = product.galleryImages?.length ? product.galleryImages : [product.image, "/images/sofa-luna.png", "/images/sofa-noa.png", "/images/sofa-ella.png", "/images/look-modern-elegance.png"];
+  const galleryImages = (product.galleryImages?.length ? product.galleryImages : [product.image, "/images/sofa-luna.png", "/images/sofa-noa.png", "/images/sofa-ella.png", "/images/look-modern-elegance.png"]).filter(isUsableImagePath);
   const fabricImages = product.fabricImages?.length ? product.fabricImages : fallbackFabricImages;
 
   return (
     <>
       <AppSection className="pt-8 sm:pt-10">
         <div className="grid gap-8 lg:grid-cols-[1.1fr_0.9fr]">
-          <section>
-            <div className="relative overflow-hidden rounded-lg">
-              <AppImage src={galleryImages[0] ?? product.image} alt={product.name} className="aspect-[1.15/1]" sizes="(max-width: 1024px) 100vw, 55vw" preload loading="eager" imageClassName="object-cover" />
-              <span className="absolute start-4 top-4 rounded-full bg-white px-4 py-1 text-xs font-bold text-neutral-950">{product.badge ?? "Ready to order"}</span>
-              <span className="absolute end-4 top-4 grid size-9 place-items-center rounded-full bg-white/80 text-neutral-950"><SiteIcon name="heart" className="size-5" /></span>
-            </div>
-            <div className="mt-4 grid grid-cols-5 gap-3">
-              {galleryImages.slice(0, 5).map((image, index) => (
-                <AppImage key={`${image}-${index}`} src={image} alt={`${product.name} gallery`} className="aspect-[1.2/1] rounded-lg" sizes="20vw" />
-              ))}
-            </div>
-          </section>
+          <ProductImageSwiper images={galleryImages} productName={product.name} badge={product.badge} />
           <aside>
             <nav className="mb-6 flex flex-wrap items-center gap-2 text-xs font-bold text-neutral-600 dark:text-neutral-400">
               <Link href="/">Home</Link>

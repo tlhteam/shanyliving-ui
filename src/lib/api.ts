@@ -1,6 +1,9 @@
 import axios from "axios";
 
-export const apiBaseUrl = process.env.NEXT_PUBLIC_API_URL?.replace(/\/$/, "");
+const configuredApiBaseUrl = process.env.NEXT_PUBLIC_API_URL?.replace(/\/$/, "");
+const fallbackApiBaseUrl = process.env.NODE_ENV === "development" ? "http://127.0.0.1:8000" : "https://api.shanyliving.com";
+
+export const apiBaseUrl = configuredApiBaseUrl || fallbackApiBaseUrl;
 export const apiUrl = apiBaseUrl ? `${apiBaseUrl}/api` : undefined;
 
 export const api = axios.create({

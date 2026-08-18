@@ -1,11 +1,12 @@
 "use client";
 
 import { ChangeEvent, useEffect, useMemo } from "react";
+import { useSession } from "next-auth/react";
 import type { CellContext, ColumnDef } from "@tanstack/react-table";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Path, useForm, useWatch } from "react-hook-form";
 import { toast } from "sonner";
-import { Eye, Pencil, RefreshCcw, Trash2 } from "lucide-react";
+import { Eye, Pencil, RefreshCcw, Trash2, X } from "lucide-react";
 import { AppConfirmationDialog } from "@/components/app/AppConfirmationDialog";
 import { AppDialog } from "@/components/app/AppDialog";
 import { AppButton } from "@/components/app/AppButton";
@@ -14,12 +15,14 @@ import { AppForm } from "@/components/app/AppForm";
 import { AppImage } from "@/components/app/AppImage";
 import { AppPagination } from "@/components/app/AppPagination";
 import { AppSearch } from "@/components/app/AppSearch";
+import { AppSwitch } from "@/components/app/AppSwitch";
 import { AppTable } from "@/components/app/AppTable";
 import { AppTextField } from "@/components/app/AppTextField";
 import { AdminPageHeader } from "@/components/admin/AdminPageHeader";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import type { AdminRow } from "@/lib/admin-data";
+import { api } from "@/lib/api";
 import { useAdminCrudStore } from "@/stores/admin-crud-store";
 
 type AdminResourcePageProps = {
@@ -28,32 +31,41 @@ type AdminResourcePageProps = {
   description: string;
   action: string;
   rows: AdminRow[];
-  columns: { key: string; label: string; badge?: boolean; swatch?: boolean; input?: "text" | "textarea" | "color" | "image" | "images" }[];
+  columns: { key: string; label: string; badge?: boolean; swatch?: boolean; input?: "text" | "textarea" | "color" | "image" | "images" | "switch" }[];
+  apiPath?: string;
+  mapApiRow?: (row: Record<string, unknown>) => AdminRow;
+  getResourceKey?: (row: AdminRow) => string;
 };
 
-type AdminFormValues = Record<string, string>;
+type AdminFormValues = Record<string, unknown>;
+type ApiPageMeta = { current_page?: number; last_page?: number; per_page?: number; total?: number };
+type ResourceQueryData = AdminRow[] | { rows: AdminRow[]; meta?: ApiPageMeta };
 
 function rowKey(row: AdminRow) {
-  return String(row.id ?? row.reference ?? row.event ?? row.setting ?? row.name);
+  return String(row.id ?? row.productId ?? row.categoryId ?? row.slug ?? row.sku ?? row.reference ?? row.event ?? row.setting ?? row.name);
 }
 
 function createEmptyRow(columns: AdminResourcePageProps["columns"]) {
   return columns.reduce<AdminRow>((draft, column) => {
-    draft[column.key] = "";
+    draft[column.key] = column.input === "switch" ? true : "";
     return draft;
   }, {});
 }
 
 function rowToFormValues(row: AdminRow) {
-  return Object.fromEntries(Object.entries(row).map(([key, value]) => [key, String(value)]));
+  return Object.fromEntries(Object.entries(row).map(([key, value]) => [key, value ?? ""]));
 }
 
 function isImageValue(value: unknown) {
-  return typeof value === "string" && (value.startsWith("data:image") || value.startsWith("/") || value.startsWith("http"));
+  return typeof value === "string" && (value.startsWith("data:image") || value.startsWith("blob:") || value.startsWith("/") || value.startsWith("http"));
 }
 
 function hasDisplayValue(value: unknown) {
   return value !== undefined && value !== null && String(value).trim() !== "";
+}
+
+function toBoolean(value: unknown) {
+  return value === true || value === 1 || ["1", "true", "yes", "active", "visible"].includes(String(value).toLowerCase());
 }
 
 function EmptyValue({ image = false }: { image?: boolean }) {
@@ -66,15 +78,6 @@ function EmptyValue({ image = false }: { image?: boolean }) {
   }
 
   return <span className="font-mono text-xs text-neutral-500 dark:text-neutral-400">null</span>;
-}
-
-function filesToDataUrls(files: FileList | null) {
-  return Promise.all(Array.from(files ?? []).map((file) => new Promise<string>((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onload = () => resolve(String(reader.result));
-    reader.onerror = () => reject(reader.error);
-    reader.readAsDataURL(file);
-  })));
 }
 
 function statusVariant(value: unknown): "default" | "secondary" | "destructive" {
@@ -91,20 +94,67 @@ function statusVariant(value: unknown): "default" | "secondary" | "destructive" 
   return "secondary";
 }
 
-export function AdminResourcePage({ eyebrow, title, description, action, rows, columns }: AdminResourcePageProps) {
+function imageListFromValue(value: unknown): Array<string | File> {
+  if (!value) {
+    return [];
+  }
+
+  if (value instanceof File) {
+    return [value];
+  }
+
+  if (Array.isArray(value)) {
+    return value.filter((item): item is string | File => typeof item === "string" || item instanceof File);
+  }
+
+  return String(value).split(",").map((item) => item.trim()).filter(Boolean);
+}
+
+function previewSrc(value: string | File) {
+  return value instanceof File ? URL.createObjectURL(value) : value;
+}
+
+export function AdminResourcePage({ eyebrow, title, description, action, rows, columns, apiPath, mapApiRow, getResourceKey }: AdminResourcePageProps) {
   const queryClient = useQueryClient();
+  const { data: session, status: sessionStatus } = useSession();
   const form = useForm<AdminFormValues>({ defaultValues: {} });
   const watchedValues = useWatch({ control: form.control });
   const queryKey = useMemo(() => ["admin-resource", title], [title]);
   const { query, page, pageSize, mode, selected, draft, confirmText, setQuery, setPage, openCreate, openView, openEdit, openDelete, setConfirmText, close } = useAdminCrudStore();
-  const { data = rows, isFetching, isLoading } = useQuery({
-    queryKey,
-    queryFn: async () => new Promise<AdminRow[]>((resolve) => {
-      window.setTimeout(() => resolve(rows), 250);
-    })
+  const accessToken = (session as { accessToken?: string } | null)?.accessToken;
+  const authHeaders = useMemo(() => accessToken ? { Authorization: `Bearer ${accessToken}` } : undefined, [accessToken]);
+  const requiresSession = Boolean(apiPath?.startsWith("/admin") || apiPath?.startsWith("/customer"));
+  const { data: resourceData, isFetching, isLoading, isError } = useQuery<ResourceQueryData>({
+    queryKey: apiPath ? [...queryKey, page, pageSize, query, accessToken ?? "guest"] : queryKey,
+    queryFn: async () => {
+      if (!apiPath) {
+        return new Promise<AdminRow[]>((resolve) => {
+          window.setTimeout(() => resolve(rows), 250);
+        });
+      }
+
+      const response = await api.get(apiPath, { params: { page, per_page: pageSize, search: query || undefined }, headers: authHeaders });
+      const payload = response.data?.data ?? response.data;
+      const records = Array.isArray(payload?.data) ? payload.data : Array.isArray(payload) ? payload : [];
+      const meta = payload?.meta as ApiPageMeta | undefined;
+      const mappedRows = mapApiRow ? records.map(mapApiRow) : records;
+
+      return apiPath ? { rows: mappedRows, meta } : mappedRows;
+    },
+    enabled: !requiresSession || sessionStatus !== "loading"
   });
 
+  const data = useMemo(
+    () => Array.isArray(resourceData) ? resourceData : resourceData?.rows ?? (apiPath ? [] : rows),
+    [apiPath, resourceData, rows]
+  );
+  const serverMeta = !Array.isArray(resourceData) ? resourceData?.meta : undefined;
+
   const filteredRows = useMemo(() => {
+    if (apiPath) {
+      return data;
+    }
+
     const normalizedQuery = query.trim().toLowerCase();
 
     if (!normalizedQuery) {
@@ -112,11 +162,12 @@ export function AdminResourcePage({ eyebrow, title, description, action, rows, c
     }
 
     return data.filter((row) => Object.values(row).some((value) => String(value).toLowerCase().includes(normalizedQuery)));
-  }, [data, query]);
+  }, [apiPath, data, query]);
 
-  const pageCount = Math.max(1, Math.ceil(filteredRows.length / pageSize));
+  const totalRows = serverMeta?.total ?? filteredRows.length;
+  const pageCount = Math.max(1, serverMeta?.last_page ?? Math.ceil(totalRows / pageSize));
   const safePage = Math.min(page, pageCount);
-  const paginatedRows = filteredRows.slice((safePage - 1) * pageSize, safePage * pageSize);
+  const paginatedRows = apiPath ? filteredRows : filteredRows.slice((safePage - 1) * pageSize, safePage * pageSize);
 
   useEffect(() => {
     if (mode === "create" || mode === "edit") {
@@ -124,15 +175,69 @@ export function AdminResourcePage({ eyebrow, title, description, action, rows, c
     }
   }, [draft, form, mode]);
 
-  const saveMutation = useMutation({
-    mutationFn: async (payload: AdminRow) => payload,
-    onSuccess: (payload) => {
-      queryClient.setQueryData<AdminRow[]>(queryKey, (current = rows) => {
-        const payloadKey = rowKey(payload);
-        const exists = current.some((row) => rowKey(row) === payloadKey);
+  const formColumns = columns.filter((column) => column.key !== "actions");
 
-        return exists ? current.map((row) => rowKey(row) === payloadKey ? payload : row) : [payload, ...current];
+  const saveMutation = useMutation({
+    mutationFn: async (payload: AdminRow) => {
+      if (!apiPath) {
+        return payload;
+      }
+
+      const formData = new FormData();
+
+      formColumns.forEach((column) => {
+        const value = payload[column.key];
+
+        if (column.input === "image") {
+          if (value instanceof File) {
+            formData.append(column.key, value);
+          } else if (!hasDisplayValue(value) && selected?.[column.key]) {
+            formData.append("remove_cover", "1");
+          }
+          return;
+        }
+
+        if (column.input === "images") {
+          formData.append(`${column.key}_touched`, "1");
+          imageListFromValue(value).forEach((item) => {
+            if (item instanceof File) {
+              formData.append(`${column.key}[]`, item);
+            } else {
+              formData.append(`${column.key}_keep[]`, item);
+            }
+          });
+          return;
+        }
+
+        if (column.input === "switch") {
+          formData.append(column.key, toBoolean(value) ? "1" : "0");
+          return;
+        }
+
+        formData.append(column.key, hasDisplayValue(value) ? String(value) : "");
       });
+
+      const targetRow = selected ?? data.find((row) => rowKey(row) === rowKey(payload));
+      const resourceKey = targetRow ? (getResourceKey ? getResourceKey(targetRow) : rowKey(targetRow)) : null;
+      const url = resourceKey ? `${apiPath}/${encodeURIComponent(resourceKey)}` : apiPath;
+      const response = await api.post(url, formData, {
+        headers: { "Content-Type": "multipart/form-data", ...(authHeaders ?? {}) }
+      });
+      const responseRow = response.data?.data ?? response.data;
+
+      return mapApiRow ? mapApiRow(responseRow) : responseRow;
+    },
+    onSuccess: (payload) => {
+      if (apiPath) {
+        queryClient.invalidateQueries({ queryKey });
+      } else {
+        queryClient.setQueryData<AdminRow[]>(queryKey, (current = rows) => {
+          const payloadKey = rowKey(payload);
+          const exists = current.some((row) => rowKey(row) === payloadKey);
+
+          return exists ? current.map((row) => rowKey(row) === payloadKey ? payload : row) : [payload, ...current];
+        });
+      }
       toast.success(`${title} saved`);
       close();
     },
@@ -140,9 +245,20 @@ export function AdminResourcePage({ eyebrow, title, description, action, rows, c
   });
 
   const deleteMutation = useMutation({
-    mutationFn: async (payload: AdminRow) => payload,
+    mutationFn: async (payload: AdminRow) => {
+      if (apiPath) {
+        const resourceKey = getResourceKey ? getResourceKey(payload) : rowKey(payload);
+        await api.delete(`${apiPath}/${encodeURIComponent(resourceKey)}`, { headers: authHeaders });
+      }
+
+      return payload;
+    },
     onSuccess: (payload) => {
-      queryClient.setQueryData<AdminRow[]>(queryKey, (current = rows) => current.filter((row) => rowKey(row) !== rowKey(payload)));
+      if (apiPath) {
+        queryClient.invalidateQueries({ queryKey });
+      } else {
+        queryClient.setQueryData<AdminRow[]>(queryKey, (current = rows) => current.filter((row) => rowKey(row) !== rowKey(payload)));
+      }
       toast.success(`${title} deleted`);
       close();
     },
@@ -175,6 +291,25 @@ export function AdminResourcePage({ eyebrow, title, description, action, rows, c
           }
 
           return <Badge variant={statusVariant(value)}>{String(value)}</Badge>;
+        }
+
+        if (column.input === "switch") {
+          const checked = toBoolean(value);
+
+          return (
+            <div className="flex items-center gap-2">
+              <AppSwitch
+                checked={checked}
+                aria-label={`${column.label} ${checked ? "visible" : "hidden"}`}
+                disabled={saveMutation.isPending}
+                onClick={(event) => {
+                  event.stopPropagation();
+                  saveMutation.mutate({ ...row.original, [column.key]: !checked });
+                }}
+              />
+              <span className="text-sm font-semibold">{checked ? "Visible" : "Hidden"}</span>
+            </div>
+          );
         }
 
         if (column.input === "image") {
@@ -226,32 +361,39 @@ export function AdminResourcePage({ eyebrow, title, description, action, rows, c
         </div>
       )
     }
-  ], [columns, openDelete, openEdit, openView, title]);
+  ], [columns, openDelete, openEdit, openView, saveMutation, title]);
 
   const handleSave = (values: AdminFormValues) => {
     const fallbackKey = rowKey(selected ?? values);
     const payload: AdminRow = { ...values };
 
-    if (!payload.id && !payload.reference && !payload.event && !payload.setting) {
+    if (!payload.id && !payload.productId && !payload.categoryId && !payload.reference && !payload.event && !payload.setting) {
       payload.id = `${title.slice(0, 3).toUpperCase()}-${Date.now().toString().slice(-5)}`;
     }
 
-    if (selected && !payload.id && !payload.reference && !payload.event && !payload.setting) {
+    if (selected && !payload.id && !payload.productId && !payload.categoryId && !payload.reference && !payload.event && !payload.setting) {
       payload.id = fallbackKey;
     }
 
     saveMutation.mutate(payload);
   };
 
-  const formColumns = columns.filter((column) => column.key !== "actions");
   const selectedName = selected ? String(selected.name ?? selected.id ?? selected.reference ?? selected.event ?? selected.setting ?? "this record") : "this record";
-  const handleFileInput = async (event: ChangeEvent<HTMLInputElement>, key: string, multiple: boolean) => {
-    try {
-      const files = await filesToDataUrls(event.target.files);
-      form.setValue(key as Path<AdminFormValues>, multiple ? files.join(",") : files[0] ?? "", { shouldDirty: true, shouldValidate: true });
-    } catch {
-      toast.error("Unable to read selected image.");
+  const handleFileInput = (event: ChangeEvent<HTMLInputElement>, key: string, multiple: boolean) => {
+    const files = Array.from(event.target.files ?? []);
+    const existing = multiple ? imageListFromValue(form.getValues(key as Path<AdminFormValues>)).filter((item) => typeof item === "string") : [];
+    form.setValue(key as Path<AdminFormValues>, (multiple ? [...existing, ...files] : files[0] ?? "") as never, { shouldDirty: true, shouldValidate: true });
+    event.currentTarget.value = "";
+  };
+  const removeImageValue = (key: string, index?: number) => {
+    const value = form.getValues(key as Path<AdminFormValues>);
+
+    if (typeof index === "number") {
+      form.setValue(key as Path<AdminFormValues>, imageListFromValue(value).filter((_, itemIndex) => itemIndex !== index) as never, { shouldDirty: true, shouldValidate: true });
+      return;
     }
+
+    form.setValue(key as Path<AdminFormValues>, "" as never, { shouldDirty: true, shouldValidate: true });
   };
 
   return (
@@ -261,7 +403,7 @@ export function AdminResourcePage({ eyebrow, title, description, action, rows, c
         <div className="grid gap-4 border-b border-neutral-200 p-4 dark:border-white/10 lg:grid-cols-[1fr_320px] lg:items-center">
           <div>
             <h2 className="font-bold">{title} List</h2>
-            <p className="text-sm text-neutral-500 dark:text-neutral-400">{isLoading ? "Loading records for management" : `${filteredRows.length} of ${data.length} records ready for management`}</p>
+            <p className="text-sm text-neutral-500 dark:text-neutral-400">{isLoading ? "Loading records for management" : `${filteredRows.length} of ${totalRows} records ready for management`}</p>
           </div>
           <div className="flex flex-col gap-2 sm:flex-row">
             <AppSearch onSearch={setQuery} placeholder={`Search ${title.toLowerCase()}...`} />
@@ -274,8 +416,8 @@ export function AdminResourcePage({ eyebrow, title, description, action, rows, c
             </Button>
           </div>
         </div>
-        <AppTable data={paginatedRows} columns={tableColumns} loading={isLoading || isFetching} skeletonRows={pageSize} emptyMessage="No matching records found." />
-        {!isLoading && !isFetching ? <AppPagination page={safePage} pageSize={pageSize} total={filteredRows.length} onPageChange={setPage} /> : null}
+        <AppTable data={isError ? [] : paginatedRows} columns={tableColumns} loading={isLoading || isFetching} skeletonRows={pageSize} emptyMessage={isError ? "Unable to load records from the API." : "No matching records found."} />
+        {!isLoading && !isFetching ? <AppPagination page={safePage} pageSize={pageSize} total={totalRows} onPageChange={setPage} /> : null}
       </AppCard>
 
       <AppDialog
@@ -304,25 +446,47 @@ export function AdminResourcePage({ eyebrow, title, description, action, rows, c
         <AppForm form={form} onSubmit={handleSave} submitLabel={mode === "create" ? "Create" : "Save Changes"} onCancel={close}>
           {formColumns.map((column) => {
             const value = watchedValues?.[column.key];
-            const images = String(value ?? "").split(",").map((item) => item.trim()).filter(Boolean);
+            const images = imageListFromValue(value);
 
             if (column.input === "image" || column.input === "images") {
               return (
                 <div key={column.key} className="space-y-2">
                   <label className="text-sm font-medium text-neutral-800 dark:text-neutral-200">{column.label}</label>
-                  <input type="hidden" {...form.register(column.key as Path<AdminFormValues>, { required: `${column.label} is required` })} />
                   <label className="flex min-h-28 cursor-pointer flex-col items-center justify-center rounded-md border border-dashed border-neutral-300 bg-white p-4 text-center text-sm font-bold text-neutral-700 hover:bg-neutral-50 dark:border-white/15 dark:bg-neutral-950 dark:text-neutral-200 dark:hover:bg-white/10">
-                    Upload {column.input === "images" ? "images" : "image"}
+                    {images.length ? `Add ${column.input === "images" ? "more images" : "new image"}` : `Upload ${column.input === "images" ? "images" : "image"}`}
                     <span className="mt-1 text-xs font-medium text-neutral-500">PNG, JPG, or WebP</span>
                     <input type="file" accept="image/*" multiple={column.input === "images"} className="sr-only" onChange={(event) => handleFileInput(event, column.key, column.input === "images")} />
                   </label>
                   {images.length ? (
                     <div className="grid grid-cols-3 gap-2">
                       {images.map((image, index) => (
-                        <AppImage key={`${image}-${index}`} src={image} alt={`${column.label} preview`} className="aspect-square rounded-md border border-neutral-200 dark:border-white/10" sizes="120px" />
+                        <div key={`${image instanceof File ? image.name : image}-${index}`} className="relative">
+                          <AppImage src={previewSrc(image)} alt={`${column.label} preview`} className="aspect-square rounded-md border border-neutral-200 dark:border-white/10" sizes="120px" />
+                          <Button type="button" variant="destructive" size="icon" className="absolute right-1 top-1 size-7" onClick={() => removeImageValue(column.key, column.input === "images" ? index : undefined)}>
+                            <X className="size-3.5" />
+                          </Button>
+                        </div>
                       ))}
                     </div>
                   ) : null}
+                </div>
+              );
+            }
+
+            if (column.input === "switch") {
+              const checked = toBoolean(value);
+
+              return (
+                <div key={column.key} className="flex items-center justify-between rounded-md border border-neutral-200 p-3 dark:border-white/10">
+                  <div>
+                    <p className="text-sm font-medium text-neutral-800 dark:text-neutral-200">{column.label}</p>
+                    <p className="text-xs text-neutral-500 dark:text-neutral-400">{checked ? "Visible on storefront" : "Hidden from storefront"}</p>
+                  </div>
+                  <AppSwitch
+                    checked={checked}
+                    aria-label={column.label}
+                    onClick={() => form.setValue(column.key as Path<AdminFormValues>, !checked as never, { shouldDirty: true, shouldValidate: true })}
+                  />
                 </div>
               );
             }
@@ -334,7 +498,7 @@ export function AdminResourcePage({ eyebrow, title, description, action, rows, c
                 name={column.key as Path<AdminFormValues>}
                 type={column.input === "color" ? "color" : "text"}
                 multiline={column.input === "textarea"}
-                rules={{ required: `${column.label} is required` }}
+                rules={column.key === "name" ? { required: `${column.label} is required` } : undefined}
                 className={column.input === "color" ? "h-12 p-1" : undefined}
               />
             );
