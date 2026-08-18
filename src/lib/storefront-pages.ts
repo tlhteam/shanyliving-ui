@@ -11,6 +11,9 @@ export type StorefrontProduct = {
   dimensions?: string;
   variants?: string[];
   colors?: string[];
+  colorNames?: string[];
+  galleryImages?: string[];
+  fabricImages?: string[];
 };
 
 export type StorefrontPage = {
@@ -25,7 +28,34 @@ export type StorefrontPage = {
 const colors = ["#eee9df", "#6a5845", "#0d5f43", "#d9d4ca"];
 
 export const storefrontProducts: StorefrontProduct[] = [
-  { name: "Lazai Sofa", slug: "lazai-sofa", category: "sofas", subcategory: "Three-Seat Sofas", price: 0, image: "/images/category-sofas.png", badge: "New", description: "Three-seat sofa available in white, light gray and blue central variations.", seatRange: "Three-seat sofa", dimensions: "200 x 100 x 85 cm", variants: ["White", "Light Gray", "Blue"], colors: ["#ffffff", "#d9dde3", "#315f97"] },
+  {
+    name: "Lazai Sofa",
+    slug: "lazai-sofa",
+    category: "sofas",
+    subcategory: "Three-Seat Sofas",
+    price: 0,
+    image: "/images/products/lazai/lazai-1.png",
+    badge: "New",
+    description: "A relaxed three-seat sofa with rounded cushions, a clean showroom silhouette and made-to-order upholstery options.",
+    seatRange: "Three-seat sofa",
+    dimensions: "200 x 100 x 85 cm",
+    variants: ["White", "Light Gray", "Blue"],
+    colors: ["#ffffff", "#d9dde3", "#315f97"],
+    colorNames: ["White", "Light Gray", "Blue"],
+    galleryImages: [
+      "/images/products/lazai/lazai-1.png",
+      "/images/products/lazai/lazai-2.png",
+      "/images/products/lazai/lazai-white.png",
+      "/images/products/lazai/lazai-light-gray.png",
+      "/images/products/lazai/lazai-blue.png",
+      "/images/products/lazai/lazai-dimensions.png"
+    ],
+    fabricImages: [
+      "/images/products/lazai/lazai-fabric-white.png",
+      "/images/products/lazai/lazai-fabric-light-gray.png",
+      "/images/products/lazai/lazai-fabric-blue.png"
+    ]
+  },
   { name: "Valentine Sofa", slug: "valentine-sofa", category: "sofas", subcategory: "Fabric Sofas", price: 7900, image: "/images/sofa-ella.png", badge: "Best Seller", description: "A soft modern silhouette with exceptional comfort and fully customizable size, fabric and color.", seatRange: "2.2m, 2.4m, 2.8m, 3.2m", colors: ["#efe7dc", "#d8c7b4", "#b1845f", "#3d271c", "#183421"] },
   { name: "Milano Sofa", slug: "milano-sofa", category: "sofas", subcategory: "Fabric Sofas", price: 8400, image: "/images/sofa-luna.png", badge: "New", description: "Clean Italian-inspired lines with deep seats, premium fabric and solid wood frame support.", seatRange: "2.4m, 2.8m, 3.2m", colors },
   { name: "Luz Sofa", slug: "luz-sofa", category: "sofas", subcategory: "Modular Sofas", price: 7400, image: "/images/sofa-noa.png", badge: "Customizable", description: "A relaxed modular sofa made for open living rooms and flexible family layouts.", seatRange: "2.4m, 2.8m, 3.2m", colors },

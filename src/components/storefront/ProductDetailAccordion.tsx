@@ -33,7 +33,9 @@ const optionGroups = [
   }
 ];
 
-const swatches = [
+const defaultFabricImages = ["/images/category-sofas.png", "/images/product-linen-cushion.png", "/images/look-warm-minimalism.png", "/images/look-urban-luxury.png"];
+
+const defaultSwatches = [
   { name: "Light Beige", value: "#eee9df" },
   { name: "Sand", value: "#d9d4ca" },
   { name: "Caramel", value: "#b1845f" },
@@ -43,6 +45,11 @@ const swatches = [
 
 export function ProductDetailAccordion({ product }: { product: StorefrontProduct }) {
   const [open, setOpen] = useState(optionGroups[0].title);
+  const fabricImages = product.fabricImages?.length ? product.fabricImages : defaultFabricImages;
+  const swatches = (product.colors?.length ? product.colors : defaultSwatches.map((swatch) => swatch.value)).map((value, index) => ({
+    name: product.colorNames?.[index] ?? product.variants?.[index] ?? defaultSwatches[index]?.name ?? `Color ${index + 1}`,
+    value
+  }));
 
   return (
     <div className="mt-6 divide-y divide-neutral-300 border border-neutral-300 bg-white text-neutral-950 dark:divide-white/15 dark:border-white/20 dark:bg-neutral-950 dark:text-neutral-50">
@@ -62,9 +69,16 @@ export function ProductDetailAccordion({ product }: { product: StorefrontProduct
               <div className="animate-in fade-in slide-in-from-top-1 px-5 pb-5">
                 {group.title === "Fabric" ? (
                   <div className="grid grid-cols-4 gap-3">
-                    {["/images/category-sofas.png", "/images/product-linen-cushion.png", "/images/look-warm-minimalism.png", "/images/look-urban-luxury.png"].map((image, index) => (
-                      <AppImage key={image} src={image} alt={`${group.details[index]} preview`} className="aspect-square rounded-md border border-neutral-200 dark:border-white/10" sizes="96px" />
-                    ))}
+                    {fabricImages.map((image, index) => {
+                      const label = product.variants?.[index] ?? group.details[index] ?? `Fabric ${index + 1}`;
+
+                      return (
+                        <span key={`${image}-${index}`} className="text-center text-[10px] font-bold text-neutral-700 dark:text-neutral-200">
+                          <AppImage src={image} alt={`${label} preview`} className="aspect-square rounded-md border border-neutral-200 dark:border-white/10" sizes="96px" />
+                          <span className="mt-1 block">{label}</span>
+                        </span>
+                      );
+                    })}
                   </div>
                 ) : null}
                 {group.title === "Color" ? (

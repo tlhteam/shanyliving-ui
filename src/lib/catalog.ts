@@ -69,14 +69,14 @@ export const fallbackCatalog: HomeCatalog = {
     { id: 6, name: "Coffee Tables", slug: "coffee-tables" }
   ],
   featuredProducts: [
-    { id: 1, name: "Cloud Modular", slug: "cloud-modular", price: 6990, seat_range: "3-4 Seater", is_customizable: true, colors: ["#ede8df", "#705d49", "#0f5f3f"] },
-    { id: 2, name: "Luna Sofa", slug: "luna-sofa", price: 5890, seat_range: "2-3 Seater", is_customizable: true, colors: ["#ece7df", "#5d4a39", "#0b6040"] },
-    { id: 3, name: "Noa Sofa", slug: "noa-sofa", price: 6280, seat_range: "3-5 Seater", is_customizable: true, colors: ["#eee9df", "#8a755f", "#0f5d43"] },
-    { id: 4, name: "Ella Sofa", slug: "ella-sofa", price: 7650, seat_range: "3-5 Seater", is_customizable: true, colors: ["#eee9df", "#5e4b36", "#0a5639"] }
+    { id: 1, name: "Lazai Sofa", slug: "lazai-sofa", price: 0, seat_range: "Three-seat sofa", is_customizable: true, is_featured: true, is_best_seller: true, colors: ["#ffffff", "#d9dde3", "#315f97"], image: "/images/products/lazai/lazai-1.png" },
+    { id: 2, name: "Cloud Modular", slug: "cloud-modular", price: 6990, seat_range: "3-4 Seater", is_customizable: true, colors: ["#ede8df", "#705d49", "#0f5f3f"] },
+    { id: 3, name: "Luna Sofa", slug: "luna-sofa", price: 5890, seat_range: "2-3 Seater", is_customizable: true, colors: ["#ece7df", "#5d4a39", "#0b6040"] },
+    { id: 4, name: "Noa Sofa", slug: "noa-sofa", price: 6280, seat_range: "3-5 Seater", is_customizable: true, colors: ["#eee9df", "#8a755f", "#0f5d43"] }
   ],
   bestSellers: [
-    { id: 5, name: "Marble Coffee Table", slug: "marble-coffee-table", price: 1690, is_best_seller: true },
-    { id: 6, name: "Nora Armchair", slug: "nora-armchair", price: 2990, is_best_seller: true },
+    { id: 5, name: "Lazai Sofa", slug: "lazai-sofa", price: 0, seat_range: "200 x 100 x 85 cm", is_best_seller: true, is_customizable: true, image: "/images/products/lazai/lazai-1.png" },
+    { id: 6, name: "Marble Coffee Table", slug: "marble-coffee-table", price: 1690, is_best_seller: true },
     { id: 7, name: "Ribbed Side Table", slug: "ribbed-side-table", price: 890, is_best_seller: true },
     { id: 8, name: "Dining Chair", slug: "dining-chair", price: 1990, is_best_seller: true },
     { id: 9, name: "Luca Dining Table", slug: "luca-dining-table", price: 3990, is_best_seller: true },

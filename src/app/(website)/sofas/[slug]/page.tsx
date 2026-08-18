@@ -13,7 +13,7 @@ type ProductDetailPageProps = {
   params: Promise<{ slug: string }>;
 };
 
-const fabricImages = ["/images/category-sofas.png", "/images/look-warm-minimalism.png", "/images/sofa-noa.png", "/images/category-living-room.png", "/images/look-urban-luxury.png", "/images/showroom-interior.png"];
+const fallbackFabricImages = ["/images/category-sofas.png", "/images/look-warm-minimalism.png", "/images/sofa-noa.png", "/images/category-living-room.png", "/images/look-urban-luxury.png", "/images/showroom-interior.png"];
 
 const benefits = [
   { title: "Premium Quality", text: "Crafted to last", icon: "shield" },
@@ -32,6 +32,8 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
 
   const related = storefrontProducts.filter((item) => item.slug !== product.slug).slice(0, 5);
   const hasPrice = product.price > 0;
+  const galleryImages = product.galleryImages?.length ? product.galleryImages : [product.image, "/images/sofa-luna.png", "/images/sofa-noa.png", "/images/sofa-ella.png", "/images/look-modern-elegance.png"];
+  const fabricImages = product.fabricImages?.length ? product.fabricImages : fallbackFabricImages;
 
   return (
     <>
@@ -39,12 +41,12 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
         <div className="grid gap-8 lg:grid-cols-[1.1fr_0.9fr]">
           <section>
             <div className="relative overflow-hidden rounded-lg">
-              <AppImage src={product.image} alt={product.name} className="aspect-[1.15/1]" sizes="(max-width: 1024px) 100vw, 55vw" preload loading="eager" imageClassName="object-cover" />
+              <AppImage src={galleryImages[0] ?? product.image} alt={product.name} className="aspect-[1.15/1]" sizes="(max-width: 1024px) 100vw, 55vw" preload loading="eager" imageClassName="object-cover" />
               <span className="absolute start-4 top-4 rounded-full bg-white px-4 py-1 text-xs font-bold text-neutral-950">{product.badge ?? "Ready to order"}</span>
               <span className="absolute end-4 top-4 grid size-9 place-items-center rounded-full bg-white/80 text-neutral-950"><SiteIcon name="heart" className="size-5" /></span>
             </div>
             <div className="mt-4 grid grid-cols-5 gap-3">
-              {[product.image, "/images/sofa-luna.png", "/images/sofa-noa.png", "/images/sofa-ella.png", "/images/look-modern-elegance.png"].map((image, index) => (
+              {galleryImages.slice(0, 5).map((image, index) => (
                 <AppImage key={`${image}-${index}`} src={image} alt={`${product.name} gallery`} className="aspect-[1.2/1] rounded-lg" sizes="20vw" />
               ))}
             </div>
