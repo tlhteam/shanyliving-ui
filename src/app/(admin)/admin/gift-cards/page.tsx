@@ -8,6 +8,7 @@ import { AppButton } from "@/components/app/AppButton";
 import { AppCard } from "@/components/app/AppCard";
 import { AppConfirmationDialog } from "@/components/app/AppConfirmationDialog";
 import { AppDialog } from "@/components/app/AppDialog";
+import { AppPagination } from "@/components/app/AppPagination";
 import { Badge } from "@/components/ui/badge";
 import { useApi } from "@/hooks/use-api";
 import type { CustomerGiftCard } from "@/types/customer";
@@ -21,6 +22,8 @@ type GiftCardForm = {
   status: string;
   expires_at: string;
 };
+
+const pageSize = 10;
 
 const emptyForm: GiftCardForm = {
   code: "",
@@ -45,6 +48,7 @@ export default function AdminGiftCardsPage() {
   const { request, token } = useApi();
   const queryClient = useQueryClient();
   const [search, setSearch] = useState("");
+  const [page, setPage] = useState(1);
   const [open, setOpen] = useState(false);
   const [editing, setEditing] = useState<CustomerGiftCard | null>(null);
   const [pendingDelete, setPendingDelete] = useState<CustomerGiftCard | null>(null);
@@ -62,6 +66,9 @@ export default function AdminGiftCardsPage() {
 
     return cards.filter((card) => `${card.code} ${card.name} ${card.user?.name ?? ""} ${card.user?.email ?? ""}`.toLowerCase().includes(term));
   }, [cards, search]);
+  const lastPage = Math.max(1, Math.ceil(filtered.length / pageSize));
+  const safePage = Math.min(page, lastPage);
+  const paginated = useMemo(() => filtered.slice((safePage - 1) * pageSize, safePage * pageSize), [filtered, safePage]);
 
   const saveMutation = useMutation({
     mutationFn: (values: GiftCardForm) => request<CustomerGiftCard>(editing ? `/admin/gift-cards/${editing.id}` : "/admin/gift-cards", {
@@ -123,7 +130,7 @@ export default function AdminGiftCardsPage() {
       <AppCard className="overflow-hidden">
         <div className="relative border-b border-neutral-200 p-4 dark:border-white/10">
           <Search className="pointer-events-none absolute left-7 top-1/2 size-4 -translate-y-1/2 text-neutral-400" />
-          <input value={search} onChange={(event) => setSearch(event.target.value)} placeholder="Search code, name, or customer..." className="h-11 w-full rounded-md border border-neutral-300 bg-white px-9 text-sm outline-none focus:border-neutral-950 dark:border-white/15 dark:bg-neutral-950 dark:text-neutral-50 dark:focus:border-white" />
+          <input value={search} onChange={(event) => { setSearch(event.target.value); setPage(1); }} placeholder="Search code, name, or customer..." className="h-11 w-full rounded-md border border-neutral-300 bg-white px-9 text-sm outline-none focus:border-neutral-950 dark:border-white/15 dark:bg-neutral-950 dark:text-neutral-50 dark:focus:border-white" />
         </div>
         <div className="overflow-x-auto">
           <table className="w-full min-w-[820px] text-sm">
@@ -137,7 +144,7 @@ export default function AdminGiftCardsPage() {
               </tr>
             </thead>
             <tbody>
-              {filtered.map((card) => (
+              {paginated.map((card) => (
                 <tr key={card.id} className="border-b border-neutral-100 last:border-0 dark:border-white/10">
                   <td className="p-4"><p className="font-bold">{card.name}</p><p className="font-mono text-xs text-neutral-500 dark:text-neutral-400">{card.code}</p></td>
                   <td className="p-4 font-bold">{card.currency} {Number(card.balance).toLocaleString()}</td>
@@ -157,6 +164,9 @@ export default function AdminGiftCardsPage() {
             </tbody>
           </table>
         </div>
+        {!cardsQuery.isLoading ? (
+          <AppPagination page={safePage} pageSize={pageSize} total={filtered.length} onPageChange={setPage} />
+        ) : null}
       </AppCard>
 
       <AppDialog

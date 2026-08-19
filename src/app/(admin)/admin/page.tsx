@@ -61,12 +61,12 @@ export default function AdminPage() {
           <h2 className="font-serif text-2xl font-bold">Priority Leads</h2>
           <div className="mt-4 space-y-3">
             {leads.map((lead) => (
-              <div key={lead.reference} className="flex items-center justify-between rounded-md border border-neutral-200 p-3 dark:border-white/10">
+              <div key={String(lead.reference)} className="flex items-center justify-between rounded-md border border-neutral-200 p-3 dark:border-white/10">
                 <div>
-                  <p className="font-bold">{lead.name}</p>
-                  <p className="text-sm text-neutral-500 dark:text-neutral-400">{lead.product} · {lead.source}</p>
+                  <p className="font-bold">{String(lead.name)}</p>
+                  <p className="text-sm text-neutral-500 dark:text-neutral-400">{String(lead.product)} · {String(lead.source)}</p>
                 </div>
-                <span className="text-sm font-bold">{lead.status}</span>
+                <span className="text-sm font-bold">{String(lead.status)}</span>
               </div>
             ))}
           </div>
@@ -75,12 +75,12 @@ export default function AdminPage() {
           <h2 className="font-serif text-2xl font-bold">Key Events</h2>
           <div className="mt-4 space-y-3">
             {analyticsEvents.map((event) => (
-              <div key={event.event} className="flex items-center justify-between rounded-md border border-neutral-200 p-3 dark:border-white/10">
+              <div key={String(event.event)} className="flex items-center justify-between rounded-md border border-neutral-200 p-3 dark:border-white/10">
                 <div>
-                  <p className="font-bold">{event.event}</p>
-                  <p className="text-sm text-neutral-500 dark:text-neutral-400">{event.priority} priority</p>
+                  <p className="font-bold">{String(event.event)}</p>
+                  <p className="text-sm text-neutral-500 dark:text-neutral-400">{String(event.priority)} priority</p>
                 </div>
-                <span className="text-sm font-bold">{event.count} {event.trend}</span>
+                <span className="text-sm font-bold">{String(event.count)} {String(event.trend)}</span>
               </div>
             ))}
           </div>

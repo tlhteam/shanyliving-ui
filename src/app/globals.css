@@ -231,3 +231,47 @@ a {
     @apply font-sans;
   }
 }
+
+.app-rich-text-content h2,
+.app-rich-text-content h3,
+.app-rich-text-content h4 {
+  font-weight: 700;
+  margin: 0.75rem 0 0.35rem;
+}
+
+.app-rich-text-content h2 {
+  font-size: 1.15rem;
+}
+
+.app-rich-text-content h3 {
+  font-size: 1.05rem;
+}
+
+.app-rich-text-content p {
+  margin: 0 0 0.65rem;
+}
+
+.app-rich-text-content ul,
+.app-rich-text-content ol {
+  margin: 0 0 0.65rem;
+  padding-inline-start: 1.25rem;
+}
+
+.app-rich-text-content ul {
+  list-style: disc;
+}
+
+.app-rich-text-content ol {
+  list-style: decimal;
+}
+
+.app-rich-text-content blockquote {
+  border-inline-start: 3px solid currentColor;
+  opacity: 0.75;
+  margin: 0 0 0.65rem;
+  padding-inline-start: 0.75rem;
+}
+
+.app-rich-text-content a {
+  text-decoration: underline;
+}

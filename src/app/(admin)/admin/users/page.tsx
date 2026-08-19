@@ -8,6 +8,7 @@ import { AppButton } from "@/components/app/AppButton";
 import { AppCard } from "@/components/app/AppCard";
 import { AppConfirmationDialog } from "@/components/app/AppConfirmationDialog";
 import { AppDialog } from "@/components/app/AppDialog";
+import { AppPagination } from "@/components/app/AppPagination";
 import { Badge } from "@/components/ui/badge";
 import { useApi } from "@/hooks/use-api";
 import type { AdminUserAccount } from "@/types/customer";
@@ -21,12 +22,15 @@ type UserForm = {
   password: string;
 };
 
+const pageSize = 10;
+
 const emptyForm: UserForm = { name: "", email: "", phone: "", avatar: "", role: "customer", password: "" };
 
 export default function AdminUsersPage() {
   const { request, token } = useApi();
   const queryClient = useQueryClient();
   const [search, setSearch] = useState("");
+  const [page, setPage] = useState(1);
   const [role, setRole] = useState<"all" | "admin" | "customer">("all");
   const [open, setOpen] = useState(false);
   const [editing, setEditing] = useState<AdminUserAccount | null>(null);
@@ -41,6 +45,9 @@ export default function AdminUsersPage() {
   });
 
   const users = useMemo(() => usersQuery.data ?? [], [usersQuery.data]);
+  const lastPage = Math.max(1, Math.ceil(users.length / pageSize));
+  const safePage = Math.min(page, lastPage);
+  const paginated = useMemo(() => users.slice((safePage - 1) * pageSize, safePage * pageSize), [users, safePage]);
 
   useEffect(() => {
     const timer = window.setTimeout(() => {
@@ -119,7 +126,7 @@ export default function AdminUsersPage() {
         <div className="grid gap-3 border-b border-neutral-200 p-4 dark:border-white/10 lg:grid-cols-[1fr_180px]">
           <div className="relative">
             <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-neutral-400" />
-            <input value={search} onChange={(event) => setSearch(event.target.value)} placeholder="Search name or email..." className="h-11 w-full rounded-md border border-neutral-300 bg-white px-9 text-sm outline-none focus:border-neutral-950 dark:border-white/15 dark:bg-neutral-950 dark:text-neutral-50 dark:focus:border-white" />
+            <input value={search} onChange={(event) => { setSearch(event.target.value); setPage(1); }} placeholder="Search name or email..." className="h-11 w-full rounded-md border border-neutral-300 bg-white px-9 text-sm outline-none focus:border-neutral-950 dark:border-white/15 dark:bg-neutral-950 dark:text-neutral-50 dark:focus:border-white" />
           </div>
           <select value={role} onChange={(event) => setRole(event.target.value as typeof role)} className="h-11 rounded-md border border-neutral-300 bg-white px-3 text-sm outline-none focus:border-neutral-950 dark:border-white/15 dark:bg-neutral-950 dark:text-neutral-50 dark:focus:border-white">
             <option value="all">All roles</option>
@@ -140,7 +147,7 @@ export default function AdminUsersPage() {
               </tr>
             </thead>
             <tbody>
-              {users.map((user) => (
+              {paginated.map((user) => (
                 <tr key={user.id} className="border-b border-neutral-100 last:border-0 dark:border-white/10">
                   <td className="p-4">
                     <div className="flex items-center gap-3">
@@ -164,7 +171,7 @@ export default function AdminUsersPage() {
                   </td>
                 </tr>
               ))}
-              {!usersQuery.isLoading && users.length === 0 ? (
+              {!usersQuery.isLoading && paginated.length === 0 ? (
                 <tr>
                   <td colSpan={5} className="p-12 text-center text-neutral-500 dark:text-neutral-400">
                     <UserCog className="mx-auto mb-2 size-6" />
@@ -175,6 +182,10 @@ export default function AdminUsersPage() {
             </tbody>
           </table>
         </div>
+      
+        {!usersQuery.isLoading ? (
+          <AppPagination page={safePage} pageSize={pageSize} total={users.length} onPageChange={setPage} />
+        ) : null}
       </AppCard>
 
       <AppDialog

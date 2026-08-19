@@ -67,6 +67,10 @@ function apiImagePatterns() {
 }
 
 const nextConfig: NextConfig = {
+  turbopack: {
+    root: process.cwd(),
+  },
+
   images: {
     remotePatterns: [...apiImagePatterns(), ...googleAvatarPatterns],
     dangerouslyAllowLocalIP: process.env.NODE_ENV === "development",
