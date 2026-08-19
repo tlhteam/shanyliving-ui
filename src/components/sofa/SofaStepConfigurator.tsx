@@ -710,7 +710,7 @@ export function SofaStepConfigurator() {
                   className="mt-5 w-full"
                   onClick={() => setStep((step + 1) as 1 | 2 | 3 | 4)}
                 >
-                  Continue to &nbsp; {stepLabels[step + 1]}
+                  Continue to {stepLabels[step + 1]}
                 </AppButton>
               ) : (
                 <>
