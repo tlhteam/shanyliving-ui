@@ -43,8 +43,21 @@ const defaultSwatches = [
   { name: "Forest", value: "#183421" }
 ];
 
+function groupsFromProduct(product: StorefrontProduct) {
+  if (!product.optionGroups?.length) {
+    return optionGroups;
+  }
+
+  return product.optionGroups.map((group) => ({
+    title: group.name,
+    summary: group.values.map((value) => value.label).join(", "),
+    details: group.values.map((value) => value.label)
+  }));
+}
+
 export function ProductDetailAccordion({ product }: { product: StorefrontProduct }) {
-  const [open, setOpen] = useState(optionGroups[0].title);
+  const resolvedGroups = groupsFromProduct(product);
+  const [open, setOpen] = useState(resolvedGroups[0]?.title ?? optionGroups[0].title);
   const fabricImages = product.fabricImages?.length ? product.fabricImages : defaultFabricImages;
   const swatches = (product.colors?.length ? product.colors : defaultSwatches.map((swatch) => swatch.value)).map((value, index) => ({
     name: product.colorNames?.[index] ?? product.variants?.[index] ?? defaultSwatches[index]?.name ?? `Color ${index + 1}`,
@@ -53,7 +66,7 @@ export function ProductDetailAccordion({ product }: { product: StorefrontProduct
 
   return (
     <div className="mt-6 divide-y divide-neutral-300 border border-neutral-300 bg-white text-neutral-950 dark:divide-white/15 dark:border-white/20 dark:bg-neutral-950 dark:text-neutral-50">
-      {optionGroups.map((group) => {
+      {resolvedGroups.map((group) => {
         const expanded = open === group.title;
 
         return (

@@ -42,6 +42,20 @@ function apiProductToStorefrontProduct(product: CatalogProduct, fallback?: Store
     .filter(isUsableImagePath);
   const primaryImage = isUsableImagePath(product.image) ? String(product.image) : galleryImages?.[0] ?? fallback?.image ?? "";
 
+  const optionGroups = (product.options ?? [])
+    .filter((option) => (option.values ?? []).length > 0)
+    .map((option) => ({
+      name: option.name,
+      values: (option.values ?? []).map((value) => ({
+        label: value.value,
+        swatch: value.swatch ?? null,
+        image: value.media_url ?? null
+      }))
+    }));
+
+  const colorGroup = optionGroups.find((group) => group.name.toLowerCase() === "color");
+  const fabricGroup = optionGroups.find((group) => group.name.toLowerCase() === "fabric");
+
   return {
     name: product.name,
     slug: product.slug,
@@ -53,11 +67,14 @@ function apiProductToStorefrontProduct(product: CatalogProduct, fallback?: Store
     description: product.description ?? fallback?.description,
     seatRange: product.seat_range ?? fallback?.seatRange,
     dimensions: fallback?.dimensions,
-    variants: fallback?.variants,
-    colors: product.colors?.length ? product.colors : fallback?.colors,
-    colorNames: fallback?.colorNames,
+    variants: fabricGroup?.values.map((value) => value.label) ?? fallback?.variants,
+    colors: colorGroup?.values.map((value) => value.swatch).filter((swatch): swatch is string => Boolean(swatch))
+      ?? (product.colors?.length ? product.colors : fallback?.colors),
+    colorNames: colorGroup?.values.map((value) => value.label) ?? fallback?.colorNames,
     galleryImages: galleryImages?.length ? galleryImages : fallback?.galleryImages,
-    fabricImages: fallback?.fabricImages
+    fabricImages: fabricGroup?.values.map((value) => value.image).filter((image): image is string => Boolean(image))
+      ?? fallback?.fabricImages,
+    optionGroups: optionGroups.length ? optionGroups : undefined
   };
 }
 
