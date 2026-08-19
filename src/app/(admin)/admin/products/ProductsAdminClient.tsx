@@ -5,7 +5,13 @@ import { products } from "@/lib/admin-data";
 import type { AdminRow } from "@/lib/admin-data";
 import { isUsableImagePath } from "@/lib/media";
 
-const EMPTY_VALUES = new Set(["", "undefined", "null", "nan", "[object object]"]);
+const EMPTY_VALUES = new Set([
+  "",
+  "undefined",
+  "null",
+  "nan",
+  "[object object]",
+]);
 
 function cleanText(value: unknown) {
   if (value === undefined || value === null) {
@@ -18,13 +24,21 @@ function cleanText(value: unknown) {
 }
 
 function toBoolean(value: unknown) {
-  return value === true || value === 1 || ["1", "true", "yes", "active", "visible"].includes(cleanText(value).toLowerCase());
+  return (
+    value === true ||
+    value === 1 ||
+    ["1", "true", "yes", "active", "visible"].includes(
+      cleanText(value).toLowerCase(),
+    )
+  );
 }
 
 function formatPrice(value: unknown) {
   const price = Number(cleanText(value).replace(/[^\d.-]/g, ""));
 
-  return Number.isFinite(price) && price > 0 ? `₪ ${new Intl.NumberFormat("en").format(price)}` : "Price on request";
+  return Number.isFinite(price) && price > 0
+    ? `₪ ${new Intl.NumberFormat("en").format(price)}`
+    : "Price on request";
 }
 
 function textList(value: unknown) {
@@ -46,22 +60,33 @@ function imagePath(image: unknown) {
     return "";
   }
 
-  const path = cleanText((image as { url?: unknown }).url ?? (image as { path?: unknown }).path ?? (image as { image?: unknown }).image);
+  const path = cleanText(
+    (image as { url?: unknown }).url ??
+      (image as { path?: unknown }).path ??
+      (image as { image?: unknown }).image,
+  );
 
   return isUsableImagePath(path) ? path : "";
 }
 
 function mapProductRow(row: Record<string, unknown>): AdminRow {
   const images = Array.isArray(row.images) ? row.images : [];
-  const primaryImage = images.find((image) => toBoolean((image as { is_primary?: unknown }).is_primary));
-  const coverImage = imagePath(row.image_url ?? row.cover_image) || imagePath(primaryImage) || imagePath(images[0]) || imagePath(row.image);
+  const primaryImage = images.find((image) =>
+    toBoolean((image as { is_primary?: unknown }).is_primary),
+  );
+  const coverImage =
+    imagePath(row.image_url ?? row.cover_image) ||
+    imagePath(primaryImage) ||
+    imagePath(images[0]) ||
+    imagePath(row.image);
   const gallery = images
     .map(imagePath)
     .filter((image) => image !== coverImage)
     .filter(Boolean);
-  const category = typeof row.category === "object" && row.category
-    ? cleanText((row.category as { name?: unknown }).name)
-    : cleanText(row.category);
+  const category =
+    typeof row.category === "object" && row.category
+      ? cleanText((row.category as { name?: unknown }).name)
+      : cleanText(row.category);
 
   return {
     productId: row.id ?? row.productId ?? row.uuid ?? cleanText(row.slug),
@@ -75,9 +100,11 @@ function mapProductRow(row: Record<string, unknown>): AdminRow {
     description: cleanText(row.description),
     features: textList(row.features),
     colors: textList(row.colors),
-    production: toBoolean(row.is_customizable) ? "Made to Order" : "Available Now",
+    production: toBoolean(row.is_customizable)
+      ? "Made to Order"
+      : "Available Now",
     status: toBoolean(row.is_active) ? "Active" : "Draft",
-    customizable: toBoolean(row.is_customizable) ? "Yes" : "No"
+    customizable: toBoolean(row.is_customizable) ? "Yes" : "No",
   };
 }
 
@@ -101,12 +128,39 @@ export function ProductsAdminClient() {
         { key: "name", label: "Product" },
         { key: "category", label: "Category" },
         { key: "price", label: "Starting Price" },
-        { key: "description", label: "Description", input: "textarea" },
+        {
+          key: "description",
+          label: "Description",
+          input: "textarea",
+          expandable: true,
+        },
         { key: "features", label: "Features", input: "textarea" },
         { key: "colors", label: "Color Hex Codes", input: "textarea" },
         { key: "production", label: "Production", badge: true },
-        { key: "status", label: "Status", badge: true, formInput: "switch", switchLabels: { on: "Active", off: "Draft", onHint: "Active on storefront", offHint: "Saved as draft" } },
-        { key: "customizable", label: "Customizable", badge: true, formInput: "switch", switchLabels: { on: "Yes", off: "No", onHint: "Customizable product", offHint: "Fixed product" } }
+        {
+          key: "status",
+          label: "Status",
+          badge: true,
+          formInput: "switch",
+          switchLabels: {
+            on: "Active",
+            off: "Draft",
+            onHint: "Active on storefront",
+            offHint: "Saved as draft",
+          },
+        },
+        {
+          key: "customizable",
+          label: "Customizable",
+          badge: true,
+          formInput: "switch",
+          switchLabels: {
+            on: "Yes",
+            off: "No",
+            onHint: "Customizable product",
+            offHint: "Fixed product",
+          },
+        },
       ]}
     />
   );
