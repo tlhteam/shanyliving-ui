@@ -8,10 +8,10 @@ import { ProductBuyActions } from "@/components/storefront/ProductBuyActions";
 import { ProductCard } from "@/components/storefront/ProductCard";
 import { ProductDetailAccordion } from "@/components/storefront/ProductDetailAccordion";
 import { ProductImageSwiper } from "@/components/storefront/ProductImageSwiper";
-import { getCatalogProduct, type CatalogProduct } from "@/lib/catalog";
+import { getCatalogProduct } from "@/lib/catalog";
+import { mapCatalogProduct } from "@/lib/storefront-catalog";
 import { isUsableImagePath } from "@/lib/media";
 import { getStorefrontProduct, storefrontProducts } from "@/lib/storefront-pages";
-import type { StorefrontProduct } from "@/lib/storefront-pages";
 
 type ProductDetailPageProps = {
   params: Promise<{ slug: string }>;
@@ -26,63 +26,12 @@ const benefits = [
   { title: "Secure Payments", text: "Safe and encrypted", icon: "lock" }
 ];
 
-function apiProductToStorefrontProduct(product: CatalogProduct, fallback?: StorefrontProduct): StorefrontProduct {
-  const categorySlug = typeof product.category === "object" && product.category ? product.category.slug : "sofas";
-  const category: StorefrontProduct["category"] = categorySlug === "living-room"
-    ? "living-room"
-    : categorySlug === "dining-room"
-      ? "dining"
-      : categorySlug === "bedroom"
-        ? "bedroom"
-        : "sofas";
-  const galleryImages = product.images
-    ?.slice()
-    .sort((a, b) => Number(a.sort_order ?? 0) - Number(b.sort_order ?? 0))
-    .map((image) => image.path ?? image.url ?? "")
-    .filter(isUsableImagePath);
-  const primaryImage = isUsableImagePath(product.image) ? String(product.image) : galleryImages?.[0] ?? fallback?.image ?? "";
-
-  const optionGroups = (product.options ?? [])
-    .filter((option) => (option.values ?? []).length > 0)
-    .map((option) => ({
-      name: option.name,
-      values: (option.values ?? []).map((value) => ({
-        label: value.value,
-        swatch: value.swatch ?? null,
-        image: value.media_url ?? null
-      }))
-    }));
-
-  const colorGroup = optionGroups.find((group) => group.name.toLowerCase() === "color");
-  const fabricGroup = optionGroups.find((group) => group.name.toLowerCase() === "fabric");
-
-  return {
-    name: product.name,
-    slug: product.slug,
-    category,
-    subcategory: product.subcategory ?? fallback?.subcategory ?? "Showroom product",
-    price: Number(product.price ?? fallback?.price ?? 0),
-    image: primaryImage,
-    badge: product.is_best_seller ? "Best Seller" : product.is_featured ? "Featured" : fallback?.badge,
-    description: product.description ?? fallback?.description,
-    seatRange: product.seat_range ?? fallback?.seatRange,
-    dimensions: fallback?.dimensions,
-    variants: fabricGroup?.values.map((value) => value.label) ?? fallback?.variants,
-    colors: colorGroup?.values.map((value) => value.swatch).filter((swatch): swatch is string => Boolean(swatch))
-      ?? (product.colors?.length ? product.colors : fallback?.colors),
-    colorNames: colorGroup?.values.map((value) => value.label) ?? fallback?.colorNames,
-    galleryImages: galleryImages?.length ? galleryImages : fallback?.galleryImages,
-    fabricImages: fabricGroup?.values.map((value) => value.image).filter((image): image is string => Boolean(image))
-      ?? fallback?.fabricImages,
-    optionGroups: optionGroups.length ? optionGroups : undefined
-  };
-}
 
 export default async function ProductDetailPage({ params }: ProductDetailPageProps) {
   const { slug } = await params;
   const fallbackProduct = getStorefrontProduct(slug);
   const apiProduct = await getCatalogProduct(slug);
-  const product = apiProduct ? apiProductToStorefrontProduct(apiProduct, fallbackProduct) : fallbackProduct;
+  const product = apiProduct ? mapCatalogProduct(apiProduct, fallbackProduct) : fallbackProduct;
 
   if (!product) {
     notFound();

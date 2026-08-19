@@ -1,6 +1,10 @@
 import { ProductGridPage } from "@/components/storefront/ProductGridPage";
-import { storefrontPages } from "@/lib/storefront-pages";
+import { getStorefrontPage } from "@/lib/storefront-catalog";
 
-export default function LivingRoomPage() {
-  return <ProductGridPage page={storefrontPages["living-room"]} />;
+export const revalidate = 60;
+
+export default async function LivingRoomPage() {
+  const page = await getStorefrontPage("living-room");
+
+  return <ProductGridPage page={page} />;
 }

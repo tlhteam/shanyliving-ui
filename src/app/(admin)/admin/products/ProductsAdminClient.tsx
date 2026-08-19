@@ -46,7 +46,7 @@ function imagePath(image: unknown) {
     return "";
   }
 
-  const path = cleanText((image as { path?: unknown; url?: unknown; image?: unknown }).path ?? (image as { url?: unknown }).url ?? (image as { image?: unknown }).image);
+  const path = cleanText((image as { url?: unknown }).url ?? (image as { path?: unknown }).path ?? (image as { image?: unknown }).image);
 
   return isUsableImagePath(path) ? path : "";
 }
@@ -54,7 +54,7 @@ function imagePath(image: unknown) {
 function mapProductRow(row: Record<string, unknown>): AdminRow {
   const images = Array.isArray(row.images) ? row.images : [];
   const primaryImage = images.find((image) => toBoolean((image as { is_primary?: unknown }).is_primary));
-  const coverImage = imagePath(row.image ?? row.image_url ?? row.cover_image) || imagePath(primaryImage) || imagePath(images[0]);
+  const coverImage = imagePath(row.image_url ?? row.cover_image) || imagePath(primaryImage) || imagePath(images[0]) || imagePath(row.image);
   const gallery = images
     .map(imagePath)
     .filter((image) => image !== coverImage)
