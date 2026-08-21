@@ -1,288 +1,364 @@
 {
-    "common": {
-        "brand": "SHANY Living",
-        "explore": "Esplora",
-        "customizable": "Personalizzabile",
-        "priceFrom": "A partire da ₪ {price}",
-        "price": "₪ {price}",
-        "saveItem": "Salva {name}",
-        "askAbout": "Chiedi informazioni su {name}"
+  "common": {
+    "brand": "SHANY Living",
+    "explore": "Esplora",
+    "customizable": "Personalizzabile",
+    "priceFrom": "A partire da ₪ {price}",
+    "price": "₪ {price}",
+    "saveItem": "Salva {name}",
+    "askAbout": "Chiedi informazioni su {name}"
+  },
+  "language": {
+    "trigger": "Lingua",
+    "label": "Scegli la lingua",
+    "current": "Lingua attuale: {language}"
+  },
+  "header": {
+    "openMenu": "Apri menu",
+    "closeMenu": "Chiudi menu",
+    "account": "Il mio account",
+    "whatsapp": "WhatsApp",
+    "search": "Cerca",
+    "closeSearch": "Chiudi ricerca",
+    "searchPlaceholder": "Cerca divani, tessuti, showroom o servizi",
+    "announcements": [
+      "Disponibili misure, tessuti e colori personalizzati",
+      "Consulenza personale tramite WhatsApp",
+      "Visita il nostro showroom in Herzl Street 34, Tel Aviv, Israele",
+      "Scegli lo stile del tuo divano in meno di un minuto",
+      "Invia la tua selezione direttamente su WhatsApp"
+    ],
+    "nav": {
+      "sofas": "Divani",
+      "livingRoom": "Soggiorno",
+      "dining": "Sala da pranzo",
+      "bedroom": "Camera da letto",
+      "newArrivals": "Nuovi arrivi",
+      "inspiration": "Ispirazione",
+      "customize": "Personalizza il tuo divano",
+      "showroom": "Showroom"
     },
-    "language": {
-        "trigger": "Lingua",
-        "label": "Scegli la lingua",
-        "current": "Lingua attuale: {language}"
+    "searchTypes": {
+      "sofa": "Divano",
+      "fabric": "Tessuto",
+      "service": "Servizio",
+      "feature": "Caratteristica"
     },
-    "header": {
-        "openMenu": "Apri menu",
-        "closeMenu": "Chiudi menu",
-        "account": "Il mio account",
-        "whatsapp": "WhatsApp",
-        "search": "Cerca",
-        "closeSearch": "Chiudi ricerca",
-        "searchPlaceholder": "Cerca divani, tessuti, showroom o servizi",
-        "announcements": [
-            "Disponibili misure, tessuti e colori personalizzati",
-            "Consulenza personale tramite WhatsApp",
-            "Visita il nostro showroom in Herzl Street 34, Tel Aviv, Israele",
-            "Scegli lo stile del tuo divano in meno di un minuto",
-            "Invia la tua selezione direttamente su WhatsApp"
-        ],
-        "nav": {
-            "sofas": "Divani",
-            "livingRoom": "Soggiorno",
-            "dining": "Sala da pranzo",
-            "bedroom": "Camera da letto",
-            "newArrivals": "Nuovi arrivi",
-            "inspiration": "Ispirazione",
-            "customize": "Personalizza il tuo divano",
-            "showroom": "Showroom"
-        },
-        "searchTypes": {
-            "sofa": "Divano",
-            "fabric": "Tessuto",
-            "service": "Servizio",
-            "feature": "Caratteristica"
-        },
-        "searchResults": {
-            "cloudModular": "Divano personalizzato da 3-4 posti",
-            "lunaSofa": "Comfort modulare dai toni caldi",
-            "performanceLinen": "Tessuto premium facile da pulire",
-            "showroomVisit": "Herzl 34, Tel Aviv",
-            "roomPhoto": "Carica una foto della stanza"
-        },
-        "whatsappDialog": {
-            "title": "Consulenza WhatsApp",
-            "description": "Invia la selezione del tuo divano oppure chiedi aiuto per scegliere misura, tessuto e colore.",
-            "close": "Chiudi",
-            "startChat": "Avvia chat",
-            "adviceTitle": "Consulenza personalizzata sul divano",
-            "adviceText": "Condividi le dimensioni della stanza, il tessuto preferito e lo stile che ti ispira.",
-            "followUpTitle": "Assistenza in showroom",
-            "followUpText": "Prenota una visita oppure chiedi al team di preparare alcune opzioni di tessuto."
-        }
+    "searchResults": {
+      "cloudModular": "Divano personalizzato da 3-4 posti",
+      "lunaSofa": "Comfort modulare dai toni caldi",
+      "performanceLinen": "Tessuto premium facile da pulire",
+      "showroomVisit": "Herzl 34, Tel Aviv",
+      "roomPhoto": "Carica una foto della stanza"
     },
-    "home": {
-        "hero": {
-            "title": "Progetta il tuo spazio abitativo perfetto",
-            "subtitle": "Arredi premium realizzati per case moderne, con divani personalizzabili pensati per adattarsi al tuo stile.",
-            "primaryCta": "Personalizza il tuo divano",
-            "secondaryCta": "Esplora la collezione",
-            "imageAlt": "Spazio abitativo nello showroom SHANY Living"
-        },
-        "categories": {
-            "title": "Acquista per categoria",
-            "viewAll": "Visualizza tutte le categorie"
-        },
-        "featured": {
-            "title": "Collezione in evidenza",
-            "viewAll": "Visualizza tutta la collezione"
-        },
-        "customization": {
-            "title": "Come funziona la personalizzazione",
-            "steps": {
-                "model": {
-                    "title": "Scegli il tuo modello",
-                    "text": "Seleziona il modello e la struttura più adatti al tuo stile."
-                },
-                "fabric": {
-                    "title": "Scegli misura, tessuto e colore",
-                    "text": "Seleziona la misura, il tessuto e il colore che preferisci."
-                },
-                "whatsapp": {
-                    "title": "Invia la tua selezione su WhatsApp",
-                    "text": "Esamineremo la tua selezione e ti guideremo nel completamento della configurazione perfetta."
-                }
-            }
-        },
-        "roomUpload": {
-            "title": "Consulenza design in showroom",
-            "text": "Ricevi consigli personalizzati su misura, tessuto, colore e disposizione prima di ordinare.",
-            "cta": "Prenota una visita in showroom",
-            "note": "Personale, pratica e adatta al tuo spazio"
-        },
-        "shopTheLook": {
-            "title": "Acquista il look",
-            "text": "Esplora ambienti completi e ricrea lo stile che ami.",
-            "cta": "Esplora le ispirazioni",
-            "previous": "Look precedenti",
-            "next": "Look successivi",
-            "looks": {
-                "modernElegance": "Eleganza moderna",
-                "warmMinimalism": "Minimalismo caldo",
-                "urbanLuxury": "Lusso urbano"
-            }
-        },
-        "bestSellers": {
-            "title": "Più venduti",
-            "viewAll": "Visualizza tutti i prodotti"
-        },
-        "showroom": {
-            "title": "Visita il nostro showroom",
-            "address": "Herzl 34, Tel Aviv, Israele",
-            "weekHours": "Dom - Gio | 10:00 - 19:00",
-            "weekendHours": "Ven | 10:00 - 14:00",
-            "bookCta": "Prenota una consulenza",
-            "directionsCta": "Ottieni indicazioni",
-            "imageAlt": "Consulenza nello showroom SHANY Living"
-        },
-        "club": {
-            "title": "Entra nel club SHANY LIVING",
-            "text": "Scopri per primo nuove collezioni, offerte esclusive e ispirazioni per l’arredamento.",
-            "emailLabel": "Email",
-            "emailPlaceholder": "Inserisci la tua email",
-            "subscribe": "Iscriviti",
-            "perks": {
-                "offers": "Offerte esclusive",
-                "arrivals": "Nuovi arrivi",
-                "inspiration": "Ispirazione di design"
-            }
-        },
-        "features": {
-            "craftsmanship": {
-                "title": "Artigianalità premium",
-                "text": "Realizzato per durare"
-            },
-            "delivery": {
-                "title": "Consegna in tutto il paese",
-                "text": "Veloce e affidabile"
-            },
-            "sizes": {
-                "title": "Misure personalizzate disponibili",
-                "text": "Realizzato per il tuo spazio"
-            },
-            "fabrics": {
-                "title": "Tessuti premium",
-                "text": "Ampia selezione"
-            },
-            "consultation": {
-                "title": "Consulenza WhatsApp",
-                "text": "Assistenza personale"
-            },
-            "payments": {
-                "title": "Pagamenti sicuri",
-                "text": "Sicuri e crittografati"
-            }
-        },
-        "whatsappFloating": "Consulenza WhatsApp"
-    },
-    "sofas": {
-        "eyebrow": "Collezione",
-        "title": "Divani personalizzabili",
-        "subtitle": "Scegli un modello e continua con misura, struttura, tessuto, colore e consulenza WhatsApp.",
-        "imageAlt": "Collezione di divani SHANY Living",
-        "seatRange": "Disponibile in {range}",
-        "customize": "Personalizza",
-        "helpTitle": "Non sai quale modello si adatta alla tua stanza?",
-        "helpText": "Inviaci una foto del tuo spazio e il nostro team ti consiglierà la misura, il tessuto e la disposizione più adatti.",
-        "helpCta": "Parla con un designer"
-    },
-    "about": {
-        "eyebrow": "La nostra storia",
-        "title": "Chi è SHANY Living",
-        "subtitle": "Uno showroom premium di Tel Aviv specializzato in divani personalizzabili, arredi moderni e servizio personale.",
-        "imageAlt": "Showroom SHANY Living",
-        "storyTitle": "Arredi progettati intorno alla tua stanza",
-        "storyFirst": "Partiamo dal tuo spazio, non da un catalogo. Porta le misure o una foto della stanza e il nostro team individuerà il modello, la struttura, il tessuto e il colore più adatti al tuo stile di vita.",
-        "storySecond": "Ogni selezione viene raccolta in un unico riepilogo WhatsApp, così potrai verificare comfort, tempi di consegna e dettagli finali con una sola persona, dalla prima visita fino all’installazione.",
-        "storyCta": "Prenota una visita in showroom",
-        "teamImageAlt": "Designer SHANY Living con i clienti",
-        "valuesTitle": "I nostri valori",
-        "values": {
-            "measure": {
-                "title": "Realizzato su misura",
-                "text": "Ogni divano viene realizzato in base alle dimensioni e alla disposizione della tua stanza."
-            },
-            "fabrics": {
-                "title": "Tessuti premium",
-                "text": "Lini performanti, bouclé e velluti selezionati con cura nello showroom."
-            },
-            "durability": {
-                "title": "Progettato per durare",
-                "text": "Strutture in legno massello, schiuma ad alta resilienza e cuciture rinforzate."
-            },
-            "service": {
-                "title": "Servizio personale",
-                "text": "Un designer dedicato segue il tuo ordine dalla selezione alla consegna."
-            }
-        },
-        "inspirationTitle": "Ispirazione"
-    },
-    "contact": {
-        "eyebrow": "Contatti",
-        "title": "Visita il nostro showroom",
-        "subtitle": "Prova i modelli, tocca i tessuti e progetta il tuo divano con un designer.",
-        "formTitle": "Parla con il team",
-        "whatsappCta": "Chatta su WhatsApp",
-        "browseCta": "Sfoglia i divani",
-        "imageAlt": "Interno dello showroom SHANY Living",
-        "details": {
-            "showroom": {
-                "label": "Showroom",
-                "value": "Herzl Street 34, Tel Aviv, Israele"
-            },
-            "phone": {
-                "label": "Telefono",
-                "value": "03-1234567"
-            },
-            "email": {
-                "label": "Email",
-                "value": "info@shanyliving.com"
-            },
-            "hours": {
-                "label": "Orari di apertura",
-                "value": "Dom - Gio | 10:00 - 19:00 · Ven | 10:00 - 14:00"
-            }
-        }
-    },
-    "footer": {
-        "shop": "Negozio",
-        "customerService": "Servizio clienti",
-        "company": "Azienda",
-        "contact": "Contatti",
-        "follow": "Segui @shanyliving.furniture",
-        "instagramCta": "Visualizza Instagram",
-        "instagramAlt": "Interno dello showroom SHANY Living",
-        "rights": "©2026 Shany Living Furniture. Tutti i diritti riservati.",
-        "privacy": "Informativa sulla privacy",
-        "terms": "Termini e condizioni",
-        "accessibility": "Accessibilità",
-        "shopLinks": {
-            "sofas": "Divani",
-            "livingRoom": "Soggiorno",
-            "diningRoom": "Sala da pranzo",
-            "bedroom": "Camera da letto",
-            "coffeeTables": "Tavolini da caffè",
-            "chairs": "Sedie",
-            "newArrivals": "Nuovi arrivi"
-        },
-        "serviceLinks": {
-            "contact": "Contatti",
-            "faq": "Domande frequenti",
-            "shipping": "Spedizione",
-            "warranty": "Garanzia"
-        },
-        "companyLinks": {
-            "about": "Chi siamo",
-            "showroom": "Showroom",
-            "privacy": "Privacy",
-            "terms": "Termini"
-        },
-        "contactRows": {
-            "address": "Herzl 34, Tel Aviv, Israele",
-            "phone": "03-1234567",
-            "whatsapp": "Contattaci su WhatsApp",
-            "email": "info@shanyliving.com",
-            "weekHours": "Dom - Gio | 10:00 - 19:00",
-            "weekendHours": "Ven | 10:00 - 14:00"
-        }
+    "whatsappDialog": {
+      "title": "Consulenza WhatsApp",
+      "description": "Invia la selezione del tuo divano oppure chiedi aiuto per scegliere misura, tessuto e colore.",
+      "close": "Chiudi",
+      "startChat": "Avvia chat",
+      "adviceTitle": "Consulenza personalizzata sul divano",
+      "adviceText": "Condividi le dimensioni della stanza, il tessuto preferito e lo stile che ti ispira.",
+      "followUpTitle": "Assistenza in showroom",
+      "followUpText": "Prenota una visita oppure chiedi al team di preparare alcune opzioni di tessuto."
+    }
+  },
+  "home": {
+    "hero": {
+      "title": "Progetta il tuo spazio abitativo perfetto",
+      "subtitle": "Arredi premium realizzati per case moderne, con divani personalizzabili pensati per adattarsi al tuo stile.",
+      "primaryCta": "Personalizza il tuo divano",
+      "secondaryCta": "Esplora la collezione",
+      "imageAlt": "Spazio abitativo nello showroom SHANY Living"
     },
     "categories": {
-        "sofas": "Divani",
-        "living-room": "Soggiorno",
-        "dining-room": "Sala da pranzo",
-        "bedroom": "Camera da letto",
-        "chairs": "Sedie",
-        "coffee-tables": "Tavolini da caffè"
+      "title": "Acquista per categoria",
+      "viewAll": "Visualizza tutte le categorie"
+    },
+    "journey": {
+      "eyebrow": "Percorso cliente",
+      "title": "Come funziona, dall'annuncio al tuo salotto",
+      "text": "Quattordici passaggi del flusso mobile, riassunti in quattro fasi da seguire con calma.",
+      "phases": {
+        "discover": "Scoprire",
+        "customize": "Personalizzare",
+        "talk": "Parlare con noi",
+        "own": "E tuo"
+      },
+      "previous": "Passo precedente",
+      "next": "Passo successivo",
+      "stepLabel": "Passo {number} di {total}",
+      "cta": "Inizia dalla collezione",
+      "secondaryCta": "Apri il configuratore",
+      "instagram": {
+        "badge": "Arrivi da Instagram",
+        "title": "Benvenuto dall'annuncio Shany Living",
+        "text": "Hai visto il divano su Instagram. Ecco cosa succede ora, dalla navigazione alla conferma.",
+        "cta": "Guarda il percorso"
+      },
+      "steps": {
+        "home": {
+          "title": "Arrivo su Shany Living",
+          "text": "L'annuncio porta direttamente allo store."
+        },
+        "collection": {
+          "title": "Sfoglia la collezione",
+          "text": "Filtra i modelli adatti alla tua stanza."
+        },
+        "product": {
+          "title": "Apri la scheda prodotto",
+          "text": "Dettagli, dimensioni, materiali e cura."
+        },
+        "model": {
+          "title": "Scegli il modello",
+          "text": "Seleziona la silhouette di partenza."
+        },
+        "size": {
+          "title": "Misura e configurazione",
+          "text": "Imposta larghezza e lato della chaise."
+        },
+        "fabric": {
+          "title": "Tessuto e colore",
+          "text": "Scegli la famiglia di tessuto e poi la tonalita."
+        },
+        "review": {
+          "title": "Rivedi la configurazione",
+          "text": "Tutte le scelte in un unico riepilogo."
+        },
+        "room": {
+          "title": "Guardalo nella tua stanza",
+          "text": "Carica una foto e posiziona il divano con l'AI."
+        },
+        "whatsapp": {
+          "title": "Invia su WhatsApp",
+          "text": "La configurazione arriva in un solo messaggio."
+        },
+        "consultation": {
+          "title": "Consulenza personale",
+          "text": "Un consulente conferma misure e consegna."
+        },
+        "quote": {
+          "title": "Preventivo personale",
+          "text": "Un preventivo per la tua configurazione esatta."
+        },
+        "payment": {
+          "title": "Paga con il consulente",
+          "text": "Link sicuro, bonifico o pagamento telefonico."
+        },
+        "confirmed": {
+          "title": "Ordine confermato",
+          "text": "Aggiornamenti su produzione e consegna fino all'arrivo."
+        }
+      }
+    },
+    "featured": {
+      "title": "Collezione in evidenza",
+      "viewAll": "Visualizza tutta la collezione"
+    },
+    "customization": {
+      "title": "Come funziona la personalizzazione",
+      "steps": {
+        "model": {
+          "title": "Scegli il tuo modello",
+          "text": "Seleziona il modello e la struttura più adatti al tuo stile."
+        },
+        "fabric": {
+          "title": "Scegli misura, tessuto e colore",
+          "text": "Seleziona la misura, il tessuto e il colore che preferisci."
+        },
+        "whatsapp": {
+          "title": "Invia la tua selezione su WhatsApp",
+          "text": "Esamineremo la tua selezione e ti guideremo nel completamento della configurazione perfetta."
+        }
+      }
+    },
+    "roomUpload": {
+      "title": "Consulenza design in showroom",
+      "text": "Ricevi consigli personalizzati su misura, tessuto, colore e disposizione prima di ordinare.",
+      "cta": "Prenota una visita in showroom",
+      "note": "Personale, pratica e adatta al tuo spazio"
+    },
+    "shopTheLook": {
+      "title": "Acquista il look",
+      "text": "Esplora ambienti completi e ricrea lo stile che ami.",
+      "cta": "Esplora le ispirazioni",
+      "previous": "Look precedenti",
+      "next": "Look successivi",
+      "looks": {
+        "modernElegance": "Eleganza moderna",
+        "warmMinimalism": "Minimalismo caldo",
+        "urbanLuxury": "Lusso urbano"
+      }
+    },
+    "bestSellers": {
+      "title": "Più venduti",
+      "viewAll": "Visualizza tutti i prodotti"
+    },
+    "showroom": {
+      "title": "Visita il nostro showroom",
+      "address": "Herzl 34, Tel Aviv, Israele",
+      "weekHours": "Dom - Gio | 10:00 - 19:00",
+      "weekendHours": "Ven | 10:00 - 14:00",
+      "bookCta": "Prenota una consulenza",
+      "directionsCta": "Ottieni indicazioni",
+      "imageAlt": "Consulenza nello showroom SHANY Living"
+    },
+    "club": {
+      "title": "Entra nel club SHANY LIVING",
+      "text": "Scopri per primo nuove collezioni, offerte esclusive e ispirazioni per l’arredamento.",
+      "emailLabel": "Email",
+      "emailPlaceholder": "Inserisci la tua email",
+      "subscribe": "Iscriviti",
+      "perks": {
+        "offers": "Offerte esclusive",
+        "arrivals": "Nuovi arrivi",
+        "inspiration": "Ispirazione di design"
+      }
+    },
+    "features": {
+      "craftsmanship": {
+        "title": "Artigianalità premium",
+        "text": "Realizzato per durare"
+      },
+      "delivery": {
+        "title": "Consegna in tutto il paese",
+        "text": "Veloce e affidabile"
+      },
+      "sizes": {
+        "title": "Misure personalizzate disponibili",
+        "text": "Realizzato per il tuo spazio"
+      },
+      "fabrics": {
+        "title": "Tessuti premium",
+        "text": "Ampia selezione"
+      },
+      "consultation": {
+        "title": "Consulenza WhatsApp",
+        "text": "Assistenza personale"
+      },
+      "payments": {
+        "title": "Pagamenti sicuri",
+        "text": "Sicuri e crittografati"
+      }
+    },
+    "whatsappFloating": "Consulenza WhatsApp"
+  },
+  "sofas": {
+    "eyebrow": "Collezione",
+    "title": "Divani personalizzabili",
+    "subtitle": "Scegli un modello e continua con misura, struttura, tessuto, colore e consulenza WhatsApp.",
+    "imageAlt": "Collezione di divani SHANY Living",
+    "seatRange": "Disponibile in {range}",
+    "customize": "Personalizza",
+    "helpTitle": "Non sai quale modello si adatta alla tua stanza?",
+    "helpText": "Inviaci una foto del tuo spazio e il nostro team ti consiglierà la misura, il tessuto e la disposizione più adatti.",
+    "helpCta": "Parla con un designer"
+  },
+  "about": {
+    "eyebrow": "La nostra storia",
+    "title": "Chi è SHANY Living",
+    "subtitle": "Uno showroom premium di Tel Aviv specializzato in divani personalizzabili, arredi moderni e servizio personale.",
+    "imageAlt": "Showroom SHANY Living",
+    "storyTitle": "Arredi progettati intorno alla tua stanza",
+    "storyFirst": "Partiamo dal tuo spazio, non da un catalogo. Porta le misure o una foto della stanza e il nostro team individuerà il modello, la struttura, il tessuto e il colore più adatti al tuo stile di vita.",
+    "storySecond": "Ogni selezione viene raccolta in un unico riepilogo WhatsApp, così potrai verificare comfort, tempi di consegna e dettagli finali con una sola persona, dalla prima visita fino all’installazione.",
+    "storyCta": "Prenota una visita in showroom",
+    "teamImageAlt": "Designer SHANY Living con i clienti",
+    "valuesTitle": "I nostri valori",
+    "values": {
+      "measure": {
+        "title": "Realizzato su misura",
+        "text": "Ogni divano viene realizzato in base alle dimensioni e alla disposizione della tua stanza."
+      },
+      "fabrics": {
+        "title": "Tessuti premium",
+        "text": "Lini performanti, bouclé e velluti selezionati con cura nello showroom."
+      },
+      "durability": {
+        "title": "Progettato per durare",
+        "text": "Strutture in legno massello, schiuma ad alta resilienza e cuciture rinforzate."
+      },
+      "service": {
+        "title": "Servizio personale",
+        "text": "Un designer dedicato segue il tuo ordine dalla selezione alla consegna."
+      }
+    },
+    "inspirationTitle": "Ispirazione"
+  },
+  "contact": {
+    "eyebrow": "Contatti",
+    "title": "Visita il nostro showroom",
+    "subtitle": "Prova i modelli, tocca i tessuti e progetta il tuo divano con un designer.",
+    "formTitle": "Parla con il team",
+    "whatsappCta": "Chatta su WhatsApp",
+    "browseCta": "Sfoglia i divani",
+    "imageAlt": "Interno dello showroom SHANY Living",
+    "details": {
+      "showroom": {
+        "label": "Showroom",
+        "value": "Herzl Street 34, Tel Aviv, Israele"
+      },
+      "phone": {
+        "label": "Telefono",
+        "value": "03-1234567"
+      },
+      "email": {
+        "label": "Email",
+        "value": "info@shanyliving.com"
+      },
+      "hours": {
+        "label": "Orari di apertura",
+        "value": "Dom - Gio | 10:00 - 19:00 · Ven | 10:00 - 14:00"
+      }
     }
+  },
+  "footer": {
+    "shop": "Negozio",
+    "customerService": "Servizio clienti",
+    "company": "Azienda",
+    "contact": "Contatti",
+    "follow": "Segui @shanyliving.furniture",
+    "instagramCta": "Visualizza Instagram",
+    "instagramAlt": "Interno dello showroom SHANY Living",
+    "rights": "©2026 Shany Living Furniture. Tutti i diritti riservati.",
+    "privacy": "Informativa sulla privacy",
+    "terms": "Termini e condizioni",
+    "accessibility": "Accessibilità",
+    "shopLinks": {
+      "sofas": "Divani",
+      "livingRoom": "Soggiorno",
+      "diningRoom": "Sala da pranzo",
+      "bedroom": "Camera da letto",
+      "coffeeTables": "Tavolini da caffè",
+      "chairs": "Sedie",
+      "newArrivals": "Nuovi arrivi"
+    },
+    "serviceLinks": {
+      "contact": "Contatti",
+      "faq": "Domande frequenti",
+      "shipping": "Spedizione",
+      "warranty": "Garanzia"
+    },
+    "companyLinks": {
+      "about": "Chi siamo",
+      "showroom": "Showroom",
+      "privacy": "Privacy",
+      "terms": "Termini"
+    },
+    "contactRows": {
+      "address": "Herzl 34, Tel Aviv, Israele",
+      "phone": "03-1234567",
+      "whatsapp": "Contattaci su WhatsApp",
+      "email": "info@shanyliving.com",
+      "weekHours": "Dom - Gio | 10:00 - 19:00",
+      "weekendHours": "Ven | 10:00 - 14:00"
+    }
+  },
+  "categories": {
+    "sofas": "Divani",
+    "living-room": "Soggiorno",
+    "dining-room": "Sala da pranzo",
+    "bedroom": "Camera da letto",
+    "chairs": "Sedie",
+    "coffee-tables": "Tavolini da caffè"
+  }
 }

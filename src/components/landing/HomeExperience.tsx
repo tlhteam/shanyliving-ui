@@ -6,16 +6,13 @@ import { useLocale, useTranslations } from "next-intl";
 import { AppButton } from "@/components/app/AppButton";
 import { AppImage } from "@/components/app/AppImage";
 import { AppSection } from "@/components/app/AppSection";
+import { HomeJourney } from "@/components/landing/HomeJourney";
 import { SiteIcon, SiteIconName } from "@/components/icons/SiteIcon";
 import { WhatsappIcon } from "@/components/icons/WhatsappIcon";
 import { categoryImage, looks, productImage, siteImages } from "@/lib/images";
+import { mobileOnlyClass, mobileVisibleSlug } from "@/lib/mobile-catalog";
+import { cn } from "@/lib/utils";
 import type { HomeCatalog, CatalogCategory, CatalogProduct } from "@/lib/catalog";
-
-const customizationSteps = [
-  { key: "model", icon: "sofa" },
-  { key: "fabric", icon: "ruler" },
-  { key: "whatsapp", icon: "message" }
-];
 
 const clubPerks = [
   { key: "offers", icon: "gift" },
@@ -32,14 +29,14 @@ const features = [
   { key: "payments", icon: "lock" }
 ];
 
-function FeaturedCard({ product, index }: { product: CatalogProduct; index: number }) {
+function FeaturedCard({ product, index, className }: { product: CatalogProduct; index: number; className?: string }) {
   const t = useTranslations("common");
   const locale = useLocale();
   const price = new Intl.NumberFormat(locale).format(product.price);
 
   return (
-    <div>
-      <Link href="/sofas" className="group relative block overflow-hidden rounded-lg shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-xl">
+    <div className={className}>
+      <Link href={`/sofas/${product.slug}`} className="group relative block overflow-hidden rounded-lg shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-xl">
         <AppImage
           src={productImage(product, index)}
           alt={product.name}
@@ -63,14 +60,14 @@ function FeaturedCard({ product, index }: { product: CatalogProduct; index: numb
   );
 }
 
-function BestSeller({ product, index }: { product: CatalogProduct; index: number }) {
+function BestSeller({ product, index, className }: { product: CatalogProduct; index: number; className?: string }) {
   const t = useTranslations("common");
   const locale = useLocale();
   const price = new Intl.NumberFormat(locale).format(product.price);
 
   return (
-    <div>
-      <Link href="/sofas" className="group block">
+    <div className={className}>
+      <Link href={`/sofas/${product.slug}`} className="group block">
         <div className="relative overflow-hidden rounded-lg">
           <AppImage
             src={productImage(product, index)}
@@ -110,11 +107,15 @@ function CategoryTile({ category, index }: { category: CatalogCategory; index: n
   );
 }
 
-export function HomeExperience({ catalog }: { catalog: HomeCatalog }) {
+export function HomeExperience({ catalog, fromSocial = false }: { catalog: HomeCatalog; fromSocial?: boolean }) {
   const t = useTranslations("home");
   const [lookRef, lookApi] = useEmblaCarousel({ align: "start", loop: true, containScroll: "trimSnaps" });
   const whatsappNumber = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER?.replace(/\D/g, "");
   const whatsappHref = whatsappNumber ? `https://wa.me/${whatsappNumber}` : "/contact";
+  const featured = catalog.featuredProducts.slice(0, 4);
+  const bestSellers = catalog.bestSellers.slice(0, 6);
+  const featuredMobileSlug = mobileVisibleSlug(featured);
+  const bestSellerMobileSlug = mobileVisibleSlug(bestSellers);
 
   return (
     <>
@@ -157,29 +158,18 @@ export function HomeExperience({ catalog }: { catalog: HomeCatalog }) {
           </Link>
         </div>
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4 lg:gap-5">
-          {catalog.featuredProducts.slice(0, 4).map((product, index) => (
-            <FeaturedCard key={product.slug} product={product} index={index} />
+          {featured.map((product, index) => (
+            <FeaturedCard
+              key={product.slug}
+              product={product}
+              index={index}
+              className={cn(mobileOnlyClass(product.slug, featuredMobileSlug))}
+            />
           ))}
         </div>
       </AppSection>
 
-      <section className="bg-neutral-100 text-neutral-950 transition-colors dark:bg-neutral-900 dark:text-neutral-50">
-        <AppSection>
-          <h2 className="text-center font-serif text-2xl font-bold sm:text-3xl">{t("customization.title")}</h2>
-          <div className="mt-10 grid gap-10 lg:grid-cols-3 lg:gap-0 lg:divide-x lg:divide-neutral-300 dark:lg:divide-white/10">
-            {customizationSteps.map((step, index) => (
-              <div key={step.key} className="px-4 text-center">
-                <div className="mx-auto flex max-w-xs flex-col items-center">
-                  <span className="grid size-9 place-items-center rounded-full bg-black text-sm font-bold text-white dark:bg-white dark:text-neutral-950">{index + 1}</span>
-                  <SiteIcon name={step.icon as SiteIconName} className="mt-4 size-12 text-neutral-800 dark:text-neutral-100" />
-                  <h3 className="mt-6 font-bold">{t(`customization.steps.${step.key}.title`)}</h3>
-                  <p className="mt-3 text-xs leading-5 text-neutral-600 dark:text-neutral-300">{t(`customization.steps.${step.key}.text`)}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </AppSection>
-      </section>
+      <HomeJourney fromSocial={fromSocial} />
 
       <section className="bg-white text-neutral-950 transition-colors dark:bg-neutral-950 dark:text-neutral-50">
         <AppSection className="grid items-center gap-6 py-10 lg:grid-cols-[1fr_360px] lg:py-12">
@@ -247,9 +237,14 @@ export function HomeExperience({ catalog }: { catalog: HomeCatalog }) {
             {t("bestSellers.viewAll")} <SiteIcon name="arrow-right" className="size-4 rtl:rotate-180" />
           </Link>
         </div>
-        <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6 lg:gap-5">
-          {catalog.bestSellers.slice(0, 6).map((product, index) => (
-            <BestSeller key={product.slug} product={product} index={index} />
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-3 lg:grid-cols-6 lg:gap-5">
+          {bestSellers.map((product, index) => (
+            <BestSeller
+              key={product.slug}
+              product={product}
+              index={index}
+              className={cn(mobileOnlyClass(product.slug, bestSellerMobileSlug))}
+            />
           ))}
         </div>
       </AppSection>

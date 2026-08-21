@@ -74,6 +74,82 @@
       "title": "Shop by Category",
       "viewAll": "View all categories"
     },
+    "journey": {
+      "eyebrow": "Customer journey",
+      "title": "How it works, from the ad to your living room",
+      "text": "Fourteen steps on the mobile flow, condensed into four phases you can follow at your own pace.",
+      "phases": {
+        "discover": "Discover",
+        "customize": "Customize",
+        "talk": "Talk to us",
+        "own": "Make it yours"
+      },
+      "previous": "Previous step",
+      "next": "Next step",
+      "stepLabel": "Step {number} of {total}",
+      "cta": "Start with the collection",
+      "secondaryCta": "Open the customizer",
+      "instagram": {
+        "badge": "Arriving from Instagram",
+        "title": "Welcome from the Shany Living ad",
+        "text": "You saw the sofa on Instagram. Here is exactly what happens next, from browsing to order confirmation.",
+        "cta": "See the journey"
+      },
+      "steps": {
+        "home": {
+          "title": "Land on Shany Living",
+          "text": "The ad drops you straight onto the storefront."
+        },
+        "collection": {
+          "title": "Browse the collection",
+          "text": "Filter the sofa models that fit your room."
+        },
+        "product": {
+          "title": "Open the product page",
+          "text": "Details, dimensions, materials and care."
+        },
+        "model": {
+          "title": "Choose your model",
+          "text": "Pick the silhouette you want to build on."
+        },
+        "size": {
+          "title": "Size and configuration",
+          "text": "Set the width and the chaise direction."
+        },
+        "fabric": {
+          "title": "Fabric and color",
+          "text": "Feel the fabric family, then choose the shade."
+        },
+        "review": {
+          "title": "Review your configuration",
+          "text": "Everything you picked on a single summary."
+        },
+        "room": {
+          "title": "See it in your room",
+          "text": "Upload a photo and place the sofa with AI."
+        },
+        "whatsapp": {
+          "title": "Send it to WhatsApp",
+          "text": "Your configuration arrives as one clean message."
+        },
+        "consultation": {
+          "title": "Personal consultation",
+          "text": "An advisor confirms measurements and delivery."
+        },
+        "quote": {
+          "title": "Personal quote",
+          "text": "A priced quote for your exact configuration."
+        },
+        "payment": {
+          "title": "Pay with your advisor",
+          "text": "Secure payment link, bank transfer or by phone."
+        },
+        "confirmed": {
+          "title": "Order confirmed",
+          "text": "Production and delivery updates until it arrives."
+        }
+      }
+    },
     "featured": {
       "title": "Featured Collection",
       "viewAll": "View all Collection"
@@ -139,12 +215,30 @@
       }
     },
     "features": {
-      "craftsmanship": { "title": "Premium Craftsmanship", "text": "Built to last" },
-      "delivery": { "title": "Nationwide Delivery", "text": "Fast & reliable" },
-      "sizes": { "title": "Custom Sizes Available", "text": "Made for your space" },
-      "fabrics": { "title": "Premium fabrics", "text": "Wide selection" },
-      "consultation": { "title": "WhatsApp Consultation", "text": "Personal guidance" },
-      "payments": { "title": "Secure Payments", "text": "Safe & encrypted" }
+      "craftsmanship": {
+        "title": "Premium Craftsmanship",
+        "text": "Built to last"
+      },
+      "delivery": {
+        "title": "Nationwide Delivery",
+        "text": "Fast & reliable"
+      },
+      "sizes": {
+        "title": "Custom Sizes Available",
+        "text": "Made for your space"
+      },
+      "fabrics": {
+        "title": "Premium fabrics",
+        "text": "Wide selection"
+      },
+      "consultation": {
+        "title": "WhatsApp Consultation",
+        "text": "Personal guidance"
+      },
+      "payments": {
+        "title": "Secure Payments",
+        "text": "Safe & encrypted"
+      }
     },
     "whatsappFloating": "WhatsApp consultation"
   },
@@ -171,10 +265,22 @@
     "teamImageAlt": "Shany Living designers with clients",
     "valuesTitle": "What we stand for",
     "values": {
-      "measure": { "title": "Made to measure", "text": "Every sofa is built to the size and layout of your room." },
-      "fabrics": { "title": "Premium fabrics", "text": "Performance linens, boucle and velvets selected in the showroom." },
-      "durability": { "title": "Built to last", "text": "Hardwood frames, high resilience foam and reinforced stitching." },
-      "service": { "title": "Personal service", "text": "One designer follows your order from selection to delivery." }
+      "measure": {
+        "title": "Made to measure",
+        "text": "Every sofa is built to the size and layout of your room."
+      },
+      "fabrics": {
+        "title": "Premium fabrics",
+        "text": "Performance linens, boucle and velvets selected in the showroom."
+      },
+      "durability": {
+        "title": "Built to last",
+        "text": "Hardwood frames, high resilience foam and reinforced stitching."
+      },
+      "service": {
+        "title": "Personal service",
+        "text": "One designer follows your order from selection to delivery."
+      }
     },
     "inspirationTitle": "Inspiration"
   },
@@ -187,10 +293,22 @@
     "browseCta": "Browse sofas",
     "imageAlt": "Shany Living showroom interior",
     "details": {
-      "showroom": { "label": "Showroom", "value": "Herzl Street 34, Tel Aviv, Israel" },
-      "phone": { "label": "Phone", "value": "03-1234567" },
-      "email": { "label": "Email", "value": "info@shanyliving.com" },
-      "hours": { "label": "Opening hours", "value": "Sun - Thu | 10:00 - 19:00 · Fri | 10:00 - 14:00" }
+      "showroom": {
+        "label": "Showroom",
+        "value": "Herzl Street 34, Tel Aviv, Israel"
+      },
+      "phone": {
+        "label": "Phone",
+        "value": "03-1234567"
+      },
+      "email": {
+        "label": "Email",
+        "value": "info@shanyliving.com"
+      },
+      "hours": {
+        "label": "Opening hours",
+        "value": "Sun - Thu | 10:00 - 19:00 · Fri | 10:00 - 14:00"
+      }
     }
   },
   "footer": {
