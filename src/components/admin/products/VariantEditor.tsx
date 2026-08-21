@@ -1,8 +1,8 @@
 "use client";
 
 import Image from "next/image";
-import { useState } from "react";
-import { ChevronDown, GripVertical, ImagePlus, Plus, Trash2, X } from "lucide-react";
+import { useMemo, useState } from "react";
+import { ChevronDown, ImagePlus, Plus, Sparkles, Trash2, X } from "lucide-react";
 import { AppButton } from "@/components/app/AppButton";
 import { AppCard } from "@/components/app/AppCard";
 import { MediaPicker } from "@/components/admin/MediaPicker";
@@ -16,16 +16,16 @@ type VariantEditorProps = {
   onVariantsChange: (variants: ProductVariantDraft[]) => void;
 };
 
-const suggestedOptions = ["Color", "Size", "Configuration", "Fabric", "Leg Style"];
+const suggestedOptions = ["Size", "Configuration", "Fabric", "Color", "Leg Style"];
 
-function variantKey(options: Record<string, string>) {
+export function variantKey(options: Record<string, string>) {
   return Object.entries(options)
     .map(([name, value]) => `${name}:${value}`)
     .sort()
     .join("|");
 }
 
-function buildCombinations(options: ProductOptionDraft[]): Array<Record<string, string>> {
+export function buildCombinations(options: ProductOptionDraft[]): Array<Record<string, string>> {
   const usable = options
     .filter((option) => option.name.trim() && option.values.some((value) => value.value.trim()))
     .map((option) => ({
@@ -44,12 +44,25 @@ function buildCombinations(options: ProductOptionDraft[]): Array<Record<string, 
   );
 }
 
-export function VariantEditor({ options, variants, onOptionsChange, onVariantsChange }: VariantEditorProps) {
-  const [groupBy, setGroupBy] = useState<string>("");
-  const [pickerTarget, setPickerTarget] = useState<{ kind: "variant"; key: string } | { kind: "option"; optionIndex: number; valueIndex: number } | null>(null);
+const inputClass = "h-9 w-full rounded-md border border-neutral-300 px-2.5 text-sm outline-none transition focus:border-neutral-950 dark:border-white/15 dark:bg-neutral-950 dark:focus:border-white";
 
-  const combinations = buildCombinations(options);
-  const activeGroup = groupBy || options[0]?.name?.trim() || "";
+export function VariantEditor({ options, variants, onOptionsChange, onVariantsChange }: VariantEditorProps) {
+  const [groupBy, setGroupBy] = useState("");
+  const [selected, setSelected] = useState<string[]>([]);
+  const [bulkPrice, setBulkPrice] = useState("");
+  const [bulkStock, setBulkStock] = useState("");
+  const [optionsOpen, setOptionsOpen] = useState(true);
+  const [pickerTarget, setPickerTarget] = useState<
+    { kind: "variant"; key: string } | { kind: "option"; optionIndex: number; valueIndex: number } | null
+  >(null);
+
+  const combinations = useMemo(() => buildCombinations(options), [options]);
+  const optionNames = useMemo(
+    () => options.map((option) => option.name.trim()).filter(Boolean),
+    [options]
+  );
+  const activeGroup = groupBy && optionNames.includes(groupBy) ? groupBy : optionNames[0] ?? "";
+  const staleMatrix = combinations.length !== variants.length;
 
   const updateOption = (index: number, patch: Partial<ProductOptionDraft>) => {
     onOptionsChange(options.map((option, current) => (current === index ? { ...option, ...patch } : option)));
@@ -57,6 +70,7 @@ export function VariantEditor({ options, variants, onOptionsChange, onVariantsCh
 
   const addOption = (name = "") => {
     onOptionsChange([...options, { name, values: [{ value: "", swatch: null, media_id: null, media_url: null }] }]);
+    setOptionsOpen(true);
   };
 
   const removeOption = (index: number) => {
@@ -100,6 +114,7 @@ export function VariantEditor({ options, variants, onOptionsChange, onVariantsCh
         );
       })
     );
+    setSelected([]);
   };
 
   const updateVariant = (key: string, patch: Partial<ProductVariantDraft>) => {
@@ -110,148 +125,192 @@ export function VariantEditor({ options, variants, onOptionsChange, onVariantsCh
     onVariantsChange(variants.map((variant) => ({ ...variant, is_default: variantKey(variant.options) === key })));
   };
 
-  const grouped = activeGroup
-    ? Array.from(
-        variants.reduce((map, variant) => {
-          const label = variant.options[activeGroup] ?? "Other";
-          map.set(label, [...(map.get(label) ?? []), variant]);
+  const removeVariants = (keys: string[]) => {
+    onVariantsChange(variants.filter((variant) => !keys.includes(variantKey(variant.options))));
+    setSelected((current) => current.filter((key) => !keys.includes(key)));
+  };
 
-          return map;
-        }, new Map<string, ProductVariantDraft[]>())
-      )
+  const applyBulk = () => {
+    onVariantsChange(
+      variants.map((variant) => {
+        if (!selected.includes(variantKey(variant.options))) {
+          return variant;
+        }
+
+        return {
+          ...variant,
+          price: bulkPrice === "" ? variant.price : bulkPrice,
+          stock: bulkStock === "" ? variant.stock : bulkStock
+        };
+      })
+    );
+    setBulkPrice("");
+    setBulkStock("");
+  };
+
+  const toggleSelected = (key: string) => {
+    setSelected((current) => (current.includes(key) ? current.filter((item) => item !== key) : [...current, key]));
+  };
+
+  const allKeys = variants.map((variant) => variantKey(variant.options));
+  const allSelected = allKeys.length > 0 && selected.length === allKeys.length;
+
+  const grouped = activeGroup
+    ? [
+        ...variants
+          .reduce((map, variant) => {
+            const label = variant.options[activeGroup] ?? "Other";
+            map.set(label, [...(map.get(label) ?? []), variant]);
+
+            return map;
+          }, new Map<string, ProductVariantDraft[]>())
+          .entries()
+      ]
     : [["All variants", variants] as [string, ProductVariantDraft[]]];
 
-  const staleMatrix = combinations.length !== variants.length;
-
   return (
-    <AppCard className="p-5 dark:border-white/10 dark:bg-neutral-900 dark:text-neutral-50 sm:p-6">
+    <AppCard className="p-4 dark:border-white/10 dark:bg-neutral-900 dark:text-neutral-50 sm:p-6">
       <div className="flex flex-wrap items-center justify-between gap-3">
-        <h2 className="font-serif text-xl font-bold">Variants</h2>
-        <AppButton type="button" size="sm" variant="outline" className="gap-2" onClick={() => addOption()}>
-          <Plus className="size-4" /> Add option
-        </AppButton>
+        <div className="min-w-0">
+          <h2 className="font-serif text-lg font-bold sm:text-xl">Variants</h2>
+          <p className="mt-0.5 text-xs text-neutral-500 dark:text-neutral-400">
+            {variants.length} variant{variants.length === 1 ? "" : "s"} from {optionNames.length} option{optionNames.length === 1 ? "" : "s"}
+          </p>
+        </div>
+        <div className="flex flex-wrap items-center gap-2">
+          <AppButton type="button" size="sm" variant="outline" className="gap-2" onClick={() => setOptionsOpen((current) => !current)}>
+            <ChevronDown className={cn("size-4 transition", optionsOpen && "rotate-180")} />
+            Options
+          </AppButton>
+          <AppButton type="button" size="sm" variant="outline" className="gap-2" onClick={() => addOption()}>
+            <Plus className="size-4" /> Add option
+          </AppButton>
+        </div>
       </div>
 
-      <div className="mt-5 space-y-4">
-        {options.map((option, optionIndex) => (
-          <div key={optionIndex} className="rounded-lg border border-neutral-200 p-4 dark:border-white/10">
-            <div className="flex items-start gap-3">
-              <GripVertical className="mt-2.5 size-4 shrink-0 text-neutral-400" />
-              <div className="min-w-0 flex-1 space-y-3">
-                <div className="flex flex-wrap items-center gap-2">
-                  <input
-                    value={option.name}
-                    onChange={(event) => updateOption(optionIndex, { name: event.target.value })}
-                    placeholder="Option name"
-                    list="variant-option-names"
-                    className="h-10 w-full max-w-56 rounded-md border border-neutral-300 px-3 text-sm font-semibold outline-none focus:border-neutral-950 dark:border-white/15 dark:bg-neutral-950"
-                  />
-                  <button
-                    type="button"
-                    aria-label="Remove option"
-                    onClick={() => removeOption(optionIndex)}
-                    className="ms-auto grid size-9 place-items-center rounded-md text-neutral-500 transition hover:bg-neutral-100 hover:text-red-600 dark:hover:bg-white/10"
-                  >
-                    <Trash2 className="size-4" />
-                  </button>
-                </div>
+      {optionsOpen ? (
+        <div className="mt-4 space-y-3">
+          {options.map((option, optionIndex) => (
+            <div key={optionIndex} className="rounded-lg border border-neutral-200 p-3 dark:border-white/10 sm:p-4">
+              <div className="flex flex-wrap items-center gap-2">
+                <input
+                  value={option.name}
+                  onChange={(event) => updateOption(optionIndex, { name: event.target.value })}
+                  placeholder="Option name"
+                  list="variant-option-names"
+                  className={cn(inputClass, "h-10 max-w-56 font-semibold")}
+                />
+                <button
+                  type="button"
+                  aria-label="Remove option"
+                  onClick={() => removeOption(optionIndex)}
+                  className="ms-auto grid size-9 place-items-center rounded-md text-neutral-500 transition hover:bg-neutral-100 hover:text-red-600 dark:hover:bg-white/10"
+                >
+                  <Trash2 className="size-4" />
+                </button>
+              </div>
 
-                <div className="space-y-2">
-                  {option.values.map((value, valueIndex) => (
-                    <div key={valueIndex} className="flex flex-wrap items-center gap-2">
-                      <input
-                        value={value.value}
-                        onChange={(event) => updateValue(optionIndex, valueIndex, { value: event.target.value })}
-                        placeholder="Value"
-                        className="h-9 w-full max-w-44 rounded-md border border-neutral-300 px-3 text-sm outline-none focus:border-neutral-950 dark:border-white/15 dark:bg-neutral-950"
-                      />
-                      <input
-                        value={value.swatch ?? ""}
-                        onChange={(event) => updateValue(optionIndex, valueIndex, { swatch: event.target.value })}
-                        placeholder="#hex"
-                        className="h-9 w-24 rounded-md border border-neutral-300 px-2 text-xs outline-none focus:border-neutral-950 dark:border-white/15 dark:bg-neutral-950"
-                      />
-                      {value.swatch ? <span className="size-6 rounded-full border border-neutral-200" style={{ backgroundColor: value.swatch }} /> : null}
+              <div className="mt-3 space-y-2">
+                {option.values.map((value, valueIndex) => (
+                  <div key={valueIndex} className="grid grid-cols-[1fr_auto] items-center gap-2 sm:grid-cols-[minmax(0,11rem)_6rem_auto_auto_auto]">
+                    <input
+                      value={value.value}
+                      onChange={(event) => updateValue(optionIndex, valueIndex, { value: event.target.value })}
+                      placeholder="Value"
+                      className={inputClass}
+                    />
+                    <input
+                      value={value.swatch ?? ""}
+                      onChange={(event) => updateValue(optionIndex, valueIndex, { swatch: event.target.value })}
+                      placeholder="#hex"
+                      className={cn(inputClass, "font-mono text-xs")}
+                    />
+                    <span
+                      className={cn("hidden size-7 rounded-full border border-neutral-200 sm:block dark:border-white/15", !value.swatch && "opacity-0")}
+                      style={value.swatch ? { backgroundColor: value.swatch } : undefined}
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setPickerTarget({ kind: "option", optionIndex, valueIndex })}
+                      className="inline-flex h-9 items-center gap-1.5 rounded-md border border-dashed border-neutral-300 px-2.5 text-xs transition hover:border-neutral-950 dark:border-white/15"
+                    >
+                      {value.media_url ? (
+                        <Image src={value.media_url} alt={value.value} width={20} height={20} className="size-5 rounded object-cover" />
+                      ) : (
+                        <ImagePlus className="size-4" />
+                      )}
+                      {value.media_url ? "Change" : "Image"}
+                    </button>
+                    {option.values.length > 1 ? (
                       <button
                         type="button"
-                        onClick={() => setPickerTarget({ kind: "option", optionIndex, valueIndex })}
-                        className="inline-flex h-9 items-center gap-1.5 rounded-md border border-dashed border-neutral-300 px-2.5 text-xs transition hover:border-neutral-950 dark:border-white/15"
+                        aria-label="Remove value"
+                        onClick={() => updateOption(optionIndex, { values: option.values.filter((_, current) => current !== valueIndex) })}
+                        className="grid size-9 place-items-center rounded-md text-neutral-400 transition hover:text-red-600"
                       >
-                        {value.media_url ? (
-                          <Image src={value.media_url} alt={value.value} width={20} height={20} className="size-5 rounded object-cover" />
-                        ) : (
-                          <ImagePlus className="size-4" />
-                        )}
-                        {value.media_url ? "Change" : "Image"}
+                        <X className="size-4" />
                       </button>
-                      {option.values.length > 1 ? (
-                        <button
-                          type="button"
-                          aria-label="Remove value"
-                          onClick={() => updateOption(optionIndex, { values: option.values.filter((_, current) => current !== valueIndex) })}
-                          className="grid size-8 place-items-center rounded-md text-neutral-400 transition hover:text-red-600"
-                        >
-                          <X className="size-4" />
-                        </button>
-                      ) : null}
-                    </div>
-                  ))}
-                  <button
-                    type="button"
-                    onClick={() => updateOption(optionIndex, { values: [...option.values, { value: "", swatch: null, media_id: null, media_url: null }] })}
-                    className="text-xs font-bold text-neutral-700 underline dark:text-neutral-300"
-                  >
-                    Add another value
-                  </button>
-                </div>
+                    ) : (
+                      <span className="hidden sm:block" />
+                    )}
+                  </div>
+                ))}
+                <button
+                  type="button"
+                  onClick={() => updateOption(optionIndex, { values: [...option.values, { value: "", swatch: null, media_id: null, media_url: null }] })}
+                  className="text-xs font-bold text-neutral-700 underline dark:text-neutral-300"
+                >
+                  Add another value
+                </button>
               </div>
             </div>
-          </div>
-        ))}
+          ))}
 
-        <datalist id="variant-option-names">
-          {suggestedOptions.map((name) => <option key={name} value={name} />)}
-        </datalist>
+          <datalist id="variant-option-names">
+            {suggestedOptions.map((name) => <option key={name} value={name} />)}
+          </datalist>
 
-        {options.length === 0 ? (
-          <div className="rounded-lg border border-dashed border-neutral-300 p-6 text-center dark:border-white/15">
-            <p className="text-sm text-neutral-600 dark:text-neutral-300">Add options like Color, Size, Configuration or Fabric to build variants.</p>
-            <div className="mt-3 flex flex-wrap justify-center gap-2">
-              {suggestedOptions.map((name) => (
-                <button
-                  key={name}
-                  type="button"
-                  onClick={() => addOption(name)}
-                  className="rounded-full border border-neutral-300 px-3 py-1 text-xs font-semibold transition hover:border-neutral-950 dark:border-white/15"
-                >
-                  + {name}
-                </button>
-              ))}
+          {options.length === 0 ? (
+            <div className="rounded-lg border border-dashed border-neutral-300 p-5 text-center dark:border-white/15">
+              <p className="text-sm text-neutral-600 dark:text-neutral-300">Add Size, Configuration, Fabric and Color to build the variant table.</p>
+              <div className="mt-3 flex flex-wrap justify-center gap-2">
+                {suggestedOptions.map((name) => (
+                  <button
+                    key={name}
+                    type="button"
+                    onClick={() => addOption(name)}
+                    className="rounded-full border border-neutral-300 px-3 py-1 text-xs font-semibold transition hover:border-neutral-950 dark:border-white/15"
+                  >
+                    + {name}
+                  </button>
+                ))}
+              </div>
             </div>
-          </div>
-        ) : null}
-      </div>
+          ) : null}
+        </div>
+      ) : null}
 
       {options.length ? (
-        <div className="mt-6 border-t border-neutral-200 pt-5 dark:border-white/10">
+        <div className="mt-5 border-t border-neutral-200 pt-4 dark:border-white/10">
           <div className="flex flex-wrap items-center justify-between gap-3">
             <div className="flex items-center gap-2 text-sm">
-              <span className="text-neutral-500">Group by</span>
+              <span className="text-neutral-500 dark:text-neutral-400">Group by</span>
               <div className="relative">
                 <select
                   value={activeGroup}
                   onChange={(event) => setGroupBy(event.target.value)}
                   className="h-9 appearance-none rounded-md border border-neutral-300 pe-8 ps-3 text-sm font-semibold outline-none dark:border-white/15 dark:bg-neutral-950"
                 >
-                  {options.filter((option) => option.name.trim()).map((option) => (
-                    <option key={option.name} value={option.name.trim()}>{option.name}</option>
+                  {optionNames.map((name) => (
+                    <option key={name} value={name}>{name}</option>
                   ))}
                 </select>
                 <ChevronDown className="pointer-events-none absolute end-2 top-2.5 size-4 text-neutral-500" />
               </div>
             </div>
-            <AppButton type="button" size="sm" variant={staleMatrix ? "primary" : "outline"} onClick={syncVariants}>
-              {variants.length ? "Regenerate variants" : "Generate variants"} ({combinations.length})
+            <AppButton type="button" size="sm" variant={staleMatrix ? "primary" : "outline"} className="gap-2" onClick={syncVariants}>
+              <Sparkles className="size-4" />
+              {variants.length ? "Regenerate" : "Generate"} ({combinations.length})
             </AppButton>
           </div>
 
@@ -261,54 +320,130 @@ export function VariantEditor({ options, variants, onOptionsChange, onVariantsCh
             </p>
           ) : null}
 
-          <div className="mt-4 space-y-4">
-            {grouped.map(([label, groupVariants]) => (
-              <div key={label} className="overflow-hidden rounded-lg border border-neutral-200 dark:border-white/10">
-                <div className="flex items-center justify-between gap-3 bg-neutral-50 px-4 py-2.5 dark:bg-white/5">
-                  <p className="text-sm font-bold">{label}</p>
-                  <p className="text-xs text-neutral-500">{groupVariants.length} variant{groupVariants.length === 1 ? "" : "s"}</p>
-                </div>
-                <div className="divide-y divide-neutral-200 dark:divide-white/10">
+          {selected.length ? (
+            <div className="mt-4 flex flex-wrap items-end gap-2 rounded-lg border border-neutral-300 bg-neutral-50 p-3 dark:border-white/15 dark:bg-white/5">
+              <p className="me-auto text-sm font-bold">{selected.length} selected</p>
+              <label className="text-xs font-semibold">
+                <span className="mb-1 block text-neutral-500 dark:text-neutral-400">Price</span>
+                <input value={bulkPrice} onChange={(event) => setBulkPrice(event.target.value)} inputMode="decimal" placeholder="0.00" className={cn(inputClass, "w-24")} />
+              </label>
+              <label className="text-xs font-semibold">
+                <span className="mb-1 block text-neutral-500 dark:text-neutral-400">Available</span>
+                <input value={bulkStock} onChange={(event) => setBulkStock(event.target.value)} inputMode="numeric" placeholder="0" className={cn(inputClass, "w-20")} />
+              </label>
+              <AppButton type="button" size="sm" onClick={applyBulk} disabled={bulkPrice === "" && bulkStock === ""}>Apply</AppButton>
+              <AppButton type="button" size="sm" variant="outline" onClick={() => removeVariants(selected)}>Delete</AppButton>
+              <AppButton type="button" size="sm" variant="ghost" onClick={() => setSelected([])}>Clear</AppButton>
+            </div>
+          ) : null}
+
+          <div className="mt-4 overflow-x-auto rounded-lg border border-neutral-200 dark:border-white/10">
+            <table className="w-full min-w-200 border-collapse text-sm">
+              <thead className="bg-neutral-50 text-start text-xs uppercase tracking-[0.08em] text-neutral-500 dark:bg-white/5 dark:text-neutral-400">
+                <tr>
+                  <th scope="col" className="w-10 px-3 py-2.5">
+                    <input
+                      type="checkbox"
+                      aria-label="Select all variants"
+                      checked={allSelected}
+                      onChange={() => setSelected(allSelected ? [] : allKeys)}
+                      className="size-4 accent-neutral-900"
+                    />
+                  </th>
+                  <th scope="col" className="w-14 px-2 py-2.5 text-start font-bold">Image</th>
+                  <th scope="col" className="px-3 py-2.5 text-start font-bold">Variant</th>
+                  <th scope="col" className="w-56 px-3 py-2.5 text-start font-bold">SKU</th>
+                  <th scope="col" className="w-28 px-3 py-2.5 text-start font-bold">Price</th>
+                  <th scope="col" className="w-24 px-3 py-2.5 text-start font-bold">Available</th>
+                  <th scope="col" className="w-28 px-3 py-2.5 text-start font-bold">Status</th>
+                  <th scope="col" className="w-28 px-3 py-2.5 text-start font-bold">Default</th>
+                  <th scope="col" className="w-12 px-2 py-2.5" />
+                </tr>
+              </thead>
+              {grouped.map(([label, groupVariants]) => (
+                <tbody key={label} className="divide-y divide-neutral-200 dark:divide-white/10">
+                  {activeGroup ? (
+                    <tr className="bg-neutral-50/70 dark:bg-white/5">
+                      <td colSpan={9} className="px-3 py-2">
+                        <span className="text-xs font-bold uppercase tracking-[0.1em]">{label}</span>
+                        <span className="ms-2 text-xs text-neutral-500 dark:text-neutral-400">
+                          {groupVariants.length} variant{groupVariants.length === 1 ? "" : "s"}
+                        </span>
+                      </td>
+                    </tr>
+                  ) : null}
                   {groupVariants.map((variant) => {
                     const key = variantKey(variant.options);
 
                     return (
-                      <div key={key} className="grid gap-3 p-3 sm:grid-cols-[auto_1fr_120px_100px_auto] sm:items-center">
-                        <button
-                          type="button"
-                          onClick={() => setPickerTarget({ kind: "variant", key })}
-                          className="grid size-12 shrink-0 place-items-center overflow-hidden rounded-md border border-neutral-200 bg-neutral-50 dark:border-white/10 dark:bg-neutral-800"
-                        >
-                          {variant.media_url ? (
-                            <Image src={variant.media_url} alt={Object.values(variant.options).join(" ")} width={48} height={48} className="size-12 object-cover" />
-                          ) : (
-                            <ImagePlus className="size-4 text-neutral-400" />
-                          )}
-                        </button>
-                        <div className="min-w-0">
-                          <p className="truncate text-sm font-semibold">{Object.values(variant.options).join(" / ") || "Default"}</p>
+                      <tr key={key} className={cn("align-middle", selected.includes(key) && "bg-neutral-50 dark:bg-white/5")}>
+                        <td className="px-3 py-2">
+                          <input
+                            type="checkbox"
+                            aria-label={`Select ${Object.values(variant.options).join(" ")}`}
+                            checked={selected.includes(key)}
+                            onChange={() => toggleSelected(key)}
+                            className="size-4 accent-neutral-900"
+                          />
+                        </td>
+                        <td className="px-2 py-2">
+                          <button
+                            type="button"
+                            aria-label="Select variant image"
+                            onClick={() => setPickerTarget({ kind: "variant", key })}
+                            className="grid size-10 place-items-center overflow-hidden rounded-md border border-neutral-200 bg-neutral-50 dark:border-white/10 dark:bg-neutral-800"
+                          >
+                            {variant.media_url ? (
+                              <Image src={variant.media_url} alt={Object.values(variant.options).join(" ")} width={40} height={40} className="size-10 object-cover" />
+                            ) : (
+                              <ImagePlus className="size-4 text-neutral-400" />
+                            )}
+                          </button>
+                        </td>
+                        <td className="px-3 py-2">
+                          <span className="block font-semibold">{Object.values(variant.options).join(" / ") || "Default"}</span>
+                        </td>
+                        <td className="px-3 py-2">
                           <input
                             value={variant.sku}
                             onChange={(event) => updateVariant(key, { sku: event.target.value })}
-                            placeholder="SKU is generated when empty"
-                            className="mt-1 h-8 w-full max-w-64 rounded border border-neutral-200 px-2 font-mono text-xs outline-none focus:border-neutral-950 dark:border-white/10 dark:bg-neutral-950"
+                            placeholder="Generated when empty"
+                            className={cn(inputClass, "font-mono text-xs")}
                           />
-                        </div>
-                        <input
-                          value={variant.price}
-                          onChange={(event) => updateVariant(key, { price: event.target.value })}
-                          inputMode="decimal"
-                          placeholder="₪ 0.00"
-                          className="h-10 rounded-md border border-neutral-300 px-3 text-sm outline-none focus:border-neutral-950 dark:border-white/15 dark:bg-neutral-950"
-                        />
-                        <input
-                          value={variant.stock}
-                          onChange={(event) => updateVariant(key, { stock: event.target.value })}
-                          inputMode="numeric"
-                          placeholder="0"
-                          className="h-10 rounded-md border border-neutral-300 px-3 text-sm outline-none focus:border-neutral-950 dark:border-white/15 dark:bg-neutral-950"
-                        />
-                        <div className="flex items-center gap-2">
+                        </td>
+                        <td className="px-3 py-2">
+                          <input
+                            value={variant.price}
+                            onChange={(event) => updateVariant(key, { price: event.target.value })}
+                            inputMode="decimal"
+                            placeholder="0.00"
+                            className={inputClass}
+                          />
+                        </td>
+                        <td className="px-3 py-2">
+                          <input
+                            value={variant.stock}
+                            onChange={(event) => updateVariant(key, { stock: event.target.value })}
+                            inputMode="numeric"
+                            placeholder="0"
+                            className={inputClass}
+                          />
+                        </td>
+                        <td className="px-3 py-2">
+                          <button
+                            type="button"
+                            onClick={() => updateVariant(key, { is_active: !variant.is_active })}
+                            className={cn(
+                              "rounded-full border px-3 py-1 text-xs font-semibold transition",
+                              variant.is_active
+                                ? "border-emerald-300 bg-emerald-50 text-emerald-800 dark:border-emerald-400/30 dark:bg-emerald-400/10 dark:text-emerald-200"
+                                : "border-neutral-300 text-neutral-500 dark:border-white/15 dark:text-neutral-400"
+                            )}
+                          >
+                            {variant.is_active ? "Active" : "Hidden"}
+                          </button>
+                        </td>
+                        <td className="px-3 py-2">
                           <button
                             type="button"
                             onClick={() => setDefault(key)}
@@ -319,24 +454,30 @@ export function VariantEditor({ options, variants, onOptionsChange, onVariantsCh
                                 : "border-neutral-300 text-neutral-600 hover:border-neutral-950 dark:border-white/15 dark:text-neutral-300"
                             )}
                           >
-                            Default
+                            {variant.is_default ? "Default" : "Set"}
                           </button>
+                        </td>
+                        <td className="px-2 py-2">
                           <button
                             type="button"
                             aria-label="Remove variant"
-                            onClick={() => onVariantsChange(variants.filter((current) => variantKey(current.options) !== key))}
+                            onClick={() => removeVariants([key])}
                             className="grid size-8 place-items-center rounded-md text-neutral-400 transition hover:text-red-600"
                           >
                             <Trash2 className="size-4" />
                           </button>
-                        </div>
-                      </div>
+                        </td>
+                      </tr>
                     );
                   })}
-                </div>
-              </div>
-            ))}
+                </tbody>
+              ))}
+            </table>
           </div>
+
+          {variants.length === 0 ? (
+            <p className="mt-3 text-sm text-neutral-600 dark:text-neutral-300">No variants yet. Generate the matrix from the options above.</p>
+          ) : null}
         </div>
       ) : null}
 

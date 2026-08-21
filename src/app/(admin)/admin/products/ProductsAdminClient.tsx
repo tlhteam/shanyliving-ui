@@ -88,6 +88,9 @@ function mapProductRow(row: Record<string, unknown>): AdminRow {
       ? cleanText((row.category as { name?: unknown }).name)
       : cleanText(row.category);
 
+  const variants = Array.isArray(row.variants) ? row.variants : [];
+  const options = Array.isArray(row.options) ? row.options : [];
+
   return {
     productId: row.id ?? row.productId ?? row.uuid ?? cleanText(row.slug),
     slug: cleanText(row.slug),
@@ -97,6 +100,9 @@ function mapProductRow(row: Record<string, unknown>): AdminRow {
     name: cleanText(row.name),
     category,
     price: formatPrice(row.price),
+    variants: variants.length
+      ? `${variants.length} variant${variants.length === 1 ? "" : "s"} / ${options.length} option${options.length === 1 ? "" : "s"}`
+      : "No variants",
     description: cleanText(row.description),
     features: textList(row.features),
     colors: textList(row.colors),
@@ -128,6 +134,7 @@ export function ProductsAdminClient() {
         { key: "name", label: "Product" },
         { key: "category", label: "Category" },
         { key: "price", label: "Starting Price" },
+        { key: "variants", label: "Variants" },
         {
           key: "description",
           label: "Description",

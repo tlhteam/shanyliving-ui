@@ -24,6 +24,21 @@ export type ProductVariantDraft = {
   is_active: boolean;
 };
 
+export type ProductTranslationDraft = {
+  name: string;
+  description: string;
+  subcategory: string;
+  seat_range: string;
+};
+
+export type AdminProductTranslation = {
+  locale: string;
+  name: string | null;
+  description: string | null;
+  subcategory: string | null;
+  seat_range: string | null;
+};
+
 export type AdminProductImage = {
   id: number;
   media_id: number | null;
@@ -76,4 +91,5 @@ export type AdminProduct = {
     is_active: boolean;
   }>;
   tags: Array<{ id: number; name: string; slug: string }>;
+  translations: Record<string, AdminProductTranslation> | null;
 };

@@ -6,17 +6,18 @@ import { useRouter } from "next/navigation";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useMemo, useState } from "react";
 import { toast } from "sonner";
-import { ArrowLeft, ImagePlus, Star, Trash2 } from "lucide-react";
+import { ArrowLeft, ImagePlus, Lock, Star, Trash2 } from "lucide-react";
 import { AppButton } from "@/components/app/AppButton";
 import { AppCard } from "@/components/app/AppCard";
 import { AppRichTextEditor } from "@/components/app/AppRichTextEditor";
 import { AppSwitch } from "@/components/app/AppSwitch";
 import { AppTagInput } from "@/components/app/AppTagInput";
 import { MediaPicker } from "@/components/admin/MediaPicker";
-import { VariantEditor } from "@/components/admin/products/VariantEditor";
+import { VariantEditor, buildCombinations, variantKey } from "@/components/admin/products/VariantEditor";
 import { useApi } from "@/hooks/use-api";
+import { localeOptions } from "@/i18n/config";
 import { cn } from "@/lib/utils";
-import type { AdminProduct, ProductOptionDraft, ProductVariantDraft } from "@/types/product";
+import type { AdminProduct, ProductOptionDraft, ProductTranslationDraft, ProductVariantDraft } from "@/types/product";
 import type { MediaItem } from "@/types/media";
 
 type GalleryEntry = { media_id: number | null; url: string | null; path: string | null; is_primary: boolean };
@@ -26,7 +27,6 @@ type ProductForm = {
   category: string;
   subcategory: string;
   description: string;
-  features: string;
   price: string;
   compare_at_price: string;
   seat_range: string;
@@ -40,7 +40,6 @@ const emptyForm: ProductForm = {
   category: "",
   subcategory: "",
   description: "",
-  features: "",
   price: "",
   compare_at_price: "",
   seat_range: "",
@@ -49,7 +48,53 @@ const emptyForm: ProductForm = {
   customizable: true
 };
 
+const emptyTranslation: ProductTranslationDraft = { name: "", description: "", subcategory: "", seat_range: "" };
+
 const tagSuggestions = ["sofa", "customizable", "new arrival", "best seller", "showroom pick", "living room", "dining", "bedroom"];
+
+const defaultOptions: ProductOptionDraft[] = [
+  {
+    name: "Size",
+    values: [
+      { value: "2.4m", swatch: null, media_id: null, media_url: null },
+      { value: "2.8m", swatch: null, media_id: null, media_url: null }
+    ]
+  },
+  {
+    name: "Configuration",
+    values: [
+      { value: "Left chaise", swatch: null, media_id: null, media_url: null },
+      { value: "Right chaise", swatch: null, media_id: null, media_url: null }
+    ]
+  },
+  {
+    name: "Fabric",
+    values: [
+      { value: "Boucle", swatch: null, media_id: null, media_url: null },
+      { value: "Performance Linen", swatch: null, media_id: null, media_url: null }
+    ]
+  },
+  {
+    name: "Color",
+    values: [
+      { value: "Warm Beige", swatch: "#e2d6c3", media_id: null, media_url: null },
+      { value: "Charcoal", swatch: "#3a3a3a", media_id: null, media_url: null }
+    ]
+  }
+];
+
+function defaultVariants(): ProductVariantDraft[] {
+  return buildCombinations(defaultOptions).map((combination, index) => ({
+    options: combination,
+    sku: "",
+    price: "",
+    stock: "0",
+    media_id: null,
+    media_url: null,
+    is_default: index === 0,
+    is_active: true
+  }));
+}
 
 function slugify(value: string) {
   return value
@@ -74,12 +119,13 @@ export function ProductEditor({ slug }: { slug?: string }) {
   const editing = Boolean(slug);
 
   const [form, setForm] = useState<ProductForm>(emptyForm);
-  const [slugTouched, setSlugTouched] = useState(false);
-  const [manualSlug, setManualSlug] = useState("");
+  const [savedSlug, setSavedSlug] = useState(slug ?? "");
   const [tags, setTags] = useState<string[]>([]);
   const [gallery, setGallery] = useState<GalleryEntry[]>([]);
-  const [options, setOptions] = useState<ProductOptionDraft[]>([]);
-  const [variants, setVariants] = useState<ProductVariantDraft[]>([]);
+  const [options, setOptions] = useState<ProductOptionDraft[]>(() => (slug ? [] : defaultOptions));
+  const [variants, setVariants] = useState<ProductVariantDraft[]>(() => (slug ? [] : defaultVariants()));
+  const [translations, setTranslations] = useState<Record<string, ProductTranslationDraft>>({});
+  const [activeLocale, setActiveLocale] = useState("");
   const [pickerOpen, setPickerOpen] = useState(false);
   const [errors, setErrors] = useState<Record<string, string[]>>({});
   const [hydratedId, setHydratedId] = useState<number | null>(null);
@@ -92,53 +138,65 @@ export function ProductEditor({ slug }: { slug?: string }) {
 
   const hydrate = (product: AdminProduct) => {
     setForm({
-    name: product.name ?? "",
-    category: product.category?.name ?? "",
-    subcategory: product.subcategory ?? "",
-    description: product.description ?? "",
-    features: "",
-    price: product.price ? String(product.price) : "",
-    compare_at_price: product.compare_at_price ? String(product.compare_at_price) : "",
-    seat_range: product.seat_range ?? "",
-    colors: (product.colors ?? []).join(", "),
-    status: product.is_active ? "active" : "draft",
-    customizable: Boolean(product.is_customizable)
+      name: product.name ?? "",
+      category: product.category?.name ?? "",
+      subcategory: product.subcategory ?? "",
+      description: product.description ?? "",
+      price: product.price ? String(product.price) : "",
+      compare_at_price: product.compare_at_price ? String(product.compare_at_price) : "",
+      seat_range: product.seat_range ?? "",
+      colors: (product.colors ?? []).join(", "),
+      status: product.is_active ? "active" : "draft",
+      customizable: Boolean(product.is_customizable)
     });
-    setManualSlug(product.slug ?? "");
+    setSavedSlug(product.slug ?? "");
     setTags((product.tags ?? []).map((tag) => tag.name));
     setGallery(
-    (product.images ?? []).map((image) => ({
-      media_id: image.media_id,
-      url: image.url,
-      path: image.path,
-      is_primary: image.is_primary
-    }))
+      (product.images ?? []).map((image) => ({
+        media_id: image.media_id,
+        url: image.url,
+        path: image.path,
+        is_primary: image.is_primary
+      }))
     );
     setOptions(
-    (product.options ?? []).map((option) => ({
-      id: option.id,
-      name: option.name,
-      values: option.values.map((value) => ({
-        id: value.id,
-        value: value.value,
-        swatch: value.swatch,
-        media_id: value.media_id,
-        media_url: value.media_url
+      (product.options ?? []).map((option) => ({
+        id: option.id,
+        name: option.name,
+        values: option.values.map((value) => ({
+          id: value.id,
+          value: value.value,
+          swatch: value.swatch,
+          media_id: value.media_id,
+          media_url: value.media_url
+        }))
       }))
-    }))
     );
     setVariants(
-    (product.variants ?? []).map((variant) => ({
-      id: variant.id,
-      options: variant.options ?? {},
-      sku: variant.sku ?? "",
-      price: variant.price ? String(variant.price) : "",
-      stock: String(variant.stock ?? 0),
-      media_id: variant.media_id,
-      media_url: variant.media_url,
-      is_default: variant.is_default,
-      is_active: variant.is_active
-    }))
+      (product.variants ?? []).map((variant) => ({
+        id: variant.id,
+        options: variant.options ?? {},
+        sku: variant.sku ?? "",
+        price: variant.price ? String(variant.price) : "",
+        stock: String(variant.stock ?? 0),
+        media_id: variant.media_id,
+        media_url: variant.media_url,
+        is_default: variant.is_default,
+        is_active: variant.is_active
+      }))
+    );
+    setTranslations(
+      Object.fromEntries(
+        Object.entries(product.translations ?? {}).map(([locale, translation]) => [
+          locale,
+          {
+            name: translation.name ?? "",
+            description: translation.description ?? "",
+            subcategory: translation.subcategory ?? "",
+            seat_range: translation.seat_range ?? ""
+          }
+        ])
+      )
     );
   };
 
@@ -149,20 +207,26 @@ export function ProductEditor({ slug }: { slug?: string }) {
     hydrate(hydratedProduct);
   }
 
+  const derivedSlug = useMemo(() => (editing ? savedSlug : slugify(form.name)), [editing, form.name, savedSlug]);
+  const translation = translations[activeLocale] ?? emptyTranslation;
 
-  const derivedSlug = useMemo(() => {
-    if (editing) {
-      return manualSlug;
-    }
+  const updateTranslation = (patch: Partial<ProductTranslationDraft>) => {
+    setTranslations((current) => ({
+      ...current,
+      [activeLocale]: { ...(current[activeLocale] ?? emptyTranslation), ...patch }
+    }));
+  };
 
-    return slugTouched ? manualSlug : slugify(form.name);
-  }, [editing, form.name, manualSlug, slugTouched]);
+  const translatedLocales = localeOptions.filter((option) => {
+    const entry = translations[option.locale];
+
+    return entry ? Object.values(entry).some(Boolean) : false;
+  });
 
   const saveMutation = useMutation({
     mutationFn: () => {
       const payload = {
         name: form.name,
-        slug: derivedSlug || undefined,
         category: form.category || undefined,
         subcategory: form.subcategory || undefined,
         description: form.description || null,
@@ -178,6 +242,10 @@ export function ProductEditor({ slug }: { slug?: string }) {
         tags,
         media_ids: gallery.map((entry) => entry.media_id).filter((id): id is number => typeof id === "number"),
         primary_media_id: gallery.find((entry) => entry.is_primary)?.media_id ?? undefined,
+        translations: localeOptions.map((option) => ({
+          locale: option.locale,
+          ...(translations[option.locale] ?? emptyTranslation)
+        })),
         options: options
           .filter((option) => option.name.trim() && option.values.some((value) => value.value.trim()))
           .map((option, index) => ({
@@ -204,7 +272,7 @@ export function ProductEditor({ slug }: { slug?: string }) {
         }))
       };
 
-      return request<AdminProduct>(editing ? `/admin/catalog/products/${slug}` : "/admin/catalog/products", {
+      return request<AdminProduct>(editing ? `/admin/catalog/products/${savedSlug}` : "/admin/catalog/products", {
         method: editing ? "PATCH" : "POST",
         body: payload
       });
@@ -215,8 +283,8 @@ export function ProductEditor({ slug }: { slug?: string }) {
       queryClient.invalidateQueries({ queryKey: ["admin-product"] });
       queryClient.invalidateQueries({ queryKey: ["admin-resource"] });
 
-      if (!editing) {
-        router.push(`/admin/products/${product.slug}/edit`);
+      if (!editing || product.slug !== savedSlug) {
+        router.replace(`/admin/products/${product.slug}/edit`);
         return;
       }
 
@@ -246,7 +314,7 @@ export function ProductEditor({ slug }: { slug?: string }) {
 
   const removeMedia = (mediaId: number | null, index: number) => {
     setGallery((current) => {
-      const next = current.filter((entry, current_index) => (mediaId ? entry.media_id !== mediaId : current_index !== index));
+      const next = current.filter((entry, currentIndex) => (mediaId ? entry.media_id !== mediaId : currentIndex !== index));
 
       if (next.length && !next.some((entry) => entry.is_primary)) {
         next[0] = { ...next[0], is_primary: true };
@@ -257,7 +325,14 @@ export function ProductEditor({ slug }: { slug?: string }) {
   };
 
   const setPrimary = (index: number) => {
-    setGallery((current) => current.map((entry, current_index) => ({ ...entry, is_primary: current_index === index })));
+    setGallery((current) => current.map((entry, currentIndex) => ({ ...entry, is_primary: currentIndex === index })));
+  };
+
+  const applyDefaultVariants = () => {
+    const existing = new Map(variants.map((variant) => [variantKey(variant.options), variant]));
+    setOptions(defaultOptions);
+    setVariants(defaultVariants().map((variant) => existing.get(variantKey(variant.options)) ?? variant));
+    toast.success("Default Size, Configuration, Fabric and Color variants applied.");
   };
 
   const fieldError = (key: string) => errors[key]?.[0];
@@ -277,67 +352,116 @@ export function ProductEditor({ slug }: { slug?: string }) {
 
   return (
     <div className="pb-24">
-      <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
-        <div className="flex min-w-0 items-center gap-3">
-          <Link href="/admin/products" aria-label="Back to products" className="grid size-9 shrink-0 place-items-center rounded-md border border-neutral-300 transition hover:bg-neutral-100 dark:border-white/15 dark:hover:bg-white/10">
+      <div className="mb-5 flex flex-wrap items-center justify-between gap-3 sm:mb-6">
+        <div className="flex min-w-0 flex-1 items-center gap-3">
+          <Link
+            href="/admin/products"
+            aria-label="Back to products"
+            className="grid size-9 shrink-0 place-items-center rounded-md border border-neutral-300 transition hover:bg-neutral-100 dark:border-white/15 dark:hover:bg-white/10"
+          >
             <ArrowLeft className="size-4 rtl:rotate-180" />
           </Link>
           <div className="min-w-0">
             <p className="text-xs font-bold uppercase tracking-[0.2em] text-neutral-500 dark:text-neutral-400">Catalog</p>
-            <h1 className="truncate font-serif text-2xl font-bold sm:text-3xl">{editing ? form.name || "Edit product" : "Add product"}</h1>
+            <h1 className="truncate font-serif text-xl font-bold sm:text-3xl">{editing ? form.name || "Edit product" : "Add product"}</h1>
           </div>
         </div>
-        <div className="flex items-center gap-2">
-          <Link href="/admin/products"><AppButton type="button" variant="outline">Discard</AppButton></Link>
-          <AppButton type="button" loading={saveMutation.isPending} disabled={!form.name.trim()} onClick={() => saveMutation.mutate()}>
+        <div className="flex w-full items-center gap-2 sm:w-auto">
+          <Link href="/admin/products" className="flex-1 sm:flex-none">
+            <AppButton type="button" variant="outline" className="w-full sm:w-auto">Discard</AppButton>
+          </Link>
+          <AppButton
+            type="button"
+            loading={saveMutation.isPending}
+            disabled={!form.name.trim()}
+            onClick={() => saveMutation.mutate()}
+            className="flex-1 sm:flex-none"
+          >
             Save
           </AppButton>
         </div>
       </div>
 
-      <div className="grid gap-5 lg:grid-cols-[1fr_340px] lg:items-start">
+      <div className="grid gap-5 lg:grid-cols-[minmax(0,1fr)_340px] lg:items-start">
         <div className="min-w-0 space-y-5">
-          <AppCard className="p-5 dark:border-white/10 dark:bg-neutral-900 dark:text-neutral-50 sm:p-6">
+          <AppCard className="p-4 dark:border-white/10 dark:bg-neutral-900 dark:text-neutral-50 sm:p-6">
+            <div className="-mx-1 mb-4 flex gap-1.5 overflow-x-auto px-1 pb-1">
+              <button
+                type="button"
+                onClick={() => setActiveLocale("")}
+                className={cn(
+                  "h-9 shrink-0 rounded-full border px-4 text-xs font-bold transition",
+                  activeLocale === ""
+                    ? "border-neutral-950 bg-neutral-950 text-white dark:border-white dark:bg-white dark:text-neutral-950"
+                    : "border-neutral-300 hover:border-neutral-950 dark:border-white/15"
+                )}
+              >
+                Default
+              </button>
+              {localeOptions.map((option) => (
+                <button
+                  key={option.locale}
+                  type="button"
+                  onClick={() => setActiveLocale(option.locale)}
+                  className={cn(
+                    "h-9 shrink-0 rounded-full border px-4 text-xs font-bold transition",
+                    activeLocale === option.locale
+                      ? "border-neutral-950 bg-neutral-950 text-white dark:border-white dark:bg-white dark:text-neutral-950"
+                      : "border-neutral-300 hover:border-neutral-950 dark:border-white/15"
+                  )}
+                >
+                  {option.short}
+                  {translatedLocales.some((locale) => locale.locale === option.locale) ? (
+                    <span className="ms-1.5 inline-block size-1.5 rounded-full bg-emerald-500 align-middle" />
+                  ) : null}
+                </button>
+              ))}
+            </div>
+
+            {activeLocale ? (
+              <p className="mb-4 rounded-md bg-neutral-100 p-3 text-xs leading-5 text-neutral-700 dark:bg-white/10 dark:text-neutral-300">
+                Editing the {localeOptions.find((option) => option.locale === activeLocale)?.english} translation. Empty fields fall back to the default text.
+              </p>
+            ) : null}
+
             <label htmlFor="product-name" className="mb-2 block text-sm font-semibold">Title</label>
             <input
               id="product-name"
-              value={form.name}
-              onChange={(event) => setForm((current) => ({ ...current, name: event.target.value }))}
-              placeholder="Lian"
+              dir={activeLocale === "he" ? "rtl" : undefined}
+              value={activeLocale ? translation.name : form.name}
+              onChange={(event) =>
+                activeLocale
+                  ? updateTranslation({ name: event.target.value })
+                  : setForm((current) => ({ ...current, name: event.target.value }))
+              }
+              placeholder={activeLocale ? form.name || "Translated title" : "Lian"}
               className={fieldClass(Boolean(fieldError("name")))}
             />
-            {derivedSlug ? <p className="mt-1.5 font-mono text-xs text-neutral-500 dark:text-neutral-400">/{derivedSlug}</p> : null}
             {fieldError("name") ? <p className="mt-1.5 text-sm text-red-600">{fieldError("name")}</p> : null}
-            {editing ? (
-              <button
-                type="button"
-                onClick={() => {
-                  setSlugTouched(true);
-                  const next = window.prompt("Update the product slug", manualSlug);
 
-                  if (next) {
-                    setManualSlug(slugify(next));
-                  }
-                }}
-                className="mt-1 text-xs font-semibold text-neutral-600 underline dark:text-neutral-300"
-              >
-                Edit slug
-              </button>
-            ) : null}
+            <div className="mt-3 flex items-center gap-2 rounded-md border border-neutral-200 bg-neutral-50 px-3 py-2 dark:border-white/10 dark:bg-white/5">
+              <Lock className="size-3.5 shrink-0 text-neutral-500" />
+              <span className="min-w-0 flex-1 truncate font-mono text-xs text-neutral-600 dark:text-neutral-300">
+                /{derivedSlug || "generated-from-the-title"}
+              </span>
+              <span className="shrink-0 text-[10px] font-bold uppercase tracking-[0.14em] text-neutral-400">Auto</span>
+            </div>
 
             <div className="mt-5">
               <span className="mb-2 block text-sm font-semibold">Description</span>
               <AppRichTextEditor
-                value={form.description}
-                onChange={(value) => setForm((current) => ({ ...current, description: value }))}
+                value={activeLocale ? translation.description : form.description}
+                onChange={(value) =>
+                  activeLocale ? updateTranslation({ description: value }) : setForm((current) => ({ ...current, description: value }))
+                }
                 placeholder="Describe the product, materials and comfort"
               />
             </div>
           </AppCard>
 
-          <AppCard className="p-5 dark:border-white/10 dark:bg-neutral-900 dark:text-neutral-50 sm:p-6">
+          <AppCard className="p-4 dark:border-white/10 dark:bg-neutral-900 dark:text-neutral-50 sm:p-6">
             <div className="flex flex-wrap items-center justify-between gap-3">
-              <h2 className="font-serif text-xl font-bold">Media</h2>
+              <h2 className="font-serif text-lg font-bold sm:text-xl">Media</h2>
               <AppButton type="button" size="sm" variant="outline" className="gap-2" onClick={() => setPickerOpen(true)}>
                 <ImagePlus className="size-4" /> Select from media
               </AppButton>
@@ -347,7 +471,7 @@ export function ProductEditor({ slug }: { slug?: string }) {
               <button
                 type="button"
                 onClick={() => setPickerOpen(true)}
-                className="mt-4 grid w-full place-items-center gap-2 rounded-lg border border-dashed border-neutral-300 p-10 text-center transition hover:border-neutral-950 dark:border-white/15"
+                className="mt-4 grid w-full place-items-center gap-2 rounded-lg border border-dashed border-neutral-300 p-8 text-center transition hover:border-neutral-950 dark:border-white/15 sm:p-10"
               >
                 <ImagePlus className="size-6 text-neutral-400" />
                 <span className="text-sm text-neutral-600 dark:text-neutral-300">Add images from the media library</span>
@@ -389,16 +513,30 @@ export function ProductEditor({ slug }: { slug?: string }) {
             )}
           </AppCard>
 
-          <AppCard className="p-5 dark:border-white/10 dark:bg-neutral-900 dark:text-neutral-50 sm:p-6">
-            <h2 className="font-serif text-xl font-bold">Pricing</h2>
+          <AppCard className="p-4 dark:border-white/10 dark:bg-neutral-900 dark:text-neutral-50 sm:p-6">
+            <h2 className="font-serif text-lg font-bold sm:text-xl">Pricing</h2>
             <div className="mt-4 grid gap-4 sm:grid-cols-2">
               <div>
                 <label htmlFor="product-price" className="mb-2 block text-sm font-semibold">Price</label>
-                <input id="product-price" value={form.price} inputMode="decimal" onChange={(event) => setForm((current) => ({ ...current, price: event.target.value }))} placeholder="0.00" className={fieldClass(Boolean(fieldError("price")))} />
+                <input
+                  id="product-price"
+                  value={form.price}
+                  inputMode="decimal"
+                  onChange={(event) => setForm((current) => ({ ...current, price: event.target.value }))}
+                  placeholder="0.00"
+                  className={fieldClass(Boolean(fieldError("price")))}
+                />
               </div>
               <div>
                 <label htmlFor="product-compare" className="mb-2 block text-sm font-semibold">Compare at price</label>
-                <input id="product-compare" value={form.compare_at_price} inputMode="decimal" onChange={(event) => setForm((current) => ({ ...current, compare_at_price: event.target.value }))} placeholder="0.00" className={fieldClass()} />
+                <input
+                  id="product-compare"
+                  value={form.compare_at_price}
+                  inputMode="decimal"
+                  onChange={(event) => setForm((current) => ({ ...current, compare_at_price: event.target.value }))}
+                  placeholder="0.00"
+                  className={fieldClass()}
+                />
               </div>
             </div>
           </AppCard>
@@ -407,7 +545,7 @@ export function ProductEditor({ slug }: { slug?: string }) {
         </div>
 
         <div className="space-y-5">
-          <AppCard className="p-5 dark:border-white/10 dark:bg-neutral-900 dark:text-neutral-50">
+          <AppCard className="p-4 dark:border-white/10 dark:bg-neutral-900 dark:text-neutral-50 sm:p-5">
             <h2 className="text-sm font-bold uppercase tracking-[0.16em] text-neutral-500 dark:text-neutral-400">Status</h2>
             <div className="mt-4 space-y-4">
               <div className="flex items-start justify-between gap-3">
@@ -439,16 +577,45 @@ export function ProductEditor({ slug }: { slug?: string }) {
             </div>
           </AppCard>
 
-          <AppCard className="p-5 dark:border-white/10 dark:bg-neutral-900 dark:text-neutral-50">
+          <AppCard className="p-4 dark:border-white/10 dark:bg-neutral-900 dark:text-neutral-50 sm:p-5">
+            <h2 className="text-sm font-bold uppercase tracking-[0.16em] text-neutral-500 dark:text-neutral-400">Variant defaults</h2>
+            <p className="mt-2 text-xs leading-5 text-neutral-600 dark:text-neutral-300">
+              New products start with Size, Configuration, Fabric and Color. Reapply them if the option list was cleared.
+            </p>
+            <AppButton type="button" size="sm" variant="outline" className="mt-3 w-full" onClick={applyDefaultVariants}>
+              Apply default variants
+            </AppButton>
+          </AppCard>
+
+          <AppCard className="p-4 dark:border-white/10 dark:bg-neutral-900 dark:text-neutral-50 sm:p-5">
             <h2 className="text-sm font-bold uppercase tracking-[0.16em] text-neutral-500 dark:text-neutral-400">Organization</h2>
             <div className="mt-4 space-y-4">
               <div>
                 <label htmlFor="product-category" className="mb-2 block text-sm font-semibold">Category</label>
-                <input id="product-category" value={form.category} onChange={(event) => setForm((current) => ({ ...current, category: event.target.value }))} placeholder="Sofas" className={fieldClass()} />
+                <input
+                  id="product-category"
+                  value={form.category}
+                  onChange={(event) => setForm((current) => ({ ...current, category: event.target.value }))}
+                  placeholder="Sofas"
+                  className={fieldClass()}
+                />
               </div>
               <div>
-                <label htmlFor="product-subcategory" className="mb-2 block text-sm font-semibold">Subcategory</label>
-                <input id="product-subcategory" value={form.subcategory} onChange={(event) => setForm((current) => ({ ...current, subcategory: event.target.value }))} placeholder="Modular Sofas" className={fieldClass()} />
+                <label htmlFor="product-subcategory" className="mb-2 block text-sm font-semibold">
+                  Subcategory{activeLocale ? ` (${activeLocale.toUpperCase()})` : ""}
+                </label>
+                <input
+                  id="product-subcategory"
+                  dir={activeLocale === "he" ? "rtl" : undefined}
+                  value={activeLocale ? translation.subcategory : form.subcategory}
+                  onChange={(event) =>
+                    activeLocale
+                      ? updateTranslation({ subcategory: event.target.value })
+                      : setForm((current) => ({ ...current, subcategory: event.target.value }))
+                  }
+                  placeholder="Modular Sofas"
+                  className={fieldClass()}
+                />
               </div>
               <div>
                 <span className="mb-2 block text-sm font-semibold">Tags</span>
@@ -457,16 +624,35 @@ export function ProductEditor({ slug }: { slug?: string }) {
             </div>
           </AppCard>
 
-          <AppCard className="p-5 dark:border-white/10 dark:bg-neutral-900 dark:text-neutral-50">
+          <AppCard className="p-4 dark:border-white/10 dark:bg-neutral-900 dark:text-neutral-50 sm:p-5">
             <h2 className="text-sm font-bold uppercase tracking-[0.16em] text-neutral-500 dark:text-neutral-400">Details</h2>
             <div className="mt-4 space-y-4">
               <div>
-                <label htmlFor="product-seat" className="mb-2 block text-sm font-semibold">Seat range</label>
-                <input id="product-seat" value={form.seat_range} onChange={(event) => setForm((current) => ({ ...current, seat_range: event.target.value }))} placeholder="3-4 Seater" className={fieldClass()} />
+                <label htmlFor="product-seat" className="mb-2 block text-sm font-semibold">
+                  Seat range{activeLocale ? ` (${activeLocale.toUpperCase()})` : ""}
+                </label>
+                <input
+                  id="product-seat"
+                  dir={activeLocale === "he" ? "rtl" : undefined}
+                  value={activeLocale ? translation.seat_range : form.seat_range}
+                  onChange={(event) =>
+                    activeLocale
+                      ? updateTranslation({ seat_range: event.target.value })
+                      : setForm((current) => ({ ...current, seat_range: event.target.value }))
+                  }
+                  placeholder="3-4 Seater"
+                  className={fieldClass()}
+                />
               </div>
               <div>
                 <label htmlFor="product-colors" className="mb-2 block text-sm font-semibold">Color hex codes</label>
-                <input id="product-colors" value={form.colors} onChange={(event) => setForm((current) => ({ ...current, colors: event.target.value }))} placeholder="#eee9df, #705d49" className={fieldClass()} />
+                <input
+                  id="product-colors"
+                  value={form.colors}
+                  onChange={(event) => setForm((current) => ({ ...current, colors: event.target.value }))}
+                  placeholder="#eee9df, #705d49"
+                  className={fieldClass()}
+                />
               </div>
             </div>
           </AppCard>
