@@ -36,6 +36,24 @@ const stepLabels: Record<number, string> = {
   4: "Review"
 };
 
+const stepQueryAliases: Record<string, 1 | 2 | 3 | 4> = {
+  "1": 1,
+  model: 1,
+  "2": 2,
+  size: 2,
+  configuration: 2,
+  "3": 3,
+  fabric: 3,
+  color: 3,
+  "4": 4,
+  review: 4,
+  summary: 4
+};
+
+function stepFromQuery(value: string | null): 1 | 2 | 3 | 4 {
+  return stepQueryAliases[String(value ?? "").toLowerCase()] ?? 1;
+}
+
 function formatPrice(price: number) {
   return `NIS ${new Intl.NumberFormat("en").format(price)}`;
 }
@@ -55,10 +73,11 @@ export function SofaStepConfigurator() {
   const addToCart = useCustomerCommerceStore((state) => state.addToCart);
   const openCart = useCustomerCommerceStore((state) => state.openCart);
   const productSlug = searchParams.get("product");
-  const requestedRoom = searchParams.get("step") === "room";
+  const requestedStep = searchParams.get("step");
+  const requestedRoom = requestedStep === "room";
   const sofaProducts = useMemo(() => storefrontProducts.filter((product) => product.category === "sofas").slice(0, 5), []);
   const initialProduct = productSlug ? getStorefrontProduct(productSlug) : sofaProducts[0];
-  const [step, setStep] = useState<1 | 2 | 3 | 4>(requestedRoom ? 4 : 1);
+  const [step, setStep] = useState<1 | 2 | 3 | 4>(requestedRoom ? 4 : stepFromQuery(requestedStep));
   const [roomMode, setRoomMode] = useState(requestedRoom);
   const [product, setProduct] = useState(initialProduct ?? sofaProducts[0]);
   const [size, setSize] = useState("2.8m");
