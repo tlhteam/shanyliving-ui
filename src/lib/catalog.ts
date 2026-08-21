@@ -1,4 +1,9 @@
 import { apiUrl } from "@/lib/api";
+import { getUserLocale } from "@/i18n/locale";
+
+async function localeQuery(separator: "?" | "&" = "?") {
+  return `${separator}locale=${await getUserLocale()}`;
+}
 
 export type CatalogImage = {
   id?: number | string;
@@ -121,7 +126,7 @@ export async function getHomeCatalog(): Promise<HomeCatalog> {
   }
 
   try {
-    const response = await fetch(`${apiUrl}/storefront/home`, {
+    const response = await fetch(`${apiUrl}/storefront/home${await localeQuery()}`, {
       headers: { Accept: "application/json" },
       next: { revalidate: 60 }
     });
@@ -150,7 +155,7 @@ export async function getCollections(pageSlug?: string): Promise<CatalogCollecti
 
   try {
     const query = pageSlug ? `?page_slug=${encodeURIComponent(pageSlug)}` : "";
-    const response = await fetch(`${apiUrl}/storefront/collections${query}`, {
+    const response = await fetch(`${apiUrl}/storefront/collections${query}${await localeQuery(query ? "&" : "?")}`, {
       headers: { Accept: "application/json" },
       next: { revalidate: 60 }
     });
@@ -173,7 +178,7 @@ export async function getCatalogProduct(slug: string): Promise<CatalogProduct | 
   }
 
   try {
-    const response = await fetch(`${apiUrl}/storefront/products/${encodeURIComponent(slug)}`, {
+    const response = await fetch(`${apiUrl}/storefront/products/${encodeURIComponent(slug)}${await localeQuery()}`, {
       headers: { Accept: "application/json" },
       next: { revalidate: 60 }
     });

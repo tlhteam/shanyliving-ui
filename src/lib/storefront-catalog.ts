@@ -1,4 +1,5 @@
 import { apiUrl } from "@/lib/api";
+import { getUserLocale } from "@/i18n/locale";
 import { isUsableImagePath } from "@/lib/media";
 import { getStorefrontProduct, storefrontPages } from "@/lib/storefront-pages";
 import type { CatalogProduct } from "@/lib/catalog";
@@ -69,7 +70,8 @@ async function fetchCollectionProducts(pageSlug: string): Promise<CatalogProduct
   }
 
   try {
-    const response = await fetch(`${apiUrl}/storefront/collections/${encodeURIComponent(pageSlug)}?per_page=48`, {
+    const locale = await getUserLocale();
+    const response = await fetch(`${apiUrl}/storefront/collections/${encodeURIComponent(pageSlug)}?per_page=48&locale=${locale}`, {
       headers: { Accept: "application/json" },
       next: { revalidate: 60 }
     });
@@ -93,7 +95,8 @@ async function fetchCategoryProducts(categorySlug: string): Promise<CatalogProdu
   }
 
   try {
-    const response = await fetch(`${apiUrl}/storefront/products/category/${encodeURIComponent(categorySlug)}?per_page=48`, {
+    const locale = await getUserLocale();
+    const response = await fetch(`${apiUrl}/storefront/products/category/${encodeURIComponent(categorySlug)}?per_page=48&locale=${locale}`, {
       headers: { Accept: "application/json" },
       next: { revalidate: 60 }
     });

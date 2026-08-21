@@ -2,15 +2,16 @@ import Link from "next/link";
 import { AppImage } from "@/components/app/AppImage";
 import { SiteIcon } from "@/components/icons/SiteIcon";
 import { ProductBuyActions } from "@/components/storefront/ProductBuyActions";
+import { cn } from "@/lib/utils";
 import type { StorefrontProduct } from "@/lib/storefront-pages";
 
 const formatPrice = (price: number) => new Intl.NumberFormat("en").format(price);
 
-export function ProductCard({ product }: { product: StorefrontProduct }) {
+export function ProductCard({ product, className }: { product: StorefrontProduct; className?: string }) {
   const priceLabel = product.price > 0 ? `NIS ${formatPrice(product.price)}` : "Price on request";
 
   return (
-    <article className="group overflow-hidden rounded-lg border border-neutral-200 bg-white text-neutral-950 shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-xl dark:border-white/10 dark:bg-neutral-900 dark:text-neutral-50">
+    <article className={cn("group overflow-hidden rounded-lg border border-neutral-200 bg-white text-neutral-950 shadow-sm transition duration-300 hover:shadow-xl sm:hover:-translate-y-1 dark:border-white/10 dark:bg-neutral-900 dark:text-neutral-50", className)}>
       <Link href={`/sofas/${product.slug}`} className="relative block overflow-hidden">
         <AppImage
           src={product.image}
