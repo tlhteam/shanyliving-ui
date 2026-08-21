@@ -7,7 +7,7 @@ import type { CellContext, ColumnDef } from "@tanstack/react-table";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Path, useForm, useWatch } from "react-hook-form";
 import { toast } from "sonner";
-import { Eye, Pencil, RefreshCcw, Trash2, X } from "lucide-react";
+import { Eye, ImageOff, Pencil, RefreshCcw, Trash2, X } from "lucide-react";
 import { AppConfirmationDialog } from "@/components/app/AppConfirmationDialog";
 import { AppDialog } from "@/components/app/AppDialog";
 import { AppButton } from "@/components/app/AppButton";
@@ -18,6 +18,7 @@ import { AppPagination } from "@/components/app/AppPagination";
 import { AppSearch } from "@/components/app/AppSearch";
 import { AppSwitch } from "@/components/app/AppSwitch";
 import { AppTable } from "@/components/app/AppTable";
+import { cn } from "@/lib/utils";
 import { AppTextField } from "@/components/app/AppTextField";
 import { AdminPageHeader } from "@/components/admin/AdminPageHeader";
 import { Badge } from "@/components/ui/badge";
@@ -135,11 +136,23 @@ function toBoolean(value: unknown) {
   );
 }
 
-function EmptyValue({ image = false }: { image?: boolean }) {
+function EmptyValue({
+  image = false,
+  compact = false,
+}: {
+  image?: boolean;
+  compact?: boolean;
+}) {
   if (image) {
     return (
-      <div className="grid h-12 w-16 place-items-center rounded-md border border-dashed border-neutral-300 bg-neutral-50 px-2 text-center text-[10px] font-semibold leading-tight text-neutral-500 dark:border-white/15 dark:bg-neutral-950 dark:text-neutral-400">
-        No image found
+      <div
+        title="No image"
+        className={cn(
+          "grid place-items-center rounded-md border border-dashed border-neutral-200 bg-neutral-50 text-neutral-300 dark:border-white/10 dark:bg-white/5 dark:text-neutral-600",
+          compact ? "size-10" : "h-12 w-16",
+        )}
+      >
+        <ImageOff className="size-4" />
       </div>
     );
   }
@@ -653,7 +666,7 @@ export function AdminResourcePage({
                 ) : null}
               </div>
             ) : (
-              <EmptyValue image />
+              <EmptyValue image compact />
             );
           }
 

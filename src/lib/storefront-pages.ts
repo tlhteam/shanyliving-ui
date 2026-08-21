@@ -15,6 +15,12 @@ export type StorefrontProduct = {
   galleryImages?: string[];
   fabricImages?: string[];
   optionGroups?: StorefrontOptionGroup[];
+  variantMedia?: StorefrontVariantMedia[];
+};
+
+export type StorefrontVariantMedia = {
+  options: Record<string, string>;
+  image: string;
 };
 
 export type StorefrontOptionGroup = {
@@ -40,7 +46,7 @@ export const storefrontProducts: StorefrontProduct[] = [
     category: "sofas",
     subcategory: "Three-Seat Sofas",
     price: 0,
-    image: "/images/products/lian/lian-1.png",
+    image: "/images/products/lazai/White.jpeg",
     badge: "New",
     description: "A relaxed three-seat sofa with rounded cushions, a clean showroom silhouette and made-to-order upholstery options.",
     seatRange: "Three-seat sofa",
@@ -49,17 +55,22 @@ export const storefrontProducts: StorefrontProduct[] = [
     colors: ["#ffffff", "#d9dde3", "#315f97"],
     colorNames: ["White", "Light Gray", "Blue"],
     galleryImages: [
-      "/images/products/lian/lian-1.png",
-      "/images/products/lian/lian-2.png",
-      "/images/products/lian/lian-white.png",
-      "/images/products/lian/lian-light-gray.png",
-      "/images/products/lian/lian-blue.png",
-      "/images/products/lian/lian-dimensions.png"
+      "/images/products/lazai/White.jpeg",
+      "/images/products/lazai/White - left.jpeg",
+      "/images/products/lazai/blue.jpeg",
+      "/images/products/lazai/grey.jpeg",
+      "/images/products/lazai/1.jpeg",
+      "/images/products/lazai/2.jpeg"
     ],
     fabricImages: [
-      "/images/products/lian/lian-fabric-white.png",
-      "/images/products/lian/lian-fabric-light-gray.png",
-      "/images/products/lian/lian-fabric-blue.png"
+      "/images/products/lazai/3.jpeg",
+      "/images/products/lazai/4.jpeg",
+      "/images/products/lazai/White - left.jpeg"
+    ],
+    variantMedia: [
+      { options: { Color: "White" }, image: "/images/products/lazai/White.jpeg" },
+      { options: { Color: "Blue" }, image: "/images/products/lazai/blue.jpeg" },
+      { options: { Color: "Grey" }, image: "/images/products/lazai/grey.jpeg" }
     ]
   },
   { name: "Valentine Sofa", slug: "valentine-sofa", category: "sofas", subcategory: "Fabric Sofas", price: 7900, image: "/images/sofa-ella.png", badge: "Best Seller", description: "A soft modern silhouette with exceptional comfort and fully customizable size, fabric and color.", seatRange: "2.2m, 2.4m, 2.8m, 3.2m", colors: ["#efe7dc", "#d8c7b4", "#b1845f", "#3d271c", "#183421"] },

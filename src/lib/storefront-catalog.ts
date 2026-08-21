@@ -42,6 +42,17 @@ export function mapCatalogProduct(product: CatalogProduct, fallback?: Storefront
   const colorGroup = optionGroups.find((group) => group.name.toLowerCase() === "color");
   const fabricGroup = optionGroups.find((group) => group.name.toLowerCase() === "fabric");
 
+  const variantMedia = [
+    ...(product.variants ?? [])
+      .filter((variant) => isUsableImagePath(variant.media_url))
+      .map((variant) => ({ options: variant.options ?? {}, image: String(variant.media_url) })),
+    ...optionGroups.flatMap((group) =>
+      group.values
+        .filter((value) => isUsableImagePath(value.image))
+        .map((value) => ({ options: { [group.name]: value.label }, image: String(value.image) }))
+    )
+  ];
+
   return {
     name: product.name,
     slug: product.slug,
@@ -60,7 +71,8 @@ export function mapCatalogProduct(product: CatalogProduct, fallback?: Storefront
     galleryImages: galleryImages?.length ? galleryImages : fallback?.galleryImages,
     fabricImages: fabricGroup?.values.map((value) => value.image).filter((image): image is string => Boolean(image))
       ?? fallback?.fabricImages,
-    optionGroups: optionGroups.length ? optionGroups : undefined
+    optionGroups: optionGroups.length ? optionGroups : undefined,
+    variantMedia: variantMedia.length ? variantMedia : fallback?.variantMedia
   };
 }
 
