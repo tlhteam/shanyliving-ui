@@ -33,28 +33,28 @@ export default function ShowroomPage() {
           </div>
         </div>
       </section>
-      <section className="bg-neutral-100">
+      <section className="bg-neutral-100 text-neutral-950 dark:bg-neutral-900 dark:text-neutral-50">
         <div className="mx-auto grid max-w-7xl grid-cols-2 gap-4 px-4 py-7 sm:px-6 lg:grid-cols-4 lg:px-8">
           {stats.map((stat) => (
             <div key={stat.label} className="flex items-center gap-3">
               <SiteIcon name={stat.icon as SiteIconName} className="size-8" />
               <div>
                 <p className="font-serif text-2xl font-bold">{stat.value}</p>
-                <p className="text-xs font-bold">{stat.label}</p>
+                <p className="text-xs font-bold text-neutral-600 dark:text-neutral-400">{stat.label}</p>
               </div>
             </div>
           ))}
         </div>
       </section>
-      <AppSection>
+      <AppSection className="text-neutral-950 dark:text-neutral-50">
         <div className="grid gap-8 lg:grid-cols-[0.8fr_1.2fr]">
           <section>
             <h2 className="font-serif text-2xl font-bold">Why visit our showroom?</h2>
             <div className="mt-5 grid gap-3 sm:grid-cols-2">
               {["Feel the Fabrics", "Try Every Sofa", "Design Consultation", "Customize Everything"].map((title) => (
-                <div key={title} className="rounded-lg bg-neutral-100 p-5">
+                <div key={title} className="rounded-lg bg-neutral-100 p-5 text-neutral-950 dark:bg-neutral-900 dark:text-neutral-50">
                   <h3 className="font-serif text-xl font-bold">{title}</h3>
-                  <p className="mt-2 text-sm leading-6 text-neutral-700">Touch, compare and plan details with the team before ordering.</p>
+                  <p className="mt-2 text-sm leading-6 text-neutral-700 dark:text-neutral-300">Touch, compare and plan details with the team before ordering.</p>
                 </div>
               ))}
             </div>
@@ -68,10 +68,10 @@ export default function ShowroomPage() {
             </div>
           </section>
         </div>
-        <div id="book" className="mt-12 grid gap-6 rounded-lg bg-neutral-100 p-6 sm:p-8 lg:grid-cols-[1fr_1.2fr]">
+        <div id="book" className="mt-12 grid gap-6 rounded-lg bg-neutral-100 p-6 text-neutral-950 sm:p-8 dark:bg-neutral-900 dark:text-neutral-50 lg:grid-cols-[1fr_1.2fr]">
           <div>
             <h2 className="font-serif text-2xl font-bold">Book Your Visit</h2>
-            <div className="mt-5 space-y-3 text-sm text-neutral-700">
+            <div className="mt-5 space-y-3 text-sm text-neutral-700 dark:text-neutral-300">
               <p className="flex gap-2"><SiteIcon name="map-pin" className="size-4" /> Herzl 34, Tel Aviv, Israel</p>
               <p>03-1234567</p>
               <p>info@shanyliving.com</p>
@@ -83,7 +83,7 @@ export default function ShowroomPage() {
               <AppButton variant="outline">Book a Showroom Visit</AppButton>
             </div>
           </div>
-          <div className="overflow-hidden rounded-lg border border-neutral-300 bg-white">
+          <div className="overflow-hidden rounded-lg border border-neutral-300 bg-white dark:border-white/15 dark:bg-neutral-950">
             <iframe
               title="Shany Living showroom map"
               src="https://www.google.com/maps?q=Herzl%2034%2C%20Tel%20Aviv%2C%20Israel&output=embed"
@@ -95,10 +95,10 @@ export default function ShowroomPage() {
         </div>
         <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {services.map((service) => (
-            <div key={service.title} className="rounded-lg border border-neutral-200 bg-white p-5">
+            <div key={service.title} className="rounded-lg border border-neutral-200 bg-white p-5 text-neutral-950 dark:border-white/10 dark:bg-neutral-900 dark:text-neutral-50">
               <SiteIcon name={service.icon as SiteIconName} className="size-7" />
               <h3 className="mt-4 font-bold">{service.title}</h3>
-              <p className="mt-2 text-sm leading-6 text-neutral-700">{service.text}</p>
+              <p className="mt-2 text-sm leading-6 text-neutral-700 dark:text-neutral-300">{service.text}</p>
             </div>
           ))}
         </div>

@@ -44,15 +44,15 @@ export default async function AboutPage() {
         </div>
       </AppSection>
 
-      <section className="bg-neutral-100">
+      <section className="bg-neutral-100 text-neutral-950 dark:bg-neutral-900 dark:text-neutral-50">
         <AppSection>
           <h2 className="text-center font-serif text-2xl font-bold sm:text-3xl">{t("valuesTitle")}</h2>
           <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
             {values.map((value) => (
-              <div key={value.key} className="rounded-lg bg-white p-6 shadow-sm">
+              <div key={value.key} className="rounded-lg bg-white p-6 text-neutral-950 shadow-sm dark:bg-neutral-950 dark:text-neutral-50">
                 <SiteIcon name={value.icon as SiteIconName} className="size-8" />
                 <h3 className="mt-5 font-bold">{t(`values.${value.key}.title`)}</h3>
-                <p className="mt-2 text-sm leading-6 text-neutral-600">{t(`values.${value.key}.text`)}</p>
+                <p className="mt-2 text-sm leading-6 text-neutral-600 dark:text-neutral-400">{t(`values.${value.key}.text`)}</p>
               </div>
             ))}
           </div>

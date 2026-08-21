@@ -26,25 +26,25 @@ export default function InspirationPage() {
       <AppSection>
         <div className="grid gap-5 lg:grid-cols-3">
           {rooms.map((room) => (
-            <article key={room.title} className="group overflow-hidden rounded-lg border border-neutral-200 bg-white shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-xl">
+            <article key={room.title} className="group overflow-hidden rounded-lg border border-neutral-200 bg-white text-neutral-950 shadow-sm transition duration-300 hover:shadow-xl sm:hover:-translate-y-1 dark:border-white/10 dark:bg-neutral-900 dark:text-neutral-50">
               <AppImage src={room.image} alt={room.title} className="aspect-[1.4/1]" sizes="(max-width: 1024px) 100vw, 33vw" imageClassName="transition duration-700 group-hover:scale-[1.05]" />
               <div className="p-5">
                 <h2 className="font-serif text-2xl font-bold">{room.title}</h2>
-                <p className="mt-2 text-sm leading-6 text-neutral-700">{room.text}</p>
+                <p className="mt-2 text-sm leading-6 text-neutral-700 dark:text-neutral-300">{room.text}</p>
                 <Link href="/sofas" className="mt-5 inline-flex items-center gap-2 text-sm font-bold hover:underline">
-                  Explore products <SiteIcon name="arrow-right" className="size-4" />
+                  Explore products <SiteIcon name="arrow-right" className="size-4 rtl:rotate-180" />
                 </Link>
               </div>
             </article>
           ))}
         </div>
-        <div className="mt-12 grid items-center gap-6 rounded-lg bg-neutral-100 p-6 sm:p-8 lg:grid-cols-[auto_1fr_auto]">
+        <div className="mt-12 grid items-center gap-6 rounded-lg bg-neutral-100 p-6 text-neutral-950 sm:p-8 dark:bg-neutral-900 dark:text-neutral-50 lg:grid-cols-[auto_1fr_auto]">
           <SiteIcon name="grid" className="size-10" />
           <div>
             <h2 className="font-serif text-2xl font-bold">Build a room with us</h2>
-            <p className="mt-2 text-sm leading-6 text-neutral-700">Share one inspiration room and the showroom team can match products, fabrics and colors for your space.</p>
+            <p className="mt-2 text-sm leading-6 text-neutral-700 dark:text-neutral-300">Share one inspiration room and the showroom team can match products, fabrics and colors for your space.</p>
           </div>
-          <Link href="/showroom"><AppButton>Book a consultation</AppButton></Link>
+          <Link href="/showroom" className="block"><AppButton className="w-full lg:w-auto">Book a consultation</AppButton></Link>
         </div>
       </AppSection>
     </>

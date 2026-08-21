@@ -43,11 +43,11 @@ export default async function ContactPage() {
           <div className="mt-7 flex flex-col gap-5">
             {details.map((detail) => (
               <div key={detail.key} className="flex items-start gap-4">
-                <span className="grid size-10 shrink-0 place-items-center rounded-full bg-neutral-100">
+                <span className="grid size-10 shrink-0 place-items-center rounded-full bg-neutral-100 text-neutral-950 dark:bg-white/10 dark:text-neutral-50">
                   <SiteIcon name={detail.icon as SiteIconName} className="size-5" />
                 </span>
                 <div>
-                  <p className="text-xs font-bold uppercase tracking-[0.16em] text-neutral-500">{t(`details.${detail.key}.label`)}</p>
+                  <p className="text-xs font-bold uppercase tracking-[0.16em] text-neutral-500 dark:text-neutral-400">{t(`details.${detail.key}.label`)}</p>
                   <p className="mt-1 text-sm leading-6">{t(`details.${detail.key}.value`)}</p>
                 </div>
               </div>

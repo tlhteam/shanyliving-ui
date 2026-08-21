@@ -276,21 +276,21 @@ export function HomeExperience({ catalog, fromSocial = false }: { catalog: HomeC
         </AppSection>
       </section>
 
-      <section className="bg-white">
+      <section className="bg-white text-neutral-950 dark:bg-neutral-950 dark:text-neutral-50">
         <AppSection className="grid items-center gap-8 py-10 lg:grid-cols-[1.1fr_1fr_1.3fr]">
           <div>
             <h2 className="font-serif text-xl font-bold sm:text-2xl">{t("club.title")}</h2>
-            <p className="mt-2 text-sm text-neutral-700">{t("club.text")}</p>
+            <p className="mt-2 text-sm text-neutral-700 dark:text-neutral-300">{t("club.text")}</p>
           </div>
           <form className="flex w-full">
             <input
               aria-label={t("club.emailLabel")}
               placeholder={t("club.emailPlaceholder")}
-              className="h-11 min-w-0 flex-1 rounded-s-md border border-neutral-300 px-3 text-sm outline-none focus:border-neutral-900"
+              className="h-11 min-w-0 flex-1 rounded-s-md border border-neutral-300 bg-white px-3 text-sm text-neutral-950 outline-none focus:border-neutral-900 dark:border-white/15 dark:bg-neutral-900 dark:text-neutral-50 dark:focus:border-white"
             />
             <button className="h-11 rounded-e-md bg-black px-5 text-sm font-semibold text-white transition hover:bg-neutral-800">{t("club.subscribe")}</button>
           </form>
-          <div className="grid grid-cols-1 gap-4 text-xs sm:grid-cols-3 sm:divide-x sm:divide-neutral-300">
+          <div className="grid grid-cols-1 gap-4 text-xs sm:grid-cols-3 sm:divide-x sm:divide-neutral-300 dark:sm:divide-white/15">
             {clubPerks.map((perk) => (
               <span key={perk.key} className="flex items-center gap-2 sm:justify-center sm:px-3"><SiteIcon name={perk.icon as SiteIconName} className="size-5" /> {t(`club.perks.${perk.key}`)}</span>
             ))}
@@ -298,14 +298,14 @@ export function HomeExperience({ catalog, fromSocial = false }: { catalog: HomeC
         </AppSection>
       </section>
 
-      <section className="border-y border-neutral-200 bg-neutral-100">
+      <section className="border-y border-neutral-200 bg-neutral-100 text-neutral-950 dark:border-white/10 dark:bg-neutral-900 dark:text-neutral-50">
         <div className="mx-auto grid max-w-7xl grid-cols-2 gap-4 px-4 py-6 sm:grid-cols-3 lg:grid-cols-6 lg:gap-0 lg:px-8">
           {features.map((feature, index) => (
-            <div key={feature.key} className={`flex items-center gap-3 px-1 lg:px-3 ${index === features.length - 1 ? "" : "lg:border-e lg:border-neutral-300"}`}>
+            <div key={feature.key} className={`flex items-center gap-3 px-1 lg:px-3 ${index === features.length - 1 ? "" : "lg:border-e lg:border-neutral-300 dark:lg:border-white/15"}`}>
               <SiteIcon name={feature.icon as SiteIconName} className="size-6" />
               <div>
                 <p className="text-xs font-bold">{t(`features.${feature.key}.title`)}</p>
-                <p className="text-[11px] text-neutral-600">{t(`features.${feature.key}.text`)}</p>
+                <p className="text-[11px] text-neutral-600 dark:text-neutral-400">{t(`features.${feature.key}.text`)}</p>
               </div>
             </div>
           ))}
