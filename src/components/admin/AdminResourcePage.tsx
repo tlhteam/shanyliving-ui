@@ -739,11 +739,11 @@ export function AdminResourcePage({
     [
       columns,
       editHref,
+      expandedRows,
       openDelete,
       openEdit,
       openView,
       router,
-      saveMutation,
       title,
     ],
   );
