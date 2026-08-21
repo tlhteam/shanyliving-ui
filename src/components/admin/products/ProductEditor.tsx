@@ -279,7 +279,10 @@ export function ProductEditor({ slug }: { slug?: string }) {
     },
     onSuccess: (product) => {
       setErrors({});
-      toast.success(editing ? "Product updated." : "Product created.");
+      toast.success(editing ? "Product updated." : "Product created.", {
+        description: `${product.name} / ${product.variants?.length ?? 0} variants saved.`,
+        action: { label: "View on storefront", onClick: () => window.open(`/sofas/${product.slug}`, "_blank") },
+      });
       queryClient.invalidateQueries({ queryKey: ["admin-product"] });
       queryClient.invalidateQueries({ queryKey: ["admin-resource"] });
 
@@ -292,7 +295,9 @@ export function ProductEditor({ slug }: { slug?: string }) {
     },
     onError: (error: Error & { errors?: Record<string, string[]> }) => {
       setErrors(error.errors ?? {});
-      toast.error(error.message);
+      toast.error(error.message, {
+        action: { label: "Try again", onClick: () => saveMutation.mutate() },
+      });
     }
   });
 

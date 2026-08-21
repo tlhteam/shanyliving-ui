@@ -370,6 +370,8 @@ export function AdminResourcePage({
     isFetching,
     isLoading,
     isError,
+    error: resourceError,
+    refetch: refetchResource,
   } = useQuery<ResourceQueryData>({
     queryKey: apiPath
       ? [...queryKey, page, pageSize, query, accessToken ?? "guest"]
@@ -392,6 +394,28 @@ export function AdminResourcePage({
     },
     enabled: !requiresSession || sessionStatus !== "loading",
   });
+
+  const resourceErrorMessage = useMemo(() => {
+    const status = (resourceError as { response?: { status?: number } } | null)?.response?.status;
+    const apiMessage = (resourceError as { response?: { data?: { message?: string } } } | null)?.response?.data?.message;
+
+    if (status === 401 || status === 403) {
+      return "Your admin session expired. Sign in again to load these records.";
+    }
+
+    return apiMessage || (resourceError as Error | null)?.message || "Unable to load records from the API.";
+  }, [resourceError]);
+
+  useEffect(() => {
+    if (!isError) {
+      return;
+    }
+
+    toast.error(`${title} could not be loaded`, {
+      description: resourceErrorMessage,
+      action: { label: "Retry", onClick: () => refetchResource() },
+    });
+  }, [isError, refetchResource, resourceErrorMessage, title]);
 
   const data = useMemo(
     () =>
@@ -831,11 +855,20 @@ export function AdminResourcePage({
               onSearch={setQuery}
               placeholder={`Search ${title.toLowerCase()}...`}
             />
+            {isError ? (
+              <Button variant="outline" onClick={() => refetchResource()}>
+                <RefreshCcw className="size-4" />
+                Retry
+              </Button>
+            ) : null}
             <Button
               variant="outline"
               onClick={() => {
                 queryClient.invalidateQueries({ queryKey });
-                toast.success(`${title} data refreshed`);
+                toast.success(`${title} data refreshed`, {
+                  description: "The list now matches the API.",
+                  action: { label: "Reload", onClick: () => refetchResource() },
+                });
               }}
             >
               <RefreshCcw className="size-4" />
@@ -850,7 +883,7 @@ export function AdminResourcePage({
           skeletonRows={pageSize}
           emptyMessage={
             isError
-              ? "Unable to load records from the API."
+              ? resourceErrorMessage
               : "No matching records found."
           }
         />

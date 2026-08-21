@@ -196,6 +196,61 @@ a {
 .cn-toast {
   overflow: hidden;
   position: relative;
+  padding-inline-end: 2.5rem;
+}
+
+[data-sonner-toast].cn-toast [data-close-button] {
+  position: absolute;
+  top: 0.5rem;
+  left: auto;
+  right: 0.5rem;
+  inset-block-end: auto;
+  transform: none;
+  display: grid;
+  place-items: center;
+  width: 1.5rem;
+  height: 1.5rem;
+  padding: 0;
+  border-radius: 9999px;
+  border: 1px solid color-mix(in oklab, currentColor 24%, transparent);
+  background: color-mix(in oklab, currentColor 8%, transparent);
+  color: currentColor;
+  opacity: 0.75;
+  transition: opacity 150ms ease, background 150ms ease;
+}
+
+[data-sonner-toast].cn-toast [data-close-button]:hover {
+  opacity: 1;
+  background: color-mix(in oklab, currentColor 16%, transparent);
+}
+
+[data-sonner-toast].cn-toast [data-close-button] svg {
+  width: 0.75rem;
+  height: 0.75rem;
+}
+
+[dir="rtl"] [data-sonner-toaster] [data-sonner-toast].cn-toast [data-close-button] {
+  left: 0.5rem;
+  right: auto;
+}
+
+[data-sonner-toast].cn-toast [data-button] {
+  height: 1.75rem;
+  border-radius: calc(var(--radius) - 2px);
+  border: 1px solid color-mix(in oklab, currentColor 28%, transparent);
+  background: color-mix(in oklab, currentColor 10%, transparent);
+  padding-inline: 0.625rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: currentColor;
+}
+
+[data-sonner-toast].cn-toast [data-button]:hover {
+  background: color-mix(in oklab, currentColor 20%, transparent);
+}
+
+[data-sonner-toast].cn-toast [data-cancel] {
+  background: transparent;
 }
 
 .cn-toast::after {
