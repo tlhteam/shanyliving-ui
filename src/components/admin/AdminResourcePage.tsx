@@ -54,6 +54,7 @@ type AdminResourcePageProps = {
   getResourceKey?: (row: AdminRow) => string;
   createHref?: string;
   editHref?: (row: AdminRow) => string;
+  onRowClick?: (row: AdminRow) => void;
 };
 
 type AdminColumnInput =
@@ -344,6 +345,7 @@ export function AdminResourcePage({
   getResourceKey,
   createHref,
   editHref,
+  onRowClick,
 }: AdminResourcePageProps) {
   const router = useRouter();
   const queryClient = useQueryClient();
@@ -409,14 +411,21 @@ export function AdminResourcePage({
   });
 
   const resourceErrorMessage = useMemo(() => {
-    const status = (resourceError as { response?: { status?: number } } | null)?.response?.status;
-    const apiMessage = (resourceError as { response?: { data?: { message?: string } } } | null)?.response?.data?.message;
+    const status = (resourceError as { response?: { status?: number } } | null)
+      ?.response?.status;
+    const apiMessage = (
+      resourceError as { response?: { data?: { message?: string } } } | null
+    )?.response?.data?.message;
 
     if (status === 401 || status === 403) {
       return "Your admin session expired. Sign in again to load these records.";
     }
 
-    return apiMessage || (resourceError as Error | null)?.message || "Unable to load records from the API.";
+    return (
+      apiMessage ||
+      (resourceError as Error | null)?.message ||
+      "Unable to load records from the API."
+    );
   }, [resourceError]);
 
   useEffect(() => {
@@ -895,10 +904,9 @@ export function AdminResourcePage({
           loading={isLoading || isFetching}
           skeletonRows={pageSize}
           emptyMessage={
-            isError
-              ? resourceErrorMessage
-              : "No matching records found."
+            isError ? resourceErrorMessage : "No matching records found."
           }
+          onRowClick={onRowClick}
         />
         {!isLoading && !isFetching ? (
           <AppPagination

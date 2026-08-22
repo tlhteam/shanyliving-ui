@@ -127,6 +127,9 @@ export function ProductsAdminClient() {
       getResourceKey={(row) => String(row.slug ?? row.productId ?? row.sku)}
       createHref="/admin/products/new"
       editHref={(row) => `/admin/products/${row.slug}/edit`}
+      onRowClick={(row) => {
+        window.location.href = `/admin/products/${row.slug}/edit`;
+      }}
       columns={[
         { key: "sku", label: "SKU" },
         { key: "image", label: "Cover Image", input: "image" },

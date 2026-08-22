@@ -1,8 +1,20 @@
 "use client";
 
-import { flexRender, getCoreRowModel, useReactTable, type ColumnDef } from "@tanstack/react-table";
+import {
+  flexRender,
+  getCoreRowModel,
+  useReactTable,
+  type ColumnDef,
+} from "@tanstack/react-table";
 import { AppTableSkeleton } from "@/components/app/AppTableSkeleton";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 
 type AppTableProps<TData> = {
   data: TData[];
@@ -10,15 +22,23 @@ type AppTableProps<TData> = {
   emptyMessage?: string;
   loading?: boolean;
   skeletonRows?: number;
+  onRowClick?: (row: TData) => void;
 };
 
-export function AppTable<TData>({ data, columns, emptyMessage = "No records found.", loading, skeletonRows = 5 }: AppTableProps<TData>) {
+export function AppTable<TData>({
+  data,
+  columns,
+  emptyMessage = "No records found.",
+  loading,
+  skeletonRows = 5,
+  onRowClick,
+}: AppTableProps<TData>) {
   "use no memo";
 
   const table = useReactTable({
     data,
     columns,
-    getCoreRowModel: getCoreRowModel()
+    getCoreRowModel: getCoreRowModel(),
   });
 
   if (loading) {
@@ -31,8 +51,16 @@ export function AppTable<TData>({ data, columns, emptyMessage = "No records foun
         {table.getHeaderGroups().map((headerGroup) => (
           <TableRow key={headerGroup.id}>
             {headerGroup.headers.map((header) => (
-              <TableHead key={header.id} className="px-4 py-3 text-xs font-bold uppercase tracking-[0.12em] text-muted-foreground">
-                {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
+              <TableHead
+                key={header.id}
+                className="px-4 py-3 text-xs font-bold uppercase tracking-[0.12em] text-muted-foreground"
+              >
+                {header.isPlaceholder
+                  ? null
+                  : flexRender(
+                      header.column.columnDef.header,
+                      header.getContext(),
+                    )}
               </TableHead>
             ))}
           </TableRow>
@@ -41,7 +69,13 @@ export function AppTable<TData>({ data, columns, emptyMessage = "No records foun
       <TableBody>
         {table.getRowModel().rows.length ? (
           table.getRowModel().rows.map((row) => (
-            <TableRow key={row.id}>
+            <TableRow
+              key={row.id}
+              onClick={() => onRowClick?.(row.original)}
+              className={
+                onRowClick ? "cursor-pointer hover:bg-muted/50" : undefined
+              }
+            >
               {row.getVisibleCells().map((cell) => (
                 <TableCell key={cell.id} className="px-4 py-4">
                   {flexRender(cell.column.columnDef.cell, cell.getContext())}
@@ -51,7 +85,10 @@ export function AppTable<TData>({ data, columns, emptyMessage = "No records foun
           ))
         ) : (
           <TableRow>
-            <TableCell colSpan={columns.length} className="h-28 text-center text-muted-foreground">
+            <TableCell
+              colSpan={columns.length}
+              className="h-28 text-center text-muted-foreground"
+            >
               {emptyMessage}
             </TableCell>
           </TableRow>
