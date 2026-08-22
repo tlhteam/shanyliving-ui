@@ -48,16 +48,21 @@ type GalleryEntry = {
   media_id: number | null;
   url: string | null;
   path: string | null;
+  color: string | null;
   is_primary: boolean;
 };
 function SortableGalleryItem({
   entry,
   index,
+  colors,
+  onColorChange,
   onSetPrimary,
   onRemove,
 }: {
   entry: GalleryEntry;
   index: number;
+  colors: string[];
+  onColorChange: (index: number, color: string | null) => void;
   onSetPrimary: (index: number) => void;
   onRemove: (mediaId: number | null, index: number) => void;
 }) {
@@ -103,21 +108,29 @@ function SortableGalleryItem({
       </div>
 
       <div className="absolute inset-x-1 top-1 flex items-center justify-between">
-        <button
-          type="button"
-          aria-label="Set as primary image"
-          onClick={() => onSetPrimary(index)}
-          className={cn(
-            "grid size-7 place-items-center rounded-full bg-white/90 transition",
-            entry.is_primary
-              ? "text-amber-500"
-              : "text-neutral-400 hover:text-neutral-900",
-          )}
-        >
-          <Star
-            className={cn("size-3.5", entry.is_primary && "fill-current")}
-          />
-        </button>
+        <div className="flex items-center gap-1.5">
+          <button
+            type="button"
+            aria-label="Set as primary image"
+            onClick={() => onSetPrimary(index)}
+            className={cn(
+              "grid size-7 place-items-center rounded-full bg-white/90 transition",
+              entry.is_primary
+                ? "text-amber-500"
+                : "text-neutral-400 hover:text-neutral-900",
+            )}
+          >
+            <Star
+              className={cn("size-3.5", entry.is_primary && "fill-current")}
+            />
+          </button>
+
+          {entry.is_primary ? (
+            <span className="rounded-full bg-neutral-950/85 px-2 py-1 text-[9px] font-bold uppercase tracking-[0.08em] text-white">
+              Primary
+            </span>
+          ) : null}
+        </div>
 
         <button
           type="button"
@@ -129,11 +142,26 @@ function SortableGalleryItem({
         </button>
       </div>
 
-      {entry.is_primary ? (
-        <span className="absolute inset-x-0 bottom-0 bg-neutral-950/80 py-1 text-center text-[10px] font-bold uppercase tracking-wide text-white">
-          Primary
-        </span>
-      ) : null}
+      <div className="border-t border-neutral-200 bg-white p-2 dark:border-white/10 dark:bg-neutral-900">
+        <label className="block text-[10px] font-bold uppercase tracking-[0.12em] text-neutral-500 dark:text-neutral-400">
+          Color
+        </label>
+
+        <select
+          value={entry.color ?? ""}
+          onChange={(event) => onColorChange(index, event.target.value || null)}
+          onPointerDown={(event) => event.stopPropagation()}
+          onClick={(event) => event.stopPropagation()}
+          className="mt-1 h-9 w-full rounded-md border border-neutral-300 bg-white px-2 text-xs font-medium outline-none focus:border-neutral-950 dark:border-white/15 dark:bg-neutral-950"
+        >
+          <option value="">No color</option>
+          {colors.map((color) => (
+            <option key={color} value={color}>
+              {color}
+            </option>
+          ))}
+        </select>
+      </div>
     </div>
   );
 }
@@ -272,6 +300,14 @@ export function ProductEditor({ slug }: { slug?: string }) {
   const [options, setOptions] = useState<ProductOptionDraft[]>(() =>
     slug ? [] : defaultOptions,
   );
+  const availableColors = useMemo(
+    () =>
+      options
+        .find((option) => option.name.toLowerCase() === "color")
+        ?.values.map((value) => value.value.trim())
+        .filter(Boolean) ?? [],
+    [options],
+  );
   const [variants, setVariants] = useState<ProductVariantDraft[]>(() =>
     slug ? [] : defaultVariants(),
   );
@@ -313,6 +349,7 @@ export function ProductEditor({ slug }: { slug?: string }) {
         media_id: image.media_id,
         url: image.url,
         path: image.path,
+        color: image.color ?? null,
         is_primary: image.is_primary,
       })),
     );
@@ -416,8 +453,18 @@ export function ProductEditor({ slug }: { slug?: string }) {
         media_ids: gallery
           .map((entry) => entry.media_id)
           .filter((id): id is number => typeof id === "number"),
+
         primary_media_id:
           gallery.find((entry) => entry.is_primary)?.media_id ?? undefined,
+
+        media_colors: Object.fromEntries(
+          gallery
+            .filter(
+              (entry): entry is GalleryEntry & { media_id: number } =>
+                typeof entry.media_id === "number",
+            )
+            .map((entry) => [entry.media_id, entry.color]),
+        ),
         translations: localeOptions.map((option) => ({
           locale: option.locale,
           ...(translations[option.locale] ?? emptyTranslation),
@@ -530,6 +577,13 @@ export function ProductEditor({ slug }: { slug?: string }) {
         ...entry,
         is_primary: currentIndex === index,
       })),
+    );
+  };
+  const setGalleryColor = (index: number, color: string | null) => {
+    setGallery((current) =>
+      current.map((entry, currentIndex) =>
+        currentIndex === index ? { ...entry, color } : entry,
+      ),
     );
   };
   const handleGalleryDragEnd = (event: DragEndEvent) => {
@@ -784,6 +838,8 @@ export function ProductEditor({ slug }: { slug?: string }) {
                         key={`${entry.media_id ?? entry.path}-${index}`}
                         entry={entry}
                         index={index}
+                        colors={availableColors}
+                        onColorChange={setGalleryColor}
                         onSetPrimary={setPrimary}
                         onRemove={removeMedia}
                       />

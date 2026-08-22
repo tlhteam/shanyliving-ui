@@ -1,13 +1,16 @@
 "use client";
 
 import Link from "next/link";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { AppButton } from "@/components/app/AppButton";
 import { AppImage } from "@/components/app/AppImage";
 import { SiteIcon } from "@/components/icons/SiteIcon";
 import { ProductBuyActions } from "@/components/storefront/ProductBuyActions";
 import { cn } from "@/lib/utils";
-import type { StorefrontOptionGroup, StorefrontProduct } from "@/lib/storefront-pages";
+import type {
+  StorefrontOptionGroup,
+  StorefrontProduct,
+} from "@/lib/storefront-pages";
 
 type ProductDetailHeroProps = {
   product: StorefrontProduct;
@@ -17,11 +20,27 @@ type ProductDetailHeroProps = {
 type OptionValue = StorefrontOptionGroup["values"][number];
 
 const fallbackGroups: StorefrontOptionGroup[] = [
-  { name: "Size", values: [{ label: "2.2m" }, { label: "2.4m" }, { label: "2.8m" }, { label: "3.2m" }] },
-  { name: "Configuration", values: [{ label: "Left chaise" }, { label: "Right chaise" }] },
+  {
+    name: "Size",
+    values: [
+      { label: "2.2m" },
+      { label: "2.4m" },
+      { label: "2.8m" },
+      { label: "3.2m" },
+    ],
+  },
+  {
+    name: "Configuration",
+    values: [{ label: "Left chaise" }, { label: "Right chaise" }],
+  },
   {
     name: "Fabric",
-    values: [{ label: "Boucle" }, { label: "Performance Linen" }, { label: "Soft Chenille" }, { label: "Premium Velvet" }]
+    values: [
+      { label: "Boucle" },
+      { label: "Performance Linen" },
+      { label: "Soft Chenille" },
+      { label: "Premium Velvet" },
+    ],
   },
   {
     name: "Color",
@@ -30,9 +49,9 @@ const fallbackGroups: StorefrontOptionGroup[] = [
       { label: "Sand", swatch: "#d9d4ca" },
       { label: "Caramel", swatch: "#b1845f" },
       { label: "Espresso", swatch: "#3d271c" },
-      { label: "Forest", swatch: "#183421" }
-    ]
-  }
+      { label: "Forest", swatch: "#183421" },
+    ],
+  },
 ];
 
 function resolveGroups(product: StorefrontProduct): StorefrontOptionGroup[] {
@@ -42,12 +61,12 @@ function resolveGroups(product: StorefrontProduct): StorefrontOptionGroup[] {
 
   const colorValues = (product.colors ?? []).map((swatch, index) => ({
     label: product.colorNames?.[index] ?? `Color ${index + 1}`,
-    swatch
+    swatch,
   }));
 
   const fabricValues = (product.fabricImages ?? []).map((image, index) => ({
     label: product.variants?.[index] ?? `Fabric ${index + 1}`,
-    image
+    image,
   }));
 
   return fallbackGroups.map((group) => {
@@ -64,7 +83,10 @@ function resolveGroups(product: StorefrontProduct): StorefrontOptionGroup[] {
 }
 
 function normalizeToken(value: string) {
-  return value.toLowerCase().replace(/gray/g, "grey").replace(/[^a-z0-9]+/g, "");
+  return value
+    .toLowerCase()
+    .replace(/gray/g, "grey")
+    .replace(/[^a-z0-9]+/g, "");
 }
 
 function labelTokens(label: string) {
@@ -85,15 +107,17 @@ function imageForSelection(
   product: StorefrontProduct,
   gallery: string[],
   selection: Record<string, string>,
-  changedGroup: string
+  changedGroup: string,
 ) {
-  const entries = Object.entries(selection).filter(([, value]) => Boolean(value));
+  const entries = Object.entries(selection).filter(([, value]) =>
+    Boolean(value),
+  );
   const media = product.variantMedia ?? [];
 
   const exact = media.find(
     (entry) =>
       Object.keys(entry.options).length === entries.length &&
-      entries.every(([name, value]) => entry.options[name] === value)
+      entries.every(([name, value]) => entry.options[name] === value),
   );
 
   if (exact) {
@@ -103,12 +127,18 @@ function imageForSelection(
   const scored = media
     .map((entry) => ({
       image: entry.image,
-      matched: Object.entries(entry.options).filter(([name, value]) => selection[name] === value).length,
+      matched: Object.entries(entry.options).filter(
+        ([name, value]) => selection[name] === value,
+      ).length,
       total: Object.keys(entry.options).length,
-      touchesChanged: Object.keys(entry.options).includes(changedGroup)
+      touchesChanged: Object.keys(entry.options).includes(changedGroup),
     }))
     .filter((entry) => entry.matched === entry.total && entry.total > 0)
-    .sort((a, b) => Number(b.touchesChanged) - Number(a.touchesChanged) || b.matched - a.matched);
+    .sort(
+      (a, b) =>
+        Number(b.touchesChanged) - Number(a.touchesChanged) ||
+        b.matched - a.matched,
+    );
 
   if (scored.length) {
     return scored[0].image;
@@ -141,10 +171,17 @@ function imageForSelection(
 
 function parseDescription(description?: string) {
   if (!description) {
-    return { intro: "", specs: [] as Array<{ label: string; value: string }> };
+    return {
+      intro: "",
+      specs: [] as Array<{ label: string; value: string }>,
+    };
   }
 
-  const blocks = description.split(/\n{2,}/).map((block) => block.trim()).filter(Boolean);
+  const blocks = description
+    .split(/\n{2,}/)
+    .map((block) => block.trim())
+    .filter(Boolean);
+
   const intro: string[] = [];
   const specs: Array<{ label: string; value: string }> = [];
 
@@ -152,7 +189,10 @@ function parseDescription(description?: string) {
     const match = block.match(/^([A-Za-z][A-Za-z /&-]{1,38}):\s*([\s\S]+)$/);
 
     if (match) {
-      specs.push({ label: match[1].trim(), value: match[2].trim().replace(/\.+$/, "") });
+      specs.push({
+        label: match[1].trim(),
+        value: match[2].trim().replace(/\.+$/, ""),
+      });
       return;
     }
 
@@ -164,40 +204,88 @@ function parseDescription(description?: string) {
 
 export function ProductDetailHero({ product, images }: ProductDetailHeroProps) {
   const groups = useMemo(() => resolveGroups(product), [product]);
-  const { intro, specs } = useMemo(() => parseDescription(product.description), [product.description]);
 
-  const gallery = useMemo(() => {
-    const optionImages = groups.flatMap((group) =>
-      group.values.map((value) => value.image).filter((image): image is string => Boolean(image))
-    );
-    const variantImages = (product.variantMedia ?? []).map((entry) => entry.image);
-
-    return [...new Set([...images.filter(Boolean), ...variantImages, ...optionImages])];
-  }, [groups, images, product.variantMedia]);
-
-  const [activeImage, setActiveImage] = useState(gallery[0] ?? product.image);
-  const [selection, setSelection] = useState<Record<string, string>>(() =>
-    Object.fromEntries(groups.map((group) => [group.name, group.values[0]?.label ?? ""]))
+  const { intro, specs } = useMemo(
+    () => parseDescription(product.description),
+    [product.description],
   );
 
+  const [selection, setSelection] = useState<Record<string, string>>(() =>
+    Object.fromEntries(
+      groups.map((group) => [group.name, group.values[0]?.label ?? ""]),
+    ),
+  );
+
+  const gallery = useMemo(() => {
+    const colorGroup = groups.find(
+      (group) => group.name.toLowerCase() === "color",
+    );
+
+    const selectedColor =
+      selection[colorGroup?.name ?? "Color"] ??
+      selection.Color ??
+      selection.color;
+
+    const colorImages = (product.galleryMedia ?? [])
+      .filter((entry) =>
+        selectedColor ? entry.color === selectedColor : !entry.color,
+      )
+      .map((entry) => entry.image)
+      .filter(Boolean);
+
+    const fallbackImages = images.filter(Boolean);
+
+    const optionImages = groups.flatMap((group) =>
+      group.name.toLowerCase() === "color"
+        ? []
+        : group.values
+            .map((value) => value.image)
+            .filter((image): image is string => Boolean(image)),
+    );
+
+    const baseImages = colorImages.length > 0 ? colorImages : fallbackImages;
+
+    return [...new Set([...baseImages, ...optionImages])];
+  }, [groups, images, product.galleryMedia, selection]);
+
+  const [activeImage, setActiveImage] = useState(gallery[0] ?? product.image);
+
+  useEffect(() => {
+    if (!gallery.length) {
+      setActiveImage(product.image);
+      return;
+    }
+
+    if (!gallery.includes(activeImage)) {
+      setActiveImage(gallery[0]);
+    }
+  }, [activeImage, gallery, product.image]);
+
   const hasPrice = product.price > 0;
+
   const summary = groups
     .map((group) => selection[group.name])
     .filter(Boolean)
     .join(" / ");
 
   const select = (group: StorefrontOptionGroup, value: OptionValue) => {
-    const nextSelection = { ...selection, [group.name]: value.label };
+    const nextSelection = {
+      ...selection,
+      [group.name]: value.label,
+    };
+
     setSelection(nextSelection);
 
-    const nextImage = value.image ?? imageForSelection(product, gallery, nextSelection, group.name);
+    const nextImage =
+      value.image ??
+      imageForSelection(product, gallery, nextSelection, group.name);
 
     if (nextImage) {
       setActiveImage(nextImage);
     }
   };
 
-  const thumbnails = gallery.slice(0, 8);
+  const thumbnails = gallery;
 
   return (
     <div className="grid gap-8 lg:grid-cols-[1.1fr_0.9fr]">
@@ -210,16 +298,18 @@ export function ProductDetailHero({ product, images }: ProductDetailHeroProps) {
               alt={product.name}
               className={cn(
                 "absolute inset-0 transition-opacity duration-500 ease-out",
-                image === activeImage ? "opacity-100" : "opacity-0"
+                image === activeImage ? "opacity-100" : "opacity-0",
               )}
               sizes="(max-width: 1024px) 100vw, 55vw"
               preload={image === gallery[0]}
               loading={image === gallery[0] ? "eager" : "lazy"}
             />
           ))}
+
           <span className="absolute start-3 top-3 z-10 rounded-full bg-white px-3 py-1 text-[10px] font-bold uppercase tracking-[0.12em] text-neutral-950 sm:start-4 sm:top-4 sm:text-xs">
             {product.badge ?? "Ready to order"}
           </span>
+
           <button
             type="button"
             aria-label={`Save ${product.name}`}
@@ -241,10 +331,17 @@ export function ProductDetailHero({ product, images }: ProductDetailHeroProps) {
                   onClick={() => setActiveImage(image)}
                   className={cn(
                     "w-20 shrink-0 snap-start overflow-hidden rounded-lg border-2 transition sm:w-auto",
-                    activeImage === image ? "border-neutral-950 dark:border-white" : "border-transparent hover:border-neutral-300"
+                    activeImage === image
+                      ? "border-neutral-950 dark:border-white"
+                      : "border-transparent hover:border-neutral-300",
                   )}
                 >
-                  <AppImage src={image} alt={`${product.name} gallery ${index + 1}`} className="aspect-[1.2/1] w-full" sizes="120px" />
+                  <AppImage
+                    src={image}
+                    alt={`${product.name} gallery ${index + 1}`}
+                    className="aspect-[1.2/1] w-full"
+                    sizes="120px"
+                  />
                 </button>
               ))}
             </div>
@@ -258,35 +355,53 @@ export function ProductDetailHero({ product, images }: ProductDetailHeroProps) {
           <SiteIcon name="chevron-right" className="size-3 rtl:rotate-180" />
           <Link href="/sofas">Sofas</Link>
           <SiteIcon name="chevron-right" className="size-3 rtl:rotate-180" />
-          <span className="text-neutral-950 dark:text-neutral-50">{product.name}</span>
+          <span className="text-neutral-950 dark:text-neutral-50">
+            {product.name}
+          </span>
         </nav>
 
-        <h1 className="font-serif text-3xl leading-tight font-bold sm:text-4xl lg:text-5xl">{product.name}</h1>
+        <h1 className="font-serif text-3xl leading-tight font-bold sm:text-4xl lg:text-5xl">
+          {product.name}
+        </h1>
 
         <div className="mt-3 flex flex-wrap items-center gap-2 text-xs sm:mt-4">
           <span className="rounded-full bg-neutral-100 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.12em] text-neutral-950 dark:bg-white/10 dark:text-white">
             {product.badge ?? "Ready to order"}
           </span>
+
           <span className="rounded-full bg-neutral-100 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.12em] text-neutral-950 dark:bg-white/10 dark:text-white">
             Trusted showroom pick
           </span>
-          <span className="text-neutral-600 dark:text-neutral-400">4.8 (36 reviews)</span>
+
+          <span className="text-neutral-600 dark:text-neutral-400">
+            4.8 (36 reviews)
+          </span>
         </div>
 
         {intro ? (
-          <p className="mt-4 text-sm leading-6 text-neutral-700 sm:mt-5 dark:text-neutral-300">{intro}</p>
+          <p className="mt-4 text-sm leading-6 text-neutral-700 sm:mt-5 dark:text-neutral-300">
+            {intro}
+          </p>
         ) : null}
 
         <div className="mt-6 border-t border-neutral-200 pt-5 dark:border-white/10">
           <p className="text-sm font-bold">
             {hasPrice ? (
-              <>From <span className="text-2xl sm:text-3xl">NIS {new Intl.NumberFormat("en").format(product.price)}</span></>
+              <>
+                From{" "}
+                <span className="text-2xl sm:text-3xl">
+                  NIS {new Intl.NumberFormat("en").format(product.price)}
+                </span>
+              </>
             ) : (
               <span className="text-2xl sm:text-3xl">Price on request</span>
             )}
           </p>
+
           <p className="mt-1 text-xs text-neutral-600 dark:text-neutral-400">
-            {hasPrice ? "Price varies by size and configuration" : "Available by showroom quote"}
+            {hasPrice
+              ? "Price varies by size and configuration"
+              : "Available by showroom quote"}
           </p>
         </div>
 
@@ -294,9 +409,15 @@ export function ProductDetailHero({ product, images }: ProductDetailHeroProps) {
           {groups.map((group) => (
             <div key={group.name}>
               <div className="flex flex-wrap items-baseline justify-between gap-2">
-                <span className="text-xs font-bold uppercase tracking-[0.16em] text-neutral-500 dark:text-neutral-400">{group.name}</span>
-                <span className="text-sm font-bold">{selection[group.name]}</span>
+                <span className="text-xs font-bold uppercase tracking-[0.16em] text-neutral-500 dark:text-neutral-400">
+                  {group.name}
+                </span>
+
+                <span className="text-sm font-bold">
+                  {selection[group.name]}
+                </span>
               </div>
+
               <div className="mt-2.5 flex flex-wrap gap-2.5">
                 {group.values.map((value) => {
                   const active = selection[group.name] === value.label;
@@ -314,7 +435,7 @@ export function ProductDetailHero({ product, images }: ProductDetailHeroProps) {
                           "size-9 rounded-full border-2 transition",
                           active
                             ? "border-neutral-950 ring-2 ring-neutral-950/20 dark:border-white"
-                            : "border-neutral-200 hover:border-neutral-500 dark:border-white/20"
+                            : "border-neutral-200 hover:border-neutral-500 dark:border-white/20",
                         )}
                         style={{ backgroundColor: value.swatch }}
                       />
@@ -330,11 +451,21 @@ export function ProductDetailHero({ product, images }: ProductDetailHeroProps) {
                         onClick={() => select(group, value)}
                         className={cn(
                           "w-20 overflow-hidden rounded-lg border-2 p-1 text-center transition",
-                          active ? "border-neutral-950 dark:border-white" : "border-neutral-200 hover:border-neutral-400 dark:border-white/15"
+                          active
+                            ? "border-neutral-950 dark:border-white"
+                            : "border-neutral-200 hover:border-neutral-400 dark:border-white/15",
                         )}
                       >
-                        <AppImage src={value.image} alt={value.label} className="aspect-square rounded-md" sizes="80px" />
-                        <span className="mt-1 block truncate text-[10px] font-bold">{value.label}</span>
+                        <AppImage
+                          src={value.image}
+                          alt={value.label}
+                          className="aspect-square rounded-md"
+                          sizes="80px"
+                        />
+
+                        <span className="mt-1 block truncate text-[10px] font-bold">
+                          {value.label}
+                        </span>
                       </button>
                     );
                   }
@@ -349,7 +480,7 @@ export function ProductDetailHero({ product, images }: ProductDetailHeroProps) {
                         "h-10 rounded-md border px-4 text-xs font-bold transition",
                         active
                           ? "border-neutral-950 bg-neutral-950 text-white dark:border-white dark:bg-white dark:text-neutral-950"
-                          : "border-neutral-300 hover:border-neutral-950 dark:border-white/15"
+                          : "border-neutral-300 hover:border-neutral-950 dark:border-white/15",
                       )}
                     >
                       {value.label}
@@ -374,35 +505,67 @@ export function ProductDetailHero({ product, images }: ProductDetailHeroProps) {
         {hasPrice ? (
           <>
             <div className="mt-3 grid gap-3 sm:grid-cols-2">
-              <Link href={`/customize-your-sofa?product=${product.slug}&step=model`} className="block">
-                <AppButton variant="outline" className="w-full">Customize Your Sofa</AppButton>
+              <Link
+                href={`/customize-your-sofa?product=${product.slug}&step=model`}
+                className="block"
+              >
+                <AppButton variant="outline" className="w-full">
+                  Customize Your Sofa
+                </AppButton>
               </Link>
-              <Link href={`/customize-your-sofa?product=${product.slug}&step=room`} className="block">
-                <AppButton variant="outline" className="w-full">See It In My Room (AI)</AppButton>
+
+              <Link
+                href={`/customize-your-sofa?product=${product.slug}&step=room`}
+                className="block"
+              >
+                <AppButton variant="outline" className="w-full">
+                  See It In My Room (AI)
+                </AppButton>
               </Link>
             </div>
+
             <p className="mt-3 text-center text-xs text-neutral-600 dark:text-neutral-400">
-              Add to cart for checkout, customize in 4 steps, or preview the sofa in your room.
+              Add to cart for checkout, customize in 4 steps, or preview the
+              sofa in your room.
             </p>
           </>
         ) : (
           <Link href="/showroom" className="mt-3 block">
-            <AppButton variant="outline" className="w-full">Ask Showroom Team</AppButton>
+            <AppButton variant="outline" className="w-full">
+              Ask Showroom Team
+            </AppButton>
           </Link>
         )}
 
         {specs.length || product.dimensions ? (
           <dl className="mt-7 divide-y divide-neutral-200 border-t border-neutral-200 text-sm dark:divide-white/10 dark:border-white/10">
-            {product.dimensions && !specs.some((spec) => spec.label.toLowerCase().startsWith("dimensions")) ? (
+            {product.dimensions &&
+            !specs.some((spec) =>
+              spec.label.toLowerCase().startsWith("dimensions"),
+            ) ? (
               <div className="grid grid-cols-[8.5rem_1fr] gap-3 py-2.5">
-                <dt className="text-xs font-bold uppercase tracking-[0.1em] text-neutral-500 dark:text-neutral-400">Dimensions</dt>
-                <dd className="text-neutral-800 dark:text-neutral-200">{product.dimensions}</dd>
+                <dt className="text-xs font-bold uppercase tracking-[0.1em] text-neutral-500 dark:text-neutral-400">
+                  Dimensions
+                </dt>
+
+                <dd className="text-neutral-800 dark:text-neutral-200">
+                  {product.dimensions}
+                </dd>
               </div>
             ) : null}
+
             {specs.map((spec) => (
-              <div key={spec.label} className="grid grid-cols-[8.5rem_1fr] gap-3 py-2.5">
-                <dt className="text-xs font-bold uppercase tracking-[0.1em] text-neutral-500 dark:text-neutral-400">{spec.label}</dt>
-                <dd className="text-neutral-800 dark:text-neutral-200">{spec.value}</dd>
+              <div
+                key={spec.label}
+                className="grid grid-cols-[8.5rem_1fr] gap-3 py-2.5"
+              >
+                <dt className="text-xs font-bold uppercase tracking-[0.1em] text-neutral-500 dark:text-neutral-400">
+                  {spec.label}
+                </dt>
+
+                <dd className="text-neutral-800 dark:text-neutral-200">
+                  {spec.value}
+                </dd>
               </div>
             ))}
           </dl>

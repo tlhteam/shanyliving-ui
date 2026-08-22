@@ -11,22 +11,38 @@ const categoryBySlug: Record<string, StorefrontProduct["category"]> = {
   dining: "dining",
   "dining-room": "dining",
   bedroom: "bedroom",
-  "new-arrivals": "new-arrivals"
+  "new-arrivals": "new-arrivals",
 };
 
-export function mapCatalogProduct(product: CatalogProduct, fallback?: StorefrontProduct): StorefrontProduct {
-  const categorySlug = typeof product.category === "object" && product.category ? product.category.slug : "sofas";
-  const category = categoryBySlug[categorySlug] ?? fallback?.category ?? "sofas";
+export function mapCatalogProduct(
+  product: CatalogProduct,
+  fallback?: StorefrontProduct,
+): StorefrontProduct {
+  const categorySlug =
+    typeof product.category === "object" && product.category
+      ? product.category.slug
+      : "sofas";
+  const category =
+    categoryBySlug[categorySlug] ?? fallback?.category ?? "sofas";
 
-  const galleryImages = product.images
+  const sortedImages = product.images
     ?.slice()
-    .sort((a, b) => Number(a.sort_order ?? 0) - Number(b.sort_order ?? 0))
-    .map((image) => image.url ?? image.path ?? "")
+    .sort((a, b) => Number(a.sort_order ?? 0) - Number(b.sort_order ?? 0));
+
+  const galleryImages = sortedImages
+    ?.map((image) => image.url ?? image.path ?? "")
     .filter(isUsableImagePath);
+
+  const galleryMedia = sortedImages
+    ?.map((image) => ({
+      image: image.url ?? image.path ?? "",
+      color: image.color ?? null,
+    }))
+    .filter((image) => isUsableImagePath(image.image));
 
   const primaryImage = isUsableImagePath(product.image_url)
     ? String(product.image_url)
-    : galleryImages?.[0] ?? fallback?.image ?? "";
+    : (galleryImages?.[0] ?? fallback?.image ?? "");
 
   const optionGroups = (product.options ?? [])
     .filter((option) => (option.values ?? []).length > 0)
@@ -35,58 +51,89 @@ export function mapCatalogProduct(product: CatalogProduct, fallback?: Storefront
       values: (option.values ?? []).map((value) => ({
         label: value.value,
         swatch: value.swatch ?? null,
-        image: value.media_url ?? null
-      }))
+        image: value.media_url ?? null,
+      })),
     }));
 
-  const colorGroup = optionGroups.find((group) => group.name.toLowerCase() === "color");
-  const fabricGroup = optionGroups.find((group) => group.name.toLowerCase() === "fabric");
+  const colorGroup = optionGroups.find(
+    (group) => group.name.toLowerCase() === "color",
+  );
+  const fabricGroup = optionGroups.find(
+    (group) => group.name.toLowerCase() === "fabric",
+  );
 
   const variantMedia = [
     ...(product.variants ?? [])
       .filter((variant) => isUsableImagePath(variant.media_url))
-      .map((variant) => ({ options: variant.options ?? {}, image: String(variant.media_url) })),
+      .map((variant) => ({
+        options: variant.options ?? {},
+        image: String(variant.media_url),
+      })),
     ...optionGroups.flatMap((group) =>
       group.values
         .filter((value) => isUsableImagePath(value.image))
-        .map((value) => ({ options: { [group.name]: value.label }, image: String(value.image) }))
-    )
+        .map((value) => ({
+          options: { [group.name]: value.label },
+          image: String(value.image),
+        })),
+    ),
   ];
 
   return {
     name: product.name,
     slug: product.slug,
     category,
-    subcategory: product.subcategory ?? fallback?.subcategory ?? "Showroom product",
+    subcategory:
+      product.subcategory ?? fallback?.subcategory ?? "Showroom product",
     price: Number(product.price ?? fallback?.price ?? 0),
     image: primaryImage,
-    badge: product.is_best_seller ? "Best Seller" : product.is_featured ? "Featured" : fallback?.badge,
+    badge: product.is_best_seller
+      ? "Best Seller"
+      : product.is_featured
+        ? "Featured"
+        : fallback?.badge,
     description: product.description ?? fallback?.description,
     seatRange: product.seat_range ?? fallback?.seatRange,
     dimensions: fallback?.dimensions,
-    variants: fabricGroup?.values.map((value) => value.label) ?? fallback?.variants,
-    colors: colorGroup?.values.map((value) => value.swatch).filter((swatch): swatch is string => Boolean(swatch))
-      ?? (product.colors?.length ? product.colors : fallback?.colors),
-    colorNames: colorGroup?.values.map((value) => value.label) ?? fallback?.colorNames,
-    galleryImages: galleryImages?.length ? galleryImages : fallback?.galleryImages,
-    fabricImages: fabricGroup?.values.map((value) => value.image).filter((image): image is string => Boolean(image))
-      ?? fallback?.fabricImages,
+    variants:
+      fabricGroup?.values.map((value) => value.label) ?? fallback?.variants,
+    colors:
+      colorGroup?.values
+        .map((value) => value.swatch)
+        .filter((swatch): swatch is string => Boolean(swatch)) ??
+      (product.colors?.length ? product.colors : fallback?.colors),
+    colorNames:
+      colorGroup?.values.map((value) => value.label) ?? fallback?.colorNames,
+    galleryImages: galleryImages?.length
+      ? galleryImages
+      : fallback?.galleryImages,
+    galleryMedia: galleryMedia?.length ? galleryMedia : undefined,
+    fabricImages:
+      fabricGroup?.values
+        .map((value) => value.image)
+        .filter((image): image is string => Boolean(image)) ??
+      fallback?.fabricImages,
     optionGroups: optionGroups.length ? optionGroups : undefined,
-    variantMedia: variantMedia.length ? variantMedia : fallback?.variantMedia
+    variantMedia: variantMedia.length ? variantMedia : fallback?.variantMedia,
   };
 }
 
-async function fetchCollectionProducts(pageSlug: string): Promise<CatalogProduct[]> {
+async function fetchCollectionProducts(
+  pageSlug: string,
+): Promise<CatalogProduct[]> {
   if (!apiUrl) {
     return [];
   }
 
   try {
     const locale = await getUserLocale();
-    const response = await fetch(`${apiUrl}/storefront/collections/${encodeURIComponent(pageSlug)}?per_page=48&locale=${locale}`, {
-      headers: { Accept: "application/json" },
-      next: { revalidate: 60 }
-    });
+    const response = await fetch(
+      `${apiUrl}/storefront/collections/${encodeURIComponent(pageSlug)}?per_page=48&locale=${locale}`,
+      {
+        headers: { Accept: "application/json" },
+        next: { revalidate: 60 },
+      },
+    );
 
     if (!response.ok) {
       return [];
@@ -101,17 +148,22 @@ async function fetchCollectionProducts(pageSlug: string): Promise<CatalogProduct
   }
 }
 
-async function fetchCategoryProducts(categorySlug: string): Promise<CatalogProduct[]> {
+async function fetchCategoryProducts(
+  categorySlug: string,
+): Promise<CatalogProduct[]> {
   if (!apiUrl) {
     return [];
   }
 
   try {
     const locale = await getUserLocale();
-    const response = await fetch(`${apiUrl}/storefront/products/category/${encodeURIComponent(categorySlug)}?per_page=48&locale=${locale}`, {
-      headers: { Accept: "application/json" },
-      next: { revalidate: 60 }
-    });
+    const response = await fetch(
+      `${apiUrl}/storefront/products/category/${encodeURIComponent(categorySlug)}?per_page=48&locale=${locale}`,
+      {
+        headers: { Accept: "application/json" },
+        next: { revalidate: 60 },
+      },
+    );
 
     if (!response.ok) {
       return [];
@@ -125,7 +177,9 @@ async function fetchCategoryProducts(categorySlug: string): Promise<CatalogProdu
   }
 }
 
-export async function getStorefrontPage(pageSlug: string): Promise<StorefrontPage> {
+export async function getStorefrontPage(
+  pageSlug: string,
+): Promise<StorefrontPage> {
   const staticPage = storefrontPages[pageSlug];
 
   if (!staticPage) {
@@ -133,7 +187,9 @@ export async function getStorefrontPage(pageSlug: string): Promise<StorefrontPag
   }
 
   const collectionProducts = await fetchCollectionProducts(pageSlug);
-  const apiProducts = collectionProducts.length ? collectionProducts : await fetchCategoryProducts(pageSlug);
+  const apiProducts = collectionProducts.length
+    ? collectionProducts
+    : await fetchCategoryProducts(pageSlug);
 
   if (!apiProducts.length) {
     return staticPage;
@@ -141,6 +197,8 @@ export async function getStorefrontPage(pageSlug: string): Promise<StorefrontPag
 
   return {
     ...staticPage,
-    products: apiProducts.map((product) => mapCatalogProduct(product, getStorefrontProduct(product.slug)))
+    products: apiProducts.map((product) =>
+      mapCatalogProduct(product, getStorefrontProduct(product.slug)),
+    ),
   };
 }
