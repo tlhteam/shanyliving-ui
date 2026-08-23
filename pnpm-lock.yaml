@@ -57,7 +57,7 @@ importers:
         specifier: ^8.6.0
         version: 8.6.0(react@19.2.4)
       imapflow:
-        specifier: ^1.0.191
+        specifier: ^1.7.2
         version: 1.7.2
       laravel-echo:
         specifier: ^2.4.0
