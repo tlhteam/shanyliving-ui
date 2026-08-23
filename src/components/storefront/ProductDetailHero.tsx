@@ -398,15 +398,15 @@ export function ProductDetailHero({ product, images }: ProductDetailHeroProps) {
         {specs.length || product.dimensions ? (
           <dl className="mt-7 divide-y divide-neutral-200 border-t border-neutral-200 text-sm dark:divide-white/10 dark:border-white/10">
             {product.dimensions && !specs.some((spec) => spec.label.toLowerCase().startsWith("dimensions")) ? (
-              <div className="grid grid-cols-[8.5rem_1fr] gap-3 py-2.5">
-                <dt className="text-xs font-bold uppercase tracking-[0.1em] text-neutral-500 dark:text-neutral-400">{t("dimensions")}</dt>
-                <dd className="text-neutral-800 dark:text-neutral-200">{product.dimensions}</dd>
+              <div className="grid grid-cols-1 gap-1 py-2.5 sm:grid-cols-[9.5rem_minmax(0,1fr)] sm:gap-3">
+                <dt className="min-w-0 break-words text-xs font-bold uppercase leading-5 tracking-[0.1em] text-neutral-500 dark:text-neutral-400">{t("dimensions")}</dt>
+                <dd className="min-w-0 break-words text-neutral-800 dark:text-neutral-200">{product.dimensions}</dd>
               </div>
             ) : null}
             {specs.map((spec) => (
-              <div key={spec.label} className="grid grid-cols-[8.5rem_1fr] gap-3 py-2.5">
-                <dt className="text-xs font-bold uppercase tracking-[0.1em] text-neutral-500 dark:text-neutral-400">{spec.label}</dt>
-                <dd className="text-neutral-800 dark:text-neutral-200">{spec.value}</dd>
+              <div key={spec.label} className="grid grid-cols-1 gap-1 py-2.5 sm:grid-cols-[9.5rem_minmax(0,1fr)] sm:gap-3">
+                <dt className="min-w-0 break-words text-xs font-bold uppercase leading-5 tracking-[0.1em] text-neutral-500 dark:text-neutral-400">{spec.label}</dt>
+                <dd className="min-w-0 break-words text-neutral-800 dark:text-neutral-200">{spec.value}</dd>
               </div>
             ))}
           </dl>
