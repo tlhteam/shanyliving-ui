@@ -24,9 +24,13 @@ export const AppButton = forwardRef<HTMLButtonElement, AppButtonProps>(
         size === "lg" && "h-13 px-7 text-base",
         className
       )}
+      aria-busy={loading || undefined}
       {...props}
     >
-      {loading ? "Loading..." : children}
+      {loading ? (
+        <span className="me-2 inline-block size-4 shrink-0 animate-spin rounded-full border-2 border-current border-e-transparent" aria-hidden />
+      ) : null}
+      {children}
     </button>
   )
 );
