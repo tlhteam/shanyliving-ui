@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { getServerSession } from "next-auth";
+import { getTranslations } from "next-intl/server";
 import { redirect } from "next/navigation";
 import { Gift, Heart, Package, Sofa, UserPlus } from "lucide-react";
 import { authOptions } from "@/auth";
@@ -8,6 +9,7 @@ import { AppLogo } from "@/components/layout/AppLogo";
 import { RegisterForm } from "@/components/auth/RegisterForm";
 
 export default async function RegisterPage() {
+  const t = await getTranslations("auth");
   const session = await getServerSession(authOptions);
 
   if (session?.user) {
@@ -21,8 +23,8 @@ export default async function RegisterPage() {
         <div className="relative flex h-full flex-col justify-between p-12">
           <AppLogo variant="light" imageClassName="w-44" />
           <div>
-            <h1 className="font-serif text-6xl leading-tight">Create your SHANY Living account</h1>
-            <p className="mt-5 max-w-lg text-white/80">Save sofa designs, follow your orders, keep addresses and gift cards in one place, and talk to the showroom team.</p>
+            <h1 className="font-serif text-6xl leading-tight">{t("registerHeroTitle")}</h1>
+            <p className="mt-5 max-w-lg text-white/80">{t("registerHeroText")}</p>
           </div>
           <div className="grid grid-cols-4 gap-3">
             {[Package, Sofa, Heart, Gift].map((Icon, index) => (
@@ -41,12 +43,12 @@ export default async function RegisterPage() {
             <div className="mx-auto grid size-12 place-items-center rounded-full bg-black text-white">
               <UserPlus className="size-5" />
             </div>
-            <h2 className="mt-4 font-serif text-2xl font-bold sm:text-3xl">Create an account</h2>
-            <p className="mt-2 text-sm text-neutral-600 dark:text-neutral-400">It takes a minute and keeps every design and order together.</p>
+            <h2 className="mt-4 font-serif text-2xl font-bold sm:text-3xl">{t("registerTitle")}</h2>
+            <p className="mt-2 text-sm text-neutral-600 dark:text-neutral-400">{t("registerSubtitle")}</p>
           </div>
           <RegisterForm />
           <p className="mt-5 text-center text-sm text-neutral-600 dark:text-neutral-400">
-            Already have an account? <Link href="/login" className="font-bold text-neutral-950 hover:underline dark:text-white">Sign in</Link>
+            {t("haveAccount")} <Link href="/login" className="font-bold text-neutral-950 hover:underline dark:text-white">{t("signIn")}</Link>
           </p>
         </AppCard>
       </section>

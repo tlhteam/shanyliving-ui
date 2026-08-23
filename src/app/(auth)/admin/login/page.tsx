@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { getServerSession } from "next-auth";
+import { getTranslations } from "next-intl/server";
 import { redirect } from "next/navigation";
 import { ShieldCheck } from "lucide-react";
 import { authOptions } from "@/auth";
@@ -16,6 +17,7 @@ type PageProps = { searchParams: Promise<{ callbackUrl?: string }> };
 
 export default async function LoginPage({ searchParams }: PageProps) {
   const { callbackUrl } = await searchParams;
+  const t = await getTranslations("auth");
   const session = await getServerSession(authOptions);
 
   if (session?.user?.role === "admin") {
@@ -38,8 +40,8 @@ export default async function LoginPage({ searchParams }: PageProps) {
             <div className="mx-auto flex size-12 items-center justify-center rounded-full bg-neutral-950 text-white dark:bg-white dark:text-neutral-950">
               <ShieldCheck className="size-5" />
             </div>
-            <h1 className="mt-4 text-2xl font-semibold">Admin sign in</h1>
-            <p className="mt-2 text-sm text-neutral-600 dark:text-neutral-300">Access the catalog, leads, appointments, and showroom dashboard.</p>
+            <h1 className="mt-4 text-2xl font-semibold">{t("adminTitle")}</h1>
+            <p className="mt-2 text-sm text-neutral-600 dark:text-neutral-300">{t("adminSubtitle")}</p>
           </div>
           <AdminLoginForm callbackUrl={callbackUrl} />
         </div>
