@@ -3,21 +3,21 @@ import { BarChart3, Boxes, CalendarClock, ContactRound, FileImage, Gift, Layers3
 export type AdminRow = Record<string, unknown>;
 
 export const adminSections = [
-  { href: "/admin", label: "Dashboard", group: "Overview", icon: BarChart3 },
-  { href: "/admin/products", label: "Products", group: "Catalog", icon: Sofa },
-  { href: "/admin/categories", label: "Categories", group: "Catalog", icon: Boxes },
-  { href: "/admin/fabrics", label: "Fabrics", group: "Catalog", icon: SwatchBook },
-  { href: "/admin/colors", label: "Colors", group: "Catalog", icon: Palette },
-  { href: "/admin/configurations", label: "Configurations", group: "Sales Flow", icon: Wand2 },
-  { href: "/admin/leads", label: "Leads", group: "Sales Flow", icon: ContactRound },
-  { href: "/admin/customers", label: "Customers", group: "People", icon: Users },
-  { href: "/admin/messages", label: "Messages", group: "People", icon: Mail },
-  { href: "/admin/users", label: "Accounts", group: "People", icon: UserCog },
-  { href: "/admin/gift-cards", label: "Gift Cards", group: "People", icon: Gift },
-  { href: "/admin/appointments", label: "Appointments", group: "People", icon: CalendarClock },
-  { href: "/admin/media", label: "Media", group: "Content", icon: FileImage },
-  { href: "/admin/analytics", label: "Analytics", group: "Content", icon: Layers3 },
-  { href: "/admin/settings", label: "Settings", group: "System", icon: Settings }
+  { href: "/admin", label: "Dashboard", labelKey: "dashboard", group: "Overview", groupKey: "overview", icon: BarChart3 },
+  { href: "/admin/products", label: "Products", labelKey: "products", group: "Catalog", groupKey: "catalog", icon: Sofa },
+  { href: "/admin/categories", label: "Categories", labelKey: "categories", group: "Catalog", groupKey: "catalog", icon: Boxes },
+  { href: "/admin/fabrics", label: "Fabrics", labelKey: "fabrics", group: "Catalog", groupKey: "catalog", icon: SwatchBook },
+  { href: "/admin/colors", label: "Colors", labelKey: "colors", group: "Catalog", groupKey: "catalog", icon: Palette },
+  { href: "/admin/configurations", label: "Configurations", labelKey: "configurations", group: "Sales Flow", groupKey: "salesFlow", icon: Wand2 },
+  { href: "/admin/leads", label: "Leads", labelKey: "leads", group: "Sales Flow", groupKey: "salesFlow", icon: ContactRound },
+  { href: "/admin/customers", label: "Customers", labelKey: "customers", group: "People", groupKey: "people", icon: Users },
+  { href: "/admin/messages", label: "Messages", labelKey: "messages", group: "People", groupKey: "people", icon: Mail },
+  { href: "/admin/users", label: "Accounts", labelKey: "accounts", group: "People", groupKey: "people", icon: UserCog },
+  { href: "/admin/gift-cards", label: "Gift Cards", labelKey: "giftCards", group: "People", groupKey: "people", icon: Gift },
+  { href: "/admin/appointments", label: "Appointments", labelKey: "appointments", group: "People", groupKey: "people", icon: CalendarClock },
+  { href: "/admin/media", label: "Media", labelKey: "media", group: "Content", groupKey: "content", icon: FileImage },
+  { href: "/admin/analytics", label: "Analytics", labelKey: "analytics", group: "Content", groupKey: "content", icon: Layers3 },
+  { href: "/admin/settings", label: "Settings", labelKey: "settings", group: "System", groupKey: "system", icon: Settings }
 ];
 
 export const products: AdminRow[] = [

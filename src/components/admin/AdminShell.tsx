@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { Menu, PanelLeftClose, PanelLeftOpen } from "lucide-react";
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 import { adminNotifications, adminSections } from "@/lib/admin-data";
 import { AppAccountMenu } from "@/components/app/AppAccountMenu";
 import { AppNotificationBell } from "@/components/app/AppNotificationBell";
@@ -16,8 +17,12 @@ import { cn } from "@/lib/utils";
 import { persistSidebarPreference, sidebarCookies } from "@/lib/sidebar-preference";
 import { useNotifications } from "@/hooks/use-notifications";
 
+const groupKeys = new Map(adminSections.map((item) => [item.group, item.groupKey]));
+
 function AdminNav({ collapsed = false, onNavigate }: { collapsed?: boolean; onNavigate?: () => void }) {
   const pathname = usePathname();
+  const t = useTranslations("adminPanel");
+  const navLabel = (key: string, fallback: string) => (t.has(key) ? t(key) : fallback);
   const groups = [...new Set(adminSections.map((item) => item.group))];
 
   return (
@@ -25,10 +30,10 @@ function AdminNav({ collapsed = false, onNavigate }: { collapsed?: boolean; onNa
       {groups.map((group) => (
         <div key={group}>
           {collapsed ? null : (
-            <p className="px-3 text-[11px] font-bold uppercase tracking-[0.18em] text-neutral-500 dark:text-neutral-400">{group}</p>
+            <p className="px-3 text-[11px] font-bold uppercase tracking-[0.18em] text-neutral-500 dark:text-neutral-400">{navLabel("nav." + (groupKeys.get(group) ?? ""), group)}</p>
           )}
           <div className={cn("space-y-1", collapsed ? "mt-0" : "mt-2")}>
-            {adminSections.filter((item) => item.group === group).map(({ href, label, icon: Icon }) => {
+            {adminSections.filter((item) => item.group === group).map(({ href, label, labelKey, icon: Icon }) => {
               const active = pathname === href;
 
               return (
@@ -36,7 +41,7 @@ function AdminNav({ collapsed = false, onNavigate }: { collapsed?: boolean; onNa
                   key={href}
                   href={href}
                   onClick={onNavigate}
-                  title={collapsed ? label : undefined}
+                  title={collapsed ? navLabel("nav." + labelKey, label) : undefined}
                   className={cn(
                     "flex items-center gap-3 rounded-md px-3 py-2.5 text-sm font-semibold transition",
                     collapsed && "justify-center px-0",
@@ -46,7 +51,7 @@ function AdminNav({ collapsed = false, onNavigate }: { collapsed?: boolean; onNa
                   )}
                 >
                   <Icon className="size-4 shrink-0" />
-                  {collapsed ? <span className="sr-only">{label}</span> : label}
+                  {collapsed ? <span className="sr-only">{navLabel("nav." + labelKey, label)}</span> : navLabel("nav." + labelKey, label)}
                 </Link>
               );
             })}

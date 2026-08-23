@@ -55,7 +55,7 @@ function stepFromQuery(value: string | null): 1 | 2 | 3 | 4 {
 }
 
 function formatPrice(price: number) {
-  return `NIS ${new Intl.NumberFormat("en").format(price)}`;
+  return `₪ ${new Intl.NumberFormat("en").format(price)}`;
 }
 
 function readFile(file: File) {

@@ -1351,7 +1351,7 @@ export function SofaStudioEditor() {
             </div>
           ) : null}
 
-          <p className="mt-5 font-serif text-3xl font-bold">NIS {price.toLocaleString()}</p>
+          <p className="mt-5 font-serif text-3xl font-bold">₪ {price.toLocaleString()}</p>
           <AppButton className="mt-4 w-full gap-2" onClick={addCustomDesignToCart}>
             <SiteIcon name="cart" className="size-4" />
             Add to Cart
@@ -1389,7 +1389,7 @@ export function SofaStudioEditor() {
         <div className="mx-auto grid max-w-lg grid-cols-[1fr_auto_auto] items-center gap-2">
           <div className="min-w-0">
             <p className="text-[11px] font-bold uppercase tracking-[0.14em] text-neutral-500 dark:text-neutral-400">Total</p>
-            <p className="truncate font-serif text-xl font-bold">NIS {price.toLocaleString()}</p>
+            <p className="truncate font-serif text-xl font-bold">₪ {price.toLocaleString()}</p>
           </div>
           <AppButton size="sm" className="gap-2 px-4" onClick={addCustomDesignToCart}>
             <SiteIcon name="cart" className="size-4" />

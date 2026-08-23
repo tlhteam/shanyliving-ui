@@ -7,7 +7,7 @@ import { SiteIcon } from "@/components/icons/SiteIcon";
 import { storefrontProducts } from "@/lib/storefront-pages";
 import { useCustomerCommerceStore } from "@/stores/customer-commerce-store";
 
-const formatPrice = (price: number) => `NIS ${new Intl.NumberFormat("en").format(price)}`;
+const formatPrice = (price: number) => `₪ ${new Intl.NumberFormat("en").format(price)}`;
 
 export function CartDrawer() {
   const cart = useCustomerCommerceStore((state) => state.cart);

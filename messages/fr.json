@@ -360,5 +360,301 @@
     "bedroom": "Chambre",
     "chairs": "Chaises",
     "coffee-tables": "Tables basses"
+  },
+  "storefront": {
+    "filters": {
+      "all": "Tout",
+      "sort": "Trier",
+      "color": "Couleur",
+      "clear": "Effacer les filtres",
+      "items": "{count, plural, one {# article} other {# articles}}",
+      "more": "+{count} de plus",
+      "fewer": "Afficher moins",
+      "shown": "{count, plural, one {# produit affiche} other {# produits affiches}}",
+      "noneTitle": "Aucun produit ne correspond a cette combinaison.",
+      "sortFeatured": "Ordre recommande",
+      "sortPriceLow": "Prix croissant",
+      "sortPriceHigh": "Prix decroissant"
+    },
+    "help": {
+      "title": "Besoin d aide pour choisir?",
+      "text": "Envoyez une photo de la piece, des mesures ou un style prefere et l equipe vous guidera vers le bon produit et la bonne configuration.",
+      "cta": "Parler au showroom"
+    },
+    "card": {
+      "add": "Ajouter",
+      "quote": "Devis",
+      "viewCart": "Voir le panier",
+      "addToCart": "Ajouter au panier",
+      "requestQuote": "Demander un devis",
+      "ask": "Poser une question",
+      "availableIn": "Disponible en {range}",
+      "priceOnRequest": "Prix sur demande"
+    },
+    "detail": {
+      "home": "Accueil",
+      "collection": "Canapes",
+      "ready": "Pret a commander",
+      "trusted": "Selection du showroom",
+      "reviews": "4.8 (36 avis)",
+      "from": "A partir de",
+      "priceVaries": "Le prix varie selon la taille et la configuration",
+      "quoteNote": "Disponible sur devis du showroom",
+      "dimensions": "Dimensions",
+      "selection": "Votre selection",
+      "customize": "Personnaliser votre canape",
+      "seeInRoom": "Voir chez moi (IA)",
+      "ctaNote": "Ajoutez au panier, personnalisez en 4 etapes ou visualisez le canape chez vous.",
+      "askShowroom": "Contacter le showroom",
+      "completeLook": "Completer le look",
+      "fabricTitle": "Choisissez votre tissu",
+      "fabricText": "Plus de 120 tissus premium au choix.",
+      "fabricCta": "Voir tous les tissus",
+      "customTitle": "Canape sur mesure, pour vous",
+      "customText": "Choisissez taille, tissu, couleur et plus. Notre equipe vous aide a creer le canape parfait.",
+      "customCta": "Ouvrir le configurateur",
+      "save": "Enregistrer {name}"
+    },
+    "benefits": {
+      "quality": {
+        "title": "Qualite premium",
+        "text": "Concu pour durer"
+      },
+      "custom": {
+        "title": "Fait sur mesure",
+        "text": "Juste pour vous"
+      },
+      "delivery": {
+        "title": "Livraison premium",
+        "text": "Livraison et montage"
+      },
+      "payments": {
+        "title": "Paiement securise",
+        "text": "Sur et chiffre"
+      }
+    },
+    "pages": {
+      "sofas": {
+        "eyebrow": "Collection sur mesure",
+        "title": "Canapes",
+        "description": "Choisissez un canape fabrique sur commande, puis personnalisez taille, structure, tissu, couleur et pieds."
+      },
+      "living-room": {
+        "eyebrow": "Completer la piece",
+        "title": "Salon",
+        "description": "Tables basses, tables d appoint, consoles, tapis et assises pour un salon moderne et calme."
+      },
+      "dining": {
+        "eyebrow": "Espaces de partage",
+        "title": "Salle a manger",
+        "description": "Tables, chaises, bancs et rangements concus pour les repas du quotidien et les receptions."
+      },
+      "bedroom": {
+        "eyebrow": "Confort paisible",
+        "title": "Chambre",
+        "description": "Lits, chevets, commodes et accessoires qui completent la chambre."
+      },
+      "new-arrivals": {
+        "eyebrow": "Nouveautes",
+        "title": "Nouveautes",
+        "description": "Les dernieres arrivees du showroom: canapes, chambre, salle a manger et salon."
+      }
+    }
+  },
+  "cart": {
+    "title": "Mon panier ({count})",
+    "subtitle": "Verifiez vos pieces avant le paiement.",
+    "continueShopping": "Continuer mes achats",
+    "empty": "Votre panier est vide.",
+    "browse": "Parcourir les produits",
+    "remove": "Retirer",
+    "subtotal": "Sous-total",
+    "checkout": "Paiement",
+    "alsoLike": "Vous aimerez aussi",
+    "signInTitle": "Connectez-vous pour commander",
+    "signInText": "Les commandes sont enregistrees sur votre compte pour suivre la production et la livraison.",
+    "google": "Continuer avec Google",
+    "emailSignIn": "Se connecter par e-mail"
+  },
+  "checkout": {
+    "title": "Paiement",
+    "subtitle": "Ajoutez vos coordonnees et l adresse de livraison pour creer la commande.",
+    "contact": "Coordonnees",
+    "fullName": "Nom complet",
+    "email": "E-mail",
+    "phone": "Telephone",
+    "address": "Adresse de livraison",
+    "apartment": "Appartement, etage, etc.",
+    "saveDetails": "Enregistrer mes informations",
+    "adminBlocked": "Les comptes administrateur ne peuvent pas creer de commandes. Utilisez un compte client.",
+    "continue": "Continuer",
+    "summary": "Recapitulatif",
+    "paymentPending": "Le paiement se fait avec votre conseiller. La commande est enregistree et vous pouvez la suivre dans votre compte.",
+    "signInTitle": "Connectez-vous pour passer commande",
+    "signInText": "Nous enregistrons la commande sur votre compte pour que vous et votre conseiller puissiez la suivre.",
+    "google": "Continuer avec Google"
+  },
+  "customer": {
+    "nav": {
+      "dashboard": "Tableau de bord",
+      "orders": "Commandes",
+      "savedDesigns": "Designs enregistres",
+      "wishlist": "Favoris",
+      "addresses": "Adresses",
+      "payments": "Paiements",
+      "giftCards": "Cartes cadeaux",
+      "messages": "Messages",
+      "profile": "Profil",
+      "settings": "Parametres"
+    },
+    "orders": {
+      "title": "Commandes",
+      "subtitle": "Suivez production, livraison et paiement pour chaque commande.",
+      "all": "Toutes",
+      "progress": "En cours",
+      "delivered": "Livrees",
+      "cancelled": "Annulees",
+      "search": "Rechercher",
+      "empty": "Aucune commande.",
+      "emptyText": "Les commandes passees sur le site apparaissent ici.",
+      "browse": "Parcourir les produits",
+      "details": "Details de la commande",
+      "reference": "Commande",
+      "placed": "Passee le",
+      "status": "Statut",
+      "total": "Total",
+      "items": "Articles",
+      "payment": "Paiement",
+      "paymentPending": "En attente du paiement conseiller",
+      "shipping": "Adresse de livraison",
+      "view": "Voir"
+    }
+  },
+  "adminPanel": {
+    "nav": {
+      "overview": "Apercu",
+      "dashboard": "Tableau de bord",
+      "catalog": "Catalogue",
+      "products": "Produits",
+      "categories": "Categories",
+      "fabrics": "Tissus",
+      "colors": "Couleurs",
+      "salesFlow": "Flux de vente",
+      "configurations": "Configurations",
+      "leads": "Prospects",
+      "people": "Personnes",
+      "customers": "Clients",
+      "messages": "Messages",
+      "accounts": "Comptes",
+      "giftCards": "Cartes cadeaux",
+      "appointments": "Rendez-vous",
+      "content": "Contenu",
+      "media": "Medias",
+      "analytics": "Analytique",
+      "system": "Systeme",
+      "settings": "Parametres"
+    },
+    "table": {
+      "search": "Rechercher {resource}...",
+      "refresh": "Actualiser",
+      "retry": "Reessayer",
+      "records": "{count} sur {total} enregistrements",
+      "loading": "Chargement des enregistrements",
+      "empty": "Aucun enregistrement correspondant.",
+      "error": "Impossible de charger les enregistrements depuis l API.",
+      "view": "Voir",
+      "edit": "Modifier",
+      "delete": "Supprimer"
+    }
+  },
+  "legal": {
+    "updated": "Last updated: August 2026",
+    "reviewNotice": "This page is a working draft prepared for the Shany Living site. Have it reviewed by legal counsel before launch, and replace the bracketed details with the registered company information.",
+    "privacy": {
+      "title": "Privacy Policy",
+      "intro": "This policy explains what personal information Shany Living Furniture collects when you browse the site, configure a sofa or place an order, and how that information is used.",
+      "sections": [
+        {
+          "heading": "Who we are",
+          "body": "Shany Living Furniture, Herzl 34, Tel Aviv, Israel. Company registration number [to be completed]. For any privacy question, write to info@shanyliving.com."
+        },
+        {
+          "heading": "What we collect",
+          "body": "Contact details you enter at checkout or in a consultation request (name, email, phone, delivery address); the sofa configuration you build; order and payment status; and basic technical data such as your language preference and the pages you visit."
+        },
+        {
+          "heading": "Why we use it",
+          "body": "To prepare quotes, produce and deliver your order, provide advisor support over WhatsApp or phone, and keep records required by Israeli tax and consumer law."
+        },
+        {
+          "heading": "Who we share it with",
+          "body": "Delivery contractors, our production workshop, and the payment provider handling your transaction. We do not sell personal information, and we do not share it for advertising without your consent."
+        },
+        {
+          "heading": "Your rights",
+          "body": "Under the Israeli Protection of Privacy Law you may ask to see the personal information we hold about you, correct it, or ask us to delete it where we are not required to keep it. Send the request to info@shanyliving.com and we will respond within a reasonable period."
+        },
+        {
+          "heading": "Cookies",
+          "body": "The site stores your language choice and cart contents in your browser. These are required for the site to work and are not used to track you across other sites."
+        }
+      ]
+    },
+    "terms": {
+      "title": "Terms and Conditions",
+      "intro": "These terms apply to the Shany Living site and to made-to-order furniture purchased through it.",
+      "sections": [
+        {
+          "heading": "Made-to-order products",
+          "body": "Sofas are produced to the size, configuration, fabric and colour you select. Because each piece is made for you, the specification is confirmed with an advisor before production begins."
+        },
+        {
+          "heading": "Prices and quotes",
+          "body": "Prices shown are in new Israeli shekels and include VAT unless stated otherwise. Items marked price on request are quoted individually, and a written quote is valid for the period stated on it."
+        },
+        {
+          "heading": "Orders and payment",
+          "body": "An order is created when you submit your details on the site. Payment is arranged with your advisor by secure payment link, bank transfer or by phone. Production is scheduled after payment terms are agreed."
+        },
+        {
+          "heading": "Delivery and assembly",
+          "body": "Estimated production and delivery times are given at the time of order and confirmed by your advisor. Delivery includes placement in the room of your choice and assembly where required."
+        },
+        {
+          "heading": "Cancellation and returns",
+          "body": "Consumer cancellation rights under Israeli law apply, with the exception for goods manufactured specially for the customer. Your advisor will explain what applies to your specific order before production starts."
+        },
+        {
+          "heading": "Warranty",
+          "body": "Frames and workmanship are covered against manufacturing defects for the period stated on your order confirmation. Normal wear, misuse and unapproved alterations are not covered."
+        }
+      ]
+    },
+    "accessibility": {
+      "title": "Accessibility Statement",
+      "intro": "Shany Living wants the site and the showroom to be usable by everyone, including people using assistive technology.",
+      "sections": [
+        {
+          "heading": "What we have done",
+          "body": "The site is built with semantic headings and landmarks, keyboard focus styles, text alternatives for images, colour contrast checked in both light and dark themes, and layouts that reflow down to small screens without horizontal scrolling."
+        },
+        {
+          "heading": "Standard we aim for",
+          "body": "We work towards the Israeli standard SI 5568, which is based on WCAG 2.0 level AA. Some areas are still being improved, in particular third-party embedded content such as the map."
+        },
+        {
+          "heading": "The showroom",
+          "body": "Our Herzl 34 showroom is at street level. Call 03-1234567 before your visit and the team will arrange assistance and a quiet time slot if that helps."
+        },
+        {
+          "heading": "Accessibility coordinator",
+          "body": "Contact [name to be completed] at info@shanyliving.com or 03-1234567 with any accessibility problem you hit on the site. Tell us the page and what happened, and we will respond and fix what we can."
+        },
+        {
+          "heading": "Reporting a problem",
+          "body": "If something on this site blocks you, we treat it as a defect. Report it and we will give you the information or complete the task with you by phone or WhatsApp in the meantime."
+        }
+      ]
+    }
   }
 }

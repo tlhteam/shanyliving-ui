@@ -21,8 +21,8 @@ const serviceLinks = ["contact", "faq", "shipping", "warranty"];
 const companyLinks = [
   { key: "about", href: "/about" },
   { key: "showroom", href: "/showroom" },
-  { key: "privacy", href: "/about" },
-  { key: "terms", href: "/about" }
+  { key: "privacy", href: "/privacy" },
+  { key: "terms", href: "/terms" }
 ];
 
 const contactRows = [
@@ -36,6 +36,7 @@ const contactRows = [
 
 export async function AppFooter() {
   const t = await getTranslations("footer");
+  const instagramUrl = process.env.NEXT_PUBLIC_INSTAGRAM_URL ?? "https://www.instagram.com/shanyliving";
 
   return (
     <footer className="bg-neutral-950 text-neutral-300">
@@ -64,14 +65,14 @@ export async function AppFooter() {
             {contactRows.map((row) => (
               <span key={row.key} className="flex items-start gap-2.5">
                 {row.icon === "whatsapp" ? <WhatsappIcon className="mt-0.5 size-4 shrink-0" /> : <SiteIcon name={row.icon as SiteIconName} className="mt-0.5 size-4" />}
-                {t(`contactRows.${row.key}`)}
+                <bdi>{t(`contactRows.${row.key}`)}</bdi>
               </span>
             ))}
           </div>
         </div>
         <div className="sm:col-span-2 lg:col-span-1">
           <h3 className="text-sm font-bold uppercase tracking-wide text-white">{t("follow")}</h3>
-          <Link href="/showroom" className="group mt-5 block overflow-hidden rounded-lg border border-white/10">
+          <Link href={instagramUrl} target="_blank" rel="noreferrer noopener" className="group mt-5 block overflow-hidden rounded-lg border border-white/10">
             <AppImage
               src={siteImages.showroomInterior}
               alt={t("instagramAlt")}
@@ -80,7 +81,7 @@ export async function AppFooter() {
               imageClassName="transition duration-500 group-hover:scale-[1.04]"
             />
           </Link>
-          <Link href="/showroom" className="mt-5 inline-flex h-10 items-center gap-2 rounded-md border border-white px-4 text-sm text-white transition hover:bg-white hover:text-neutral-950">
+          <Link href={instagramUrl} target="_blank" rel="noreferrer noopener" className="mt-5 inline-flex h-10 items-center gap-2 rounded-md border border-white px-4 text-sm text-white transition hover:bg-white hover:text-neutral-950">
             <InstagramIcon className="size-4" /> {t("instagramCta")}
           </Link>
         </div>
@@ -90,11 +91,11 @@ export async function AppFooter() {
           <AppLogo variant="light" imageClassName="w-32 sm:w-36" />
           <p className="text-xs">{t("rights")}</p>
           <div className="flex flex-wrap justify-center gap-3 text-xs">
-            <Link href="/about" className="transition hover:text-white">{t("privacy")}</Link>
+            <Link href="/privacy" className="transition hover:text-white">{t("privacy")}</Link>
             <span aria-hidden>|</span>
-            <Link href="/about" className="transition hover:text-white">{t("terms")}</Link>
+            <Link href="/terms" className="transition hover:text-white">{t("terms")}</Link>
             <span aria-hidden>|</span>
-            <Link href="/contact" className="transition hover:text-white">{t("accessibility")}</Link>
+            <Link href="/accessibility" className="transition hover:text-white">{t("accessibility")}</Link>
           </div>
           <div className="flex flex-wrap items-center justify-center gap-2">
             {paymentMethods.map((method) => (

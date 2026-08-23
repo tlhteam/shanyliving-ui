@@ -2,6 +2,7 @@
 
 import { ChangeEvent, useEffect, useMemo, useState } from "react";
 import { useSession } from "next-auth/react";
+import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import type { CellContext, ColumnDef } from "@tanstack/react-table";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -347,6 +348,7 @@ export function AdminResourcePage({
 }: AdminResourcePageProps) {
   const router = useRouter();
   const queryClient = useQueryClient();
+  const tt = useTranslations("adminPanel.table");
   const { data: session, status: sessionStatus } = useSession();
   const form = useForm<AdminFormValues>({ defaultValues: {} });
   const watchedValues = useWatch({ control: form.control });
@@ -416,8 +418,8 @@ export function AdminResourcePage({
       return "Your admin session expired. Sign in again to load these records.";
     }
 
-    return apiMessage || (resourceError as Error | null)?.message || "Unable to load records from the API.";
-  }, [resourceError]);
+    return apiMessage || (resourceError as Error | null)?.message || tt("error");
+  }, [resourceError, tt]);
 
   useEffect(() => {
     if (!isError) {
@@ -858,20 +860,18 @@ export function AdminResourcePage({
           <div>
             <h2 className="font-bold">{title} List</h2>
             <p className="text-sm text-neutral-500 dark:text-neutral-400">
-              {isLoading
-                ? "Loading records for management"
-                : `${filteredRows.length} of ${totalRows} records ready for management`}
+              {isLoading ? tt("loading") : tt("records", { count: filteredRows.length, total: totalRows })}
             </p>
           </div>
           <div className="flex flex-col gap-2 sm:flex-row">
             <AppSearch
               onSearch={setQuery}
-              placeholder={`Search ${title.toLowerCase()}...`}
+              placeholder={tt("search", { resource: title.toLowerCase() })}
             />
             {isError ? (
               <Button variant="outline" onClick={() => refetchResource()}>
                 <RefreshCcw className="size-4" />
-                Retry
+                {tt("retry")}
               </Button>
             ) : null}
             <Button
@@ -885,7 +885,7 @@ export function AdminResourcePage({
               }}
             >
               <RefreshCcw className="size-4" />
-              Refresh
+              {tt("refresh")}
             </Button>
           </div>
         </div>
@@ -897,7 +897,7 @@ export function AdminResourcePage({
           emptyMessage={
             isError
               ? resourceErrorMessage
-              : "No matching records found."
+              : tt("empty")
           }
         />
         {!isLoading && !isFetching ? (

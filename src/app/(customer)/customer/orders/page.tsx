@@ -2,12 +2,14 @@
 
 import { ChevronRight, Package, SlidersHorizontal } from "lucide-react";
 import { useMemo, useState } from "react";
+import { useLocale, useTranslations } from "next-intl";
 import { AppButton } from "@/components/app/AppButton";
 import { AppCard } from "@/components/app/AppCard";
 import { AppImage } from "@/components/app/AppImage";
 import { AppPagination } from "@/components/app/AppPagination";
 import { CustomerTopbar } from "@/components/customer/CustomerShell";
 import { useCustomerQuery } from "@/hooks/use-customer";
+import { formatDate, formatMoney } from "@/lib/format";
 import type { CustomerOrder } from "@/types/customer";
 
 const statusClasses: Record<string, string> = {
@@ -20,10 +22,10 @@ const statusClasses: Record<string, string> = {
 };
 
 const orderTabs = [
-  { label: "All Orders", value: "all" },
-  { label: "In Progress", value: "progress" },
-  { label: "Delivered", value: "delivered" },
-  { label: "Cancelled", value: "cancelled" }
+  { key: "all", value: "all" },
+  { key: "progress", value: "progress" },
+  { key: "delivered", value: "delivered" },
+  { key: "cancelled", value: "cancelled" }
 ] as const;
 
 function firstItem(order: CustomerOrder) {
@@ -37,6 +39,8 @@ function itemTitle(order: CustomerOrder) {
 }
 
 export default function CustomerOrdersPage() {
+  const t = useTranslations("customer.orders");
+  const locale = useLocale();
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
   const [activeTab, setActiveTab] = useState<(typeof orderTabs)[number]["value"]>("all");
@@ -62,7 +66,7 @@ export default function CustomerOrdersPage() {
 
   return (
     <>
-      <CustomerTopbar title="My Orders" subtitle="View and track all your orders." />
+      <CustomerTopbar title={t("title")} subtitle={t("subtitle")} />
       <div className="mb-5 flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
         <div className="flex gap-6 text-sm font-bold">
           {orderTabs.map((tab) => (
@@ -75,7 +79,7 @@ export default function CustomerOrdersPage() {
               }}
               className={activeTab === tab.value ? "border-b-2 border-black pb-2 text-black dark:border-white dark:text-white" : "pb-2 text-neutral-500 transition hover:text-neutral-950 dark:hover:text-white"}
             >
-              {tab.label}
+              {t(tab.key)}
             </button>
           ))}
         </div>
@@ -83,7 +87,7 @@ export default function CustomerOrdersPage() {
           <input value={search} onChange={(event) => {
             setSearch(event.target.value);
             setPage(1);
-          }} placeholder="Search order ID or product..." className="h-10 w-full rounded-md border border-neutral-300 bg-white px-3 text-sm outline-none focus:border-neutral-950 dark:border-white/15 dark:bg-neutral-950 dark:focus:border-white lg:w-72" />
+          }} placeholder={t("search")} className="h-10 w-full rounded-md border border-neutral-300 bg-white px-3 text-sm outline-none focus:border-neutral-950 dark:border-white/15 dark:bg-neutral-950 dark:focus:border-white lg:w-72" />
           <AppButton variant="outline" className="gap-2"><SlidersHorizontal className="size-4" /> Filter</AppButton>
         </div>
       </div>
@@ -97,7 +101,8 @@ export default function CustomerOrdersPage() {
       {!ordersQuery.isLoading && filteredOrders.length === 0 ? (
           <AppCard className="grid place-items-center gap-3 p-12 text-center">
             <Package className="size-8 text-neutral-400" />
-          <p className="text-sm text-neutral-600 dark:text-neutral-400">No orders found.</p>
+          <p className="text-sm text-neutral-600 dark:text-neutral-400">{t("empty")}</p>
+          <p className="text-xs text-neutral-500 dark:text-neutral-500">{t("emptyText")}</p>
         </AppCard>
       ) : null}
 
@@ -112,14 +117,14 @@ export default function CustomerOrdersPage() {
                   <AppCard className="grid gap-4 p-3 sm:grid-cols-[160px_1fr_auto] sm:items-center">
                     <AppImage src={item?.image ?? null} alt={itemTitle(order)} className="aspect-[1.5/1] rounded-lg" sizes="160px" />
                     <div>
-                      <p className="text-xs font-bold">Order #{order.reference}</p>
-                      <p className="mt-1 text-xs text-neutral-500 dark:text-neutral-400">{order.placed_at ? new Date(order.placed_at).toLocaleDateString() : "Date pending"}</p>
+                      <p className="text-xs font-bold">{t("reference")} #{order.reference}</p>
+                      <p className="mt-1 text-xs text-neutral-500 dark:text-neutral-400">{formatDate(order.placed_at, locale)}</p>
                       <h2 className="mt-3 font-bold">{itemTitle(order)}</h2>
                       <p className="text-sm text-neutral-600 dark:text-neutral-400">{order.fulfillment_status}</p>
                     </div>
                     <div className="flex items-center justify-between gap-4 sm:block sm:text-end">
                       <span className={`rounded-full px-3 py-1 text-xs font-bold ${statusClasses[order.status] ?? "bg-neutral-100 text-neutral-700 dark:bg-white/15 dark:text-white"}`}>{order.status}</span>
-                      <p className="mt-4 font-bold">{order.currency} {new Intl.NumberFormat("en").format(Number(order.grand_total))}</p>
+                      <p className="mt-4 font-bold">{formatMoney(Number(order.grand_total), locale)}</p>
                       <ChevronRight className="ms-auto mt-4 hidden size-5 text-neutral-400 sm:block" />
                     </div>
                   </AppCard>
@@ -129,13 +134,13 @@ export default function CustomerOrdersPage() {
             <AppPagination page={safePage} pageSize={pageSize} total={filteredOrders.length} onPageChange={setPage} />
           </div>
           <AppCard className="h-fit p-5">
-            <h2 className="font-serif text-2xl font-bold">Order Details</h2>
+            <h2 className="font-serif text-2xl font-bold">{t("details")}</h2>
             <div className="mt-4 flex gap-3">
               <AppImage src={firstItem(selected)?.image ?? null} alt={itemTitle(selected)} className="size-20 rounded-lg" sizes="80px" />
               <div>
                 <p className="font-bold">{itemTitle(selected)}</p>
                 <p className="text-xs text-neutral-600 dark:text-neutral-400">{selected.payment_status}</p>
-                <p className="mt-2 text-xs">Order #{selected.reference}</p>
+                <p className="mt-2 text-xs">{t("reference")} #{selected.reference}</p>
               </div>
             </div>
             <div className="mt-5 border-t border-neutral-200 pt-5">

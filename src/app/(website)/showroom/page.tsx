@@ -11,6 +11,13 @@ const stats = [
   { value: "1:1", label: "Personal Design Consultation", icon: "users" }
 ];
 
+const reasons = [
+  { title: "Feel the Fabrics", text: "Handle boucle, linen, chenille and velvet side by side, and see how each one wears in daylight." },
+  { title: "Try Every Sofa", text: "Sit on the depths and seat heights before you commit, from apartment widths up to family layouts." },
+  { title: "Design Consultation", text: "Bring your room measurements or a photo and a designer maps the layout with you on the spot." },
+  { title: "Customize Everything", text: "Set width, chaise direction, fabric, colour and leg style, then leave with a written quote." }
+];
+
 const services = [
   { title: "Personal Consultation", text: "One-on-one guidance from our design experts.", icon: "users" },
   { title: "Fabric Selection", text: "Explore a wide range of premium fabrics.", icon: "palette" },
@@ -51,10 +58,10 @@ export default function ShowroomPage() {
           <section>
             <h2 className="font-serif text-2xl font-bold">Why visit our showroom?</h2>
             <div className="mt-5 grid gap-3 sm:grid-cols-2">
-              {["Feel the Fabrics", "Try Every Sofa", "Design Consultation", "Customize Everything"].map((title) => (
-                <div key={title} className="rounded-lg bg-neutral-100 p-5 text-neutral-950 dark:bg-neutral-900 dark:text-neutral-50">
-                  <h3 className="font-serif text-xl font-bold">{title}</h3>
-                  <p className="mt-2 text-sm leading-6 text-neutral-700 dark:text-neutral-300">Touch, compare and plan details with the team before ordering.</p>
+              {reasons.map((reason) => (
+                <div key={reason.title} className="rounded-lg bg-neutral-100 p-5 text-neutral-950 dark:bg-neutral-900 dark:text-neutral-50">
+                  <h3 className="font-serif text-xl font-bold">{reason.title}</h3>
+                  <p className="mt-2 text-sm leading-6 text-neutral-700 dark:text-neutral-300">{reason.text}</p>
                 </div>
               ))}
             </div>
@@ -75,8 +82,8 @@ export default function ShowroomPage() {
               <p className="flex gap-2"><SiteIcon name="map-pin" className="size-4" /> Herzl 34, Tel Aviv, Israel</p>
               <p>03-1234567</p>
               <p>info@shanyliving.com</p>
-              <p>Sun - Thu | 10:00 - 19:00</p>
-              <p>Fri | 10:00 - 14:00</p>
+              <p><bdi>Sun - Thu</bdi> | <bdi>10:00 - 19:00</bdi></p>
+              <p><bdi>Fri</bdi> | <bdi>10:00 - 14:00</bdi></p>
             </div>
             <div className="mt-6 flex flex-col gap-3 sm:flex-row">
               <AppButton>Chat on WhatsApp</AppButton>

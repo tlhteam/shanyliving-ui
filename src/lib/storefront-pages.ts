@@ -109,13 +109,13 @@ export const storefrontProducts: StorefrontProduct[] = [
   { name: "Milan Chest of Drawers", slug: "milan-chest-of-drawers", category: "bedroom", subcategory: "Chest of Drawers", price: 4490, image: "/images/category-bedroom.png", colors },
   { name: "Haven Bedroom Bench", slug: "haven-bedroom-bench", category: "bedroom", subcategory: "Benches", price: 1290, image: "/images/product-nora-armchair.png", colors },
   { name: "Dream Comfort Mattress", slug: "dream-comfort-mattress", category: "bedroom", subcategory: "Mattresses", price: 990, image: "/images/sofa-noa.png", colors },
-  { name: "Siena Modular Sofa", slug: "siena-modular-sofa", category: "new-arrivals", subcategory: "Sofa Type", price: 1690, image: "/images/sofa-cloud-modular.png", badge: "New", colors },
-  { name: "Luna Marble Coffee Table", slug: "luna-marble-coffee-table", category: "new-arrivals", subcategory: "Price", price: 2490, image: "/images/product-marble-coffee-table.png", badge: "New", colors },
-  { name: "Verona Dining Table", slug: "new-verona-dining-table", category: "new-arrivals", subcategory: "Seats", price: 690, image: "/images/product-luca-dining-table.png", badge: "New", colors },
-  { name: "Nova Upholstered Bed", slug: "nova-upholstered-bed", category: "new-arrivals", subcategory: "Size", price: 3290, image: "/images/category-bedroom.png", badge: "New", colors },
-  { name: "Oslo Sideboard", slug: "oslo-sideboard", category: "new-arrivals", subcategory: "Price", price: 1890, image: "/images/category-coffee-tables.png", badge: "New", colors },
-  { name: "Haven Lounge Chair", slug: "haven-lounge-chair", category: "new-arrivals", subcategory: "Sofa Type", price: 4490, image: "/images/category-chairs.png", badge: "New", colors },
-  { name: "Cloud Ottoman", slug: "cloud-ottoman", category: "new-arrivals", subcategory: "Seats", price: 149, image: "/images/look-urban-luxury.png", badge: "New", colors }
+  { name: "Siena Modular Sofa", slug: "siena-modular-sofa", category: "new-arrivals", subcategory: "Modular Sofas", price: 1690, image: "/images/sofa-cloud-modular.png", badge: "New", colors },
+  { name: "Luna Marble Coffee Table", slug: "luna-marble-coffee-table", category: "new-arrivals", subcategory: "Coffee Tables", price: 2490, image: "/images/product-marble-coffee-table.png", badge: "New", colors },
+  { name: "Verona Dining Table", slug: "new-verona-dining-table", category: "new-arrivals", subcategory: "Tables", price: 690, image: "/images/product-luca-dining-table.png", badge: "New", colors },
+  { name: "Nova Upholstered Bed", slug: "nova-upholstered-bed", category: "new-arrivals", subcategory: "Beds", price: 3290, image: "/images/category-bedroom.png", badge: "New", colors },
+  { name: "Oslo Sideboard", slug: "oslo-sideboard", category: "new-arrivals", subcategory: "Sideboards", price: 1890, image: "/images/category-coffee-tables.png", badge: "New", colors },
+  { name: "Haven Lounge Chair", slug: "haven-lounge-chair", category: "new-arrivals", subcategory: "Armchairs", price: 4490, image: "/images/category-chairs.png", badge: "New", colors },
+  { name: "Cloud Ottoman", slug: "cloud-ottoman", category: "new-arrivals", subcategory: "Ottomans", price: 149, image: "/images/look-urban-luxury.png", badge: "New", colors }
 ];
 
 export const storefrontPages: Record<string, StorefrontPage> = {
@@ -124,7 +124,7 @@ export const storefrontPages: Record<string, StorefrontPage> = {
     eyebrow: "Custom collection",
     description: "Choose a made-to-order sofa, then personalize size, structure, fabric, color and leg style.",
     heroImage: "/images/hero-living-room.png",
-    filters: ["Sort by", "Sofa Type", "Size", "Seats", "Price"],
+    filters: [],
     products: storefrontProducts.filter((product) => product.category === "sofas")
   },
   "living-room": {
@@ -156,7 +156,7 @@ export const storefrontPages: Record<string, StorefrontPage> = {
     eyebrow: "Fresh pieces",
     description: "Latest showroom arrivals across sofas, bedroom, dining and living room collections.",
     heroImage: "/images/look-urban-luxury.png",
-    filters: ["Sort by", "Sofa Type", "Size", "Seats", "Price", "Clear Filters"],
+    filters: [],
     products: storefrontProducts.filter((product) => product.category === "new-arrivals")
   }
 };

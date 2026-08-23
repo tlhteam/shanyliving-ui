@@ -265,7 +265,7 @@ export default function SavedDesignsPage() {
               <div><dt className="font-bold">Fabric</dt><dd>{viewing.fabric ?? "-"}</dd></div>
               <div><dt className="font-bold">Size</dt><dd>{viewing.size ?? "-"}</dd></div>
               <div><dt className="font-bold">Extras</dt><dd>{viewing.extras ?? "-"}</dd></div>
-              <div><dt className="font-bold">Price</dt><dd>{viewing.price ? `NIS ${Number(viewing.price).toLocaleString()}` : "-"}</dd></div>
+              <div><dt className="font-bold">Price</dt><dd>{viewing.price ? `₪ ${Number(viewing.price).toLocaleString()}` : "-"}</dd></div>
             </dl>
             {viewing.notes ? <p className="rounded-md bg-neutral-100 p-3 text-sm text-neutral-700 dark:bg-white/10 dark:text-neutral-200">{viewing.notes}</p> : null}
           </div>

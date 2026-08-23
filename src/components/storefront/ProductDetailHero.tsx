@@ -2,10 +2,12 @@
 
 import Link from "next/link";
 import { useMemo, useState } from "react";
+import { useLocale, useTranslations } from "next-intl";
 import { AppButton } from "@/components/app/AppButton";
 import { AppImage } from "@/components/app/AppImage";
 import { SiteIcon } from "@/components/icons/SiteIcon";
 import { ProductBuyActions } from "@/components/storefront/ProductBuyActions";
+import { formatMoney } from "@/lib/format";
 import { cn } from "@/lib/utils";
 import type { StorefrontOptionGroup, StorefrontProduct } from "@/lib/storefront-pages";
 
@@ -163,6 +165,8 @@ function parseDescription(description?: string) {
 }
 
 export function ProductDetailHero({ product, images }: ProductDetailHeroProps) {
+  const t = useTranslations("storefront.detail");
+  const locale = useLocale();
   const groups = useMemo(() => resolveGroups(product), [product]);
   const { intro, specs } = useMemo(() => parseDescription(product.description), [product.description]);
 
@@ -218,11 +222,11 @@ export function ProductDetailHero({ product, images }: ProductDetailHeroProps) {
             />
           ))}
           <span className="absolute start-3 top-3 z-10 rounded-full bg-white px-3 py-1 text-[10px] font-bold uppercase tracking-[0.12em] text-neutral-950 sm:start-4 sm:top-4 sm:text-xs">
-            {product.badge ?? "Ready to order"}
+            {product.badge ?? t("ready")}
           </span>
           <button
             type="button"
-            aria-label={`Save ${product.name}`}
+            aria-label={t("save", { name: product.name })}
             className="absolute end-3 top-3 z-10 grid size-9 place-items-center rounded-full bg-white/85 text-neutral-950 transition hover:bg-white sm:end-4 sm:top-4"
           >
             <SiteIcon name="heart" className="size-4" />
@@ -254,9 +258,9 @@ export function ProductDetailHero({ product, images }: ProductDetailHeroProps) {
 
       <aside className="min-w-0">
         <nav className="mb-4 flex flex-wrap items-center gap-2 text-xs font-bold text-neutral-600 sm:mb-6 dark:text-neutral-400">
-          <Link href="/">Home</Link>
+          <Link href="/">{t("home")}</Link>
           <SiteIcon name="chevron-right" className="size-3 rtl:rotate-180" />
-          <Link href="/sofas">Sofas</Link>
+          <Link href="/sofas">{t("collection")}</Link>
           <SiteIcon name="chevron-right" className="size-3 rtl:rotate-180" />
           <span className="text-neutral-950 dark:text-neutral-50">{product.name}</span>
         </nav>
@@ -265,12 +269,12 @@ export function ProductDetailHero({ product, images }: ProductDetailHeroProps) {
 
         <div className="mt-3 flex flex-wrap items-center gap-2 text-xs sm:mt-4">
           <span className="rounded-full bg-neutral-100 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.12em] text-neutral-950 dark:bg-white/10 dark:text-white">
-            {product.badge ?? "Ready to order"}
+            {product.badge ?? t("ready")}
           </span>
           <span className="rounded-full bg-neutral-100 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.12em] text-neutral-950 dark:bg-white/10 dark:text-white">
-            Trusted showroom pick
+            {t("trusted")}
           </span>
-          <span className="text-neutral-600 dark:text-neutral-400">4.8 (36 reviews)</span>
+          <span className="text-neutral-600 dark:text-neutral-400">{t("reviews")}</span>
         </div>
 
         {intro ? (
@@ -280,13 +284,13 @@ export function ProductDetailHero({ product, images }: ProductDetailHeroProps) {
         <div className="mt-6 border-t border-neutral-200 pt-5 dark:border-white/10">
           <p className="text-sm font-bold">
             {hasPrice ? (
-              <>From <span className="text-2xl sm:text-3xl">NIS {new Intl.NumberFormat("en").format(product.price)}</span></>
+              <>{t("from")} <span className="text-2xl sm:text-3xl">{formatMoney(product.price, locale)}</span></>
             ) : (
-              <span className="text-2xl sm:text-3xl">Price on request</span>
+              <span className="text-2xl sm:text-3xl">{t("priceOnRequest")}</span>
             )}
           </p>
           <p className="mt-1 text-xs text-neutral-600 dark:text-neutral-400">
-            {hasPrice ? "Price varies by size and configuration" : "Available by showroom quote"}
+            {hasPrice ? t("priceVaries") : t("quoteNote")}
           </p>
         </div>
 
@@ -363,7 +367,7 @@ export function ProductDetailHero({ product, images }: ProductDetailHeroProps) {
 
         {summary ? (
           <p className="mt-5 rounded-lg bg-neutral-100 p-3 text-xs leading-5 text-neutral-700 dark:bg-white/10 dark:text-neutral-300">
-            <span className="font-bold">Your selection:</span> {summary}
+            <span className="font-bold">{t("selection")}:</span> {summary}
           </p>
         ) : null}
 
@@ -375,19 +379,19 @@ export function ProductDetailHero({ product, images }: ProductDetailHeroProps) {
           <>
             <div className="mt-3 grid gap-3 sm:grid-cols-2">
               <Link href={`/customize-your-sofa?product=${product.slug}&step=model`} className="block">
-                <AppButton variant="outline" className="w-full">Customize Your Sofa</AppButton>
+                <AppButton variant="outline" className="w-full">{t("customize")}</AppButton>
               </Link>
               <Link href={`/customize-your-sofa?product=${product.slug}&step=room`} className="block">
-                <AppButton variant="outline" className="w-full">See It In My Room (AI)</AppButton>
+                <AppButton variant="outline" className="w-full">{t("seeInRoom")}</AppButton>
               </Link>
             </div>
             <p className="mt-3 text-center text-xs text-neutral-600 dark:text-neutral-400">
-              Add to cart for checkout, customize in 4 steps, or preview the sofa in your room.
+              {t("ctaNote")}
             </p>
           </>
         ) : (
           <Link href="/showroom" className="mt-3 block">
-            <AppButton variant="outline" className="w-full">Ask Showroom Team</AppButton>
+            <AppButton variant="outline" className="w-full">{t("askShowroom")}</AppButton>
           </Link>
         )}
 
@@ -395,7 +399,7 @@ export function ProductDetailHero({ product, images }: ProductDetailHeroProps) {
           <dl className="mt-7 divide-y divide-neutral-200 border-t border-neutral-200 text-sm dark:divide-white/10 dark:border-white/10">
             {product.dimensions && !specs.some((spec) => spec.label.toLowerCase().startsWith("dimensions")) ? (
               <div className="grid grid-cols-[8.5rem_1fr] gap-3 py-2.5">
-                <dt className="text-xs font-bold uppercase tracking-[0.1em] text-neutral-500 dark:text-neutral-400">Dimensions</dt>
+                <dt className="text-xs font-bold uppercase tracking-[0.1em] text-neutral-500 dark:text-neutral-400">{t("dimensions")}</dt>
                 <dd className="text-neutral-800 dark:text-neutral-200">{product.dimensions}</dd>
               </div>
             ) : null}

@@ -37,11 +37,11 @@ export default function OrderConfirmationPage() {
                     <p className="font-bold">{item.name}</p>
                     <p className="text-xs text-neutral-600 dark:text-neutral-400">{item.options?.size ?? "Standard"} / {item.options?.configuration ?? item.subcategory}</p>
                   </div>
-                  <p className="font-bold">NIS {new Intl.NumberFormat("en").format(item.price * item.quantity)}</p>
+                  <p className="font-bold">₪ {new Intl.NumberFormat("en").format(item.price * item.quantity)}</p>
                 </div>
               ))}
             </div>
-            <p className="mt-4 flex justify-between border-t border-neutral-200 pt-4 font-bold dark:border-white/10"><span>Total</span><span>NIS {new Intl.NumberFormat("en").format(total)}</span></p>
+            <p className="mt-4 flex justify-between border-t border-neutral-200 pt-4 font-bold dark:border-white/10"><span>Total</span><span>₪ {new Intl.NumberFormat("en").format(total)}</span></p>
           </div>
         ) : null}
         <div className="mt-6 grid gap-3">

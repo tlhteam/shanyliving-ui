@@ -1,14 +1,18 @@
+"use client";
+
 import Link from "next/link";
+import { useLocale, useTranslations } from "next-intl";
 import { AppImage } from "@/components/app/AppImage";
 import { SiteIcon } from "@/components/icons/SiteIcon";
 import { ProductBuyActions } from "@/components/storefront/ProductBuyActions";
+import { formatMoney } from "@/lib/format";
 import { cn } from "@/lib/utils";
 import type { StorefrontProduct } from "@/lib/storefront-pages";
 
-const formatPrice = (price: number) => new Intl.NumberFormat("en").format(price);
-
 export function ProductCard({ product, className }: { product: StorefrontProduct; className?: string }) {
-  const priceLabel = product.price > 0 ? `NIS ${formatPrice(product.price)}` : "Price on request";
+  const t = useTranslations("storefront.card");
+  const locale = useLocale();
+  const priceLabel = product.price > 0 ? formatMoney(product.price, locale) : t("priceOnRequest");
 
   return (
     <article className={cn("group overflow-hidden rounded-lg border border-neutral-200 bg-white text-neutral-950 shadow-sm transition duration-300 hover:shadow-xl sm:hover:-translate-y-1 dark:border-white/10 dark:bg-neutral-900 dark:text-neutral-50", className)}>
@@ -34,7 +38,7 @@ export function ProductCard({ product, className }: { product: StorefrontProduct
           {product.name}
         </Link>
         <p className="mt-1 text-sm font-bold">{priceLabel}</p>
-        {product.seatRange ? <p className="mt-4 text-xs text-neutral-600 dark:text-neutral-400">Available in {product.seatRange}</p> : <div className="mt-4 h-4" />}
+        {product.seatRange ? <p className="mt-4 text-xs text-neutral-600 dark:text-neutral-400">{t("availableIn", { range: product.seatRange })}</p> : <div className="mt-4 h-4" />}
         <div className="mt-3 flex items-center gap-1.5">
           {(product.colors ?? ["#eee9df", "#6a5845", "#0d5f43"]).slice(0, 3).map((color) => (
             <span key={`${product.slug}-${color}`} className="size-4 rounded-full border border-neutral-200 dark:border-white/30" style={{ backgroundColor: color }} />
@@ -48,7 +52,7 @@ export function ProductCard({ product, className }: { product: StorefrontProduct
         </div>
         <Link href="/showroom" className="mt-3 inline-flex items-center gap-2 text-xs font-bold text-neutral-600 hover:text-neutral-950 dark:text-neutral-400 dark:hover:text-white">
           <SiteIcon name="message" className="size-3.5" />
-          Ask about this piece
+          {t("ask")}
         </Link>
       </div>
     </article>

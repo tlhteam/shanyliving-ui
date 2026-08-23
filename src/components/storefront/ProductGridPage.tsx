@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useMemo, useState } from "react";
+import { useTranslations } from "next-intl";
 import { AppButton } from "@/components/app/AppButton";
 import { AppImage } from "@/components/app/AppImage";
 import { AppSection } from "@/components/app/AppSection";
@@ -22,10 +23,10 @@ type Facet = {
   swatch?: string;
 };
 
-const sortOptions: Array<{ value: SortMode; label: string }> = [
-  { value: "featured", label: "Featured order" },
-  { value: "price-low", label: "Price: low to high" },
-  { value: "price-high", label: "Price: high to low" }
+const sortOptions: Array<{ value: SortMode; key: string }> = [
+  { value: "featured", key: "sortFeatured" },
+  { value: "price-low", key: "sortPriceLow" },
+  { value: "price-high", key: "sortPriceHigh" }
 ];
 
 function buildSubcategoryFacets(products: StorefrontProduct[]): Facet[] {
@@ -90,12 +91,14 @@ function initials(label: string) {
 function FilterTile({
   label,
   count,
+  countLabel,
   image,
   active,
   onClick
 }: {
   label: string;
   count: number;
+  countLabel: string;
   image?: string;
   active: boolean;
   onClick: () => void;
@@ -129,14 +132,20 @@ function FilterTile({
       <span className="min-w-0">
         <span className="block truncate text-xs font-bold leading-tight">{label}</span>
         <span className={cn("text-[11px]", active ? "text-white/70 dark:text-neutral-950/70" : "text-neutral-500 dark:text-neutral-400")}>
-          {count} item{count === 1 ? "" : "s"}
+          {countLabel}
         </span>
       </span>
     </button>
   );
 }
 
-export function ProductGridPage({ page }: { page: StorefrontPage }) {
+export function ProductGridPage({ page, slug }: { page: StorefrontPage; slug?: string }) {
+  const t = useTranslations("storefront");
+  const copy = (field: "title" | "eyebrow" | "description", fallback: string) => {
+    const key = "pages." + (slug ?? "") + "." + field;
+
+    return slug && t.has(key) ? t(key) : fallback;
+  };
   const [subcategory, setSubcategory] = useState("");
   const [color, setColor] = useState("");
   const [sortMode, setSortMode] = useState<SortMode>("featured");
@@ -186,12 +195,12 @@ export function ProductGridPage({ page }: { page: StorefrontPage }) {
   return (
     <>
       <section className="relative isolate overflow-hidden text-white">
-        <AppImage src={page.heroImage} alt={page.title} className="absolute inset-0" sizes="100vw" preload loading="eager" />
+        <AppImage src={page.heroImage} alt={copy("title", page.title)} className="absolute inset-0" sizes="100vw" preload loading="eager" />
         <div className="absolute inset-0 bg-black/50" />
         <div className="relative mx-auto flex min-h-56 max-w-7xl flex-col justify-end px-4 py-10 sm:min-h-80 sm:px-6 sm:py-12 lg:px-8">
-          <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-white/80 sm:text-xs">{page.eyebrow}</p>
-          <h1 className="mt-2 font-serif text-3xl leading-tight sm:mt-3 sm:text-5xl lg:text-6xl">{page.title}</h1>
-          <p className="mt-3 max-w-xl text-sm leading-6 text-white/90 sm:text-base">{page.description}</p>
+          <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-white/80 sm:text-xs">{copy("eyebrow", page.eyebrow)}</p>
+          <h1 className="mt-2 font-serif text-3xl leading-tight sm:mt-3 sm:text-5xl lg:text-6xl">{copy("title", page.title)}</h1>
+          <p className="mt-3 max-w-xl text-sm leading-6 text-white/90 sm:text-base">{copy("description", page.description)}</p>
         </div>
       </section>
 
@@ -202,8 +211,9 @@ export function ProductGridPage({ page }: { page: StorefrontPage }) {
               <div className="-mx-3 px-3 sm:mx-0 sm:px-0">
                 <div className="flex snap-x snap-mandatory gap-2.5 overflow-x-auto pb-2 sm:flex-wrap sm:overflow-visible sm:pb-0">
                   <FilterTile
-                    label="All"
+                    label={t("filters.all")}
                     count={page.products.length}
+                    countLabel={t("filters.items", { count: page.products.length })}
                     active={!subcategory}
                     onClick={() => setSubcategory("")}
                     image={page.products[0]?.image}
@@ -213,6 +223,7 @@ export function ProductGridPage({ page }: { page: StorefrontPage }) {
                       key={facet.value}
                       label={facet.label}
                       count={facet.count}
+                      countLabel={t("filters.items", { count: facet.count })}
                       image={facet.image}
                       active={subcategory === facet.value}
                       onClick={() => setSubcategory(subcategory === facet.value ? "" : facet.value)}
@@ -224,7 +235,7 @@ export function ProductGridPage({ page }: { page: StorefrontPage }) {
                       onClick={() => setShowAllFacets((current) => !current)}
                       className="h-14 shrink-0 snap-start rounded-lg border border-dashed border-neutral-300 px-4 text-xs font-bold text-neutral-700 transition hover:border-neutral-950 hover:text-neutral-950 dark:border-white/20 dark:text-neutral-300 dark:hover:border-white dark:hover:text-white"
                     >
-                      {showAllFacets ? "Show fewer" : `+${hiddenFacetCount} more`}
+                      {showAllFacets ? t("filters.fewer") : t("filters.more", { count: hiddenFacetCount })}
                     </button>
                   ) : null}
                 </div>
@@ -234,7 +245,7 @@ export function ProductGridPage({ page }: { page: StorefrontPage }) {
             <div className="mt-3 flex flex-col gap-3 border-t border-neutral-200 pt-3 sm:flex-row sm:items-center sm:justify-between dark:border-white/10">
               {colorFacets.length ? (
                 <div className="flex min-w-0 flex-wrap items-center gap-2">
-                  <span className="text-[11px] font-bold uppercase tracking-[0.16em] text-neutral-500 dark:text-neutral-400">Color</span>
+                  <span className="text-[11px] font-bold uppercase tracking-[0.16em] text-neutral-500 dark:text-neutral-400">{t("filters.color")}</span>
                   {colorFacets.map((facet) => (
                     <button
                       key={facet.value}
@@ -258,7 +269,7 @@ export function ProductGridPage({ page }: { page: StorefrontPage }) {
               )}
 
               <div className="flex shrink-0 items-center gap-2">
-                <label htmlFor="product-sort" className="text-[11px] font-bold uppercase tracking-[0.16em] text-neutral-500 dark:text-neutral-400">Sort</label>
+                <label htmlFor="product-sort" className="text-[11px] font-bold uppercase tracking-[0.16em] text-neutral-500 dark:text-neutral-400">{t("filters.sort")}</label>
                 <div className="relative">
                   <select
                     id="product-sort"
@@ -267,7 +278,7 @@ export function ProductGridPage({ page }: { page: StorefrontPage }) {
                     className="h-10 appearance-none rounded-md border border-neutral-300 bg-white pe-9 ps-3 text-sm font-semibold text-neutral-950 outline-none focus:border-neutral-950 dark:border-white/15 dark:bg-neutral-950 dark:text-neutral-50 dark:focus:border-white"
                   >
                     {sortOptions.map((option) => (
-                      <option key={option.value} value={option.value}>{option.label}</option>
+                      <option key={option.value} value={option.value}>{t("filters." + option.key)}</option>
                     ))}
                   </select>
                   <SiteIcon name="chevron-down" className="pointer-events-none absolute end-2.5 top-2.5 size-4 text-neutral-500" />
@@ -278,12 +289,12 @@ export function ProductGridPage({ page }: { page: StorefrontPage }) {
 
           <div className="mt-5 flex flex-wrap items-center justify-between gap-3 border-t border-neutral-200 pt-4 text-sm text-neutral-600 dark:border-white/10 dark:text-neutral-400">
             <p>
-              <span className="sm:hidden">{mobileSlug ? "1 product shown" : "No products shown"}</span>
-              <span className="hidden sm:inline">{products.length} product{products.length === 1 ? "" : "s"} shown</span>
+              <span className="sm:hidden">{t("filters.shown", { count: mobileSlug ? 1 : 0 })}</span>
+              <span className="hidden sm:inline">{t("filters.shown", { count: products.length })}</span>
             </p>
             {hasFilters ? (
               <button type="button" onClick={clearFilters} className="inline-flex items-center gap-1.5 font-bold text-neutral-950 underline dark:text-white">
-                <SiteIcon name="x" className="size-3.5" /> Clear filters
+                <SiteIcon name="x" className="size-3.5" /> {t("filters.clear")}
               </button>
             ) : null}
           </div>
@@ -296,18 +307,18 @@ export function ProductGridPage({ page }: { page: StorefrontPage }) {
 
           {products.length === 0 ? (
             <div className="mt-6 rounded-lg border border-dashed border-neutral-300 p-8 text-center dark:border-white/15">
-              <p className="text-sm text-neutral-600 dark:text-neutral-300">Nothing matches this combination yet.</p>
-              <AppButton variant="outline" className="mt-4" onClick={clearFilters}>Clear filters</AppButton>
+              <p className="text-sm text-neutral-600 dark:text-neutral-300">{t("filters.noneTitle")}</p>
+              <AppButton variant="outline" className="mt-4" onClick={clearFilters}>{t("filters.clear")}</AppButton>
             </div>
           ) : null}
 
           <div className="mt-12 grid items-center gap-5 rounded-lg bg-neutral-100 p-5 sm:p-8 dark:bg-neutral-900 lg:grid-cols-[1fr_auto]">
             <div>
-              <h2 className="font-serif text-xl font-bold sm:text-2xl">Need help choosing?</h2>
-              <p className="mt-2 max-w-2xl text-sm leading-6 text-neutral-700 dark:text-neutral-300">Send a room photo, measurements, or a favorite style and the team will guide you to the right product and configuration.</p>
+              <h2 className="font-serif text-xl font-bold sm:text-2xl">{t("help.title")}</h2>
+              <p className="mt-2 max-w-2xl text-sm leading-6 text-neutral-700 dark:text-neutral-300">{t("help.text")}</p>
             </div>
             <Link href="/showroom" className="block">
-              <AppButton className="w-full lg:w-auto">Talk to the showroom</AppButton>
+              <AppButton className="w-full lg:w-auto">{t("help.cta")}</AppButton>
             </Link>
           </div>
         </AppSection>

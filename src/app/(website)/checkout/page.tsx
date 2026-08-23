@@ -3,12 +3,14 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
+import { useTranslations } from "next-intl";
 import { useMutation } from "@tanstack/react-query";
 import { useEffect } from "react";
 import { toast } from "sonner";
 import { AppButton } from "@/components/app/AppButton";
 import { AppImage } from "@/components/app/AppImage";
 import { AppSection } from "@/components/app/AppSection";
+import { SignInGate } from "@/components/storefront/SignInGate";
 import { SiteIcon } from "@/components/icons/SiteIcon";
 import { useApi } from "@/hooks/use-api";
 import { useCustomerQuery } from "@/hooks/use-customer";
@@ -20,11 +22,11 @@ type OrderResponse = {
   reference: string;
 };
 
-const formatPrice = (price: number) => `NIS ${new Intl.NumberFormat("en").format(price)}`;
+const formatPrice = (price: number) => `₪ ${new Intl.NumberFormat("en").format(price)}`;
 
 export default function CheckoutPage() {
   const router = useRouter();
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
   const { request } = useApi();
   const cart = useCustomerCommerceStore((state) => state.cart);
   const checkout = useCustomerCommerceStore((state) => state.checkout);
@@ -63,6 +65,8 @@ export default function CheckoutPage() {
     });
   }, [checkout.address, checkout.apartment, checkout.phone, defaultAddress, setCheckout]);
 
+  const t = useTranslations("checkout");
+
   const createOrder = useMutation({
     mutationFn: () => request<OrderResponse>("/customer-flow/orders", {
       method: "POST",
@@ -94,20 +98,21 @@ export default function CheckoutPage() {
       setLastOrderReference(order.reference);
       setLastOrderItems(cart);
       clearCart();
-      toast.success(`Order ${order.reference} created.`);
+      toast.success(order.reference, { description: t("paymentPending") });
       router.push("/order-confirmation");
     },
     onError: (error: Error) => toast.error(error.message)
   });
 
   const isAdmin = session?.user?.role === "admin";
+  const signedIn = status === "authenticated";
 
   return (
     <div className="bg-white text-neutral-950 dark:bg-neutral-950 dark:text-neutral-50">
     <AppSection className="max-w-5xl">
       <div className="mb-8">
-        <h1 className="font-serif text-4xl font-bold">Checkout</h1>
-        <p className="mt-2 text-sm text-neutral-600 dark:text-neutral-400">Add contact and delivery details to create the order.</p>
+        <h1 className="font-serif text-3xl font-bold sm:text-4xl">{t("title")}</h1>
+        <p className="mt-2 text-sm text-neutral-600 dark:text-neutral-400">{t("subtitle")}</p>
       </div>
       <div className="mb-8 flex items-center gap-3 text-sm font-bold">
         <span className="grid size-8 place-items-center rounded-full bg-neutral-950 text-white dark:bg-white dark:text-neutral-950">1</span>
@@ -117,23 +122,29 @@ export default function CheckoutPage() {
         <span className="grid size-8 place-items-center rounded-full border border-neutral-300 dark:border-white/20">3</span>
       </div>
 
+      {status !== "authenticated" ? (
+        <div className="mb-6">
+          <SignInGate namespace="checkout" callbackUrl="/checkout" />
+        </div>
+      ) : null}
+
       <div className="grid gap-6 lg:grid-cols-[1fr_340px]">
         <div className="rounded-lg border border-neutral-200 bg-white p-5 text-neutral-950 shadow-sm dark:border-white/10 dark:bg-neutral-900 dark:text-neutral-50">
-          <h2 className="font-serif text-2xl font-bold">Contact Information</h2>
+          <h2 className="font-serif text-2xl font-bold">{t("contact")}</h2>
           <div className="mt-5 grid gap-4 sm:grid-cols-2">
-            <input value={checkout.fullName} onChange={(event) => setCheckout({ fullName: event.target.value })} placeholder="Full name" className="h-11 rounded-md border border-neutral-300 bg-white px-3 text-sm text-neutral-950 placeholder:text-neutral-400 dark:border-white/15 dark:bg-neutral-950 dark:text-white" />
-            <input value={checkout.email} onChange={(event) => setCheckout({ email: event.target.value })} placeholder="Email" className="h-11 rounded-md border border-neutral-300 bg-white px-3 text-sm text-neutral-950 placeholder:text-neutral-400 dark:border-white/15 dark:bg-neutral-950 dark:text-white" />
-            <input value={checkout.phone} onChange={(event) => setCheckout({ phone: event.target.value })} placeholder="Phone" className="h-11 rounded-md border border-neutral-300 bg-white px-3 text-sm text-neutral-950 placeholder:text-neutral-400 dark:border-white/15 dark:bg-neutral-950 dark:text-white" />
-            <input value={checkout.address} onChange={(event) => setCheckout({ address: event.target.value })} placeholder="Delivery address" className="h-11 rounded-md border border-neutral-300 bg-white px-3 text-sm text-neutral-950 placeholder:text-neutral-400 dark:border-white/15 dark:bg-neutral-950 dark:text-white" />
-            <input value={checkout.apartment} onChange={(event) => setCheckout({ apartment: event.target.value })} placeholder="Apartment, floor, etc." className="h-11 rounded-md border border-neutral-300 bg-white px-3 text-sm text-neutral-950 placeholder:text-neutral-400 dark:border-white/15 dark:bg-neutral-950 dark:text-white sm:col-span-2" />
+            <input value={checkout.fullName} onChange={(event) => setCheckout({ fullName: event.target.value })} placeholder={t("fullName")} className="h-11 rounded-md border border-neutral-300 bg-white px-3 text-sm text-neutral-950 placeholder:text-neutral-400 dark:border-white/15 dark:bg-neutral-950 dark:text-white" />
+            <input value={checkout.email} onChange={(event) => setCheckout({ email: event.target.value })} placeholder={t("email")} className="h-11 rounded-md border border-neutral-300 bg-white px-3 text-sm text-neutral-950 placeholder:text-neutral-400 dark:border-white/15 dark:bg-neutral-950 dark:text-white" />
+            <input value={checkout.phone} onChange={(event) => setCheckout({ phone: event.target.value })} placeholder={t("phone")} className="h-11 rounded-md border border-neutral-300 bg-white px-3 text-sm text-neutral-950 placeholder:text-neutral-400 dark:border-white/15 dark:bg-neutral-950 dark:text-white" />
+            <input value={checkout.address} onChange={(event) => setCheckout({ address: event.target.value })} placeholder={t("address")} className="h-11 rounded-md border border-neutral-300 bg-white px-3 text-sm text-neutral-950 placeholder:text-neutral-400 dark:border-white/15 dark:bg-neutral-950 dark:text-white" />
+            <input value={checkout.apartment} onChange={(event) => setCheckout({ apartment: event.target.value })} placeholder={t("apartment")} className="h-11 rounded-md border border-neutral-300 bg-white px-3 text-sm text-neutral-950 placeholder:text-neutral-400 dark:border-white/15 dark:bg-neutral-950 dark:text-white sm:col-span-2" />
           </div>
           <label className="mt-5 flex items-center gap-3 text-sm font-bold text-neutral-800 dark:text-neutral-100">
             <input type="checkbox" checked={checkout.saveDetails} onChange={(event) => setCheckout({ saveDetails: event.target.checked })} />
-            Save my details for next time
+            {t("saveDetails")}
           </label>
-          {isAdmin ? <p className="mt-4 rounded-md border border-red-200 bg-red-50 p-3 text-sm font-bold text-red-700 dark:border-red-400/30 dark:bg-red-400/10 dark:text-red-200">Admin accounts cannot create storefront transactions. Please switch to a customer account.</p> : null}
-          <AppButton className="mt-6 w-full" loading={createOrder.isPending} disabled={isAdmin || cart.length === 0 || !checkout.fullName || !checkout.email || !checkout.phone || !checkout.address} onClick={() => createOrder.mutate()}>
-            Continue
+          {isAdmin ? <p className="mt-4 rounded-md border border-red-200 bg-red-50 p-3 text-sm font-bold text-red-700 dark:border-red-400/30 dark:bg-red-400/10 dark:text-red-200">{t("adminBlocked")}</p> : null}
+          <AppButton className="mt-6 w-full" loading={createOrder.isPending} disabled={isAdmin || !signedIn || cart.length === 0 || !checkout.fullName || !checkout.email || !checkout.phone || !checkout.address} onClick={() => createOrder.mutate()}>
+            {t("continue")}
           </AppButton>
         </div>
 

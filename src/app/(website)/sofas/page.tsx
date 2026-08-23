@@ -6,5 +6,5 @@ export const revalidate = 60;
 export default async function SofasPage() {
   const page = await getStorefrontPage("sofas");
 
-  return <ProductGridPage page={page} />;
+  return <ProductGridPage page={page} slug="sofas" />;
 }

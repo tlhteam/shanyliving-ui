@@ -1,17 +1,16 @@
 "use client";
 
 import Link from "next/link";
-import useEmblaCarousel from "embla-carousel-react";
 import { useLocale, useTranslations } from "next-intl";
 import { AppButton } from "@/components/app/AppButton";
 import { AppImage } from "@/components/app/AppImage";
+import { AppCarousel } from "@/components/app/AppCarousel";
 import { AppSection } from "@/components/app/AppSection";
 import { HomeJourney } from "@/components/landing/HomeJourney";
 import { SiteIcon, SiteIconName } from "@/components/icons/SiteIcon";
 import { WhatsappIcon } from "@/components/icons/WhatsappIcon";
 import { categoryImage, looks, productImage, siteImages } from "@/lib/images";
-import { mobileOnlyClass, mobileVisibleSlug } from "@/lib/mobile-catalog";
-import { cn } from "@/lib/utils";
+import { mobileVisibleSlug } from "@/lib/mobile-catalog";
 import type { HomeCatalog, CatalogCategory, CatalogProduct } from "@/lib/catalog";
 
 const clubPerks = [
@@ -31,8 +30,10 @@ const features = [
 
 function FeaturedCard({ product, index, className }: { product: CatalogProduct; index: number; className?: string }) {
   const t = useTranslations("common");
+  const card = useTranslations("storefront.card");
   const locale = useLocale();
   const price = new Intl.NumberFormat(locale).format(product.price);
+  const priceLabel = product.price > 0 ? t("priceFrom", { price }) : card("priceOnRequest");
 
   return (
     <div className={className}>
@@ -50,7 +51,7 @@ function FeaturedCard({ product, index, className }: { product: CatalogProduct; 
         )}
         <div className="absolute inset-x-4 bottom-4 flex flex-col items-center text-center text-white">
           <p className="font-serif text-lg leading-tight sm:text-xl">{product.name}</p>
-          <p className="mt-1 text-xs font-semibold sm:text-sm">{t("priceFrom", { price })}</p>
+          <p className="mt-1 text-xs font-semibold sm:text-sm">{priceLabel}</p>
           <span className="mt-3 inline-flex h-9 items-center rounded-full border border-white/80 bg-white/10 px-6 text-[11px] font-bold uppercase tracking-[0.14em] backdrop-blur transition group-hover:bg-white group-hover:text-neutral-950">
             {t("explore")}
           </span>
@@ -62,8 +63,10 @@ function FeaturedCard({ product, index, className }: { product: CatalogProduct; 
 
 function BestSeller({ product, index, className }: { product: CatalogProduct; index: number; className?: string }) {
   const t = useTranslations("common");
+  const card = useTranslations("storefront.card");
   const locale = useLocale();
   const price = new Intl.NumberFormat(locale).format(product.price);
+  const priceLabel = product.price > 0 ? t("price", { price }) : card("priceOnRequest");
 
   return (
     <div className={className}>
@@ -81,13 +84,13 @@ function BestSeller({ product, index, className }: { product: CatalogProduct; in
           </span>
         </div>
         <h3 className="mt-3 text-sm font-bold">{product.name}</h3>
-        <p className="text-sm font-bold text-neutral-700">{t("price", { price })}</p>
+        <p className="text-sm font-bold text-neutral-700 dark:text-neutral-300">{priceLabel}</p>
       </Link>
     </div>
   );
 }
 
-function CategoryTile({ category, index }: { category: CatalogCategory; index: number }) {
+function CategoryTile({ category, index, circular = false }: { category: CatalogCategory; index: number; circular?: boolean }) {
   const t = useTranslations("categories");
   const label = t.has(category.slug) ? t(category.slug) : category.name;
 
@@ -97,11 +100,11 @@ function CategoryTile({ category, index }: { category: CatalogCategory; index: n
         <AppImage
           src={categoryImage(category, index)}
           alt={label}
-          className="aspect-[1.18/1] rounded-lg"
-          sizes="(max-width: 640px) 45vw, (max-width: 1024px) 30vw, 15vw"
+          className={circular ? "aspect-square rounded-full" : "aspect-[1.18/1] rounded-lg"}
+          sizes="(max-width: 640px) 28vw, (max-width: 1024px) 30vw, 15vw"
           imageClassName="transition duration-500 group-hover:scale-[1.06]"
         />
-        <span className="mt-3 block text-sm font-bold group-hover:underline">{label}</span>
+        <span className="mt-2 block text-[11px] font-bold leading-tight group-hover:underline sm:mt-3 sm:text-sm">{label}</span>
       </Link>
     </div>
   );
@@ -109,13 +112,11 @@ function CategoryTile({ category, index }: { category: CatalogCategory; index: n
 
 export function HomeExperience({ catalog, fromSocial = false }: { catalog: HomeCatalog; fromSocial?: boolean }) {
   const t = useTranslations("home");
-  const [lookRef, lookApi] = useEmblaCarousel({ align: "start", loop: true, containScroll: "trimSnaps" });
   const whatsappNumber = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER?.replace(/\D/g, "");
   const whatsappHref = whatsappNumber ? `https://wa.me/${whatsappNumber}` : "/contact";
   const featured = catalog.featuredProducts.slice(0, 4);
   const bestSellers = catalog.bestSellers.slice(0, 6);
   const featuredMobileSlug = mobileVisibleSlug(featured);
-  const bestSellerMobileSlug = mobileVisibleSlug(bestSellers);
 
   return (
     <>
@@ -143,10 +144,17 @@ export function HomeExperience({ catalog, fromSocial = false }: { catalog: HomeC
             {t("categories.viewAll")} <SiteIcon name="arrow-right" className="size-4 rtl:rotate-180" />
           </Link>
         </div>
-        <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6">
+        <div className="hidden sm:grid sm:grid-cols-3 sm:gap-4 lg:grid-cols-6">
           {catalog.categories.map((category, index) => (
             <CategoryTile key={category.slug} category={category} index={index} />
           ))}
+        </div>
+        <div className="sm:hidden">
+          <AppCarousel itemClassName="basis-[28%]" arrows={false} dots={false}>
+            {catalog.categories.map((category, index) => (
+              <CategoryTile key={category.slug} category={category} index={index} circular />
+            ))}
+          </AppCarousel>
         </div>
       </AppSection>
 
@@ -157,15 +165,19 @@ export function HomeExperience({ catalog, fromSocial = false }: { catalog: HomeC
             {t("featured.viewAll")} <SiteIcon name="arrow-right" className="size-4 rtl:rotate-180" />
           </Link>
         </div>
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4 lg:gap-5">
+        <div className="hidden sm:grid sm:grid-cols-2 sm:gap-4 lg:grid-cols-4 lg:gap-5">
           {featured.map((product, index) => (
-            <FeaturedCard
-              key={product.slug}
-              product={product}
-              index={index}
-              className={cn(mobileOnlyClass(product.slug, featuredMobileSlug))}
-            />
+            <FeaturedCard key={product.slug} product={product} index={index} />
           ))}
+        </div>
+        <div className="sm:hidden">
+          <AppCarousel itemClassName="basis-full" arrows={false} previousLabel={t("shopTheLook.previous")} nextLabel={t("shopTheLook.next")}>
+            {featured
+              .filter((product) => product.slug === featuredMobileSlug)
+              .map((product, index) => (
+                <FeaturedCard key={product.slug} product={product} index={index} />
+              ))}
+          </AppCarousel>
         </div>
       </AppSection>
 
@@ -193,41 +205,21 @@ export function HomeExperience({ catalog, fromSocial = false }: { catalog: HomeC
           <p className="mt-4 text-sm leading-6 text-neutral-700 dark:text-neutral-300">{t("shopTheLook.text")}</p>
           <Link href="/about"><AppButton className="mt-6 w-full sm:w-auto">{t("shopTheLook.cta")}</AppButton></Link>
         </div>
-        <div className="relative">
-          <div ref={lookRef} className="overflow-hidden">
-            <div className="flex gap-4 lg:gap-5">
-              {looks.map((look) => (
-                <div key={look.key} className="min-w-0 shrink-0 grow-0 basis-[86%] sm:basis-1/2 lg:basis-1/3">
-                  <Link href="/about" className="group relative block overflow-hidden rounded-lg">
-                    <AppImage
-                      src={look.image}
-                      alt={t(`shopTheLook.looks.${look.key}`)}
-                      className="aspect-[1.6/1]"
-                      sizes="(max-width: 640px) 86vw, (max-width: 1024px) 45vw, 30vw"
-                      imageClassName="transition duration-500 group-hover:scale-[1.05]"
-                    />
-                    <div className="absolute inset-0 bg-linear-to-t from-black/55 to-transparent" />
-                    <span className="absolute bottom-3 start-3 text-xs font-bold text-white">{t(`shopTheLook.looks.${look.key}`)}</span>
-                  </Link>
-                </div>
-              ))}
-            </div>
-          </div>
-          <button
-            aria-label={t("shopTheLook.previous")}
-            onClick={() => lookApi?.scrollPrev()}
-            className="absolute -start-3 top-1/2 grid size-9 -translate-y-1/2 place-items-center rounded-full bg-white text-neutral-900 shadow-md transition hover:bg-neutral-900 hover:text-white"
-          >
-            <SiteIcon name="arrow-left" className="size-4 rtl:rotate-180" />
-          </button>
-          <button
-            aria-label={t("shopTheLook.next")}
-            onClick={() => lookApi?.scrollNext()}
-            className="absolute -end-3 top-1/2 grid size-9 -translate-y-1/2 place-items-center rounded-full bg-white text-neutral-900 shadow-md transition hover:bg-neutral-900 hover:text-white"
-          >
-            <SiteIcon name="arrow-right" className="size-4 rtl:rotate-180" />
-          </button>
-        </div>
+        <AppCarousel itemClassName="basis-[86%] sm:basis-1/2 lg:basis-1/3" previousLabel={t("shopTheLook.previous")} nextLabel={t("shopTheLook.next")}>
+          {looks.map((look) => (
+            <Link key={look.key} href="/about" className="group relative block overflow-hidden rounded-lg">
+              <AppImage
+                src={look.image}
+                alt={t(`shopTheLook.looks.${look.key}`)}
+                className="aspect-[1.6/1]"
+                sizes="(max-width: 640px) 86vw, (max-width: 1024px) 45vw, 30vw"
+                imageClassName="transition duration-500 group-hover:scale-[1.05]"
+              />
+              <div className="absolute inset-0 bg-linear-to-t from-black/55 to-transparent" />
+              <span className="absolute bottom-3 start-3 text-xs font-bold text-white">{t(`shopTheLook.looks.${look.key}`)}</span>
+            </Link>
+          ))}
+        </AppCarousel>
       </AppSection>
 
       <AppSection className="pt-0">
@@ -237,15 +229,17 @@ export function HomeExperience({ catalog, fromSocial = false }: { catalog: HomeC
             {t("bestSellers.viewAll")} <SiteIcon name="arrow-right" className="size-4 rtl:rotate-180" />
           </Link>
         </div>
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-3 lg:grid-cols-6 lg:gap-5">
+        <div className="hidden sm:grid sm:grid-cols-3 sm:gap-4 lg:grid-cols-6 lg:gap-5">
           {bestSellers.map((product, index) => (
-            <BestSeller
-              key={product.slug}
-              product={product}
-              index={index}
-              className={cn(mobileOnlyClass(product.slug, bestSellerMobileSlug))}
-            />
+            <BestSeller key={product.slug} product={product} index={index} />
           ))}
+        </div>
+        <div className="sm:hidden">
+          <AppCarousel itemClassName="basis-[62%]" arrows={false} previousLabel={t("shopTheLook.previous")} nextLabel={t("shopTheLook.next")}>
+            {bestSellers.map((product, index) => (
+              <BestSeller key={product.slug} product={product} index={index} />
+            ))}
+          </AppCarousel>
         </div>
       </AppSection>
 
@@ -263,7 +257,7 @@ export function HomeExperience({ catalog, fromSocial = false }: { catalog: HomeC
           <div className="text-center lg:text-start">
             <h2 className="font-serif text-3xl sm:text-4xl lg:text-5xl">{t("showroom.title")}</h2>
             <p className="mt-5 flex items-center justify-center gap-2 text-sm lg:justify-start"><SiteIcon name="map-pin" className="size-4" /> {t("showroom.address")}</p>
-            <p className="mt-4 text-sm leading-6 text-white/90">{t("showroom.weekHours")}<br />{t("showroom.weekendHours")}</p>
+            <p className="mt-4 text-sm leading-6 text-white/90"><bdi>{t("showroom.weekHours")}</bdi><br /><bdi>{t("showroom.weekendHours")}</bdi></p>
             <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:justify-center lg:justify-start">
               <Link href="/contact"><AppButton className="w-full sm:w-auto">{t("showroom.bookCta")}</AppButton></Link>
               <Link href="/contact">
@@ -316,7 +310,7 @@ export function HomeExperience({ catalog, fromSocial = false }: { catalog: HomeC
         aria-label={t("whatsappFloating")}
         href={whatsappHref}
         target={whatsappNumber ? "_blank" : undefined}
-        className="fixed bottom-5 end-5 z-40 grid size-13 place-items-center rounded-full bg-[#25d366] text-white shadow-lg transition hover:scale-105 sm:bottom-6 sm:end-6 sm:size-14"
+        className="fixed bottom-20 end-4 z-40 grid size-12 place-items-center rounded-full bg-[#25d366] text-white shadow-lg transition hover:scale-105 sm:bottom-6 sm:end-6 sm:size-14"
       >
         <WhatsappIcon className="size-7" />
       </Link>
