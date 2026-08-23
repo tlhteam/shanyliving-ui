@@ -3,8 +3,8 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
-import { useTranslations } from "next-intl";
-import { useMutation } from "@tanstack/react-query";
+import { useLocale, useTranslations } from "next-intl";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useEffect } from "react";
 import { toast } from "sonner";
 import { AppButton } from "@/components/app/AppButton";
@@ -13,6 +13,7 @@ import { AppSection } from "@/components/app/AppSection";
 import { SignInGate } from "@/components/storefront/SignInGate";
 import { SiteIcon } from "@/components/icons/SiteIcon";
 import { useApi } from "@/hooks/use-api";
+import { formatMoney } from "@/lib/format";
 import { useCustomerQuery } from "@/hooks/use-customer";
 import { useCustomerCommerceStore } from "@/stores/customer-commerce-store";
 import type { CustomerAddress, CustomerProfile } from "@/types/customer";
@@ -22,9 +23,11 @@ type OrderResponse = {
   reference: string;
 };
 
-const formatPrice = (price: number) => `₪ ${new Intl.NumberFormat("en").format(price)}`;
-
 export default function CheckoutPage() {
+  const t = useTranslations("checkout");
+  const locale = useLocale();
+  const formatPrice = (price: number) => formatMoney(price, locale);
+  const queryClient = useQueryClient();
   const router = useRouter();
   const { data: session, status } = useSession();
   const { request } = useApi();
@@ -65,8 +68,6 @@ export default function CheckoutPage() {
     });
   }, [checkout.address, checkout.apartment, checkout.phone, defaultAddress, setCheckout]);
 
-  const t = useTranslations("checkout");
-
   const createOrder = useMutation({
     mutationFn: () => request<OrderResponse>("/customer-flow/orders", {
       method: "POST",
@@ -81,6 +82,7 @@ export default function CheckoutPage() {
           country: "Israel"
         },
         currency: "ILS",
+        locale,
         meta: {
           checkout_saved_details: checkout.saveDetails,
           cart_source: "zustand"
@@ -98,6 +100,8 @@ export default function CheckoutPage() {
       setLastOrderReference(order.reference);
       setLastOrderItems(cart);
       clearCart();
+      queryClient.invalidateQueries({ queryKey: ["customer", "orders"] });
+      queryClient.invalidateQueries({ queryKey: ["customer", "dashboard"] });
       toast.success(order.reference, { description: t("paymentPending") });
       router.push("/order-confirmation");
     },
@@ -149,28 +153,28 @@ export default function CheckoutPage() {
         </div>
 
         <aside className="h-fit rounded-lg border border-neutral-200 bg-white p-5 text-neutral-950 shadow-sm dark:border-white/10 dark:bg-neutral-900 dark:text-neutral-50">
-          <h2 className="font-serif text-2xl font-bold">Order Summary</h2>
+          <h2 className="font-serif text-2xl font-bold">{t("summary")}</h2>
           <div className="mt-5 space-y-4">
             {cart.map((item) => (
               <div key={item.slug} className="grid grid-cols-[72px_1fr] gap-3">
                 <AppImage src={item.image} alt={item.name} className="aspect-square rounded-md" sizes="72px" />
                 <div>
                   <p className="font-bold">{item.name}</p>
-                  <p className="text-xs text-neutral-600 dark:text-neutral-400">{item.quantity} x {formatPrice(item.price)}</p>
+                  <p className="text-xs text-neutral-600 dark:text-neutral-400">{t("each", { quantity: item.quantity, price: formatPrice(item.price) })}</p>
                 </div>
               </div>
             ))}
           </div>
-          <p className="mt-5 flex justify-between border-t border-neutral-200 pt-4 font-bold dark:border-white/10"><span>Total</span><span>{formatPrice(subtotal)}</span></p>
+          <p className="mt-5 flex justify-between border-t border-neutral-200 pt-4 font-bold dark:border-white/10"><span>{t("total")}</span><span>{formatPrice(subtotal)}</span></p>
           <div className="mt-5 flex items-center gap-2 text-xs text-neutral-600 dark:text-neutral-400">
             <SiteIcon name="lock" className="size-4" />
-            Secure order creation. Payment gateway can be connected from backend settings.
+            {t("secureNote")}
           </div>
           {cart.length > 0 ? (
-            <Link href={`/customize-your-sofa?product=${cart[0].slug}&step=room`}>
+            <Link href={`/customize-your-sofa?product=${cart[0].slug}&step=room`} className="block">
               <AppButton variant="outline" className="mt-5 w-full gap-2">
                 <SiteIcon name="sparkle" className="size-4" />
-                Preview with ShiputzAI
+                {t("preview")}
               </AppButton>
             </Link>
           ) : null}
