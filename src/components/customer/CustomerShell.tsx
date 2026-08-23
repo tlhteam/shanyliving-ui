@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useSession } from "next-auth/react";
+import { useTranslations } from "next-intl";
 import { CreditCard, Gift, Heart, Home, Mail, MapPin, Menu, Package, PanelLeftClose, PanelLeftOpen, Settings, ShoppingCart, Sofa, User } from "lucide-react";
 import { useState } from "react";
 import { AppAccountMenu } from "@/components/app/AppAccountMenu";
@@ -17,25 +18,27 @@ import { useNotifications } from "@/hooks/use-notifications";
 import { customer } from "@/lib/customer-panel";
 
 const navItems = [
-  { label: "Dashboard", href: "/customer", icon: Home },
-  { label: "My Orders", href: "/customer/orders", icon: Package },
-  { label: "Cart & Checkout", href: "/cart", icon: ShoppingCart },
-  { label: "Saved Designs", href: "/customer/saved-designs", icon: Sofa },
-  { label: "Wishlist", href: "/customer/wishlist", icon: Heart },
-  { label: "Messages", href: "/customer/messages", icon: Mail },
-  { label: "Profile", href: "/customer/profile", icon: User },
-  { label: "Addresses", href: "/customer/addresses", icon: MapPin },
-  { label: "Gift Cards", href: "/customer/gift-cards", icon: Gift },
-  { label: "Cards & Bank", href: "/customer/payments", icon: CreditCard },
-  { label: "Settings", href: "/customer/settings", icon: Settings }
+  { label: "Dashboard", labelKey: "dashboard", href: "/customer", icon: Home },
+  { label: "My Orders", labelKey: "orders", href: "/customer/orders", icon: Package },
+  { label: "Cart & Checkout", labelKey: "cart", href: "/cart", icon: ShoppingCart },
+  { label: "Saved Designs", labelKey: "savedDesigns", href: "/customer/saved-designs", icon: Sofa },
+  { label: "Wishlist", labelKey: "wishlist", href: "/customer/wishlist", icon: Heart },
+  { label: "Messages", labelKey: "messages", href: "/customer/messages", icon: Mail },
+  { label: "Profile", labelKey: "profile", href: "/customer/profile", icon: User },
+  { label: "Addresses", labelKey: "addresses", href: "/customer/addresses", icon: MapPin },
+  { label: "Gift Cards", labelKey: "giftCards", href: "/customer/gift-cards", icon: Gift },
+  { label: "Cards & Bank", labelKey: "payments", href: "/customer/payments", icon: CreditCard },
+  { label: "Settings", labelKey: "settings", href: "/customer/settings", icon: Settings }
 ];
 
 function CustomerNav({ collapsed = false, onNavigate }: { collapsed?: boolean; onNavigate?: () => void }) {
+  const t = useTranslations("customer.nav");
+  const navLabel = (key: string, fallback: string) => (t.has(key) ? t(key) : fallback);
   const pathname = usePathname();
 
   return (
     <nav className="space-y-1" data-tour="customer-nav">
-      {navItems.map(({ href, label, icon: Icon }) => {
+      {navItems.map(({ href, label, labelKey, icon: Icon }) => {
         const active = pathname === href;
 
         return (
@@ -43,7 +46,7 @@ function CustomerNav({ collapsed = false, onNavigate }: { collapsed?: boolean; o
             key={href}
             href={href}
             onClick={onNavigate}
-            title={collapsed ? label : undefined}
+            title={collapsed ? navLabel(labelKey, label) : undefined}
             className={cn(
               "flex items-center gap-3 rounded-md px-3 py-2.5 text-sm font-semibold transition",
               collapsed && "justify-center px-0",
@@ -51,7 +54,7 @@ function CustomerNav({ collapsed = false, onNavigate }: { collapsed?: boolean; o
             )}
           >
             <Icon className="size-5 shrink-0 stroke-[1.5]" />
-            {collapsed ? <span className="sr-only">{label}</span> : label}
+            {collapsed ? <span className="sr-only">{navLabel(labelKey, label)}</span> : navLabel(labelKey, label)}
           </Link>
         );
       })}

@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { getTranslations } from "next-intl/server";
 import { AppButton } from "@/components/app/AppButton";
 import { AppImage } from "@/components/app/AppImage";
 import { AppSection } from "@/components/app/AppSection";
@@ -26,14 +27,16 @@ const fallbackFabricImages = [
 ];
 
 const benefits = [
-  { title: "Premium Quality", text: "Crafted to last", icon: "shield" },
-  { title: "Custom Made", text: "Just for you", icon: "fabric" },
-  { title: "White Glove Delivery", text: "Delivery and assembly", icon: "truck" },
-  { title: "Secure Payments", text: "Safe and encrypted", icon: "lock" }
+  { key: "quality", icon: "shield" },
+  { key: "custom", icon: "fabric" },
+  { key: "delivery", icon: "truck" },
+  { key: "payments", icon: "lock" }
 ];
 
 export default async function ProductDetailPage({ params }: ProductDetailPageProps) {
   const { slug } = await params;
+  const t = await getTranslations("storefront.detailPage");
+  const benefitCopy = await getTranslations("storefront.benefits");
   const fallbackProduct = getStorefrontProduct(slug);
   const apiProduct = await getCatalogProduct(slug);
   const product = apiProduct ? mapCatalogProduct(apiProduct, fallbackProduct) : fallbackProduct;
@@ -60,11 +63,11 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
       <section className="border-y border-neutral-200 bg-white dark:border-white/10 dark:bg-neutral-950">
         <div className="mx-auto grid max-w-7xl grid-cols-2 gap-4 px-4 py-6 sm:px-6 lg:grid-cols-4 lg:px-8">
           {benefits.map((benefit) => (
-            <div key={benefit.title} className="flex items-center gap-3">
+            <div key={benefit.key} className="flex items-center gap-3">
               <SiteIcon name={benefit.icon as SiteIconName} className="size-6 shrink-0 sm:size-7" />
               <div className="min-w-0">
-                <p className="text-xs font-bold leading-tight">{benefit.title}</p>
-                <p className="text-[11px] text-neutral-600 dark:text-neutral-400">{benefit.text}</p>
+                <p className="text-xs font-bold leading-tight">{benefitCopy(`${benefit.key}.title`)}</p>
+                <p className="text-[11px] text-neutral-600 dark:text-neutral-400">{benefitCopy(`${benefit.key}.text`)}</p>
               </div>
             </div>
           ))}
@@ -75,21 +78,21 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
         <AppSection className="grid items-center gap-6 py-8 lg:grid-cols-[1fr_260px]">
           <div className="grid grid-cols-3 gap-2.5 sm:grid-cols-6 sm:gap-3">
             {fabricImages.map((image) => (
-              <AppImage key={image} src={image} alt="Fabric option" className="aspect-square rounded-lg" sizes="(max-width: 640px) 30vw, 16vw" />
+              <AppImage key={image} src={image} alt={t("fabricAlt")} className="aspect-square rounded-lg" sizes="(max-width: 640px) 30vw, 16vw" />
             ))}
           </div>
           <div>
-            <h2 className="font-serif text-xl font-bold sm:text-2xl">Choose Your Fabric</h2>
-            <p className="mt-2 text-sm leading-6 text-neutral-700 dark:text-neutral-300">Over 120 premium fabrics to choose from.</p>
+            <h2 className="font-serif text-xl font-bold sm:text-2xl">{t("fabricTitle")}</h2>
+            <p className="mt-2 text-sm leading-6 text-neutral-700 dark:text-neutral-300">{t("fabricText")}</p>
             <Link href="/customize-your-sofa" className="block">
-              <AppButton variant="outline" className="mt-4 w-full sm:w-auto">View all fabrics</AppButton>
+              <AppButton variant="outline" className="mt-4 w-full sm:w-auto">{t("fabricCta")}</AppButton>
             </Link>
           </div>
         </AppSection>
       </section>
 
       <AppSection>
-        <h2 className="font-serif text-xl font-bold sm:text-2xl">Complete the look</h2>
+        <h2 className="font-serif text-xl font-bold sm:text-2xl">{t("related")}</h2>
         <div className="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-5">
           {related.map((item) => (
             <ProductCard key={item.slug} product={item} className={mobileOnlyClass(item.slug, relatedMobileSlug)} />
@@ -99,12 +102,12 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
 
       <section className="bg-neutral-100 dark:bg-neutral-900">
         <AppSection className="grid items-center gap-6 lg:grid-cols-[1.2fr_0.8fr]">
-          <AppImage src="/images/showroom-consultation.png" alt="Custom sofa consultation" className="aspect-[1.6/1] rounded-lg sm:aspect-[1.9/1]" sizes="(max-width: 1024px) 100vw, 55vw" />
+          <AppImage src="/images/showroom-consultation.png" alt={t("consultAlt")} className="aspect-[1.6/1] rounded-lg sm:aspect-[1.9/1]" sizes="(max-width: 1024px) 100vw, 55vw" />
           <div>
-            <h2 className="font-serif text-2xl font-bold sm:text-3xl">Custom Sofa, made for you</h2>
-            <p className="mt-3 text-sm leading-6 text-neutral-700 dark:text-neutral-300">Choose your size, fabric, color and more. Our team is here to help you create the perfect sofa.</p>
+            <h2 className="font-serif text-2xl font-bold sm:text-3xl">{t("consultTitle")}</h2>
+            <p className="mt-3 text-sm leading-6 text-neutral-700 dark:text-neutral-300">{t("consultText")}</p>
             <Link href="/customize-your-sofa" className="block">
-              <AppButton className="mt-6 w-full sm:w-auto">Open Customizer</AppButton>
+              <AppButton className="mt-6 w-full sm:w-auto">{t("consultCta")}</AppButton>
             </Link>
           </div>
         </AppSection>

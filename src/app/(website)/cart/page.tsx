@@ -54,19 +54,19 @@ export default function CartPage() {
                   <button type="button" className="mt-3 text-xs font-bold text-neutral-500 underline dark:text-neutral-400" onClick={() => removeFromCart(item.slug)}>{t("remove")}</button>
                 </div>
                 <div className="flex items-center gap-2 self-start">
-                  <button type="button" className="grid size-9 place-items-center rounded-md border border-neutral-300 dark:border-white/15" onClick={() => updateQuantity(item.slug, item.quantity - 1)}>-</button>
+                  <button type="button" className="grid size-9 place-items-center rounded-md border border-neutral-300 dark:border-white/15" aria-label={t("decrease")} onClick={() => updateQuantity(item.slug, item.quantity - 1)}>-</button>
                   <span className="grid size-9 place-items-center text-sm font-bold">{item.quantity}</span>
-                  <button type="button" className="grid size-9 place-items-center rounded-md border border-neutral-300 dark:border-white/15" onClick={() => updateQuantity(item.slug, item.quantity + 1)}>+</button>
+                  <button type="button" className="grid size-9 place-items-center rounded-md border border-neutral-300 dark:border-white/15" aria-label={t("increase")} onClick={() => updateQuantity(item.slug, item.quantity + 1)}>+</button>
                 </div>
               </article>
             ))}
           </div>
           <aside className="h-fit rounded-lg border border-neutral-200 bg-white p-5 shadow-sm dark:border-white/10 dark:bg-neutral-900">
-            <h2 className="font-serif text-2xl font-bold">{t("subtotal")}</h2>
+            <h2 className="font-serif text-2xl font-bold">{t("summary")}</h2>
             <div className="mt-5 space-y-3 text-sm">
               <p className="flex justify-between"><span>{t("subtotal")}</span><span>{formatPrice(subtotal)}</span></p>
-              <p className="flex justify-between"><span>Shipping</span><span>Calculated after review</span></p>
-              <p className="flex justify-between border-t border-neutral-200 pt-3 text-base font-bold dark:border-white/10"><span>Total</span><span>{formatPrice(subtotal)}</span></p>
+              <p className="flex justify-between"><span>{t("shipping")}</span><span>{t("shippingReview")}</span></p>
+              <p className="flex justify-between border-t border-neutral-200 pt-3 text-base font-bold dark:border-white/10"><span>{t("total")}</span><span>{formatPrice(subtotal)}</span></p>
             </div>
             {status === "authenticated" ? (
               <Link href="/checkout" className="block"><AppButton className="mt-5 w-full">{t("checkout")}</AppButton></Link>
