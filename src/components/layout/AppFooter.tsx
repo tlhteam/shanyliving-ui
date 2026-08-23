@@ -17,7 +17,12 @@ const shopLinks = [
   { key: "chairs", href: "/dining" },
   { key: "newArrivals", href: "/new-arrivals" }
 ];
-const serviceLinks = ["contact", "faq", "shipping", "warranty"];
+const serviceLinks = [
+  { key: "contact", href: "/contact" },
+  { key: "faq", href: "/faq" },
+  { key: "shipping", href: "/shipping" },
+  { key: "warranty", href: "/warranty" }
+];
 const companyLinks = [
   { key: "about", href: "/about" },
   { key: "showroom", href: "/showroom" },
@@ -50,7 +55,7 @@ export async function AppFooter() {
         <div>
           <h3 className="text-sm font-bold uppercase tracking-wide text-white">{t("customerService")}</h3>
           <div className="mt-5 flex flex-col gap-3 text-sm">
-            {serviceLinks.map((key) => <Link key={key} href="/contact" className="transition hover:text-white">{t(`serviceLinks.${key}`)}</Link>)}
+            {serviceLinks.map((link) => <Link key={link.key} href={link.href} className="transition hover:text-white">{t(`serviceLinks.${link.key}`)}</Link>)}
           </div>
         </div>
         <div>

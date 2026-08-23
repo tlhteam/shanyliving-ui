@@ -513,7 +513,11 @@
     "paymentPending": "Le paiement se fait avec votre conseiller. La commande est enregistree et vous pouvez la suivre dans votre compte.",
     "signInTitle": "Connectez-vous pour passer commande",
     "signInText": "Nous enregistrons la commande sur votre compte pour que vous et votre conseiller puissiez la suivre.",
-    "google": "Continuer avec Google"
+    "google": "Continuer avec Google",
+    "total": "Total",
+    "secureNote": "Creation de commande securisee. La passerelle de paiement se connecte depuis les reglages.",
+    "preview": "Apercu avec ShiputzAI",
+    "each": "{quantity} x {price}"
   },
   "customer": {
     "nav": {
@@ -1046,6 +1050,82 @@
           "body": "If something on this site blocks you, we treat it as a defect. Report it and we will give you the information or complete the task with you by phone or WhatsApp in the meantime."
         }
       ]
+    },
+    "shipping": {
+      "title": "Shipping and Delivery",
+      "intro": "How we build, ship and install your furniture across Israel, and what to expect at each step.",
+      "sections": [
+        {
+          "heading": "Production time",
+          "body": "Made-to-order sofas leave production 4 to 6 weeks after the specification is confirmed. Stocked pieces and accessories ship within 5 business days. Your advisor confirms the schedule in writing once the order is placed."
+        },
+        {
+          "heading": "Delivery areas",
+          "body": "We deliver across Israel. Tel Aviv and the central district are covered by our own crews; other regions are served by partner carriers. Delivery outside the central district may add a few days to the schedule."
+        },
+        {
+          "heading": "Delivery fees",
+          "body": "Delivery and assembly are quoted with the order and depend on the region, the number of pieces and access at the address. The fee appears on the order before you approve it, and is not calculated automatically at checkout."
+        },
+        {
+          "heading": "Booking a delivery slot",
+          "body": "We call two to three days before delivery to agree a window. Someone over 18 must be present to receive the furniture and sign for it."
+        },
+        {
+          "heading": "Access and assembly",
+          "body": "Tell us in advance about narrow staircases, lifts, tight doorways or crane requirements so the crew arrives prepared. Standard delivery includes carrying the pieces in, assembling them in the room and removing the packaging."
+        },
+        {
+          "heading": "Inspection on arrival",
+          "body": "Check the furniture with the crew before they leave and note anything on the delivery form. Report transport damage within 48 hours with photographs so we can resolve it quickly."
+        },
+        {
+          "heading": "Missed deliveries",
+          "body": "If nobody is at the address for the agreed window, the crew leaves and a second delivery is scheduled. A repeat delivery fee may apply."
+        },
+        {
+          "heading": "Returns and cancellations",
+          "body": "Made-to-order pieces are produced for you and cannot be returned once production begins. Cancellations before production starts are handled by your advisor. Stocked items follow the return rights in the Israeli Consumer Protection Law."
+        }
+      ]
+    },
+    "warranty": {
+      "title": "Warranty",
+      "intro": "What the Shany Living warranty covers, for how long, and how to open a claim.",
+      "sections": [
+        {
+          "heading": "Frame and structure",
+          "body": "The internal frame and structural joinery carry a 10 year warranty against manufacturing defects under normal domestic use."
+        },
+        {
+          "heading": "Cushions and suspension",
+          "body": "Seat and back cushion cores, webbing and springs carry a 5 year warranty. Softening and settling of foam and feather fill is normal and is not a defect."
+        },
+        {
+          "heading": "Upholstery and stitching",
+          "body": "Fabric, leather and stitching carry a 2 year warranty against manufacturing defects. Fading from direct sunlight, pilling from abrasion, stains and pet damage are not covered."
+        },
+        {
+          "heading": "Mechanisms and legs",
+          "body": "Recliner mechanisms, sofa bed frames, castors and legs carry a 2 year warranty on parts and labour."
+        },
+        {
+          "heading": "What is not covered",
+          "body": "Normal wear, damage from misuse, accidents, cleaning products not recommended for the material, alterations made after delivery, commercial use and pieces sold as showroom clearance are outside the warranty."
+        },
+        {
+          "heading": "Opening a claim",
+          "body": "Send your order reference and photographs of the issue from the Messages tab in your account, or contact your advisor. We assess the claim and repair, replace the part or replace the piece, in that order of preference."
+        },
+        {
+          "heading": "Care and cleaning",
+          "body": "Rotate and plump cushions weekly, vacuum upholstery with a soft brush, blot spills immediately and keep furniture out of direct sunlight and away from heaters. Following the care card supplied with the order keeps the warranty valid."
+        },
+        {
+          "heading": "Transfer",
+          "body": "The warranty covers the original purchaser at the delivery address and is not transferable when the furniture is sold on."
+        }
+      ]
     }
   },
   "inspiration": {
@@ -1195,5 +1275,92 @@
     "text": "La page a peut-etre bouge, mais nos canapes sont bien la ou ils doivent etre.",
     "home": "Retour a l'accueil",
     "sofas": "Voir les canapes"
+  },
+  "faq": {
+    "eyebrow": "Help centre",
+    "title": "Frequently asked questions",
+    "subtitle": "Answers about customizing, ordering, delivery and aftercare. If something is missing, message us and we will answer within one business day.",
+    "ctaTitle": "Still have a question?",
+    "ctaText": "Talk to an advisor on WhatsApp, book a showroom visit, or send us a message from your account.",
+    "ctaContact": "Contact us",
+    "ctaShowroom": "Book a showroom visit",
+    "groups": [
+      {
+        "heading": "Customizing",
+        "items": [
+          {
+            "question": "How does the sofa customizer work?",
+            "answer": "Pick a model, then set the size, configuration, fabric and colour step by step. The preview updates as you choose, and your design is saved to your account so you can come back to it."
+          },
+          {
+            "question": "How many fabrics can I choose from?",
+            "answer": "Over 120 fabrics and leathers, grouped by feel and durability. Order free swatches from the showroom page if you want to see them at home before deciding."
+          },
+          {
+            "question": "Can I order a size that is not listed?",
+            "answer": "Yes. Tell your advisor the dimensions you need and we quote the piece as a bespoke build. Bespoke sizes take the same 4 to 6 weeks as standard made-to-order pieces."
+          },
+          {
+            "question": "Do I need an account to save a design?",
+            "answer": "Yes, saved designs live in your account so an advisor can pick them up with you. Signing in with Google takes a few seconds."
+          }
+        ]
+      },
+      {
+        "heading": "Orders and payment",
+        "items": [
+          {
+            "question": "How do I place an order?",
+            "answer": "Add the piece to your cart and complete checkout. The order is created and saved to your account immediately, and an advisor confirms the specification with you before production starts."
+          },
+          {
+            "question": "How do I pay?",
+            "answer": "Payment is arranged with your advisor by secure link, bank transfer or over the phone. No card details are taken on the website."
+          },
+          {
+            "question": "Can I change my order after placing it?",
+            "answer": "Yes, until production starts. Contact your advisor with the order reference and we will update the specification or the delivery address."
+          },
+          {
+            "question": "Where do I track my order?",
+            "answer": "In My Orders in your account. Every order shows its reference, status and items, and the status moves as the piece goes through production and delivery."
+          }
+        ]
+      },
+      {
+        "heading": "Delivery",
+        "items": [
+          {
+            "question": "How long does delivery take?",
+            "answer": "Made-to-order pieces leave production 4 to 6 weeks after the specification is confirmed. Stocked items ship within 5 business days."
+          },
+          {
+            "question": "Do you assemble the furniture?",
+            "answer": "Yes. Standard delivery includes carrying the pieces in, assembling them in the room and taking the packaging away."
+          },
+          {
+            "question": "How much is delivery?",
+            "answer": "Delivery is quoted with the order and depends on the region, the number of pieces and access at the address. It is not calculated automatically at checkout."
+          }
+        ]
+      },
+      {
+        "heading": "Aftercare",
+        "items": [
+          {
+            "question": "What does the warranty cover?",
+            "answer": "Ten years on the frame, five on cushion cores and suspension, and two on upholstery and mechanisms. The warranty page has the full terms."
+          },
+          {
+            "question": "How do I clean my sofa?",
+            "answer": "Vacuum with a soft brush, blot spills straight away and use only the products named on the care card supplied with your order. Keep the piece out of direct sunlight."
+          },
+          {
+            "question": "Can I buy replacement cushion covers?",
+            "answer": "Yes, if the fabric is still in the collection. Send your order reference to your advisor and we will quote the covers."
+          }
+        ]
+      }
+    ]
   }
 }

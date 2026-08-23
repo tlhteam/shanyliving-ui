@@ -7,7 +7,7 @@ type LegalSection = {
   body: string;
 };
 
-export async function LegalPage({ document }: { document: "privacy" | "terms" | "accessibility" }) {
+export async function LegalPage({ document }: { document: "privacy" | "terms" | "accessibility" | "shipping" | "warranty" }) {
   const t = await getTranslations("legal");
   const sections = t.raw(`${document}.sections`) as LegalSection[];
 
