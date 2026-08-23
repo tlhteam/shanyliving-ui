@@ -1,7 +1,9 @@
 "use client";
 
-import { FileText, Mail, Paperclip, Plus, Search, Send, X } from "lucide-react";
+import Link from "next/link";
+import { ChevronRight, FileText, Mail, Paperclip, Plus, Search, Send, X } from "lucide-react";
 import { useMemo, useState } from "react";
+import { useTranslations } from "next-intl";
 import { AppButton } from "@/components/app/AppButton";
 import { AppCard } from "@/components/app/AppCard";
 import { AppDialog } from "@/components/app/AppDialog";
@@ -16,6 +18,13 @@ type ComposeForm = {
 };
 
 const emptyCompose: ComposeForm = { subject: "", body: "", files: [] };
+
+const quickActions = [
+  { key: "orders", href: "/customer/orders" },
+  { key: "delivery", href: "/customer/orders" },
+  { key: "consultation", href: "/showroom" },
+  { key: "help", href: "/faq" }
+];
 
 function initials(name?: string | null) {
   return name?.split(" ").filter(Boolean).slice(0, 2).map((part) => part[0]?.toUpperCase()).join("") || "SL";
@@ -38,6 +47,7 @@ function buildMessageFormData(values: { subject?: string; body?: string; files: 
 }
 
 export default function MessagesPage() {
+  const t = useTranslations("customer.messages");
   const [search, setSearch] = useState("");
   const [selectedId, setSelectedId] = useState<number | null>(null);
   const [composeOpen, setComposeOpen] = useState(false);
@@ -58,7 +68,7 @@ export default function MessagesPage() {
     "messages",
     (values) => ({ path: "/customer/messages", options: { method: "POST", formData: buildMessageFormData(values) } }),
     {
-      successMessage: "Conversation created.",
+      successMessage: t("created"),
       onSuccess: (conversation) => {
         setSelectedId(conversation.id);
         setComposeOpen(false);
@@ -74,7 +84,7 @@ export default function MessagesPage() {
       options: { method: "POST", formData: buildMessageFormData({ body, files }) }
     }),
     {
-      successMessage: "Message sent.",
+      successMessage: t("sent"),
       onSuccess: () => {
         setReply("");
         setReplyFiles([]);
@@ -88,13 +98,13 @@ export default function MessagesPage() {
 
   return (
     <>
-      <CustomerTopbar title="Messages" subtitle="Chat with our team and get updates about your orders and designs." />
+      <CustomerTopbar title={t("title")} subtitle={t("subtitle")} />
       <div className="grid gap-5 xl:grid-cols-[320px_1fr_280px]">
         <AppCard className="p-4">
           <div className="flex gap-2">
             <div className="relative min-w-0 flex-1">
               <Search className="pointer-events-none absolute start-3 top-1/2 size-4 -translate-y-1/2 text-neutral-400" />
-              <input value={search} onChange={(event) => setSearch(event.target.value)} placeholder="Search messages..." className="h-10 w-full rounded-md border border-neutral-300 bg-white px-9 text-sm outline-none focus:border-neutral-950 dark:border-white/15 dark:bg-neutral-950 dark:focus:border-white" />
+              <input value={search} onChange={(event) => setSearch(event.target.value)} placeholder={t("search")} className="h-10 w-full rounded-md border border-neutral-300 bg-white px-9 text-sm outline-none focus:border-neutral-950 dark:border-white/15 dark:bg-neutral-950 dark:focus:border-white" />
             </div>
             <AppButton variant="outline" className="h-10 w-10 p-0" onClick={() => setComposeOpen(true)}><Plus className="size-4" /></AppButton>
           </div>
@@ -103,7 +113,7 @@ export default function MessagesPage() {
             {!conversationsQuery.isLoading && filtered.length === 0 ? (
               <div className="grid place-items-center gap-3 rounded-lg border border-neutral-200 p-8 text-center dark:border-white/10">
                 <Mail className="size-7 text-neutral-400" />
-                <p className="text-sm text-neutral-600 dark:text-neutral-400">No conversations yet.</p>
+                <p className="text-sm text-neutral-600 dark:text-neutral-400">{t("empty")}</p>
               </div>
             ) : null}
             {filtered.map((item) => (
@@ -111,26 +121,26 @@ export default function MessagesPage() {
                 <div className="grid size-10 shrink-0 place-items-center rounded-full bg-neutral-200 text-xs font-bold text-neutral-700 dark:bg-neutral-800 dark:text-neutral-100">{initials(item.assigned_user?.name ?? item.customer?.name)}</div>
                 <div className="min-w-0 flex-1">
                   <p className="truncate font-bold">{item.subject}</p>
-                  <p className="truncate text-xs text-neutral-600 dark:text-neutral-400">{item.last_message?.body ?? "No messages yet"}</p>
+                  <p className="truncate text-xs text-neutral-600 dark:text-neutral-400">{item.last_message?.body ?? t("noMessages")}</p>
                 </div>
               </button>
             ))}
           </div>
-          <AppButton variant="outline" className="mt-5 w-full gap-2" onClick={() => setComposeOpen(true)}><Plus className="size-4" /> New Conversation</AppButton>
+          <AppButton variant="outline" className="mt-5 w-full gap-2" onClick={() => setComposeOpen(true)}><Plus className="size-4" /> {t("new")}</AppButton>
         </AppCard>
 
         <AppCard className="flex min-h-120 flex-col p-4">
           <div className="flex items-center gap-3 border-b border-neutral-200 pb-4 dark:border-white/10">
             <div className="grid size-11 place-items-center rounded-full bg-neutral-200 text-sm font-bold text-neutral-700 dark:bg-neutral-800 dark:text-neutral-100">{initials(selected?.assigned_user?.name ?? selected?.customer?.name)}</div>
             <div>
-              <p className="font-bold">{selected?.subject ?? "Shany Living Team"}</p>
-              <p className="text-xs text-green-700">{selected ? selected.status : "Ready to help"}</p>
+              <p className="font-bold">{selected?.subject ?? t("team")}</p>
+              <p className="text-xs text-green-700 dark:text-emerald-400">{selected ? selected.status : t("ready")}</p>
             </div>
           </div>
           <div className="flex-1 space-y-4 overflow-y-auto py-5 text-sm">
             {selected?.messages?.length ? selected.messages.map((message) => (
               <div key={message.id} className="max-w-xl rounded-lg bg-neutral-100 p-3 dark:bg-neutral-800">
-                <p className="text-xs font-bold text-neutral-500 dark:text-neutral-400">{message.author_name ?? "Shany Living Team"}</p>
+                <p className="text-xs font-bold text-neutral-500 dark:text-neutral-400">{message.author_name ?? t("team")}</p>
                 {message.body ? <p className="mt-1">{message.body}</p> : null}
                 {message.attachments?.length ? (
                   <div className="mt-3 flex flex-wrap gap-2">
@@ -142,7 +152,7 @@ export default function MessagesPage() {
                   </div>
                 ) : null}
               </div>
-            )) : <p className="max-w-xs rounded-lg bg-neutral-100 p-3 text-neutral-600 dark:bg-neutral-800 dark:text-neutral-300">Messages from the team will appear here.</p>}
+            )) : <p className="max-w-xs rounded-lg bg-neutral-100 p-3 text-neutral-600 dark:bg-neutral-800 dark:text-neutral-300">{t("placeholderThread")}</p>}
           </div>
           <div className="border-t border-neutral-200 pt-4 dark:border-white/10">
             {replyFiles.length ? (
@@ -155,20 +165,25 @@ export default function MessagesPage() {
                 <Paperclip className="size-4" />
                 <input type="file" multiple className="sr-only" onChange={(event) => updateFiles(event.target.files, setReplyFiles)} />
               </label>
-              <input value={reply} onChange={(event) => setReply(event.target.value)} placeholder="Type your message..." disabled={!selected} className="h-10 min-w-0 flex-1 rounded-md border border-neutral-300 bg-white px-3 text-sm outline-none disabled:bg-neutral-50 dark:border-white/15 dark:bg-neutral-950 dark:disabled:bg-neutral-900" />
+              <input value={reply} onChange={(event) => setReply(event.target.value)} placeholder={t("reply")} disabled={!selected} className="h-10 min-w-0 flex-1 rounded-md border border-neutral-300 bg-white px-3 text-sm outline-none disabled:bg-neutral-50 dark:border-white/15 dark:bg-neutral-950 dark:disabled:bg-neutral-900" />
               <AppButton className="h-10 w-10 p-0" disabled={!selected || (!reply.trim() && replyFiles.length === 0)} loading={sendMessage.isPending} onClick={() => selected && sendMessage.mutate({ conversation: selected, body: reply, files: replyFiles })}><Send className="size-4" /></AppButton>
             </div>
           </div>
         </AppCard>
 
         <AppCard className="h-fit p-5">
-          <h2 className="font-serif text-xl font-bold">Conversation Details</h2>
+          <h2 className="font-serif text-xl font-bold">{t("details")}</h2>
           <div className="mt-4 flex items-center gap-3">
             <div className="grid size-12 place-items-center rounded-full bg-neutral-200 text-sm font-bold text-neutral-700 dark:bg-neutral-800 dark:text-neutral-100">{initials(selected?.customer?.name)}</div>
-            <div><p className="font-bold">{selected?.customer?.name ?? "Shany Living Team"}</p><p className="text-xs text-neutral-600 dark:text-neutral-400">{selected?.customer?.email ?? "support@shanyliving.com"}</p></div>
+            <div className="min-w-0"><p className="truncate font-bold">{selected?.customer?.name ?? t("team")}</p><p className="truncate text-xs text-neutral-600 dark:text-neutral-400"><bdi>{selected?.customer?.email ?? ""}</bdi></p></div>
           </div>
           <div className="mt-6 space-y-3 border-t border-neutral-200 pt-5 text-sm dark:border-white/10">
-            {["View Order Details", "Track Delivery", "Request Consultation", "Help Center"].map((action) => <p key={action} className="flex justify-between font-semibold">{action}<span>{">"}</span></p>)}
+            {quickActions.map((action) => (
+              <Link key={action.key} href={action.href} className="flex justify-between gap-3 font-semibold transition hover:underline">
+                {t(`actions.${action.key}`)}
+                <ChevronRight className="size-4 shrink-0 rtl:rotate-180" />
+              </Link>
+            ))}
           </div>
         </AppCard>
       </div>
@@ -176,20 +191,20 @@ export default function MessagesPage() {
       <AppDialog
         open={composeOpen}
         onOpenChange={setComposeOpen}
-        title="New Conversation"
-        description="Send a message to the Shany Living team. You can attach multiple files."
+        title={t("new")}
+        description={t("composeText")}
         footer={
           <>
-            <AppButton variant="outline" onClick={() => setComposeOpen(false)}>Cancel</AppButton>
-            <AppButton loading={createConversation.isPending} disabled={!compose.subject.trim() || (!compose.body.trim() && compose.files.length === 0)} onClick={() => createConversation.mutate(compose)}>Create Conversation</AppButton>
+            <AppButton variant="outline" onClick={() => setComposeOpen(false)}>{t("cancel")}</AppButton>
+            <AppButton loading={createConversation.isPending} disabled={!compose.subject.trim() || (!compose.body.trim() && compose.files.length === 0)} onClick={() => createConversation.mutate(compose)}>{t("create")}</AppButton>
           </>
         }
       >
         <div className="space-y-4">
-          <input value={compose.subject} onChange={(event) => setCompose((current) => ({ ...current, subject: event.target.value }))} placeholder="Subject" className="h-11 w-full rounded-md border border-neutral-300 bg-white px-3 text-sm outline-none focus:border-neutral-950 dark:border-white/15 dark:bg-neutral-950 dark:focus:border-white" />
-          <textarea value={compose.body} onChange={(event) => setCompose((current) => ({ ...current, body: event.target.value }))} placeholder="Message" className="min-h-32 w-full rounded-md border border-neutral-300 bg-white p-3 text-sm outline-none focus:border-neutral-950 dark:border-white/15 dark:bg-neutral-950 dark:focus:border-white" />
+          <input value={compose.subject} onChange={(event) => setCompose((current) => ({ ...current, subject: event.target.value }))} placeholder={t("subject")} className="h-11 w-full rounded-md border border-neutral-300 bg-white px-3 text-sm outline-none focus:border-neutral-950 dark:border-white/15 dark:bg-neutral-950 dark:focus:border-white" />
+          <textarea value={compose.body} onChange={(event) => setCompose((current) => ({ ...current, body: event.target.value }))} placeholder={t("message")} className="min-h-32 w-full rounded-md border border-neutral-300 bg-white p-3 text-sm outline-none focus:border-neutral-950 dark:border-white/15 dark:bg-neutral-950 dark:focus:border-white" />
           <label className="flex cursor-pointer items-center justify-center gap-2 rounded-md border border-dashed border-neutral-300 p-5 text-sm font-bold dark:border-white/15">
-            <Paperclip className="size-4" /> Attach files
+            <Paperclip className="size-4" /> {t("attach")}
             <input type="file" multiple className="sr-only" onChange={(event) => updateFiles(event.target.files, (files) => setCompose((current) => ({ ...current, files })))} />
           </label>
           {compose.files.length ? (

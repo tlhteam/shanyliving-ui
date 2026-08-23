@@ -2,6 +2,7 @@
 
 import { CreditCard, Landmark, Plus } from "lucide-react";
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 import { AppButton } from "@/components/app/AppButton";
 import { AppCard } from "@/components/app/AppCard";
 import { AppConfirmationDialog } from "@/components/app/AppConfirmationDialog";
@@ -30,6 +31,7 @@ const emptyForm: PaymentForm = {
 };
 
 export default function PaymentsPage() {
+  const t = useTranslations("customer.payments");
   const [open, setOpen] = useState(false);
   const [editing, setEditing] = useState<CustomerPaymentMethod | null>(null);
   const [pendingDelete, setPendingDelete] = useState<CustomerPaymentMethod | null>(null);
@@ -51,20 +53,20 @@ export default function PaymentsPage() {
       path: editing ? `/customer/payment-methods/${editing.id}` : "/customer/payment-methods",
       options: { method: editing ? "PATCH" : "POST", body: values }
     }),
-    { successMessage: "Payment method saved.", onSuccess: closeDialog }
+    { successMessage: t("saved"), onSuccess: closeDialog }
   );
 
   const defaultMutation = useCustomerMutation<CustomerPaymentMethod, CustomerPaymentMethod>(
     "payment-methods",
     (method) => ({ path: `/customer/payment-methods/${method.id}`, options: { method: "PATCH", body: { is_default: true } } }),
-    { successMessage: "Default payment method updated." }
+    { successMessage: t("defaultUpdated") }
   );
 
   const deleteMutation = useCustomerMutation<CustomerPaymentMethod, null>(
     "payment-methods",
     (method) => ({ path: `/customer/payment-methods/${method.id}`, options: { method: "DELETE" } }),
     {
-      successMessage: "Payment method removed.",
+      successMessage: t("removed"),
       onSuccess: () => {
         setPendingDelete(null);
         setTyped("");
@@ -93,22 +95,22 @@ export default function PaymentsPage() {
 
   return (
     <>
-      <CustomerTopbar title="Cards & Bank" subtitle="Save cards and bank details for faster checkout and future orders." />
+      <CustomerTopbar title={t("title")} subtitle={t("subtitle")} />
       <div className="mb-5 flex justify-end">
-        <AppButton className="gap-2" onClick={startCreate}><Plus className="size-4" /> Add Payment Method</AppButton>
+        <AppButton className="gap-2" onClick={startCreate}><Plus className="size-4" /> {t("add")}</AppButton>
       </div>
 
       {methodsQuery.isLoading ? (
         <div className="grid gap-5 md:grid-cols-2">
-          {Array.from({ length: 2 }).map((_, index) => <div key={index} className="h-52 animate-pulse rounded-lg bg-neutral-200" />)}
+          {Array.from({ length: 2 }).map((_, index) => <div key={index} className="h-52 animate-pulse rounded-lg bg-neutral-200 dark:bg-white/10" />)}
         </div>
       ) : null}
 
       {!methodsQuery.isLoading && methods.length === 0 ? (
         <AppCard className="grid place-items-center gap-3 p-12 text-center">
           <CreditCard className="size-8 text-neutral-400" />
-          <p className="text-sm text-neutral-600">No payment methods saved yet.</p>
-          <AppButton onClick={startCreate}>Add Payment Method</AppButton>
+          <p className="text-sm text-neutral-600 dark:text-neutral-400">{t("empty")}</p>
+          <AppButton onClick={startCreate}>{t("add")}</AppButton>
         </AppCard>
       ) : null}
 
@@ -120,21 +122,21 @@ export default function PaymentsPage() {
             <AppCard key={method.id} className="p-6">
               <div className="flex items-start justify-between gap-4">
                 <Icon className="size-8" />
-                {method.is_default ? <span className="rounded bg-neutral-100 px-3 py-1 text-xs font-bold text-neutral-950 dark:bg-white/15 dark:text-white">Default</span> : null}
+                {method.is_default ? <span className="rounded bg-neutral-100 px-3 py-1 text-xs font-bold text-neutral-950 dark:bg-white/15 dark:text-white">{t("default")}</span> : null}
               </div>
-              <h2 className="mt-6 font-serif text-2xl font-bold">{method.holder || `${method.brand ?? method.type} method`}</h2>
-              <p className="mt-2 text-sm text-neutral-600 dark:text-neutral-400">{method.brand ?? method.type} ending in {method.last4}</p>
-              <p className="mt-1 text-sm text-neutral-600 dark:text-neutral-400">Expires / Status: {method.expires ?? "Verified"}</p>
+              <h2 className="mt-6 font-serif text-2xl font-bold">{method.holder || t("fallbackName", { brand: method.brand ?? method.type })}</h2>
+              <p className="mt-2 text-sm text-neutral-600 dark:text-neutral-400"><bdi>{t("ending", { brand: method.brand ?? method.type, last4: method.last4 ?? "" })}</bdi></p>
+              <p className="mt-1 text-sm text-neutral-600 dark:text-neutral-400"><bdi>{t("expires", { value: method.expires ?? t("verified") })}</bdi></p>
               <div className="mt-6 flex flex-wrap gap-3">
                 <AppButton
                   variant={method.is_default ? "primary" : "outline"}
                   disabled={method.is_default || defaultMutation.isPending}
                   onClick={() => defaultMutation.mutate(method)}
                 >
-                  Default
+                  {t("default")}
                 </AppButton>
-                <AppButton variant="outline" onClick={() => startEdit(method)}>Edit</AppButton>
-                <AppButton variant="outline" onClick={() => { setPendingDelete(method); setTyped(""); }}>Remove</AppButton>
+                <AppButton variant="outline" onClick={() => startEdit(method)}>{t("edit")}</AppButton>
+                <AppButton variant="outline" onClick={() => { setPendingDelete(method); setTyped(""); }}>{t("remove")}</AppButton>
               </div>
             </AppCard>
           );
@@ -144,17 +146,17 @@ export default function PaymentsPage() {
       <AppDialog
         open={open}
         onOpenChange={(next) => (next ? setOpen(true) : closeDialog())}
-        title={editing ? "Edit Payment Method" : "Add Payment Method"}
-        description="Save card or bank details for future orders."
+        title={editing ? t("editTitle") : t("addTitle")}
+        description={t("dialogText")}
         footer={
           <>
-            <AppButton variant="outline" onClick={closeDialog}>Cancel</AppButton>
+            <AppButton variant="outline" onClick={closeDialog}>{t("cancel")}</AppButton>
             <AppButton
               loading={saveMutation.isPending}
               disabled={!form.last4.match(/^\d{4}$/)}
               onClick={() => saveMutation.mutate(form)}
             >
-              Save Method
+              {t("save")}
             </AppButton>
           </>
         }
@@ -163,17 +165,17 @@ export default function PaymentsPage() {
           <select
             value={form.type}
             onChange={(event) => setForm((current) => ({ ...current, type: event.target.value as PaymentForm["type"] }))}
-            className="h-11 rounded-md border border-neutral-300 bg-white px-3 text-sm outline-none focus:border-neutral-950"
+            className="h-11 rounded-md border border-neutral-300 bg-white px-3 text-sm outline-none focus:border-neutral-950 dark:border-white/15 dark:bg-neutral-950 dark:focus:border-white"
           >
-            <option value="card">Card</option>
-            <option value="bank">Bank</option>
+            <option value="card">{t("card")}</option>
+            <option value="bank">{t("bank")}</option>
           </select>
-          <input value={form.brand} onChange={(event) => setForm((current) => ({ ...current, brand: event.target.value }))} placeholder="Brand" className="h-11 rounded-md border border-neutral-300 px-3 text-sm outline-none focus:border-neutral-950" />
-          <input value={form.holder} onChange={(event) => setForm((current) => ({ ...current, holder: event.target.value }))} placeholder="Holder Name" className="h-11 rounded-md border border-neutral-300 px-3 text-sm outline-none focus:border-neutral-950" />
-          <input value={form.last4} maxLength={4} onChange={(event) => setForm((current) => ({ ...current, last4: event.target.value.replace(/\D/g, "").slice(0, 4) }))} placeholder="Last 4 digits" className="h-11 rounded-md border border-neutral-300 px-3 text-sm outline-none focus:border-neutral-950" />
-          <input value={form.expires} onChange={(event) => setForm((current) => ({ ...current, expires: event.target.value }))} placeholder="Expiry or status" className="h-11 rounded-md border border-neutral-300 px-3 text-sm outline-none focus:border-neutral-950" />
-          <label className="flex h-11 items-center justify-between rounded-md border border-neutral-300 px-3 text-sm font-bold">
-            Default method
+          <input value={form.brand} onChange={(event) => setForm((current) => ({ ...current, brand: event.target.value }))} placeholder={t("brand")} className="h-11 rounded-md border border-neutral-300 px-3 text-sm outline-none focus:border-neutral-950 dark:border-white/15 dark:bg-neutral-950 dark:focus:border-white" />
+          <input value={form.holder} onChange={(event) => setForm((current) => ({ ...current, holder: event.target.value }))} placeholder={t("holder")} className="h-11 rounded-md border border-neutral-300 px-3 text-sm outline-none focus:border-neutral-950 dark:border-white/15 dark:bg-neutral-950 dark:focus:border-white" />
+          <input value={form.last4} maxLength={4} onChange={(event) => setForm((current) => ({ ...current, last4: event.target.value.replace(/\D/g, "").slice(0, 4) }))} placeholder={t("last4")} className="h-11 rounded-md border border-neutral-300 px-3 text-sm outline-none focus:border-neutral-950 dark:border-white/15 dark:bg-neutral-950 dark:focus:border-white" />
+          <input value={form.expires} onChange={(event) => setForm((current) => ({ ...current, expires: event.target.value }))} placeholder={t("expiryPlaceholder")} className="h-11 rounded-md border border-neutral-300 px-3 text-sm outline-none focus:border-neutral-950 dark:border-white/15 dark:bg-neutral-950 dark:focus:border-white" />
+          <label className="flex h-11 items-center justify-between rounded-md border border-neutral-300 px-3 text-sm font-bold dark:border-white/15">
+            {t("defaultMethod")}
             <AppSwitch checked={form.is_default} onClick={() => setForm((current) => ({ ...current, is_default: !current.is_default }))} />
           </label>
         </div>
@@ -181,7 +183,7 @@ export default function PaymentsPage() {
 
       <AppConfirmationDialog
         open={Boolean(pendingDelete)}
-        itemName={pendingDelete?.holder ?? "this payment method"}
+        itemName={pendingDelete?.holder ?? t("thisMethod")}
         typedValue={typed}
         onTypedValueChange={setTyped}
         onCancel={() => { setPendingDelete(null); setTyped(""); }}
