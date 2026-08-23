@@ -14,8 +14,10 @@ export function LanguageSwitcher({ className, variant = "icon" }: { className?: 
   const router = useRouter();
   const menuRef = useRef<HTMLDivElement>(null);
   const [open, setOpen] = useState(false);
+  const [dropUp, setDropUp] = useState(false);
   const [pending, startTransition] = useTransition();
   const active = localeOption(locale);
+  const menuHeight = 210;
 
   useEffect(() => {
     const close = (event: MouseEvent) => {
@@ -50,7 +52,15 @@ export function LanguageSwitcher({ className, variant = "icon" }: { className?: 
         title={t("current", { language: active.label })}
         aria-expanded={open}
         disabled={pending}
-        onClick={() => setOpen((current) => !current)}
+        onClick={() => {
+          const rect = menuRef.current?.getBoundingClientRect();
+
+          if (rect) {
+            setDropUp(window.innerHeight - rect.bottom < menuHeight && rect.top > menuHeight);
+          }
+
+          setOpen((current) => !current);
+        }}
         className={cn(
           "inline-flex items-center gap-1.5 rounded-md px-2 py-2 text-xs font-bold uppercase tracking-wide text-neutral-950 transition hover:bg-neutral-100 disabled:opacity-50 dark:text-neutral-50 dark:hover:bg-white/10",
           variant === "inline" && "w-full justify-between border border-neutral-200 px-3 text-sm normal-case tracking-normal dark:border-white/15"
@@ -64,7 +74,12 @@ export function LanguageSwitcher({ className, variant = "icon" }: { className?: 
         </span>
       </button>
       {open ? (
-        <div className="absolute start-0 top-full z-[80] mt-2 w-44 rounded-lg border border-neutral-200 bg-white p-1 text-neutral-950 shadow-xl dark:border-white/10 dark:bg-neutral-950 dark:text-neutral-50">
+        <div
+          className={cn(
+            "absolute start-0 z-80 w-44 rounded-lg border border-neutral-200 bg-white p-1 text-neutral-950 shadow-xl dark:border-white/10 dark:bg-neutral-950 dark:text-neutral-50",
+            dropUp ? "bottom-full mb-2" : "top-full mt-2"
+          )}
+        >
           <p className="px-2 py-1 text-xs font-bold uppercase tracking-wide text-neutral-500 dark:text-neutral-400">{t("label")}</p>
           <div className="-mx-1 my-1 h-px bg-neutral-200 dark:bg-white/10" />
           {localeOptions.map((option) => (
