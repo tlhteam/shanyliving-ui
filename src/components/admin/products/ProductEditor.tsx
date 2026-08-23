@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useMemo, useState } from "react";
+import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 import { ArrowLeft, ImagePlus, Lock, Star, Trash2 } from "lucide-react";
 import { AppButton } from "@/components/app/AppButton";
@@ -113,6 +114,7 @@ function fieldClass(invalid = false) {
 }
 
 export function ProductEditor({ slug }: { slug?: string }) {
+  const t = useTranslations("adminPanel.productEditor");
   const router = useRouter();
   const { request, token } = useApi();
   const queryClient = useQueryClient();
@@ -279,9 +281,9 @@ export function ProductEditor({ slug }: { slug?: string }) {
     },
     onSuccess: (product) => {
       setErrors({});
-      toast.success(editing ? "Product updated." : "Product created.", {
+      toast.success(editing ? t("updated") : t("created"), {
         description: `${product.name} / ${product.variants?.length ?? 0} variants saved.`,
-        action: { label: "View on storefront", onClick: () => window.open(`/sofas/${product.slug}`, "_blank") },
+        action: { label: t("viewOnStorefront"), onClick: () => window.open(`/sofas/${product.slug}`, "_blank") },
       });
       queryClient.invalidateQueries({ queryKey: ["admin-product"] });
       queryClient.invalidateQueries({ queryKey: ["admin-resource"] });
@@ -296,7 +298,7 @@ export function ProductEditor({ slug }: { slug?: string }) {
     onError: (error: Error & { errors?: Record<string, string[]> }) => {
       setErrors(error.errors ?? {});
       toast.error(error.message, {
-        action: { label: "Try again", onClick: () => saveMutation.mutate() },
+        action: { label: t("tryAgain"), onClick: () => saveMutation.mutate() },
       });
     }
   });
@@ -337,7 +339,7 @@ export function ProductEditor({ slug }: { slug?: string }) {
     const existing = new Map(variants.map((variant) => [variantKey(variant.options), variant]));
     setOptions(defaultOptions);
     setVariants(defaultVariants().map((variant) => existing.get(variantKey(variant.options)) ?? variant));
-    toast.success("Default Size, Configuration, Fabric and Color variants applied.");
+    toast.success(t("defaultsApplied"));
   };
 
   const fieldError = (key: string) => errors[key]?.[0];
@@ -350,7 +352,7 @@ export function ProductEditor({ slug }: { slug?: string }) {
     return (
       <AppCard className="p-6 dark:border-white/10 dark:bg-neutral-900">
         <p className="text-sm text-red-600">{(productQuery.error as Error).message}</p>
-        <Link href="/admin/products"><AppButton variant="outline" className="mt-4">Back to products</AppButton></Link>
+        <Link href="/admin/products"><AppButton variant="outline" className="mt-4">{t("back")}</AppButton></Link>
       </AppCard>
     );
   }
@@ -361,19 +363,19 @@ export function ProductEditor({ slug }: { slug?: string }) {
         <div className="flex min-w-0 flex-1 items-center gap-3">
           <Link
             href="/admin/products"
-            aria-label="Back to products"
+            aria-label={t("back")}
             className="grid size-9 shrink-0 place-items-center rounded-md border border-neutral-300 transition hover:bg-neutral-100 dark:border-white/15 dark:hover:bg-white/10"
           >
             <ArrowLeft className="size-4 rtl:rotate-180" />
           </Link>
           <div className="min-w-0">
-            <p className="text-xs font-bold uppercase tracking-[0.2em] text-neutral-500 dark:text-neutral-400">Catalog</p>
-            <h1 className="truncate font-serif text-xl font-bold sm:text-3xl">{editing ? form.name || "Edit product" : "Add product"}</h1>
+            <p className="text-xs font-bold uppercase tracking-[0.2em] text-neutral-500 dark:text-neutral-400">{t("eyebrow")}</p>
+            <h1 className="truncate font-serif text-xl font-bold sm:text-3xl">{editing ? form.name || t("editTitle") : t("addTitle")}</h1>
           </div>
         </div>
         <div className="flex w-full items-center gap-2 sm:w-auto">
           <Link href="/admin/products" className="flex-1 sm:flex-none">
-            <AppButton type="button" variant="outline" className="w-full sm:w-auto">Discard</AppButton>
+            <AppButton type="button" variant="outline" className="w-full sm:w-auto">{t("discard")}</AppButton>
           </Link>
           <AppButton
             type="button"
@@ -382,7 +384,7 @@ export function ProductEditor({ slug }: { slug?: string }) {
             onClick={() => saveMutation.mutate()}
             className="flex-1 sm:flex-none"
           >
-            Save
+            {t("save")}
           </AppButton>
         </div>
       </div>
@@ -401,7 +403,7 @@ export function ProductEditor({ slug }: { slug?: string }) {
                     : "border-neutral-300 hover:border-neutral-950 dark:border-white/15"
                 )}
               >
-                Default
+                {t("defaultTab")}
               </button>
               {localeOptions.map((option) => (
                 <button
@@ -425,11 +427,11 @@ export function ProductEditor({ slug }: { slug?: string }) {
 
             {activeLocale ? (
               <p className="mb-4 rounded-md bg-neutral-100 p-3 text-xs leading-5 text-neutral-700 dark:bg-white/10 dark:text-neutral-300">
-                Editing the {localeOptions.find((option) => option.locale === activeLocale)?.english} translation. Empty fields fall back to the default text.
+                {t("localeNotice", { locale: localeOptions.find((option) => option.locale === activeLocale)?.label ?? activeLocale })}
               </p>
             ) : null}
 
-            <label htmlFor="product-name" className="mb-2 block text-sm font-semibold">Title</label>
+            <label htmlFor="product-name" className="mb-2 block text-sm font-semibold">{t("title")}</label>
             <input
               id="product-name"
               dir={activeLocale === "he" ? "rtl" : undefined}
@@ -439,7 +441,7 @@ export function ProductEditor({ slug }: { slug?: string }) {
                   ? updateTranslation({ name: event.target.value })
                   : setForm((current) => ({ ...current, name: event.target.value }))
               }
-              placeholder={activeLocale ? form.name || "Translated title" : "Lian"}
+              placeholder={activeLocale ? form.name || t("translatedTitlePlaceholder") : t("titlePlaceholder")}
               className={fieldClass(Boolean(fieldError("name")))}
             />
             {fieldError("name") ? <p className="mt-1.5 text-sm text-red-600">{fieldError("name")}</p> : null}
@@ -447,28 +449,28 @@ export function ProductEditor({ slug }: { slug?: string }) {
             <div className="mt-3 flex items-center gap-2 rounded-md border border-neutral-200 bg-neutral-50 px-3 py-2 dark:border-white/10 dark:bg-white/5">
               <Lock className="size-3.5 shrink-0 text-neutral-500" />
               <span className="min-w-0 flex-1 truncate font-mono text-xs text-neutral-600 dark:text-neutral-300">
-                /{derivedSlug || "generated-from-the-title"}
+                /{derivedSlug || t("slugPlaceholder")}
               </span>
-              <span className="shrink-0 text-[10px] font-bold uppercase tracking-[0.14em] text-neutral-400">Auto</span>
+              <span className="shrink-0 text-[10px] font-bold uppercase tracking-[0.14em] text-neutral-400">{t("auto")}</span>
             </div>
 
             <div className="mt-5">
-              <span className="mb-2 block text-sm font-semibold">Description</span>
+              <span className="mb-2 block text-sm font-semibold">{t("description")}</span>
               <AppRichTextEditor
                 value={activeLocale ? translation.description : form.description}
                 onChange={(value) =>
                   activeLocale ? updateTranslation({ description: value }) : setForm((current) => ({ ...current, description: value }))
                 }
-                placeholder="Describe the product, materials and comfort"
+                placeholder={t("descriptionPlaceholder")}
               />
             </div>
           </AppCard>
 
           <AppCard className="p-4 dark:border-white/10 dark:bg-neutral-900 dark:text-neutral-50 sm:p-6">
             <div className="flex flex-wrap items-center justify-between gap-3">
-              <h2 className="font-serif text-lg font-bold sm:text-xl">Media</h2>
+              <h2 className="font-serif text-lg font-bold sm:text-xl">{t("media")}</h2>
               <AppButton type="button" size="sm" variant="outline" className="gap-2" onClick={() => setPickerOpen(true)}>
-                <ImagePlus className="size-4" /> Select from media
+                <ImagePlus className="size-4" /> {t("selectMedia")}
               </AppButton>
             </div>
 
@@ -479,19 +481,19 @@ export function ProductEditor({ slug }: { slug?: string }) {
                 className="mt-4 grid w-full place-items-center gap-2 rounded-lg border border-dashed border-neutral-300 p-8 text-center transition hover:border-neutral-950 dark:border-white/15 sm:p-10"
               >
                 <ImagePlus className="size-6 text-neutral-400" />
-                <span className="text-sm text-neutral-600 dark:text-neutral-300">Add images from the media library</span>
+                <span className="text-sm text-neutral-600 dark:text-neutral-300">{t("mediaEmpty")}</span>
               </button>
             ) : (
               <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-4">
                 {gallery.map((entry, index) => (
                   <div key={`${entry.media_id ?? entry.path}-${index}`} className="group relative overflow-hidden rounded-md border border-neutral-200 dark:border-white/10">
                     <div className="relative aspect-square bg-neutral-100 dark:bg-neutral-800">
-                      {entry.url ? <Image src={entry.url} alt="Product image" fill sizes="200px" className="object-cover" /> : null}
+                      {entry.url ? <Image src={entry.url} alt={t("imageAlt")} fill sizes="200px" className="object-cover" /> : null}
                     </div>
                     <div className="absolute inset-x-1 top-1 flex items-center justify-between">
                       <button
                         type="button"
-                        aria-label="Set as primary image"
+                        aria-label={t("setPrimary")}
                         onClick={() => setPrimary(index)}
                         className={cn(
                           "grid size-7 place-items-center rounded-full bg-white/90 transition",
@@ -502,7 +504,7 @@ export function ProductEditor({ slug }: { slug?: string }) {
                       </button>
                       <button
                         type="button"
-                        aria-label="Remove image"
+                        aria-label={t("removeImage")}
                         onClick={() => removeMedia(entry.media_id, index)}
                         className="grid size-7 place-items-center rounded-full bg-white/90 text-neutral-500 transition hover:text-red-600"
                       >
@@ -510,7 +512,7 @@ export function ProductEditor({ slug }: { slug?: string }) {
                       </button>
                     </div>
                     {entry.is_primary ? (
-                      <span className="absolute inset-x-0 bottom-0 bg-neutral-950/80 py-1 text-center text-[10px] font-bold uppercase tracking-wide text-white">Primary</span>
+                      <span className="absolute inset-x-0 bottom-0 bg-neutral-950/80 py-1 text-center text-[10px] font-bold uppercase tracking-wide text-white">{t("primary")}</span>
                     ) : null}
                   </div>
                 ))}
@@ -519,10 +521,10 @@ export function ProductEditor({ slug }: { slug?: string }) {
           </AppCard>
 
           <AppCard className="p-4 dark:border-white/10 dark:bg-neutral-900 dark:text-neutral-50 sm:p-6">
-            <h2 className="font-serif text-lg font-bold sm:text-xl">Pricing</h2>
+            <h2 className="font-serif text-lg font-bold sm:text-xl">{t("pricing")}</h2>
             <div className="mt-4 grid gap-4 sm:grid-cols-2">
               <div>
-                <label htmlFor="product-price" className="mb-2 block text-sm font-semibold">Price</label>
+                <label htmlFor="product-price" className="mb-2 block text-sm font-semibold">{t("price")}</label>
                 <input
                   id="product-price"
                   value={form.price}
@@ -533,7 +535,7 @@ export function ProductEditor({ slug }: { slug?: string }) {
                 />
               </div>
               <div>
-                <label htmlFor="product-compare" className="mb-2 block text-sm font-semibold">Compare at price</label>
+                <label htmlFor="product-compare" className="mb-2 block text-sm font-semibold">{t("compareAt")}</label>
                 <input
                   id="product-compare"
                   value={form.compare_at_price}
@@ -551,31 +553,31 @@ export function ProductEditor({ slug }: { slug?: string }) {
 
         <div className="space-y-5">
           <AppCard className="p-4 dark:border-white/10 dark:bg-neutral-900 dark:text-neutral-50 sm:p-5">
-            <h2 className="text-sm font-bold uppercase tracking-[0.16em] text-neutral-500 dark:text-neutral-400">Status</h2>
+            <h2 className="text-sm font-bold uppercase tracking-[0.16em] text-neutral-500 dark:text-neutral-400">{t("status")}</h2>
             <div className="mt-4 space-y-4">
               <div className="flex items-start justify-between gap-3">
                 <div>
-                  <p className="text-sm font-semibold">{form.status === "active" ? "Active" : "Draft"}</p>
+                  <p className="text-sm font-semibold">{form.status === "active" ? t("active") : t("draft")}</p>
                   <p className="mt-0.5 text-xs text-neutral-500 dark:text-neutral-400">
-                    {form.status === "active" ? "Visible on the storefront" : "Hidden from the storefront"}
+                    {form.status === "active" ? t("activeHint") : t("draftHint")}
                   </p>
                 </div>
                 <AppSwitch
                   checked={form.status === "active"}
-                  aria-label="Toggle product status"
+                  aria-label={t("toggleStatus")}
                   onClick={() => setForm((current) => ({ ...current, status: current.status === "active" ? "draft" : "active" }))}
                 />
               </div>
               <div className="flex items-start justify-between gap-3">
                 <div>
-                  <p className="text-sm font-semibold">{form.customizable ? "Customizable" : "Fixed product"}</p>
+                  <p className="text-sm font-semibold">{form.customizable ? t("customizable") : t("fixed")}</p>
                   <p className="mt-0.5 text-xs text-neutral-500 dark:text-neutral-400">
-                    {form.customizable ? "Continues into the customizer" : "Sold as shown"}
+                    {form.customizable ? t("customizableHint") : t("fixedHint")}
                   </p>
                 </div>
                 <AppSwitch
                   checked={form.customizable}
-                  aria-label="Toggle customizable"
+                  aria-label={t("toggleCustomizable")}
                   onClick={() => setForm((current) => ({ ...current, customizable: !current.customizable }))}
                 />
               </div>
@@ -583,31 +585,31 @@ export function ProductEditor({ slug }: { slug?: string }) {
           </AppCard>
 
           <AppCard className="p-4 dark:border-white/10 dark:bg-neutral-900 dark:text-neutral-50 sm:p-5">
-            <h2 className="text-sm font-bold uppercase tracking-[0.16em] text-neutral-500 dark:text-neutral-400">Variant defaults</h2>
+            <h2 className="text-sm font-bold uppercase tracking-[0.16em] text-neutral-500 dark:text-neutral-400">{t("variantDefaults")}</h2>
             <p className="mt-2 text-xs leading-5 text-neutral-600 dark:text-neutral-300">
-              New products start with Size, Configuration, Fabric and Color. Reapply them if the option list was cleared.
+              {t("variantDefaultsHint")}
             </p>
             <AppButton type="button" size="sm" variant="outline" className="mt-3 w-full" onClick={applyDefaultVariants}>
-              Apply default variants
+              {t("applyDefaults")}
             </AppButton>
           </AppCard>
 
           <AppCard className="p-4 dark:border-white/10 dark:bg-neutral-900 dark:text-neutral-50 sm:p-5">
-            <h2 className="text-sm font-bold uppercase tracking-[0.16em] text-neutral-500 dark:text-neutral-400">Organization</h2>
+            <h2 className="text-sm font-bold uppercase tracking-[0.16em] text-neutral-500 dark:text-neutral-400">{t("organization")}</h2>
             <div className="mt-4 space-y-4">
               <div>
-                <label htmlFor="product-category" className="mb-2 block text-sm font-semibold">Category</label>
+                <label htmlFor="product-category" className="mb-2 block text-sm font-semibold">{t("category")}</label>
                 <input
                   id="product-category"
                   value={form.category}
                   onChange={(event) => setForm((current) => ({ ...current, category: event.target.value }))}
-                  placeholder="Sofas"
+                  placeholder={t("categoryPlaceholder")}
                   className={fieldClass()}
                 />
               </div>
               <div>
                 <label htmlFor="product-subcategory" className="mb-2 block text-sm font-semibold">
-                  Subcategory{activeLocale ? ` (${activeLocale.toUpperCase()})` : ""}
+                  {t("subcategory")}{activeLocale ? ` (${activeLocale.toUpperCase()})` : ""}
                 </label>
                 <input
                   id="product-subcategory"
@@ -618,23 +620,23 @@ export function ProductEditor({ slug }: { slug?: string }) {
                       ? updateTranslation({ subcategory: event.target.value })
                       : setForm((current) => ({ ...current, subcategory: event.target.value }))
                   }
-                  placeholder="Modular Sofas"
+                  placeholder={t("subcategoryPlaceholder")}
                   className={fieldClass()}
                 />
               </div>
               <div>
-                <span className="mb-2 block text-sm font-semibold">Tags</span>
+                <span className="mb-2 block text-sm font-semibold">{t("tags")}</span>
                 <AppTagInput value={tags} onChange={setTags} suggestions={tagSuggestions} />
               </div>
             </div>
           </AppCard>
 
           <AppCard className="p-4 dark:border-white/10 dark:bg-neutral-900 dark:text-neutral-50 sm:p-5">
-            <h2 className="text-sm font-bold uppercase tracking-[0.16em] text-neutral-500 dark:text-neutral-400">Details</h2>
+            <h2 className="text-sm font-bold uppercase tracking-[0.16em] text-neutral-500 dark:text-neutral-400">{t("details")}</h2>
             <div className="mt-4 space-y-4">
               <div>
                 <label htmlFor="product-seat" className="mb-2 block text-sm font-semibold">
-                  Seat range{activeLocale ? ` (${activeLocale.toUpperCase()})` : ""}
+                  {t("seatRange")}{activeLocale ? ` (${activeLocale.toUpperCase()})` : ""}
                 </label>
                 <input
                   id="product-seat"
@@ -645,12 +647,12 @@ export function ProductEditor({ slug }: { slug?: string }) {
                       ? updateTranslation({ seat_range: event.target.value })
                       : setForm((current) => ({ ...current, seat_range: event.target.value }))
                   }
-                  placeholder="3-4 Seater"
+                  placeholder={t("seatRangePlaceholder")}
                   className={fieldClass()}
                 />
               </div>
               <div>
-                <label htmlFor="product-colors" className="mb-2 block text-sm font-semibold">Color hex codes</label>
+                <label htmlFor="product-colors" className="mb-2 block text-sm font-semibold">{t("colors")}</label>
                 <input
                   id="product-colors"
                   value={form.colors}

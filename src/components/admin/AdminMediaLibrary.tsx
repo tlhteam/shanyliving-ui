@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useRef, useState } from "react";
+import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 import { Check, Copy, FileText, Search, Trash2, Upload } from "lucide-react";
 import { AdminPageHeader } from "@/components/admin/AdminPageHeader";
@@ -15,9 +16,9 @@ import type { MediaItem } from "@/types/media";
 
 const folders = ["library", "products", "collections", "showroom", "inspiration"];
 
-function formatSize(size: number | null) {
+function formatSize(size: number | null, unknown: string) {
   if (!size) {
-    return "Unknown size";
+    return unknown;
   }
 
   if (size < 1024 * 1024) {
@@ -28,6 +29,7 @@ function formatSize(size: number | null) {
 }
 
 export function AdminMediaLibrary() {
+  const t = useTranslations("adminPanel.media");
   const { request, token } = useApi();
   const queryClient = useQueryClient();
   const fileInput = useRef<HTMLInputElement>(null);
@@ -61,7 +63,7 @@ export function AdminMediaLibrary() {
       return Promise.all(uploads);
     },
     onSuccess: (items) => {
-      toast.success(items.length > 1 ? `${items.length} files uploaded.` : "File uploaded.");
+      toast.success(items.length > 1 ? `${items.length} files uploaded.` : t("uploaded"));
       invalidate();
     },
     onError: (error: Error) => toast.error(error.message)
@@ -70,7 +72,7 @@ export function AdminMediaLibrary() {
   const deleteMutation = useMutation({
     mutationFn: (item: MediaItem) => request<null>(`/admin/media/${item.id}`, { method: "DELETE" }),
     onSuccess: () => {
-      toast.success("Media deleted.");
+      toast.success(t("deleted"));
       setPendingDelete(null);
       setConfirmValue("");
       invalidate();
@@ -82,7 +84,7 @@ export function AdminMediaLibrary() {
     mutationFn: ({ item, alt }: { item: MediaItem; alt: string }) =>
       request<MediaItem>(`/admin/media/${item.id}`, { method: "PATCH", body: { alt } }),
     onSuccess: () => {
-      toast.success("Media updated.");
+      toast.success(t("updated"));
       invalidate();
     },
     onError: (error: Error) => toast.error(error.message)
@@ -104,10 +106,10 @@ export function AdminMediaLibrary() {
   return (
     <>
       <AdminPageHeader
-        eyebrow="Content"
-        title="Media"
-        description="Upload product, showroom and campaign assets, copy their public url, and attach them to products."
-        action="Upload Media"
+        eyebrow={t("eyebrow")}
+        title={t("title")}
+        description={t("subtitle")}
+        action={t("upload")}
         onAction={() => fileInput.current?.click()}
       />
 
@@ -132,7 +134,7 @@ export function AdminMediaLibrary() {
           <input
             value={search}
             onChange={(event) => setSearch(event.target.value)}
-            placeholder="Search by name or alt text"
+            placeholder={t("search")}
             className="h-11 min-w-0 flex-1 bg-transparent text-sm outline-none"
           />
         </div>
@@ -141,14 +143,14 @@ export function AdminMediaLibrary() {
           onChange={(event) => setFolder(event.target.value)}
           className="h-11 rounded-md border border-neutral-300 bg-white px-3 text-sm outline-none dark:border-white/15 dark:bg-neutral-900"
         >
-          <option value="">All folders</option>
+          <option value="">{t("allFolders")}</option>
           {folders.map((option) => (
             <option key={option} value={option}>{option}</option>
           ))}
         </select>
         <AppButton className="gap-2 sm:w-auto" loading={uploadMutation.isPending} onClick={() => fileInput.current?.click()}>
           <Upload className="size-4" />
-          Upload
+          {t("uploadShort")}
         </AppButton>
       </div>
 
@@ -169,8 +171,8 @@ export function AdminMediaLibrary() {
       {!mediaQuery.isLoading && !mediaQuery.isError && items.length === 0 ? (
         <AppCard className="grid place-items-center gap-3 p-12 text-center dark:border-white/10 dark:bg-neutral-900">
           <Upload className="size-8 text-neutral-400" />
-          <p className="text-sm text-neutral-600 dark:text-neutral-300">No media yet. Upload your first asset to get started.</p>
-          <AppButton onClick={() => fileInput.current?.click()}>Upload Media</AppButton>
+          <p className="text-sm text-neutral-600 dark:text-neutral-300">{t("empty")}</p>
+          <AppButton onClick={() => fileInput.current?.click()}>{t("upload")}</AppButton>
         </AppCard>
       ) : null}
 
@@ -190,13 +192,13 @@ export function AdminMediaLibrary() {
               <div className="min-w-0">
                 <p className="truncate text-sm font-bold" title={item.name}>{item.name}</p>
                 <p className="mt-1 text-xs text-neutral-500">
-                  {item.folder ?? "library"} · {formatSize(item.size)}
+                  {item.folder ?? "library"} · {formatSize(item.size, t("unknownSize"))}
                   {item.width && item.height ? ` · ${item.width}x${item.height}` : ""}
                 </p>
               </div>
               <input
                 defaultValue={item.alt ?? ""}
-                placeholder="Alt text"
+                placeholder={t("altText")}
                 onBlur={(event) => {
                   const value = event.target.value.trim();
 
@@ -209,12 +211,12 @@ export function AdminMediaLibrary() {
               <div className="mt-auto grid grid-cols-[1fr_auto] gap-2">
                 <AppButton size="sm" variant="outline" className="gap-2" onClick={() => copyUrl(item)} disabled={!item.url}>
                   {copiedId === item.id ? <Check className="size-4" /> : <Copy className="size-4" />}
-                  {copiedId === item.id ? "Copied" : "Copy URL"}
+                  {copiedId === item.id ? t("copied") : t("copy")}
                 </AppButton>
                 <AppButton
                   size="sm"
                   variant="danger"
-                  aria-label={`Delete ${item.name}`}
+                  aria-label={t("deleteLabel", { name: item.name })}
                   onClick={() => {
                     setPendingDelete(item);
                     setConfirmValue("");
@@ -230,8 +232,8 @@ export function AdminMediaLibrary() {
 
       <AppConfirmationDialog
         open={Boolean(pendingDelete)}
-        title="Delete media"
-        itemName={pendingDelete?.name ?? "this file"}
+        title={t("deleteTitle")}
+        itemName={pendingDelete?.name ?? t("thisFile")}
         typedValue={confirmValue}
         onTypedValueChange={setConfirmValue}
         onCancel={() => {

@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { useMemo, useState } from "react";
+import { useTranslations } from "next-intl";
 import { ChevronDown, ImagePlus, Plus, Sparkles, Trash2, X } from "lucide-react";
 import { AppButton } from "@/components/app/AppButton";
 import { AppCard } from "@/components/app/AppCard";
@@ -47,6 +48,7 @@ export function buildCombinations(options: ProductOptionDraft[]): Array<Record<s
 const inputClass = "h-9 w-full rounded-md border border-neutral-300 px-2.5 text-sm outline-none transition focus:border-neutral-950 dark:border-white/15 dark:bg-neutral-950 dark:focus:border-white";
 
 export function VariantEditor({ options, variants, onOptionsChange, onVariantsChange }: VariantEditorProps) {
+  const t = useTranslations("adminPanel.variantEditor");
   const [groupBy, setGroupBy] = useState("");
   const [selected, setSelected] = useState<string[]>([]);
   const [bulkPrice, setBulkPrice] = useState("");
@@ -159,31 +161,31 @@ export function VariantEditor({ options, variants, onOptionsChange, onVariantsCh
     ? [
         ...variants
           .reduce((map, variant) => {
-            const label = variant.options[activeGroup] ?? "Other";
+            const label = variant.options[activeGroup] ?? t("other");
             map.set(label, [...(map.get(label) ?? []), variant]);
 
             return map;
           }, new Map<string, ProductVariantDraft[]>())
           .entries()
       ]
-    : [["All variants", variants] as [string, ProductVariantDraft[]]];
+    : [[t("allVariants"), variants] as [string, ProductVariantDraft[]]];
 
   return (
     <AppCard className="p-4 dark:border-white/10 dark:bg-neutral-900 dark:text-neutral-50 sm:p-6">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div className="min-w-0">
-          <h2 className="font-serif text-lg font-bold sm:text-xl">Variants</h2>
+          <h2 className="font-serif text-lg font-bold sm:text-xl">{t("title")}</h2>
           <p className="mt-0.5 text-xs text-neutral-500 dark:text-neutral-400">
-            {variants.length} variant{variants.length === 1 ? "" : "s"} from {optionNames.length} option{optionNames.length === 1 ? "" : "s"}
+            {t("summary", { variants: variants.length, options: optionNames.length })}
           </p>
         </div>
         <div className="flex flex-wrap items-center gap-2">
           <AppButton type="button" size="sm" variant="outline" className="gap-2" onClick={() => setOptionsOpen((current) => !current)}>
             <ChevronDown className={cn("size-4 transition", optionsOpen && "rotate-180")} />
-            Options
+            {t("options")}
           </AppButton>
           <AppButton type="button" size="sm" variant="outline" className="gap-2" onClick={() => addOption()}>
-            <Plus className="size-4" /> Add option
+            <Plus className="size-4" /> {t("addOption")}
           </AppButton>
         </div>
       </div>
@@ -196,13 +198,13 @@ export function VariantEditor({ options, variants, onOptionsChange, onVariantsCh
                 <input
                   value={option.name}
                   onChange={(event) => updateOption(optionIndex, { name: event.target.value })}
-                  placeholder="Option name"
+                  placeholder={t("optionName")}
                   list="variant-option-names"
                   className={cn(inputClass, "h-10 max-w-56 font-semibold")}
                 />
                 <button
                   type="button"
-                  aria-label="Remove option"
+                  aria-label={t("removeOption")}
                   onClick={() => removeOption(optionIndex)}
                   className="ms-auto grid size-9 place-items-center rounded-md text-neutral-500 transition hover:bg-neutral-100 hover:text-red-600 dark:hover:bg-white/10"
                 >
@@ -216,7 +218,7 @@ export function VariantEditor({ options, variants, onOptionsChange, onVariantsCh
                     <input
                       value={value.value}
                       onChange={(event) => updateValue(optionIndex, valueIndex, { value: event.target.value })}
-                      placeholder="Value"
+                      placeholder={t("value")}
                       className={inputClass}
                     />
                     <input
@@ -239,12 +241,12 @@ export function VariantEditor({ options, variants, onOptionsChange, onVariantsCh
                       ) : (
                         <ImagePlus className="size-4" />
                       )}
-                      {value.media_url ? "Change" : "Image"}
+                      {value.media_url ? t("change") : t("image")}
                     </button>
                     {option.values.length > 1 ? (
                       <button
                         type="button"
-                        aria-label="Remove value"
+                        aria-label={t("removeValue")}
                         onClick={() => updateOption(optionIndex, { values: option.values.filter((_, current) => current !== valueIndex) })}
                         className="grid size-9 place-items-center rounded-md text-neutral-400 transition hover:text-red-600"
                       >
@@ -260,7 +262,7 @@ export function VariantEditor({ options, variants, onOptionsChange, onVariantsCh
                   onClick={() => updateOption(optionIndex, { values: [...option.values, { value: "", swatch: null, media_id: null, media_url: null }] })}
                   className="text-xs font-bold text-neutral-700 underline dark:text-neutral-300"
                 >
-                  Add another value
+                  {t("addValue")}
                 </button>
               </div>
             </div>
@@ -272,7 +274,7 @@ export function VariantEditor({ options, variants, onOptionsChange, onVariantsCh
 
           {options.length === 0 ? (
             <div className="rounded-lg border border-dashed border-neutral-300 p-5 text-center dark:border-white/15">
-              <p className="text-sm text-neutral-600 dark:text-neutral-300">Add Size, Configuration, Fabric and Color to build the variant table.</p>
+              <p className="text-sm text-neutral-600 dark:text-neutral-300">{t("emptyHint")}</p>
               <div className="mt-3 flex flex-wrap justify-center gap-2">
                 {suggestedOptions.map((name) => (
                   <button
@@ -294,7 +296,7 @@ export function VariantEditor({ options, variants, onOptionsChange, onVariantsCh
         <div className="mt-5 border-t border-neutral-200 pt-4 dark:border-white/10">
           <div className="flex flex-wrap items-center justify-between gap-3">
             <div className="flex items-center gap-2 text-sm">
-              <span className="text-neutral-500 dark:text-neutral-400">Group by</span>
+              <span className="text-neutral-500 dark:text-neutral-400">{t("groupBy")}</span>
               <div className="relative">
                 <select
                   value={activeGroup}
@@ -310,30 +312,30 @@ export function VariantEditor({ options, variants, onOptionsChange, onVariantsCh
             </div>
             <AppButton type="button" size="sm" variant={staleMatrix ? "primary" : "outline"} className="gap-2" onClick={syncVariants}>
               <Sparkles className="size-4" />
-              {variants.length ? "Regenerate" : "Generate"} ({combinations.length})
+              {variants.length ? t("regenerate") : t("generate")} ({combinations.length})
             </AppButton>
           </div>
 
           {staleMatrix && variants.length ? (
             <p className="mt-3 rounded-md border border-amber-200 bg-amber-50 p-3 text-xs text-amber-900 dark:border-amber-400/30 dark:bg-amber-400/10 dark:text-amber-100">
-              Options changed. Regenerate to rebuild the {combinations.length} combinations. Prices already entered are kept.
+              {t("stale", { count: combinations.length })}
             </p>
           ) : null}
 
           {selected.length ? (
             <div className="mt-4 flex flex-wrap items-end gap-2 rounded-lg border border-neutral-300 bg-neutral-50 p-3 dark:border-white/15 dark:bg-white/5">
-              <p className="me-auto text-sm font-bold">{selected.length} selected</p>
+              <p className="me-auto text-sm font-bold">{t("selected", { count: selected.length })}</p>
               <label className="text-xs font-semibold">
-                <span className="mb-1 block text-neutral-500 dark:text-neutral-400">Price</span>
+                <span className="mb-1 block text-neutral-500 dark:text-neutral-400">{t("price")}</span>
                 <input value={bulkPrice} onChange={(event) => setBulkPrice(event.target.value)} inputMode="decimal" placeholder="0.00" className={cn(inputClass, "w-24")} />
               </label>
               <label className="text-xs font-semibold">
-                <span className="mb-1 block text-neutral-500 dark:text-neutral-400">Available</span>
+                <span className="mb-1 block text-neutral-500 dark:text-neutral-400">{t("available")}</span>
                 <input value={bulkStock} onChange={(event) => setBulkStock(event.target.value)} inputMode="numeric" placeholder="0" className={cn(inputClass, "w-20")} />
               </label>
-              <AppButton type="button" size="sm" onClick={applyBulk} disabled={bulkPrice === "" && bulkStock === ""}>Apply</AppButton>
-              <AppButton type="button" size="sm" variant="outline" onClick={() => removeVariants(selected)}>Delete</AppButton>
-              <AppButton type="button" size="sm" variant="ghost" onClick={() => setSelected([])}>Clear</AppButton>
+              <AppButton type="button" size="sm" onClick={applyBulk} disabled={bulkPrice === "" && bulkStock === ""}>{t("apply")}</AppButton>
+              <AppButton type="button" size="sm" variant="outline" onClick={() => removeVariants(selected)}>{t("delete")}</AppButton>
+              <AppButton type="button" size="sm" variant="ghost" onClick={() => setSelected([])}>{t("clear")}</AppButton>
             </div>
           ) : null}
 
@@ -344,19 +346,19 @@ export function VariantEditor({ options, variants, onOptionsChange, onVariantsCh
                   <th scope="col" className="w-10 px-3 py-2.5">
                     <input
                       type="checkbox"
-                      aria-label="Select all variants"
+                      aria-label={t("selectAll")}
                       checked={allSelected}
                       onChange={() => setSelected(allSelected ? [] : allKeys)}
                       className="size-4 accent-neutral-900"
                     />
                   </th>
-                  <th scope="col" className="w-14 px-2 py-2.5 text-start font-bold">Image</th>
-                  <th scope="col" className="px-3 py-2.5 text-start font-bold">Variant</th>
-                  <th scope="col" className="w-56 px-3 py-2.5 text-start font-bold">SKU</th>
-                  <th scope="col" className="w-28 px-3 py-2.5 text-start font-bold">Price</th>
-                  <th scope="col" className="w-24 px-3 py-2.5 text-start font-bold">Available</th>
-                  <th scope="col" className="w-28 px-3 py-2.5 text-start font-bold">Status</th>
-                  <th scope="col" className="w-28 px-3 py-2.5 text-start font-bold">Default</th>
+                  <th scope="col" className="w-14 px-2 py-2.5 text-start font-bold">{t("image")}</th>
+                  <th scope="col" className="px-3 py-2.5 text-start font-bold">{t("variant")}</th>
+                  <th scope="col" className="w-56 px-3 py-2.5 text-start font-bold">{t("sku")}</th>
+                  <th scope="col" className="w-28 px-3 py-2.5 text-start font-bold">{t("price")}</th>
+                  <th scope="col" className="w-24 px-3 py-2.5 text-start font-bold">{t("available")}</th>
+                  <th scope="col" className="w-28 px-3 py-2.5 text-start font-bold">{t("status")}</th>
+                  <th scope="col" className="w-28 px-3 py-2.5 text-start font-bold">{t("default")}</th>
                   <th scope="col" className="w-12 px-2 py-2.5" />
                 </tr>
               </thead>
@@ -367,7 +369,7 @@ export function VariantEditor({ options, variants, onOptionsChange, onVariantsCh
                       <td colSpan={9} className="px-3 py-2">
                         <span className="text-xs font-bold uppercase tracking-[0.1em]">{label}</span>
                         <span className="ms-2 text-xs text-neutral-500 dark:text-neutral-400">
-                          {groupVariants.length} variant{groupVariants.length === 1 ? "" : "s"}
+                          {t("groupCount", { count: groupVariants.length })}
                         </span>
                       </td>
                     </tr>
@@ -380,7 +382,7 @@ export function VariantEditor({ options, variants, onOptionsChange, onVariantsCh
                         <td className="px-3 py-2">
                           <input
                             type="checkbox"
-                            aria-label={`Select ${Object.values(variant.options).join(" ")}`}
+                            aria-label={t("selectRow", { name: Object.values(variant.options).join(" ") })}
                             checked={selected.includes(key)}
                             onChange={() => toggleSelected(key)}
                             className="size-4 accent-neutral-900"
@@ -389,7 +391,7 @@ export function VariantEditor({ options, variants, onOptionsChange, onVariantsCh
                         <td className="px-2 py-2">
                           <button
                             type="button"
-                            aria-label="Select variant image"
+                            aria-label={t("selectImage")}
                             onClick={() => setPickerTarget({ kind: "variant", key })}
                             className="grid size-10 place-items-center overflow-hidden rounded-md border border-neutral-200 bg-neutral-50 dark:border-white/10 dark:bg-neutral-800"
                           >
@@ -401,13 +403,13 @@ export function VariantEditor({ options, variants, onOptionsChange, onVariantsCh
                           </button>
                         </td>
                         <td className="px-3 py-2">
-                          <span className="block font-semibold">{Object.values(variant.options).join(" / ") || "Default"}</span>
+                          <span className="block font-semibold">{Object.values(variant.options).join(" / ") || t("default")}</span>
                         </td>
                         <td className="px-3 py-2">
                           <input
                             value={variant.sku}
                             onChange={(event) => updateVariant(key, { sku: event.target.value })}
-                            placeholder="Generated when empty"
+                            placeholder={t("skuPlaceholder")}
                             className={cn(inputClass, "font-mono text-xs")}
                           />
                         </td>
@@ -440,7 +442,7 @@ export function VariantEditor({ options, variants, onOptionsChange, onVariantsCh
                                 : "border-neutral-300 text-neutral-500 dark:border-white/15 dark:text-neutral-400"
                             )}
                           >
-                            {variant.is_active ? "Active" : "Hidden"}
+                            {variant.is_active ? t("active") : t("hidden")}
                           </button>
                         </td>
                         <td className="px-3 py-2">
@@ -454,13 +456,13 @@ export function VariantEditor({ options, variants, onOptionsChange, onVariantsCh
                                 : "border-neutral-300 text-neutral-600 hover:border-neutral-950 dark:border-white/15 dark:text-neutral-300"
                             )}
                           >
-                            {variant.is_default ? "Default" : "Set"}
+                            {variant.is_default ? t("default") : t("setDefault")}
                           </button>
                         </td>
                         <td className="px-2 py-2">
                           <button
                             type="button"
-                            aria-label="Remove variant"
+                            aria-label={t("removeVariant")}
                             onClick={() => removeVariants([key])}
                             className="grid size-8 place-items-center rounded-md text-neutral-400 transition hover:text-red-600"
                           >
@@ -476,7 +478,7 @@ export function VariantEditor({ options, variants, onOptionsChange, onVariantsCh
           </div>
 
           {variants.length === 0 ? (
-            <p className="mt-3 text-sm text-neutral-600 dark:text-neutral-300">No variants yet. Generate the matrix from the options above.</p>
+            <p className="mt-3 text-sm text-neutral-600 dark:text-neutral-300">{t("noVariants")}</p>
           ) : null}
         </div>
       ) : null}
@@ -486,7 +488,7 @@ export function VariantEditor({ options, variants, onOptionsChange, onVariantsCh
         onOpenChange={(next) => (next ? null : setPickerTarget(null))}
         multiple={false}
         folder="products"
-        title="Select variant image"
+        title={t("selectImage")}
         onSelect={(items) => {
           const item = items[0];
 

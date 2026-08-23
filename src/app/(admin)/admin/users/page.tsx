@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useFormatter, useTranslations } from "next-intl";
 import { Pencil, Plus, Search, Trash2, UserCog } from "lucide-react";
 import { toast } from "sonner";
 import { AppButton } from "@/components/app/AppButton";
@@ -27,6 +28,8 @@ const pageSize = 10;
 const emptyForm: UserForm = { name: "", email: "", phone: "", avatar: "", role: "customer", password: "" };
 
 export default function AdminUsersPage() {
+  const t = useTranslations("adminPanel.users");
+  const format = useFormatter();
   const { request, token } = useApi();
   const queryClient = useQueryClient();
   const [search, setSearch] = useState("");
@@ -66,7 +69,7 @@ export default function AdminUsersPage() {
       }
     }),
     onSuccess: () => {
-      toast.success(editing ? "User updated." : "User created.");
+      toast.success(editing ? t("updated") : t("createdToast"));
       queryClient.invalidateQueries({ queryKey: ["admin", "users"] });
       closeDialog();
     },
@@ -76,7 +79,7 @@ export default function AdminUsersPage() {
   const deleteMutation = useMutation({
     mutationFn: (user: AdminUserAccount) => request<null>(`/admin/users/${user.id}`, { method: "DELETE" }),
     onSuccess: () => {
-      toast.success("User deleted.");
+      toast.success(t("deleted"));
       queryClient.invalidateQueries({ queryKey: ["admin", "users"] });
       setPendingDelete(null);
       setTyped("");
@@ -115,35 +118,35 @@ export default function AdminUsersPage() {
     <div className="space-y-6">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <p className="text-xs font-bold uppercase tracking-[0.18em] text-neutral-500 dark:text-neutral-400">People</p>
-          <h1 className="mt-2 font-serif text-3xl font-bold">Accounts</h1>
-          <p className="mt-2 text-sm text-neutral-600 dark:text-neutral-400">Manage customer and admin user accounts.</p>
+          <p className="text-xs font-bold uppercase tracking-[0.18em] text-neutral-500 dark:text-neutral-400">{t("eyebrow")}</p>
+          <h1 className="mt-2 font-serif text-3xl font-bold">{t("title")}</h1>
+          <p className="mt-2 text-sm text-neutral-600 dark:text-neutral-400">{t("subtitle")}</p>
         </div>
-        <AppButton className="gap-2" onClick={startCreate}><Plus className="size-4" /> Add User</AppButton>
+        <AppButton className="gap-2" onClick={startCreate}><Plus className="size-4" /> {t("add")}</AppButton>
       </div>
 
       <AppCard className="overflow-hidden">
         <div className="grid gap-3 border-b border-neutral-200 p-4 dark:border-white/10 lg:grid-cols-[1fr_180px]">
           <div className="relative">
-            <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-neutral-400" />
-            <input value={search} onChange={(event) => { setSearch(event.target.value); setPage(1); }} placeholder="Search name or email..." className="h-11 w-full rounded-md border border-neutral-300 bg-white px-9 text-sm outline-none focus:border-neutral-950 dark:border-white/15 dark:bg-neutral-950 dark:text-neutral-50 dark:focus:border-white" />
+            <Search className="pointer-events-none absolute start-3 top-1/2 size-4 -translate-y-1/2 text-neutral-400" />
+            <input value={search} onChange={(event) => { setSearch(event.target.value); setPage(1); }} placeholder={t("search")} className="h-11 w-full rounded-md border border-neutral-300 bg-white px-9 text-sm outline-none focus:border-neutral-950 dark:border-white/15 dark:bg-neutral-950 dark:text-neutral-50 dark:focus:border-white" />
           </div>
           <select value={role} onChange={(event) => setRole(event.target.value as typeof role)} className="h-11 rounded-md border border-neutral-300 bg-white px-3 text-sm outline-none focus:border-neutral-950 dark:border-white/15 dark:bg-neutral-950 dark:text-neutral-50 dark:focus:border-white">
-            <option value="all">All roles</option>
-            <option value="admin">Admins</option>
-            <option value="customer">Customers</option>
+            <option value="all">{t("allRoles")}</option>
+            <option value="admin">{t("admins")}</option>
+            <option value="customer">{t("customers")}</option>
           </select>
         </div>
 
         <div className="overflow-x-auto">
           <table className="w-full min-w-[780px] text-sm">
-            <thead className="border-b border-neutral-200 text-left dark:border-white/10">
+            <thead className="border-b border-neutral-200 text-start dark:border-white/10">
               <tr className="text-xs uppercase tracking-[0.12em] text-neutral-500 dark:text-neutral-400">
-                <th className="p-4">User</th>
-                <th className="p-4">Role</th>
-                <th className="p-4">Phone</th>
-                <th className="p-4">Created</th>
-                <th className="p-4 text-right">Actions</th>
+                <th className="p-4">{t("user")}</th>
+                <th className="p-4">{t("role")}</th>
+                <th className="p-4">{t("phone")}</th>
+                <th className="p-4">{t("created")}</th>
+                <th className="p-4 text-end">{t("actions")}</th>
               </tr>
             </thead>
             <tbody>
@@ -152,7 +155,7 @@ export default function AdminUsersPage() {
                   <td className="p-4">
                     <div className="flex items-center gap-3">
                       <span className="grid size-10 place-items-center rounded-full bg-neutral-100 text-xs font-bold text-neutral-900 dark:bg-neutral-800 dark:text-white">
-                        {user.avatar ? <span className="sr-only">Avatar</span> : user.name.slice(0, 2).toUpperCase()}
+                        {user.avatar ? <span className="sr-only">{t("avatar")}</span> : user.name.slice(0, 2).toUpperCase()}
                       </span>
                       <span className="min-w-0">
                         <span className="block truncate font-bold">{user.name}</span>
@@ -161,12 +164,12 @@ export default function AdminUsersPage() {
                     </div>
                   </td>
                   <td className="p-4"><Badge variant={user.role === "admin" ? "default" : "secondary"}>{user.role}</Badge></td>
-                  <td className="p-4 text-neutral-600 dark:text-neutral-400">{user.phone ?? "Not set"}</td>
-                  <td className="p-4 text-neutral-600 dark:text-neutral-400">{user.created_at ? new Date(user.created_at).toLocaleDateString() : "Not set"}</td>
+                  <td className="p-4 text-neutral-600 dark:text-neutral-400">{user.phone ?? t("notSet")}</td>
+                  <td className="p-4 text-neutral-600 dark:text-neutral-400">{user.created_at ? format.dateTime(new Date(user.created_at), { dateStyle: "medium" }) : t("notSet")}</td>
                   <td className="p-4">
                     <div className="flex justify-end gap-2">
-                      <AppButton variant="outline" size="sm" className="gap-2" onClick={() => startEdit(user)}><Pencil className="size-4" /> Edit</AppButton>
-                      <AppButton variant="outline" size="sm" className="gap-2" onClick={() => { setPendingDelete(user); setTyped(""); }}><Trash2 className="size-4" /> Delete</AppButton>
+                      <AppButton variant="outline" size="sm" className="gap-2" onClick={() => startEdit(user)}><Pencil className="size-4" /> {t("edit")}</AppButton>
+                      <AppButton variant="outline" size="sm" className="gap-2" onClick={() => { setPendingDelete(user); setTyped(""); }}><Trash2 className="size-4" /> {t("delete")}</AppButton>
                     </div>
                   </td>
                 </tr>
@@ -175,7 +178,7 @@ export default function AdminUsersPage() {
                 <tr>
                   <td colSpan={5} className="p-12 text-center text-neutral-500 dark:text-neutral-400">
                     <UserCog className="mx-auto mb-2 size-6" />
-                    No accounts found.
+                    {t("empty")}
                   </td>
                 </tr>
               ) : null}
@@ -191,31 +194,31 @@ export default function AdminUsersPage() {
       <AppDialog
         open={open}
         onOpenChange={(next) => (next ? setOpen(true) : closeDialog())}
-        title={editing ? "Edit User" : "Add User"}
-        description="Create customer or admin accounts for panel access."
+        title={editing ? t("editTitle") : t("addTitle")}
+        description={t("dialogText")}
         footer={
           <>
-            <AppButton variant="outline" onClick={closeDialog}>Cancel</AppButton>
-            <AppButton loading={saveMutation.isPending} disabled={!canSave} onClick={() => saveMutation.mutate(form)}>{editing ? "Save Changes" : "Create User"}</AppButton>
+            <AppButton variant="outline" onClick={closeDialog}>{t("cancel")}</AppButton>
+            <AppButton loading={saveMutation.isPending} disabled={!canSave} onClick={() => saveMutation.mutate(form)}>{editing ? t("saveChanges") : t("create")}</AppButton>
           </>
         }
       >
         <div className="grid gap-4 sm:grid-cols-2">
-          <input value={form.name} onChange={(event) => setForm((current) => ({ ...current, name: event.target.value }))} placeholder="Full name" className="h-11 rounded-md border border-neutral-300 bg-white px-3 text-sm outline-none focus:border-neutral-950 dark:border-white/15 dark:bg-neutral-950 dark:text-neutral-50 dark:focus:border-white" />
-          <input value={form.email} onChange={(event) => setForm((current) => ({ ...current, email: event.target.value }))} placeholder="Email" className="h-11 rounded-md border border-neutral-300 bg-white px-3 text-sm outline-none focus:border-neutral-950 dark:border-white/15 dark:bg-neutral-950 dark:text-neutral-50 dark:focus:border-white" />
-          <input value={form.phone} onChange={(event) => setForm((current) => ({ ...current, phone: event.target.value }))} placeholder="Phone" className="h-11 rounded-md border border-neutral-300 bg-white px-3 text-sm outline-none focus:border-neutral-950 dark:border-white/15 dark:bg-neutral-950 dark:text-neutral-50 dark:focus:border-white" />
-          <input value={form.avatar} onChange={(event) => setForm((current) => ({ ...current, avatar: event.target.value }))} placeholder="Avatar URL" className="h-11 rounded-md border border-neutral-300 bg-white px-3 text-sm outline-none focus:border-neutral-950 dark:border-white/15 dark:bg-neutral-950 dark:text-neutral-50 dark:focus:border-white" />
+          <input value={form.name} onChange={(event) => setForm((current) => ({ ...current, name: event.target.value }))} placeholder={t("name")} className="h-11 rounded-md border border-neutral-300 bg-white px-3 text-sm outline-none focus:border-neutral-950 dark:border-white/15 dark:bg-neutral-950 dark:text-neutral-50 dark:focus:border-white" />
+          <input value={form.email} onChange={(event) => setForm((current) => ({ ...current, email: event.target.value }))} placeholder={t("email")} className="h-11 rounded-md border border-neutral-300 bg-white px-3 text-sm outline-none focus:border-neutral-950 dark:border-white/15 dark:bg-neutral-950 dark:text-neutral-50 dark:focus:border-white" />
+          <input value={form.phone} onChange={(event) => setForm((current) => ({ ...current, phone: event.target.value }))} placeholder={t("phone")} className="h-11 rounded-md border border-neutral-300 bg-white px-3 text-sm outline-none focus:border-neutral-950 dark:border-white/15 dark:bg-neutral-950 dark:text-neutral-50 dark:focus:border-white" />
+          <input value={form.avatar} onChange={(event) => setForm((current) => ({ ...current, avatar: event.target.value }))} placeholder={t("avatarUrl")} className="h-11 rounded-md border border-neutral-300 bg-white px-3 text-sm outline-none focus:border-neutral-950 dark:border-white/15 dark:bg-neutral-950 dark:text-neutral-50 dark:focus:border-white" />
           <select value={form.role} onChange={(event) => setForm((current) => ({ ...current, role: event.target.value as UserForm["role"] }))} className="h-11 rounded-md border border-neutral-300 bg-white px-3 text-sm outline-none focus:border-neutral-950 dark:border-white/15 dark:bg-neutral-950 dark:text-neutral-50 dark:focus:border-white">
-            <option value="customer">Customer</option>
-            <option value="admin">Admin</option>
+            <option value="customer">{t("customer")}</option>
+            <option value="admin">{t("admin")}</option>
           </select>
-          <input value={form.password} type="password" onChange={(event) => setForm((current) => ({ ...current, password: event.target.value }))} placeholder={editing ? "New password optional" : "Password"} className="h-11 rounded-md border border-neutral-300 bg-white px-3 text-sm outline-none focus:border-neutral-950 dark:border-white/15 dark:bg-neutral-950 dark:text-neutral-50 dark:focus:border-white" />
+          <input value={form.password} type="password" onChange={(event) => setForm((current) => ({ ...current, password: event.target.value }))} placeholder={editing ? t("passwordOptional") : t("password")} className="h-11 rounded-md border border-neutral-300 bg-white px-3 text-sm outline-none focus:border-neutral-950 dark:border-white/15 dark:bg-neutral-950 dark:text-neutral-50 dark:focus:border-white" />
         </div>
       </AppDialog>
 
       <AppConfirmationDialog
         open={Boolean(pendingDelete)}
-        itemName={pendingDelete?.name ?? "this user"}
+        itemName={pendingDelete?.name ?? t("thisUser")}
         typedValue={typed}
         onTypedValueChange={setTyped}
         onCancel={() => { setPendingDelete(null); setTyped(""); }}
