@@ -49,21 +49,16 @@ type GalleryEntry = {
   media_id: number | null;
   url: string | null;
   path: string | null;
-  color: string | null;
   is_primary: boolean;
 };
 function SortableGalleryItem({
   entry,
   index,
-  colors,
-  onColorChange,
   onSetPrimary,
   onRemove,
 }: {
   entry: GalleryEntry;
   index: number;
-  colors: string[];
-  onColorChange: (index: number, color: string | null) => void;
   onSetPrimary: (index: number) => void;
   onRemove: (mediaId: number | null, index: number) => void;
 }) {
@@ -128,7 +123,9 @@ function SortableGalleryItem({
           </button>
 
           {entry.is_primary ? (
-            <span className="rounded-full bg-neutral-950/85 px-2 py-1 text-[9px] font-bold uppercase tracking-[0.08em] text-white">{t("primary")}</span>
+            <span className="rounded-full bg-neutral-950/85 px-2 py-1 text-[9px] font-bold uppercase tracking-[0.08em] text-white">
+              {t("primary")}
+            </span>
           ) : null}
         </div>
 
@@ -140,27 +137,6 @@ function SortableGalleryItem({
         >
           <Trash2 className="size-3.5" />
         </button>
-      </div>
-
-      <div className="border-t border-neutral-200 bg-white p-2 dark:border-white/10 dark:bg-neutral-900">
-        <label className="block text-[10px] font-bold uppercase tracking-[0.12em] text-neutral-500 dark:text-neutral-400">
-          Color
-        </label>
-
-        <select
-          value={entry.color ?? ""}
-          onChange={(event) => onColorChange(index, event.target.value || null)}
-          onPointerDown={(event) => event.stopPropagation()}
-          onClick={(event) => event.stopPropagation()}
-          className="mt-1 h-9 w-full rounded-md border border-neutral-300 bg-white px-2 text-xs font-medium outline-none focus:border-neutral-950 dark:border-white/15 dark:bg-neutral-950"
-        >
-          <option value="">{t("noColor")}</option>
-          {colors.map((color) => (
-            <option key={color} value={color}>
-              {color}
-            </option>
-          ))}
-        </select>
       </div>
     </div>
   );
@@ -301,14 +277,7 @@ export function ProductEditor({ slug }: { slug?: string }) {
   const [options, setOptions] = useState<ProductOptionDraft[]>(() =>
     slug ? [] : defaultOptions,
   );
-  const availableColors = useMemo(
-    () =>
-      options
-        .find((option) => option.name.toLowerCase() === "color")
-        ?.values.map((value) => value.value.trim())
-        .filter(Boolean) ?? [],
-    [options],
-  );
+
   const [variants, setVariants] = useState<ProductVariantDraft[]>(() =>
     slug ? [] : defaultVariants(),
   );
@@ -350,7 +319,6 @@ export function ProductEditor({ slug }: { slug?: string }) {
         media_id: image.media_id,
         url: image.url,
         path: image.path,
-        color: image.color ?? null,
         is_primary: image.is_primary,
       })),
     );
@@ -457,14 +425,6 @@ export function ProductEditor({ slug }: { slug?: string }) {
         primary_media_id:
           gallery.find((entry) => entry.is_primary)?.media_id ?? undefined,
 
-        media_colors: Object.fromEntries(
-          gallery
-            .filter(
-              (entry): entry is GalleryEntry & { media_id: number } =>
-                typeof entry.media_id === "number",
-            )
-            .map((entry) => [entry.media_id, entry.color]),
-        ),
         translations: localeOptions.map((option) => ({
           locale: option.locale,
           ...(translations[option.locale] ?? emptyTranslation),
@@ -580,13 +540,7 @@ export function ProductEditor({ slug }: { slug?: string }) {
       })),
     );
   };
-  const setGalleryColor = (index: number, color: string | null) => {
-    setGallery((current) =>
-      current.map((entry, currentIndex) =>
-        currentIndex === index ? { ...entry, color } : entry,
-      ),
-    );
-  };
+
   const handleGalleryDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
 
@@ -620,9 +574,7 @@ export function ProductEditor({ slug }: { slug?: string }) {
         (variant) => existing.get(variantKey(variant.options)) ?? variant,
       ),
     );
-    toast.success(
-      t("defaultsApplied"),
-    );
+    toast.success(t("defaultsApplied"));
   };
 
   const fieldError = (key: string) => errors[key]?.[0];
@@ -640,7 +592,9 @@ export function ProductEditor({ slug }: { slug?: string }) {
           {(productQuery.error as Error).message}
         </p>
         <Link href="/admin/products">
-          <AppButton variant="outline" className="mt-4">{t("back")}</AppButton>
+          <AppButton variant="outline" className="mt-4">
+            {t("back")}
+          </AppButton>
         </Link>
       </AppCard>
     );
@@ -658,7 +612,9 @@ export function ProductEditor({ slug }: { slug?: string }) {
             <ArrowLeft className="size-4 rtl:rotate-180" />
           </Link>
           <div className="min-w-0">
-            <p className="text-xs font-bold uppercase tracking-[0.2em] text-neutral-500 dark:text-neutral-400">{t("eyebrow")}</p>
+            <p className="text-xs font-bold uppercase tracking-[0.2em] text-neutral-500 dark:text-neutral-400">
+              {t("eyebrow")}
+            </p>
             <h1 className="truncate font-serif text-xl font-bold sm:text-3xl">
               {editing ? form.name || t("editTitle") : t("addTitle")}
             </h1>
@@ -670,7 +626,9 @@ export function ProductEditor({ slug }: { slug?: string }) {
               type="button"
               variant="outline"
               className="w-full sm:w-auto"
-            >{t("discard")}</AppButton>
+            >
+              {t("discard")}
+            </AppButton>
           </Link>
           <AppButton
             type="button"
@@ -678,7 +636,9 @@ export function ProductEditor({ slug }: { slug?: string }) {
             disabled={!form.name.trim()}
             onClick={() => saveMutation.mutate()}
             className="flex-1 sm:flex-none"
-          >{t("save")}</AppButton>
+          >
+            {t("save")}
+          </AppButton>
         </div>
       </div>
 
@@ -695,7 +655,9 @@ export function ProductEditor({ slug }: { slug?: string }) {
                     ? "border-neutral-950 bg-neutral-950 text-white dark:border-white dark:bg-white dark:text-neutral-950"
                     : "border-neutral-300 hover:border-neutral-950 dark:border-white/15",
                 )}
-              >{t("defaultTab")}</button>
+              >
+                {t("defaultTab")}
+              </button>
               {localeOptions.map((option) => (
                 <button
                   key={option.locale}
@@ -722,8 +684,9 @@ export function ProductEditor({ slug }: { slug?: string }) {
               <p className="mb-4 rounded-md bg-neutral-100 p-3 text-xs leading-5 text-neutral-700 dark:bg-white/10 dark:text-neutral-300">
                 {t("localeNotice", {
                   locale:
-                    localeOptions.find((option) => option.locale === activeLocale)?.label ??
-                    activeLocale,
+                    localeOptions.find(
+                      (option) => option.locale === activeLocale,
+                    )?.label ?? activeLocale,
                 })}
               </p>
             ) : null}
@@ -731,7 +694,9 @@ export function ProductEditor({ slug }: { slug?: string }) {
             <label
               htmlFor="product-name"
               className="mb-2 block text-sm font-semibold"
-            >{t("title")}</label>
+            >
+              {t("title")}
+            </label>
             <input
               id="product-name"
               dir={activeLocale === "he" ? "rtl" : undefined}
@@ -745,7 +710,9 @@ export function ProductEditor({ slug }: { slug?: string }) {
                     }))
               }
               placeholder={
-                activeLocale ? form.name || t("translatedTitlePlaceholder") : "Lian"
+                activeLocale
+                  ? form.name || t("translatedTitlePlaceholder")
+                  : "Lian"
               }
               className={fieldClass(Boolean(fieldError("name")))}
             />
@@ -760,11 +727,15 @@ export function ProductEditor({ slug }: { slug?: string }) {
               <span className="min-w-0 flex-1 truncate font-mono text-xs text-neutral-600 dark:text-neutral-300">
                 /{derivedSlug || t("slugPlaceholder")}
               </span>
-              <span className="shrink-0 text-[10px] font-bold uppercase tracking-[0.14em] text-neutral-400">{t("auto")}</span>
+              <span className="shrink-0 text-[10px] font-bold uppercase tracking-[0.14em] text-neutral-400">
+                {t("auto")}
+              </span>
             </div>
 
             <div className="mt-5">
-              <span className="mb-2 block text-sm font-semibold">{t("description")}</span>
+              <span className="mb-2 block text-sm font-semibold">
+                {t("description")}
+              </span>
               <AppRichTextEditor
                 value={
                   activeLocale ? translation.description : form.description
@@ -781,7 +752,9 @@ export function ProductEditor({ slug }: { slug?: string }) {
 
           <AppCard className="p-4 dark:border-white/10 dark:bg-neutral-900 dark:text-neutral-50 sm:p-6">
             <div className="flex flex-wrap items-center justify-between gap-3">
-              <h2 className="font-serif text-lg font-bold sm:text-xl">{t("media")}</h2>
+              <h2 className="font-serif text-lg font-bold sm:text-xl">
+                {t("media")}
+              </h2>
               <AppButton
                 type="button"
                 size="sm"
@@ -789,7 +762,9 @@ export function ProductEditor({ slug }: { slug?: string }) {
                 className="gap-2"
                 onClick={() => setPickerOpen(true)}
               >
-                <ImagePlus className="size-4" />{t("selectMedia")}</AppButton>
+                <ImagePlus className="size-4" />
+                {t("selectMedia")}
+              </AppButton>
             </div>
 
             {gallery.length === 0 ? (
@@ -799,7 +774,9 @@ export function ProductEditor({ slug }: { slug?: string }) {
                 className="mt-4 grid w-full place-items-center gap-2 rounded-lg border border-dashed border-neutral-300 p-8 text-center transition hover:border-neutral-950 dark:border-white/15 sm:p-10"
               >
                 <ImagePlus className="size-6 text-neutral-400" />
-                <span className="text-sm text-neutral-600 dark:text-neutral-300">{t("mediaEmpty")}</span>
+                <span className="text-sm text-neutral-600 dark:text-neutral-300">
+                  {t("mediaEmpty")}
+                </span>
               </button>
             ) : (
               <DndContext
@@ -819,8 +796,6 @@ export function ProductEditor({ slug }: { slug?: string }) {
                         key={`${entry.media_id ?? entry.path}-${index}`}
                         entry={entry}
                         index={index}
-                        colors={availableColors}
-                        onColorChange={setGalleryColor}
                         onSetPrimary={setPrimary}
                         onRemove={removeMedia}
                       />
@@ -832,13 +807,17 @@ export function ProductEditor({ slug }: { slug?: string }) {
           </AppCard>
 
           <AppCard className="p-4 dark:border-white/10 dark:bg-neutral-900 dark:text-neutral-50 sm:p-6">
-            <h2 className="font-serif text-lg font-bold sm:text-xl">{t("pricing")}</h2>
+            <h2 className="font-serif text-lg font-bold sm:text-xl">
+              {t("pricing")}
+            </h2>
             <div className="mt-4 grid gap-4 sm:grid-cols-2">
               <div>
                 <label
                   htmlFor="product-price"
                   className="mb-2 block text-sm font-semibold"
-                >{t("price")}</label>
+                >
+                  {t("price")}
+                </label>
                 <input
                   id="product-price"
                   value={form.price}
@@ -857,7 +836,9 @@ export function ProductEditor({ slug }: { slug?: string }) {
                 <label
                   htmlFor="product-compare"
                   className="mb-2 block text-sm font-semibold"
-                >{t("compareAt")}</label>
+                >
+                  {t("compareAt")}
+                </label>
                 <input
                   id="product-compare"
                   value={form.compare_at_price}
@@ -885,7 +866,9 @@ export function ProductEditor({ slug }: { slug?: string }) {
 
         <div className="space-y-5">
           <AppCard className="p-4 dark:border-white/10 dark:bg-neutral-900 dark:text-neutral-50 sm:p-5">
-            <h2 className="text-sm font-bold uppercase tracking-[0.16em] text-neutral-500 dark:text-neutral-400">{t("status")}</h2>
+            <h2 className="text-sm font-bold uppercase tracking-[0.16em] text-neutral-500 dark:text-neutral-400">
+              {t("status")}
+            </h2>
             <div className="mt-4 space-y-4">
               <div className="flex items-start justify-between gap-3">
                 <div>
@@ -915,9 +898,7 @@ export function ProductEditor({ slug }: { slug?: string }) {
                     {form.customizable ? t("customizable") : t("fixed")}
                   </p>
                   <p className="mt-0.5 text-xs text-neutral-500 dark:text-neutral-400">
-                    {form.customizable
-                      ? t("customizableHint")
-                      : t("fixedHint")}
+                    {form.customizable ? t("customizableHint") : t("fixedHint")}
                   </p>
                 </div>
                 <AppSwitch
@@ -935,25 +916,35 @@ export function ProductEditor({ slug }: { slug?: string }) {
           </AppCard>
 
           <AppCard className="p-4 dark:border-white/10 dark:bg-neutral-900 dark:text-neutral-50 sm:p-5">
-            <h2 className="text-sm font-bold uppercase tracking-[0.16em] text-neutral-500 dark:text-neutral-400">{t("variantDefaults")}</h2>
-            <p className="mt-2 text-xs leading-5 text-neutral-600 dark:text-neutral-300">{t("variantDefaultsHint")}</p>
+            <h2 className="text-sm font-bold uppercase tracking-[0.16em] text-neutral-500 dark:text-neutral-400">
+              {t("variantDefaults")}
+            </h2>
+            <p className="mt-2 text-xs leading-5 text-neutral-600 dark:text-neutral-300">
+              {t("variantDefaultsHint")}
+            </p>
             <AppButton
               type="button"
               size="sm"
               variant="outline"
               className="mt-3 w-full"
               onClick={applyDefaultVariants}
-            >{t("applyDefaults")}</AppButton>
+            >
+              {t("applyDefaults")}
+            </AppButton>
           </AppCard>
 
           <AppCard className="p-4 dark:border-white/10 dark:bg-neutral-900 dark:text-neutral-50 sm:p-5">
-            <h2 className="text-sm font-bold uppercase tracking-[0.16em] text-neutral-500 dark:text-neutral-400">{t("organization")}</h2>
+            <h2 className="text-sm font-bold uppercase tracking-[0.16em] text-neutral-500 dark:text-neutral-400">
+              {t("organization")}
+            </h2>
             <div className="mt-4 space-y-4">
               <div>
                 <label
                   htmlFor="product-category"
                   className="mb-2 block text-sm font-semibold"
-                >{t("category")}</label>
+                >
+                  {t("category")}
+                </label>
                 <input
                   id="product-category"
                   value={form.category}
@@ -971,7 +962,9 @@ export function ProductEditor({ slug }: { slug?: string }) {
                 <label
                   htmlFor="product-subcategory"
                   className="mb-2 block text-sm font-semibold"
-                >{t("subcategory")}{activeLocale ? ` (${activeLocale.toUpperCase()})` : ""}
+                >
+                  {t("subcategory")}
+                  {activeLocale ? ` (${activeLocale.toUpperCase()})` : ""}
                 </label>
                 <input
                   id="product-subcategory"
@@ -992,7 +985,9 @@ export function ProductEditor({ slug }: { slug?: string }) {
                 />
               </div>
               <div>
-                <span className="mb-2 block text-sm font-semibold">{t("tags")}</span>
+                <span className="mb-2 block text-sm font-semibold">
+                  {t("tags")}
+                </span>
                 <AppTagInput
                   value={tags}
                   onChange={setTags}
@@ -1003,13 +998,17 @@ export function ProductEditor({ slug }: { slug?: string }) {
           </AppCard>
 
           <AppCard className="p-4 dark:border-white/10 dark:bg-neutral-900 dark:text-neutral-50 sm:p-5">
-            <h2 className="text-sm font-bold uppercase tracking-[0.16em] text-neutral-500 dark:text-neutral-400">{t("details")}</h2>
+            <h2 className="text-sm font-bold uppercase tracking-[0.16em] text-neutral-500 dark:text-neutral-400">
+              {t("details")}
+            </h2>
             <div className="mt-4 space-y-4">
               <div>
                 <label
                   htmlFor="product-seat"
                   className="mb-2 block text-sm font-semibold"
-                >{t("seatRange")}{activeLocale ? ` (${activeLocale.toUpperCase()})` : ""}
+                >
+                  {t("seatRange")}
+                  {activeLocale ? ` (${activeLocale.toUpperCase()})` : ""}
                 </label>
                 <input
                   id="product-seat"
@@ -1033,7 +1032,9 @@ export function ProductEditor({ slug }: { slug?: string }) {
                 <label
                   htmlFor="product-colors"
                   className="mb-2 block text-sm font-semibold"
-                >{t("colors")}</label>
+                >
+                  {t("colors")}
+                </label>
                 <input
                   id="product-colors"
                   value={form.colors}
