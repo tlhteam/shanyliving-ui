@@ -15,6 +15,7 @@ export const adminSections = [
   { href: "/admin/users", label: "Accounts", labelKey: "accounts", group: "People", groupKey: "people", icon: UserCog },
   { href: "/admin/gift-cards", label: "Gift Cards", labelKey: "giftCards", group: "People", groupKey: "people", icon: Gift },
   { href: "/admin/appointments", label: "Appointments", labelKey: "appointments", group: "People", groupKey: "people", icon: CalendarClock },
+  { href: "/admin/mailbox", label: "Email", labelKey: "mailbox", group: "Content", groupKey: "content", icon: Mail },
   { href: "/admin/media", label: "Media", labelKey: "media", group: "Content", groupKey: "content", icon: FileImage },
   { href: "/admin/analytics", label: "Analytics", labelKey: "analytics", group: "Content", groupKey: "content", icon: Layers3 },
   { href: "/admin/settings", label: "Settings", labelKey: "settings", group: "System", groupKey: "system", icon: Settings }
