@@ -16,6 +16,8 @@ export const metadata: Metadata = {
   }
 };
 
+const themeScript = `(function(){try{var k='shany-theme',v=localStorage.getItem(k);if(v!=='light'&&v!=='dark'&&v!=='system'){var raw=localStorage.getItem('shany-customer-commerce');if(raw){var t=JSON.parse(raw);var s=t&&t.state&&t.state.theme;if(s==='light'||s==='dark'||s==='system'){v=s}}}if(!v){v='system'}var d=v==='dark'||(v==='system'&&window.matchMedia('(prefers-color-scheme: dark)').matches);document.documentElement.classList.toggle('dark',d);document.documentElement.style.colorScheme=d?'dark':'light'}catch(e){}})();`;
+
 export default async function RootLayout({
   children,
 }: Readonly<{
@@ -25,6 +27,9 @@ export default async function RootLayout({
 
   return (
     <html lang={locale} dir={localeDirection(locale)} className="h-full antialiased" suppressHydrationWarning>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: themeScript }} />
+      </head>
       <body className="min-h-full flex flex-col">
         <NextIntlClientProvider>
           <AppProviders>{children}</AppProviders>
@@ -33,7 +38,7 @@ export default async function RootLayout({
           src="https://shipazti.com/embed/shiputzai-storefront-v1.js"
           strategy="afterInteractive"
           data-store="shany-living"
-          data-locale="he"
+          data-locale={locale}
           data-platform="auto"
         />
       </body>

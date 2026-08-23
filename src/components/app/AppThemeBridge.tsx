@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useLayoutEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useCustomerCommerceStore } from "@/stores/customer-commerce-store";
 
 type AppTheme = "light" | "dark" | "system";
@@ -44,19 +44,26 @@ function savedTheme(): AppTheme | null {
 export function AppThemeBridge() {
   const theme = useCustomerCommerceStore((state) => state.theme);
   const setCommerceTheme = useCustomerCommerceStore((state) => state.setTheme);
-
-  useLayoutEffect(() => {
-    const initialTheme = savedTheme();
-
-    if (initialTheme) {
-      applyTheme(initialTheme);
-      setCommerceTheme(initialTheme);
-    } else {
-      applyTheme(theme);
-    }
-  }, []);
+  const hydrated = useRef(false);
 
   useEffect(() => {
+    if (hydrated.current) {
+      return;
+    }
+
+    hydrated.current = true;
+    const stored = savedTheme();
+
+    if (stored && stored !== theme) {
+      setCommerceTheme(stored);
+    }
+  }, [setCommerceTheme, theme]);
+
+  useEffect(() => {
+    if (!hydrated.current) {
+      return;
+    }
+
     applyTheme(theme);
   }, [theme]);
 
