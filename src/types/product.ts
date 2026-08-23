@@ -46,6 +46,7 @@ export type AdminProductImage = {
   folder: string | null;
   url: string | null;
   alt: string | null;
+  color: string | null;
   is_primary: boolean;
   sort_order: number;
 };

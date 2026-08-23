@@ -1019,7 +1019,8 @@
       "created": "Product created.",
       "updated": "Product updated.",
       "viewOnStorefront": "View on storefront",
-      "tryAgain": "Try again"
+      "tryAgain": "Try again",
+      "noColor": "No color"
     },
     "users": {
       "eyebrow": "People",
