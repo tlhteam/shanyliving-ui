@@ -190,6 +190,11 @@ export function ProductDetailHero({ product, images }: ProductDetailHeroProps) {
     .filter(Boolean)
     .join(" / ");
 
+  const variantKey = groups
+    .map((group) => selection[group.name])
+    .filter(Boolean)
+    .join("|");
+
   const select = (group: StorefrontOptionGroup, value: OptionValue) => {
     const nextSelection = { ...selection, [group.name]: value.label };
     setSelection(nextSelection);
@@ -199,6 +204,8 @@ export function ProductDetailHero({ product, images }: ProductDetailHeroProps) {
     if (nextImage) {
       setActiveImage(nextImage);
     }
+
+    document.dispatchEvent(new Event("variant:change"));
   };
 
   const thumbnails = gallery.slice(0, 8);
@@ -256,7 +263,13 @@ export function ProductDetailHero({ product, images }: ProductDetailHeroProps) {
         ) : null}
       </section>
 
-      <aside className="min-w-0">
+      <aside
+        className="min-w-0"
+        data-shiputzai-product=""
+        data-product-id={product.slug}
+        data-sku={product.slug}
+        data-variant-id={variantKey}
+      >
         <nav className="mb-4 flex flex-wrap items-center gap-2 text-xs font-bold text-neutral-600 sm:mb-6 dark:text-neutral-400">
           <Link href="/">{t("home")}</Link>
           <SiteIcon name="chevron-right" className="size-3 rtl:rotate-180" />
@@ -375,20 +388,21 @@ export function ProductDetailHero({ product, images }: ProductDetailHeroProps) {
           <ProductBuyActions product={product} />
         </div>
 
+        <div data-shiputzai-button-slot="" className="mt-3 empty:mt-0" />
+
+        <div className="mt-3 grid gap-3 sm:grid-cols-2">
+          <Link href={`/customize-your-sofa?product=${product.slug}&step=model`} className="block">
+            <AppButton variant="outline" className="w-full">{t("customize")}</AppButton>
+          </Link>
+          <Link href={`/customize-your-sofa?product=${product.slug}&step=room`} className="block">
+            <AppButton variant="outline" className="w-full">{t("seeInRoom")}</AppButton>
+          </Link>
+        </div>
+
         {hasPrice ? (
-          <>
-            <div className="mt-3 grid gap-3 sm:grid-cols-2">
-              <Link href={`/customize-your-sofa?product=${product.slug}&step=model`} className="block">
-                <AppButton variant="outline" className="w-full">{t("customize")}</AppButton>
-              </Link>
-              <Link href={`/customize-your-sofa?product=${product.slug}&step=room`} className="block">
-                <AppButton variant="outline" className="w-full">{t("seeInRoom")}</AppButton>
-              </Link>
-            </div>
-            <p className="mt-3 text-center text-xs text-neutral-600 dark:text-neutral-400">
-              {t("ctaNote")}
-            </p>
-          </>
+          <p className="mt-3 text-center text-xs text-neutral-600 dark:text-neutral-400">
+            {t("ctaNote")}
+          </p>
         ) : (
           <Link href="/showroom" className="mt-3 block">
             <AppButton variant="outline" className="w-full">{t("askShowroom")}</AppButton>
