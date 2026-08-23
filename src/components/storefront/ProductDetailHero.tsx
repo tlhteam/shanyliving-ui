@@ -230,12 +230,14 @@ export function ProductDetailHero({ product, images }: ProductDetailHeroProps) {
       selection.Color ??
       selection.color;
 
-    const colorImages = (product.galleryMedia ?? [])
-      .filter((entry) =>
-        selectedColor ? entry.color === selectedColor : !entry.color,
-      )
-      .map((entry) => entry.image)
-      .filter(Boolean);
+    const colorImages =
+      colorGroup?.values
+        .map((value) => value.image)
+        .filter((image): image is string => Boolean(image)) ?? [];
+
+    const selectedColorValue = colorGroup?.values.find(
+      (value) => value.label === selectedColor,
+    );
 
     const fallbackImages = images.filter(Boolean);
 
@@ -249,12 +251,22 @@ export function ProductDetailHero({ product, images }: ProductDetailHeroProps) {
 
     const baseImages = colorImages.length > 0 ? colorImages : fallbackImages;
 
-    return [...new Set([...baseImages, ...optionImages])];
-  }, [groups, images, product.galleryMedia, selection]);
+    const selectedImage = selectedColorValue?.image;
+
+    return [
+      ...new Set([
+        ...(selectedImage ? [selectedImage] : []),
+        ...baseImages,
+        ...optionImages,
+      ]),
+    ];
+  }, [groups, images, selection]);
 
   const [pickedImage, setActiveImage] = useState(gallery[0] ?? product.image);
   const activeImage =
-    pickedImage && gallery.includes(pickedImage) ? pickedImage : gallery[0] ?? product.image;
+    pickedImage && gallery.includes(pickedImage)
+      ? pickedImage
+      : (gallery[0] ?? product.image);
 
   const hasPrice = product.price > 0;
 
@@ -380,7 +392,9 @@ export function ProductDetailHero({ product, images }: ProductDetailHeroProps) {
           <span className="rounded-full bg-neutral-100 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.12em] text-neutral-950 dark:bg-white/10 dark:text-white">
             {t("trusted")}
           </span>
-          <span className="text-neutral-600 dark:text-neutral-400">{t("reviews")}</span>
+          <span className="text-neutral-600 dark:text-neutral-400">
+            {t("reviews")}
+          </span>
         </div>
 
         {intro ? (
@@ -392,9 +406,16 @@ export function ProductDetailHero({ product, images }: ProductDetailHeroProps) {
         <div className="mt-6 border-t border-neutral-200 pt-5 dark:border-white/10">
           <p className="text-sm font-bold">
             {hasPrice ? (
-              <>{t("from")} <span className="text-2xl sm:text-3xl">{formatMoney(product.price, locale)}</span></>
+              <>
+                {t("from")}{" "}
+                <span className="text-2xl sm:text-3xl">
+                  {formatMoney(product.price, locale)}
+                </span>
+              </>
             ) : (
-              <span className="text-2xl sm:text-3xl">{t("priceOnRequest")}</span>
+              <span className="text-2xl sm:text-3xl">
+                {t("priceOnRequest")}
+              </span>
             )}
           </p>
 
@@ -503,11 +524,21 @@ export function ProductDetailHero({ product, images }: ProductDetailHeroProps) {
         <div data-shiputzai-button-slot="" className="mt-3 empty:mt-0" />
 
         <div className="mt-3 grid gap-3 sm:grid-cols-2">
-          <Link href={`/customize-your-sofa?product=${product.slug}&step=model`} className="block">
-            <AppButton variant="outline" className="w-full">{t("customize")}</AppButton>
+          <Link
+            href={`/customize-your-sofa?product=${product.slug}&step=model`}
+            className="block"
+          >
+            <AppButton variant="outline" className="w-full">
+              {t("customize")}
+            </AppButton>
           </Link>
-          <Link href={`/customize-your-sofa?product=${product.slug}&step=room`} className="block">
-            <AppButton variant="outline" className="w-full">{t("seeInRoom")}</AppButton>
+          <Link
+            href={`/customize-your-sofa?product=${product.slug}&step=room`}
+            className="block"
+          >
+            <AppButton variant="outline" className="w-full">
+              {t("seeInRoom")}
+            </AppButton>
           </Link>
         </div>
 
@@ -517,23 +548,39 @@ export function ProductDetailHero({ product, images }: ProductDetailHeroProps) {
           </p>
         ) : (
           <Link href="/showroom" className="mt-3 block">
-            <AppButton variant="outline" className="w-full">{t("askShowroom")}</AppButton>
+            <AppButton variant="outline" className="w-full">
+              {t("askShowroom")}
+            </AppButton>
           </Link>
         )}
 
         {specs.length || product.dimensions ? (
           <dl className="mt-7 divide-y divide-neutral-200 border-t border-neutral-200 text-sm dark:divide-white/10 dark:border-white/10">
-            {product.dimensions && !specs.some((spec) => spec.label.toLowerCase().startsWith("dimensions")) ? (
+            {product.dimensions &&
+            !specs.some((spec) =>
+              spec.label.toLowerCase().startsWith("dimensions"),
+            ) ? (
               <div className="grid grid-cols-1 gap-1 py-2.5 sm:grid-cols-[9.5rem_minmax(0,1fr)] sm:gap-3">
-                <dt className="min-w-0 break-words text-xs font-bold uppercase leading-5 tracking-[0.1em] text-neutral-500 dark:text-neutral-400">{t("dimensions")}</dt>
-                <dd className="min-w-0 break-words text-neutral-800 dark:text-neutral-200">{product.dimensions}</dd>
+                <dt className="min-w-0 break-words text-xs font-bold uppercase leading-5 tracking-[0.1em] text-neutral-500 dark:text-neutral-400">
+                  {t("dimensions")}
+                </dt>
+                <dd className="min-w-0 break-words text-neutral-800 dark:text-neutral-200">
+                  {product.dimensions}
+                </dd>
               </div>
             ) : null}
 
             {specs.map((spec) => (
-              <div key={spec.label} className="grid grid-cols-1 gap-1 py-2.5 sm:grid-cols-[9.5rem_minmax(0,1fr)] sm:gap-3">
-                <dt className="min-w-0 break-words text-xs font-bold uppercase leading-5 tracking-[0.1em] text-neutral-500 dark:text-neutral-400">{spec.label}</dt>
-                <dd className="min-w-0 break-words text-neutral-800 dark:text-neutral-200">{spec.value}</dd>
+              <div
+                key={spec.label}
+                className="grid grid-cols-1 gap-1 py-2.5 sm:grid-cols-[9.5rem_minmax(0,1fr)] sm:gap-3"
+              >
+                <dt className="min-w-0 break-words text-xs font-bold uppercase leading-5 tracking-[0.1em] text-neutral-500 dark:text-neutral-400">
+                  {spec.label}
+                </dt>
+                <dd className="min-w-0 break-words text-neutral-800 dark:text-neutral-200">
+                  {spec.value}
+                </dd>
               </div>
             ))}
           </dl>
