@@ -11,6 +11,7 @@ import { SiteIcon, SiteIconName } from "@/components/icons/SiteIcon";
 import { WhatsappIcon } from "@/components/icons/WhatsappIcon";
 import { categoryImage, looks, productImage, siteImages } from "@/lib/images";
 import { mobileVisibleSlug } from "@/lib/mobile-catalog";
+import { whatsappHref } from "@/lib/whatsapp";
 import type { HomeCatalog, CatalogCategory, CatalogProduct } from "@/lib/catalog";
 
 const clubPerks = [
@@ -112,8 +113,8 @@ function CategoryTile({ category, index, circular = false }: { category: Catalog
 
 export function HomeExperience({ catalog, fromSocial = false }: { catalog: HomeCatalog; fromSocial?: boolean }) {
   const t = useTranslations("home");
-  const whatsappNumber = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER?.replace(/\D/g, "");
-  const whatsappHref = whatsappNumber ? `https://wa.me/${whatsappNumber}` : "/contact";
+  const common = useTranslations("common");
+  const whatsappLink = whatsappHref(common("whatsappMessage"));
   const featured = catalog.featuredProducts.slice(0, 4);
   const bestSellers = catalog.bestSellers.slice(0, 6);
   const featuredMobileSlug = mobileVisibleSlug(featured);
@@ -308,8 +309,8 @@ export function HomeExperience({ catalog, fromSocial = false }: { catalog: HomeC
 
       <Link
         aria-label={t("whatsappFloating")}
-        href={whatsappHref}
-        target={whatsappNumber ? "_blank" : undefined}
+        href={whatsappLink}
+        target="_blank"
         className="fixed bottom-20 end-4 z-40 grid size-12 place-items-center rounded-full bg-[#25d366] text-white shadow-lg transition hover:scale-105 sm:bottom-6 sm:end-6 sm:size-14"
       >
         <WhatsappIcon className="size-7" />

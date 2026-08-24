@@ -11,6 +11,7 @@ import { SiteIcon } from "@/components/icons/SiteIcon";
 import { WhatsappIcon } from "@/components/icons/WhatsappIcon";
 import { AppLogo } from "@/components/layout/AppLogo";
 import { LanguageSwitcher } from "@/components/layout/LanguageSwitcher";
+import { whatsappHref } from "@/lib/whatsapp";
 import { useCustomerCommerceStore } from "@/stores/customer-commerce-store";
 
 const navItems = [
@@ -35,6 +36,7 @@ const searchableItems = [
 
 export function AppHeader() {
   const t = useTranslations("header");
+  const common = useTranslations("common");
   const [open, setOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchValue, setSearchValue] = useState("");
@@ -43,8 +45,6 @@ export function AppHeader() {
   const { status } = useSession();
   const cartCount = useCustomerCommerceStore((state) => state.cart.reduce((sum, item) => sum + item.quantity, 0));
   const accountHref = status === "authenticated" ? "/customer" : "/login";
-  const whatsappNumber = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER?.replace(/\D/g, "");
-  const whatsappHref = whatsappNumber ? `https://wa.me/${whatsappNumber}` : "/contact";
   const debouncedQuery = useMemo(() => debounce(setQuery, 220), []);
   const announcements = (t.raw("announcements") as string[]).map((text, index) => ({
     text,
@@ -115,7 +115,7 @@ export function AppHeader() {
           >
             <SiteIcon name="user" className="size-5" />
           </Link>
-          <Link href={whatsappHref} target={whatsappNumber ? "_blank" : undefined} aria-label={t("whatsapp")} title={t("whatsapp")} className="rounded-md p-2 text-[#128c4a] transition hover:bg-neutral-100 dark:hover:bg-white/10">
+          <Link href={whatsappHref(common("whatsappMessage"))} target="_blank" rel="noreferrer noopener" aria-label={t("whatsapp")} title={t("whatsapp")} className="rounded-md p-2 text-[#128c4a] transition hover:bg-neutral-100 dark:hover:bg-white/10">
             <WhatsappIcon className="size-5" />
           </Link>
           <Link
