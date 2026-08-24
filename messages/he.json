@@ -23,7 +23,9 @@
       "body": "מחיקת {item} תסיר אותה מרשימת הניהול.",
       "cancel": "בטל",
       "delete": "מחק"
-    }
+    },
+    "whatsappProductMessage": "היי שני ליבינג, אשמח לפרטים ומחיר עבור {product}.",
+    "whatsappDesignMessage": "היי שני ליבינג, יצרתי עיצוב ספה ואשמח להצעת מחיר מדויקת."
   },
   "language": {
     "trigger": "שפה",

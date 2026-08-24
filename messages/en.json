@@ -23,7 +23,9 @@
       "body": "Deleting {item} will remove it from this admin list.",
       "cancel": "Cancel",
       "delete": "Delete"
-    }
+    },
+    "whatsappProductMessage": "Hi Shany Living, I would like details and a price for {product}.",
+    "whatsappDesignMessage": "Hi Shany Living, I built a sofa design and would like an exact quote."
   },
   "language": {
     "trigger": "Language",

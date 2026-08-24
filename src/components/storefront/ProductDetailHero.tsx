@@ -8,6 +8,7 @@ import { AppImage } from "@/components/app/AppImage";
 import { SiteIcon } from "@/components/icons/SiteIcon";
 import { ProductBuyActions } from "@/components/storefront/ProductBuyActions";
 import { formatMoney } from "@/lib/format";
+import { whatsappHref } from "@/lib/whatsapp";
 import { cn } from "@/lib/utils";
 import type {
   StorefrontOptionGroup,
@@ -206,6 +207,7 @@ function parseDescription(description?: string) {
 
 export function ProductDetailHero({ product, images }: ProductDetailHeroProps) {
   const t = useTranslations("storefront.detail");
+  const common = useTranslations("common");
   const locale = useLocale();
   const groups = useMemo(() => resolveGroups(product), [product]);
 
@@ -547,7 +549,12 @@ export function ProductDetailHero({ product, images }: ProductDetailHeroProps) {
             {t("ctaNote")}
           </p>
         ) : (
-          <Link href="/showroom" className="mt-3 block">
+          <Link
+            href={whatsappHref(common("whatsappProductMessage", { product: product.name }))}
+            target="_blank"
+            rel="noreferrer noopener"
+            className="mt-3 block"
+          >
             <AppButton variant="outline" className="w-full">
               {t("askShowroom")}
             </AppButton>

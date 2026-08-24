@@ -12,6 +12,7 @@ import { AppImage } from "@/components/app/AppImage";
 import { SocialAuthButtons } from "@/components/auth/SocialAuthButtons";
 import { SiteIcon } from "@/components/icons/SiteIcon";
 import { getStorefrontProduct, storefrontProducts } from "@/lib/storefront-pages";
+import { whatsappHref } from "@/lib/whatsapp";
 import { useCustomerCommerceStore } from "@/stores/customer-commerce-store";
 
 const sizes = ["2.2m", "2.4m", "2.8m", "3.2m"];
@@ -70,6 +71,7 @@ function readFile(file: File) {
 
 export function SofaStepConfigurator() {
   const t = useTranslations("customizer");
+  const common = useTranslations("common");
   const options = useTranslations("storefront.options");
   const optionLabel = (value: string) => (options.has(value) ? options(value) : value);
   const searchParams = useSearchParams();
@@ -318,7 +320,7 @@ export function SofaStepConfigurator() {
         {aiReady ? (
           <>
             <AppButton className="w-full" onClick={addDesignToCart}>{t("addToCart")}</AppButton>
-            <Link href="/showroom" className="block"><AppButton variant="outline" className="w-full">{t("room.talkToDesigner")}</AppButton></Link>
+            <Link href={whatsappHref(common("whatsappDesignMessage"))} target="_blank" rel="noreferrer noopener" className="block"><AppButton variant="outline" className="w-full">{t("room.talkToDesigner")}</AppButton></Link>
             <AppButton variant="outline" className="w-full" onClick={() => { setRoomPhoto(null); setAiReady(false); setAiGenerating(false); }}>{t("room.tryAnother")}</AppButton>
           </>
         ) : (

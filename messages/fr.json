@@ -23,7 +23,9 @@
       "body": "Supprimer {item} le retirera de cette liste admin.",
       "cancel": "Annuler",
       "delete": "Supprimer"
-    }
+    },
+    "whatsappProductMessage": "Bonjour Shany Living, je voudrais des details et un prix pour {product}.",
+    "whatsappDesignMessage": "Bonjour Shany Living, j'ai cree un design de canape et je voudrais un devis exact."
   },
   "language": {
     "trigger": "Langue",

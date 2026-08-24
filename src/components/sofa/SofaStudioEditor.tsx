@@ -17,6 +17,7 @@ import { SocialAuthButtons } from "@/components/auth/SocialAuthButtons";
 import { SiteIcon, SiteIconName } from "@/components/icons/SiteIcon";
 import { useApi } from "@/hooks/use-api";
 import { storefrontProducts, type StorefrontProduct } from "@/lib/storefront-pages";
+import { whatsappHref } from "@/lib/whatsapp";
 import { useCustomerCommerceStore } from "@/stores/customer-commerce-store";
 import type { CustomerSavedDesign } from "@/types/customer";
 
@@ -1266,7 +1267,7 @@ export function SofaStudioEditor() {
                         <SiteIcon name="cart" className="size-4" />
                         Add to Cart
                       </AppButton>
-                      <Link href="/showroom">
+                      <Link href={whatsappHref()} target="_blank" rel="noreferrer noopener" className="block">
                         <AppButton variant="outline" className="w-full border-white/20 bg-transparent text-white hover:bg-white/10">
                           Talk to Designer
                         </AppButton>
@@ -1376,7 +1377,7 @@ export function SofaStudioEditor() {
               <button type="button" onClick={() => router.push("/customer/orders")} className="mt-1 text-xs font-bold underline">View in My Orders</button>
             </div>
           ) : null}
-          <Link href="/showroom">
+          <Link href={whatsappHref()} target="_blank" rel="noreferrer noopener" className="block">
             <AppButton variant="outline" className="mt-3 w-full gap-2">
               <SiteIcon name="message" className="size-4" />
               Ask for Help
