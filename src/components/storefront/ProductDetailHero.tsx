@@ -303,7 +303,7 @@ export function ProductDetailHero({ product, images }: ProductDetailHeroProps) {
 
   return (
     <div className="grid gap-8 lg:grid-cols-[1.1fr_0.9fr]">
-      <section className="min-w-0">
+      <section className="min-w-0 self-start lg:sticky lg:top-24">
         <div className="relative aspect-square overflow-hidden rounded-lg bg-neutral-100 sm:aspect-[1.15/1] dark:bg-neutral-900">
           {gallery.map((image) => (
             <AppImage
