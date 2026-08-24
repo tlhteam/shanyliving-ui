@@ -4,6 +4,8 @@ import { leads } from "@/lib/admin-data";
 export default function Page() {
   return (
     <AdminResourcePage
+      resourceKey="leads"
+      groupKey="salesFlow"
       eyebrow="Sales Flow"
       title="Leads"
       description="Review qualified WhatsApp conversations and move each lead toward quote, showroom visit or sale."

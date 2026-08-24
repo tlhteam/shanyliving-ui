@@ -6,7 +6,24 @@
     "priceFrom": "From ₪ {price}",
     "price": "₪ {price}",
     "saveItem": "Save {name}",
-    "askAbout": "Ask about {name}"
+    "askAbout": "Ask about {name}",
+    "whatsappMessage": "Hi Shany Living, I would like help choosing a sofa.",
+    "whatsappShowroomMessage": "Hi Shany Living, I would like to book a showroom visit.",
+    "notifications": "Notifications",
+    "unreadCount": "{count} unread",
+    "noNotifications": "No notifications yet.",
+    "viewAll": "View all",
+    "myAccount": "My Account",
+    "accountHint": "Orders, designs, wishlist and messages",
+    "confirm": {
+      "title": "Delete record",
+      "thisRecord": "this record",
+      "hint": "Type {value} to confirm deleting {item}.",
+      "warning": "This helps avoid accidental deletion.",
+      "body": "Deleting {item} will remove it from this admin list.",
+      "cancel": "Cancel",
+      "delete": "Delete"
+    }
   },
   "language": {
     "trigger": "Language",
@@ -554,7 +571,11 @@
       "payment": "Payment",
       "paymentPending": "Awaiting advisor payment",
       "shipping": "Delivery address",
-      "view": "View"
+      "view": "View",
+      "filter": "Filter",
+      "pending": "Pending",
+      "viewDetails": "View Order Details",
+      "moving": "Your order is moving forward."
     },
     "dashboard": {
       "welcome": "Welcome back,",
@@ -889,7 +910,36 @@
       "error": "Unable to load records from the API.",
       "view": "View",
       "edit": "Edit",
-      "delete": "Delete"
+      "delete": "Delete",
+      "addTitle": "Add {resource}",
+      "editTitle": "Edit {resource}",
+      "dialogHint": "Enter the record details below. These admin fields are reusable for API-backed CRUD.",
+      "create": "Create",
+      "saveChanges": "Save Changes",
+      "cancel": "Cancel",
+      "uploadImage": "Upload image",
+      "uploadImages": "Upload images",
+      "addImage": "Add new image",
+      "addImages": "Add more images",
+      "imageHint": "PNG, JPG, or WebP",
+      "noImage": "No image",
+      "removeImage": "Remove image",
+      "showMore": "Show more",
+      "showLess": "Show less",
+      "actions": "Actions",
+      "yes": "Yes",
+      "no": "No",
+      "previous": "Previous",
+      "next": "Next",
+      "pageOf": "Page {page} of {pages}",
+      "range": "{start}-{end} of {total}",
+      "listTitle": "{resource} List",
+      "detailsTitle": "{resource} Details",
+      "loadFailed": "{resource} could not be loaded",
+      "saved": "{resource} saved",
+      "deleted": "{resource} deleted",
+      "detailsOpened": "{resource} details opened",
+      "refreshed": "{resource} data refreshed"
     },
     "mailbox": {
       "title": "Email",
@@ -1111,6 +1161,301 @@
       "uploaded": "File uploaded.",
       "deleted": "Media deleted.",
       "updated": "Media updated."
+    },
+    "columns": {
+      "id": "ID",
+      "sku": "SKU",
+      "name": "Name",
+      "product": "Product",
+      "slug": "Slug",
+      "image": "Cover Image",
+      "gallery": "Gallery",
+      "textureImage": "Texture Image",
+      "swatch": "Swatch",
+      "category": "Category",
+      "subcategory": "Subcategory",
+      "price": "Price",
+      "startingPrice": "Starting Price",
+      "variants": "Variants",
+      "description": "Description",
+      "features": "Features",
+      "colors": "Color Hex Codes",
+      "production": "Production",
+      "status": "Status",
+      "customizable": "Customizable",
+      "products": "Products",
+      "sortOrder": "Sort Order",
+      "visibility": "Visibility",
+      "family": "Family",
+      "fabric": "Fabric",
+      "priceTier": "Price Tier",
+      "shade": "Shade",
+      "reference": "Reference",
+      "customer": "Customer",
+      "structure": "Structure",
+      "size": "Size",
+      "source": "Source",
+      "value": "Value",
+      "phone": "Phone",
+      "saved": "Saved",
+      "lastActivity": "Last Activity",
+      "event": "Event",
+      "count": "Count",
+      "trend": "Trend",
+      "priority": "Priority",
+      "date": "Date",
+      "time": "Time",
+      "purpose": "Purpose",
+      "card": "Card",
+      "balance": "Balance",
+      "redeemedBy": "Redeemed by",
+      "code": "Code",
+      "color": "Color",
+      "role": "Role",
+      "created": "Created",
+      "user": "User",
+      "email": "Email",
+      "title": "Title",
+      "folder": "Folder",
+      "alt": "Alt text"
+    },
+    "values": {
+      "Active": "Active",
+      "Draft": "Draft",
+      "Visible": "Visible",
+      "Hidden": "Hidden",
+      "Made to Order": "Made to Order",
+      "Available Now": "Available Now",
+      "Premium": "Premium",
+      "Standard": "Standard",
+      "Yes": "Yes",
+      "No": "No",
+      "High": "High",
+      "Critical": "Critical",
+      "Booked": "Booked",
+      "Pending": "Pending",
+      "No variants": "No variants",
+      "Not applicable": "Not applicable"
+    },
+    "groups": {
+      "overview": "Overview",
+      "catalog": "Catalog",
+      "salesFlow": "Sales Flow",
+      "people": "People",
+      "content": "Content",
+      "system": "System",
+      "account": "Account"
+    },
+    "pages": {
+      "products": {
+        "title": "Products",
+        "description": "Manage sofa models, fixed-stock products, pricing, available sizes and customization status.",
+        "action": "Add Product",
+        "singular": "product"
+      },
+      "categories": {
+        "title": "Categories",
+        "description": "Organize storefront navigation and keep MVP categories visible only when they have enough products.",
+        "action": "Add Category",
+        "singular": "category"
+      },
+      "fabrics": {
+        "title": "Fabrics",
+        "description": "Manage fabric families shown in the simple configurator before detailed showroom guidance.",
+        "action": "Add Fabric",
+        "singular": "fabric"
+      },
+      "colors": {
+        "title": "Colors",
+        "description": "Maintain the color families and recommended shades customers choose before WhatsApp confirmation.",
+        "action": "Add Color",
+        "singular": "color"
+      },
+      "configurations": {
+        "title": "Configurations",
+        "description": "Review saved sofa selections with model, structure, size, fabric, color and lead status.",
+        "action": "Create Configuration",
+        "singular": "configuration"
+      },
+      "leads": {
+        "title": "Leads",
+        "description": "Review qualified WhatsApp conversations and move each lead toward quote, showroom visit or sale.",
+        "action": "Add Lead",
+        "singular": "lead"
+      },
+      "customers": {
+        "title": "Customers",
+        "description": "Track customer contact details, saved configurations, appointment activity and sales follow-up.",
+        "action": "Add Customer",
+        "singular": "customer"
+      },
+      "appointments": {
+        "title": "Appointments",
+        "description": "Coordinate showroom consultations, fabric reviews and quote follow-up visits.",
+        "action": "Book Appointment",
+        "singular": "appointment"
+      },
+      "analytics": {
+        "title": "Analytics",
+        "description": "Track the customer path from ad visit to configurator completion and WhatsApp click.",
+        "action": "Export Analytics",
+        "singular": "event"
+      }
+    },
+    "dashboard": {
+      "title": "Dashboard",
+      "description": "Track the SHANY Living customer journey from product views to WhatsApp-qualified leads.",
+      "action": "Create Report",
+      "stats": {
+        "products": "Products",
+        "newLeads": "New leads",
+        "whatsappClicks": "WhatsApp clicks",
+        "wonLeads": "Won leads"
+      },
+      "flowTitle": "Business Process Flow",
+      "flow": {
+        "model": "Customer selects model",
+        "options": "Chooses size, structure, fabric and color",
+        "photo": "Optional room photo upload",
+        "summary": "Summary saved with reference",
+        "whatsapp": "WhatsApp intent captured",
+        "quote": "Sales team sends quote or books showroom"
+      },
+      "leftTitle": "What Is Left",
+      "left": {
+        "products": "Products still need live create, edit, upload and sort actions connected to the backend.",
+        "storefront": "The public storefront still needs product detail pages and the full sofa configurator flow.",
+        "integrations": "Analytics, appointments and media are prepared as admin sections, but need real integrations before launch."
+      },
+      "featured": "Featured Products",
+      "activeConfigurations": "Active Configurations",
+      "upcomingAppointments": "Upcoming Appointments",
+      "priorityLeads": "Priority Leads",
+      "keyEvents": "Key Events",
+      "priority": "{priority} priority"
+    },
+    "giftCards": {
+      "title": "Gift Cards",
+      "description": "Create gift cards and design credits customers can redeem.",
+      "add": "Add Gift Card",
+      "edit": "Edit Gift Card",
+      "search": "Search code, name, or customer...",
+      "notRedeemed": "Not redeemed",
+      "empty": "No gift cards found.",
+      "dialogHint": "Customers can redeem active cards from their Gift Cards page.",
+      "cancel": "Cancel",
+      "save": "Save Gift Card",
+      "code": "Code",
+      "name": "Name",
+      "initialBalance": "Initial balance",
+      "currentBalance": "Current balance",
+      "currency": "Currency",
+      "active": "Active",
+      "paused": "Paused",
+      "expired": "Expired",
+      "thisCard": "this gift card",
+      "created": "Gift card created.",
+      "updated": "Gift card updated.",
+      "deleted": "Gift card deleted."
+    },
+    "shell": {
+      "adminPanelTitle": "Admin Panel",
+      "adminPanelHint": "Catalog, leads and showroom operations",
+      "adminMenu": "SHANY Admin",
+      "openMenu": "Open menu",
+      "searchFiles": "Search files"
+    },
+    "settings": {
+      "title": "Settings",
+      "description": "Configure storefront defaults, customer channels, tracking, legal content and launch readiness.",
+      "action": "Save Settings",
+      "sectionsLabel": "Settings sections",
+      "tabs": {
+        "general": "General",
+        "channels": "Channels",
+        "localization": "Localization",
+        "tracking": "Tracking",
+        "legal": "Legal"
+      },
+      "generalTitle": "General Settings",
+      "generalDescription": "Manage the values used across the admin panel, customer area, and public storefront.",
+      "update": "Update Settings",
+      "cards": {
+        "notifications": {
+          "title": "Notifications",
+          "text": "Order, message, appointment, and admin alert preferences."
+        },
+        "localization": {
+          "title": "Localization",
+          "text": "Language, RTL layout, currency, and regional storefront display."
+        },
+        "launch": {
+          "title": "Launch Checks",
+          "text": "Legal pages, tracking pixels, and account protection status."
+        }
+      },
+      "groups": {
+        "storefront": {
+          "title": "Storefront Defaults",
+          "description": "Control the public shopping experience and launch-ready storefront behavior.",
+          "rows": {
+            "language": {
+              "label": "Default language",
+              "value": "Hebrew RTL for launch"
+            },
+            "theme": {
+              "label": "Theme behavior",
+              "value": "Customer-selected light, dark, or system mode"
+            },
+            "homepage": {
+              "label": "Homepage content",
+              "value": "Dynamic catalog sections, featured products, showroom details"
+            }
+          }
+        },
+        "communication": {
+          "title": "Customer Communication",
+          "description": "Keep customer contact channels and notifications ready for orders and design help.",
+          "rows": {
+            "whatsapp": {
+              "label": "WhatsApp number",
+              "value": "Live business number connected"
+            },
+            "orders": {
+              "label": "Order notifications",
+              "value": "Admin and customer notification flow"
+            },
+            "replies": {
+              "label": "Message replies",
+              "value": "Customer and admin conversations"
+            }
+          }
+        },
+        "compliance": {
+          "title": "Tracking & Compliance",
+          "description": "Review analytics and legal launch requirements before the public release.",
+          "rows": {
+            "pixels": {
+              "label": "Tracking pixels",
+              "value": "GA4, Meta, TikTok"
+            },
+            "legal": {
+              "label": "Legal pages",
+              "value": "Privacy, accessibility, terms"
+            },
+            "security": {
+              "label": "Security",
+              "value": "CAPTCHA, account protection, admin-only controls"
+            }
+          }
+        }
+      },
+      "statuses": {
+        "Planned": "Planned",
+        "Active": "Active",
+        "Required": "Required",
+        "Needs review": "Needs review"
+      }
     }
   },
   "legal": {

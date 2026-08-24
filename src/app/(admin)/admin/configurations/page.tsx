@@ -4,6 +4,8 @@ import { configurations } from "@/lib/admin-data";
 export default function Page() {
   return (
     <AdminResourcePage
+      resourceKey="configurations"
+      groupKey="salesFlow"
       eyebrow="Sales Flow"
       title="Configurations"
       description="Review saved sofa selections with model, structure, size, fabric, color and lead status."

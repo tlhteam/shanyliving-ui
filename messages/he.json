@@ -6,7 +6,24 @@
     "priceFrom": "החל מ־₪ {price}",
     "price": "₪ {price}",
     "saveItem": "שמירת {name}",
-    "askAbout": "שאלו על {name}"
+    "askAbout": "שאלו על {name}",
+    "whatsappMessage": "היי שני ליבינג, אשמח לעזרה בבחירת ספה.",
+    "whatsappShowroomMessage": "היי שני ליבינג, אשמח לקבוע ביקור באולם התצוגה.",
+    "notifications": "התראות",
+    "unreadCount": "{count} לא נקראו",
+    "noNotifications": "אין התראות.",
+    "viewAll": "הצג הכל",
+    "myAccount": "החשבון שלי",
+    "accountHint": "הזמנות, עיצובים, מועדפים והודעות",
+    "confirm": {
+      "title": "מחיקת רשומה",
+      "thisRecord": "הרשומה הזו",
+      "hint": "הקלד {value} כדי לאשר מחיקת {item}.",
+      "warning": "זה עוזר למנוע מחיקה בטעות.",
+      "body": "מחיקת {item} תסיר אותה מרשימת הניהול.",
+      "cancel": "בטל",
+      "delete": "מחק"
+    }
   },
   "language": {
     "trigger": "שפה",
@@ -554,7 +571,11 @@
       "payment": "תשלום",
       "paymentPending": "ממתין לתשלום מול היועץ",
       "shipping": "כתובת למשלוח",
-      "view": "צפייה"
+      "view": "צפייה",
+      "filter": "סינון",
+      "pending": "ממתין",
+      "viewDetails": "צפה בפרטי ההזמנה",
+      "moving": "ההזמנה שלך מתקדמת."
     },
     "dashboard": {
       "welcome": "שלום שוב,",
@@ -889,7 +910,36 @@
       "error": "לא ניתן לטעון רשומות מה-API.",
       "view": "צפייה",
       "edit": "עריכה",
-      "delete": "מחיקה"
+      "delete": "מחיקה",
+      "addTitle": "הוספת {resource}",
+      "editTitle": "עריכת {resource}",
+      "dialogHint": "הזן את פרטי הרשומה. השדות האלה משמשים גם לניהול מול ה-API.",
+      "create": "צור",
+      "saveChanges": "שמור שינויים",
+      "cancel": "בטל",
+      "uploadImage": "העלה תמונה",
+      "uploadImages": "העלה תמונות",
+      "addImage": "הוסף תמונה חדשה",
+      "addImages": "הוסף תמונות נוספות",
+      "imageHint": "PNG, JPG או WebP",
+      "noImage": "אין תמונה",
+      "removeImage": "מחק תמונה",
+      "showMore": "הצג עוד",
+      "showLess": "הצג פחות",
+      "actions": "פעולות",
+      "yes": "כן",
+      "no": "לא",
+      "previous": "הקודם",
+      "next": "הבא",
+      "pageOf": "עמוד {page} מתוך {pages}",
+      "range": "{start}-{end} מתוך {total}",
+      "listTitle": "רשימת {resource}",
+      "detailsTitle": "פרטי {resource}",
+      "loadFailed": "לא ניתן לטעון {resource}",
+      "saved": "{resource} נשמר",
+      "deleted": "{resource} נמחק",
+      "detailsOpened": "פרטי {resource} נפתחו",
+      "refreshed": "נתוני {resource} רועננו"
     },
     "mailbox": {
       "title": "אימייל",
@@ -1111,6 +1161,301 @@
       "uploaded": "הקובץ הועלה.",
       "deleted": "המדיה נמחקה.",
       "updated": "המדיה עודכנה."
+    },
+    "columns": {
+      "id": "מזהה",
+      "sku": "מקט",
+      "name": "שם",
+      "product": "מוצר",
+      "slug": "כתובת",
+      "image": "תמונה ראשית",
+      "gallery": "גלריה",
+      "textureImage": "תמונת מרקם",
+      "swatch": "דוגמה",
+      "category": "קטגוריה",
+      "subcategory": "תת קטגוריה",
+      "price": "מחיר",
+      "startingPrice": "מחיר התחלתי",
+      "variants": "וריאנטים",
+      "description": "תיאור",
+      "features": "מאפיינים",
+      "colors": "קודי צבע",
+      "production": "ייצור",
+      "status": "סטטוס",
+      "customizable": "בהתאמה אישית",
+      "products": "מוצרים",
+      "sortOrder": "סדר תצוגה",
+      "visibility": "נראות",
+      "family": "משפחה",
+      "fabric": "בד",
+      "priceTier": "רמת מחיר",
+      "shade": "גוון",
+      "reference": "מספר סידורי",
+      "customer": "לקוח",
+      "structure": "מבנה",
+      "size": "מידה",
+      "source": "מקור",
+      "value": "שווי",
+      "phone": "טלפון",
+      "saved": "שמורים",
+      "lastActivity": "פעילות אחרונה",
+      "event": "אירוע",
+      "count": "כמות",
+      "trend": "מגמה",
+      "priority": "עדיפות",
+      "date": "תאריך",
+      "time": "שעה",
+      "purpose": "מטרה",
+      "card": "כרטיס",
+      "balance": "יתרה",
+      "redeemedBy": "מומש על ידי",
+      "code": "קוד",
+      "color": "צבע",
+      "role": "תפקיד",
+      "created": "נוצר",
+      "user": "משתמש",
+      "email": "אימייל",
+      "title": "כותרת",
+      "folder": "תיקייה",
+      "alt": "טקסט חלופי"
+    },
+    "values": {
+      "Active": "פעיל",
+      "Draft": "טיוטה",
+      "Visible": "מוצג",
+      "Hidden": "מוסתר",
+      "Made to Order": "בהזמנה אישית",
+      "Available Now": "במלאי",
+      "Premium": "פרימיום",
+      "Standard": "רגיל",
+      "Yes": "כן",
+      "No": "לא",
+      "High": "גבוהה",
+      "Critical": "קריטית",
+      "Booked": "נקבע",
+      "Pending": "ממתין",
+      "No variants": "אין וריאנטים",
+      "Not applicable": "לא רלוונטי"
+    },
+    "groups": {
+      "overview": "סקירה",
+      "catalog": "קטלוג",
+      "salesFlow": "תהליך מכירה",
+      "people": "אנשים",
+      "content": "תוכן",
+      "system": "מערכת",
+      "account": "חשבון"
+    },
+    "pages": {
+      "products": {
+        "title": "מוצרים",
+        "description": "נהל דגמי ספות, מוצרים במלאי קבוע, מחירים, מידות זמינות ומצב התאמה אישית.",
+        "action": "הוסף מוצר",
+        "singular": "מוצר"
+      },
+      "categories": {
+        "title": "קטגוריות",
+        "description": "סדר את הניווט בחנות והשאר קטגוריות מוצגות רק כשיש בהן מספיק מוצרים.",
+        "action": "הוסף קטגוריה",
+        "singular": "קטגוריה"
+      },
+      "fabrics": {
+        "title": "בדים",
+        "description": "נהל את משפחות הבדים שמוצגות במעצב הפשוט לפני הדרכה מפורטת באולם.",
+        "action": "הוסף בד",
+        "singular": "בד"
+      },
+      "colors": {
+        "title": "צבעים",
+        "description": "נהל את משפחות הצבעים והגוונים המומלצים שהלקוחות בוחרים לפני אישור בוואטסאפ.",
+        "action": "הוסף צבע",
+        "singular": "צבע"
+      },
+      "configurations": {
+        "title": "תצורות",
+        "description": "סקור בחירות ספה שמורות עם דגם, מבנה, מידה, בד, צבע וסטטוס ליד.",
+        "action": "צור תצורה",
+        "singular": "תצורה"
+      },
+      "leads": {
+        "title": "לידים",
+        "description": "סקור שיחות וואטסאפ מוסמכות וקדם כל ליד להצעת מחיר, ביקור באולם או מכירה.",
+        "action": "הוסף ליד",
+        "singular": "ליד"
+      },
+      "customers": {
+        "title": "לקוחות",
+        "description": "עקוב אחר פרטי הקשר של הלקוחות, תצורות שמורות, פגישות ומעקב מכירות.",
+        "action": "הוסף לקוח",
+        "singular": "לקוח"
+      },
+      "appointments": {
+        "title": "פגישות",
+        "description": "תאם ייעוץ באולם התצוגה, בחירת בדים וביקורי מעקב להצעות מחיר.",
+        "action": "קבע פגישה",
+        "singular": "פגישה"
+      },
+      "analytics": {
+        "title": "אנליטיקה",
+        "description": "עקוב אחר מסלול הלקוח מהכניסה מהמודעה ועד סיום המעצב והקלקה לוואטסאפ.",
+        "action": "ייצא אנליטיקה",
+        "singular": "אירוע"
+      }
+    },
+    "dashboard": {
+      "title": "לוח בקרה",
+      "description": "עקוב אחר מסלול הלקוח של שני ליבינג מצפיות במוצר ועד לידים מוסמכים בוואטסאפ.",
+      "action": "צור דוח",
+      "stats": {
+        "products": "מוצרים",
+        "newLeads": "לידים חדשים",
+        "whatsappClicks": "הקלקות וואטסאפ",
+        "wonLeads": "לידים שנסגרו"
+      },
+      "flowTitle": "תהליך העבודה",
+      "flow": {
+        "model": "הלקוח בוחר דגם",
+        "options": "בוחר מידה, מבנה, בד וצבע",
+        "photo": "העלאת תמונת חדר (לא חובה)",
+        "summary": "הסיכום נשמר עם מספר סידורי",
+        "whatsapp": "נרשמה כוונה בוואטסאפ",
+        "quote": "צוות המכירות שולח הצעה או קובע ביקור באולם"
+      },
+      "leftTitle": "מה נשאר",
+      "left": {
+        "products": "למוצרים עוד חסרות פעולות יצירה, עריכה, העלאה וסידור מחוברות לשרת.",
+        "storefront": "בחנות הציבורית עוד חסרים דפי מוצר ותהליך המעצב המלא.",
+        "integrations": "אנליטיקה, פגישות ומדיה מוכנות כאזורי ניהול, אבל צריכות אינטגרציות אמיתיות לפני ההשקה."
+      },
+      "featured": "מוצרים מקודמים",
+      "activeConfigurations": "תצורות פעילות",
+      "upcomingAppointments": "פגישות קרובות",
+      "priorityLeads": "לידים בעדיפות",
+      "keyEvents": "אירועים מרכזיים",
+      "priority": "עדיפות {priority}"
+    },
+    "giftCards": {
+      "title": "שוברי מתנה",
+      "description": "צור שוברי מתנה וקרדיט עיצוב שהלקוחות יכולים לממש.",
+      "add": "הוסף שובר",
+      "edit": "עריכת שובר",
+      "search": "חפש קוד, שם או לקוח...",
+      "notRedeemed": "לא מומש",
+      "empty": "לא נמצאו שוברים.",
+      "dialogHint": "לקוחות יכולים לממש שוברים פעילים מעמוד השוברים שלהם.",
+      "cancel": "בטל",
+      "save": "שמור שובר",
+      "code": "קוד",
+      "name": "שם",
+      "initialBalance": "יתרה התחלתית",
+      "currentBalance": "יתרה נוכחית",
+      "currency": "מטבע",
+      "active": "פעיל",
+      "paused": "מושהה",
+      "expired": "פג תוקף",
+      "thisCard": "השובר הזה",
+      "created": "השובר נוצר.",
+      "updated": "השובר עודכן.",
+      "deleted": "השובר נמחק."
+    },
+    "shell": {
+      "adminPanelTitle": "פאנל ניהול",
+      "adminPanelHint": "קטלוג, לידים ותפעול אולם התצוגה",
+      "adminMenu": "ניהול שני",
+      "openMenu": "פתח תפריט",
+      "searchFiles": "חפש קבצים"
+    },
+    "settings": {
+      "title": "הגדרות",
+      "description": "הגדר ברירות מחדל לחנות, ערוצי לקוחות, מעקב, תוכן משפטי ומוכנות להשקה.",
+      "action": "שמור הגדרות",
+      "sectionsLabel": "אזורי הגדרות",
+      "tabs": {
+        "general": "כללי",
+        "channels": "ערוצים",
+        "localization": "שפה ואזור",
+        "tracking": "מעקב",
+        "legal": "משפטי"
+      },
+      "generalTitle": "הגדרות כלליות",
+      "generalDescription": "נהל את הערכים שבשימוש בפאנל הניהול, באזור הלקוח ובחנות הציבורית.",
+      "update": "עדכן הגדרות",
+      "cards": {
+        "notifications": {
+          "title": "התראות",
+          "text": "העדפות להזמנות, הודעות, פגישות והתראות ניהול."
+        },
+        "localization": {
+          "title": "שפה ואזור",
+          "text": "שפה, פריסת RTL, מטבע ותצוגה אזורית בחנות."
+        },
+        "launch": {
+          "title": "בדיקות השקה",
+          "text": "עמודים משפטיים, פיקסלים של מעקב וסטטוס הגנת חשבון."
+        }
+      },
+      "groups": {
+        "storefront": {
+          "title": "ברירות מחדל בחנות",
+          "description": "שלוט בחוויית הקנייה הציבורית ובהתנהגות החנות לקראת השקה.",
+          "rows": {
+            "language": {
+              "label": "שפת ברירת מחדל",
+              "value": "עברית RTL להשקה"
+            },
+            "theme": {
+              "label": "התנהגות ערכת נושא",
+              "value": "בהיר, כהה או לפי המערכת, לבחירת הלקוח"
+            },
+            "homepage": {
+              "label": "תוכן דף הבית",
+              "value": "מקטעי קטלוג דינמיים, מוצרים מקודמים ופרטי אולם"
+            }
+          }
+        },
+        "communication": {
+          "title": "תקשורת עם לקוחות",
+          "description": "שמור על ערוצי הקשר וההתראות מוכנים להזמנות ולעזרה בעיצוב.",
+          "rows": {
+            "whatsapp": {
+              "label": "מספר וואטסאפ",
+              "value": "מספר עסקי מחובר"
+            },
+            "orders": {
+              "label": "התראות הזמנה",
+              "value": "זרימת התראות למנהל וללקוח"
+            },
+            "replies": {
+              "label": "מענה להודעות",
+              "value": "שיחות לקוח ומנהל"
+            }
+          }
+        },
+        "compliance": {
+          "title": "מעקב ורגולציה",
+          "description": "סקור דרישות אנליטיקה ומשפטיות לפני ההשקה הציבורית.",
+          "rows": {
+            "pixels": {
+              "label": "פיקסלים של מעקב",
+              "value": "GA4, Meta, TikTok"
+            },
+            "legal": {
+              "label": "עמודים משפטיים",
+              "value": "פרטיות, נגישות, תנאים"
+            },
+            "security": {
+              "label": "אבטחה",
+              "value": "CAPTCHA, הגנת חשבון ובקרות למנהלים בלבד"
+            }
+          }
+        }
+      },
+      "statuses": {
+        "Planned": "מתוכנן",
+        "Active": "פעיל",
+        "Required": "נדרש",
+        "Needs review": "דורש בדיקה"
+      }
     }
   },
   "legal": {

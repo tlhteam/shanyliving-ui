@@ -1,6 +1,7 @@
 "use client";
 
 import { AlertTriangle } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { AppButton } from "@/components/app/AppButton";
 import { AppDialog } from "@/components/app/AppDialog";
 
@@ -15,29 +16,31 @@ type AppConfirmationDialogProps = {
   onConfirm: () => void;
 };
 
-export function AppConfirmationDialog({ open, title = "Delete record", itemName = "this record", confirmValue = "DELETE", typedValue, onTypedValueChange, onCancel, onConfirm }: AppConfirmationDialogProps) {
+export function AppConfirmationDialog({ open, title, itemName, confirmValue = "DELETE", typedValue, onTypedValueChange, onCancel, onConfirm }: AppConfirmationDialogProps) {
+  const t = useTranslations("common.confirm");
   const canDelete = typedValue.trim() === confirmValue;
+  const item = itemName ?? t("thisRecord");
 
   return (
     <AppDialog
       open={open}
       onOpenChange={(nextOpen) => !nextOpen && onCancel()}
-      title={title}
-      description={`Type ${confirmValue} to confirm deleting ${itemName}.`}
+      title={title ?? t("title")}
+      description={t("hint", { value: confirmValue, item })}
       className="sm:max-w-md"
       footer={
         <>
-          <AppButton type="button" variant="outline" onClick={onCancel}>Cancel</AppButton>
-          <AppButton type="button" variant="danger" disabled={!canDelete} onClick={onConfirm}>Delete</AppButton>
+          <AppButton type="button" variant="outline" onClick={onCancel}>{t("cancel")}</AppButton>
+          <AppButton type="button" variant="danger" disabled={!canDelete} onClick={onConfirm}>{t("delete")}</AppButton>
         </>
       }
     >
       <div className="rounded-md border border-amber-200 bg-amber-50 p-4 text-amber-950 dark:border-amber-400/30 dark:bg-amber-400/10 dark:text-amber-100">
         <div className="flex items-center gap-2 font-semibold">
           <AlertTriangle className="size-4" />
-          This helps avoid accidental deletion.
+          {t("warning")}
         </div>
-        <p className="mt-2 text-sm">Deleting {itemName} will remove it from this admin list.</p>
+        <p className="mt-2 text-sm">{t("body", { item })}</p>
       </div>
       <input
         value={typedValue}

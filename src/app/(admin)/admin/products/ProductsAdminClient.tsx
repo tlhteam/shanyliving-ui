@@ -117,6 +117,8 @@ function mapProductRow(row: Record<string, unknown>): AdminRow {
 export function ProductsAdminClient() {
   return (
     <AdminResourcePage
+      resourceKey="products"
+      groupKey="catalog"
       eyebrow="Catalog"
       title="Products"
       description="Manage sofa models, fixed-stock products, pricing, available sizes and customization status."

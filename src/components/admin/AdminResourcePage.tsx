@@ -1,6 +1,6 @@
 "use client";
 
-import { ChangeEvent, useEffect, useMemo, useState } from "react";
+import { ChangeEvent, useCallback, useEffect, useMemo, useState } from "react";
 import { useSession } from "next-auth/react";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
@@ -34,6 +34,8 @@ type AdminResourcePageProps = {
   title: string;
   description: string;
   action: string;
+  resourceKey?: string;
+  groupKey?: string;
   rows: AdminRow[];
   columns: {
     key: string;
@@ -145,10 +147,12 @@ function EmptyValue({
   image?: boolean;
   compact?: boolean;
 }) {
+  const tt = useTranslations("adminPanel.table");
+
   if (image) {
     return (
       <div
-        title="No image"
+        title={tt("noImage")}
         className={cn(
           "grid place-items-center rounded-md border border-dashed border-neutral-200 bg-neutral-50 text-neutral-300 dark:border-white/10 dark:bg-white/5 dark:text-neutral-600",
           compact ? "size-10" : "h-12 w-16",
@@ -339,6 +343,8 @@ export function AdminResourcePage({
   title,
   description,
   action,
+  resourceKey: resourceSlug,
+  groupKey,
   rows,
   columns,
   apiPath,
@@ -351,6 +357,40 @@ export function AdminResourcePage({
   const router = useRouter();
   const queryClient = useQueryClient();
   const tt = useTranslations("adminPanel.table");
+  const tc = useTranslations("adminPanel.columns");
+  const tp = useTranslations("adminPanel");
+
+  const pagePath = resourceSlug ? `pages.${resourceSlug}` : "";
+  const localisedTitle = pagePath && tp.has(`${pagePath}.title`) ? tp(`${pagePath}.title`) : title;
+  const localisedDescription =
+    pagePath && tp.has(`${pagePath}.description`) ? tp(`${pagePath}.description`) : description;
+  const localisedAction = pagePath && tp.has(`${pagePath}.action`) ? tp(`${pagePath}.action`) : action;
+  const localisedEyebrow = groupKey && tp.has(`groups.${groupKey}`) ? tp(`groups.${groupKey}`) : eyebrow;
+  const resourceNoun =
+    pagePath && tp.has(`${pagePath}.singular`) ? tp(`${pagePath}.singular`) : localisedTitle;
+
+  const columnLabel = useCallback(
+    (column: { key: string; label: string }) => {
+      const camel = column.key.replace(/[_-]([a-z])/g, (_, letter: string) => letter.toUpperCase());
+
+      if (tc.has(camel)) {
+        return tc(camel);
+      }
+
+      return tc.has(column.key) ? tc(column.key) : column.label;
+    },
+    [tc],
+  );
+
+  const badgeText = useCallback(
+    (value: unknown) => {
+      const raw = String(value);
+      const map = tp.raw("values") as Record<string, string> | undefined;
+
+      return map?.[raw] ?? raw;
+    },
+    [tp],
+  );
   const { data: session, status: sessionStatus } = useSession();
   const form = useForm<AdminFormValues>({ defaultValues: {} });
   const watchedValues = useWatch({ control: form.control });
@@ -431,11 +471,11 @@ export function AdminResourcePage({
       return;
     }
 
-    toast.error(`${title} could not be loaded`, {
+    toast.error(tt("loadFailed", { resource: localisedTitle }), {
       description: resourceErrorMessage,
-      action: { label: "Retry", onClick: () => refetchResource() },
+      action: { label: tt("retry"), onClick: () => refetchResource() },
     });
-  }, [isError, refetchResource, resourceErrorMessage, title]);
+  }, [isError, localisedTitle, refetchResource, resourceErrorMessage, tt]);
 
   const data = useMemo(
     () =>
@@ -561,7 +601,7 @@ export function AdminResourcePage({
             : [payload, ...current];
         });
       }
-      toast.success(`${title} saved`);
+      toast.success(tt("saved", { resource: resourceNoun }));
       close();
     },
     onError: () => toast.error(`Unable to save ${title.toLowerCase()}`),
@@ -588,7 +628,7 @@ export function AdminResourcePage({
           current.filter((row) => rowKey(row) !== rowKey(payload)),
         );
       }
-      toast.success(`${title} deleted`);
+      toast.success(tt("deleted", { resource: resourceNoun }));
       close();
     },
     onError: () => toast.error(`Unable to delete ${title.toLowerCase()}`),
@@ -598,7 +638,7 @@ export function AdminResourcePage({
     () => [
       ...columns.map((column) => ({
         accessorKey: column.key,
-        header: column.label,
+        header: columnLabel(column),
         cell: ({ row }: CellContext<AdminRow, unknown>) => {
           const value = row.original[column.key];
 
@@ -633,7 +673,7 @@ export function AdminResourcePage({
             }
 
             return (
-              <Badge variant={statusVariant(value)}>{String(value)}</Badge>
+              <Badge variant={statusVariant(value)}>{badgeText(value)}</Badge>
             );
           }
 
@@ -726,7 +766,7 @@ export function AdminResourcePage({
               size="sm"
               onClick={() => {
                 openView(row.original);
-                toast.info(`${title} details opened`);
+                toast.info(tt("detailsOpened", { resource: resourceNoun }));
               }}
             >
               <Eye className="size-3.5" />
@@ -757,14 +797,17 @@ export function AdminResourcePage({
       },
     ],
     [
+      badgeText,
+      columnLabel,
       columns,
       editHref,
       expandedRows,
       openDelete,
       openEdit,
       openView,
+      resourceNoun,
       router,
-      title,
+      tt,
     ],
   );
 
@@ -850,10 +893,10 @@ export function AdminResourcePage({
   return (
     <>
       <AdminPageHeader
-        eyebrow={eyebrow}
-        title={title}
-        description={description}
-        action={action}
+        eyebrow={localisedEyebrow}
+        title={localisedTitle}
+        description={localisedDescription}
+        action={localisedAction}
         onAction={() =>
           createHref
             ? router.push(createHref)
@@ -863,7 +906,7 @@ export function AdminResourcePage({
       <AppCard className="overflow-hidden dark:border-white/10 dark:bg-neutral-900 dark:text-neutral-50">
         <div className="grid gap-4 border-b border-neutral-200 p-4 dark:border-white/10 lg:grid-cols-[1fr_320px] lg:items-center">
           <div>
-            <h2 className="font-bold">{title} List</h2>
+            <h2 className="font-bold">{tt("listTitle", { resource: localisedTitle })}</h2>
             <p className="text-sm text-neutral-500 dark:text-neutral-400">
               {isLoading ? tt("loading") : tt("records", { count: filteredRows.length, total: totalRows })}
             </p>
@@ -871,7 +914,7 @@ export function AdminResourcePage({
           <div className="flex flex-col gap-2 sm:flex-row">
             <AppSearch
               onSearch={setQuery}
-              placeholder={tt("search", { resource: title.toLowerCase() })}
+              placeholder={tt("search", { resource: resourceNoun.toLowerCase() })}
             />
             {isError ? (
               <Button variant="outline" onClick={() => refetchResource()}>
@@ -883,7 +926,7 @@ export function AdminResourcePage({
               variant="outline"
               onClick={() => {
                 queryClient.invalidateQueries({ queryKey });
-                toast.success(`${title} data refreshed`, {
+                toast.success(tt("refreshed", { resource: localisedTitle }), {
                   description: "The list now matches the API.",
                   action: { label: "Reload", onClick: () => refetchResource() },
                 });
@@ -919,7 +962,7 @@ export function AdminResourcePage({
       <AppDialog
         open={mode === "view"}
         onOpenChange={(open) => !open && close()}
-        title={`${title} Details`}
+        title={tt("detailsTitle", { resource: resourceNoun })}
         description="Review the selected record before editing or syncing with the API."
         footer={
           <AppButton
@@ -938,7 +981,7 @@ export function AdminResourcePage({
                   className="rounded-md border border-neutral-200 p-3 dark:border-white/10"
                 >
                   <p className="text-xs font-bold uppercase tracking-[0.14em] text-neutral-500 dark:text-neutral-400">
-                    {column.label}
+                    {columnLabel(column)}
                   </p>
                   <DetailField
                     column={column}
@@ -954,13 +997,13 @@ export function AdminResourcePage({
       <AppDialog
         open={mode === "create" || mode === "edit"}
         onOpenChange={(open) => !open && close()}
-        title={mode === "create" ? `Add ${title}` : `Edit ${title}`}
-        description="Enter the record details below. These admin fields are reusable for API-backed CRUD."
+        title={mode === "create" ? tt("addTitle", { resource: resourceNoun }) : tt("editTitle", { resource: resourceNoun })}
+        description={tt("dialogHint")}
       >
         <AppForm
           form={form}
           onSubmit={handleSave}
-          submitLabel={mode === "create" ? "Create" : "Save Changes"}
+          submitLabel={mode === "create" ? tt("create") : tt("saveChanges")}
           onCancel={close}
         >
           {formColumns.map((column) => {
@@ -972,14 +1015,18 @@ export function AdminResourcePage({
               return (
                 <div key={column.key} className="space-y-2">
                   <label className="text-sm font-medium text-neutral-800 dark:text-neutral-200">
-                    {column.label}
+                    {columnLabel(column)}
                   </label>
                   <label className="flex min-h-28 cursor-pointer flex-col items-center justify-center rounded-md border border-dashed border-neutral-300 bg-white p-4 text-center text-sm font-bold text-neutral-700 hover:bg-neutral-50 dark:border-white/15 dark:bg-neutral-950 dark:text-neutral-200 dark:hover:bg-white/10">
                     {images.length
-                      ? `Add ${formInput === "images" ? "more images" : "new image"}`
-                      : `Upload ${formInput === "images" ? "images" : "image"}`}
+                      ? formInput === "images"
+                        ? tt("addImages")
+                        : tt("addImage")
+                      : formInput === "images"
+                        ? tt("uploadImages")
+                        : tt("uploadImage")}
                     <span className="mt-1 text-xs font-medium text-neutral-500">
-                      PNG, JPG, or WebP
+                      {tt("imageHint")}
                     </span>
                     <input
                       type="file"
@@ -1004,7 +1051,7 @@ export function AdminResourcePage({
                         >
                           <AppImage
                             src={previewSrc(image)}
-                            alt={`${column.label} preview`}
+                            alt={`${columnLabel(column)} preview`}
                             className="aspect-square rounded-md border border-neutral-200 dark:border-white/10"
                             sizes="120px"
                           />
@@ -1042,7 +1089,7 @@ export function AdminResourcePage({
                 >
                   <div>
                     <p className="text-sm font-medium text-neutral-800 dark:text-neutral-200">
-                      {column.label}
+                      {columnLabel(column)}
                     </p>
                     <p className="text-xs text-neutral-500 dark:text-neutral-400">
                       {checked
@@ -1052,7 +1099,7 @@ export function AdminResourcePage({
                   </div>
                   <AppSwitch
                     checked={checked}
-                    aria-label={column.label}
+                    aria-label={columnLabel(column)}
                     onClick={() =>
                       form.setValue(
                         column.key as Path<AdminFormValues>,
@@ -1068,13 +1115,13 @@ export function AdminResourcePage({
             return (
               <AppTextField<AdminFormValues>
                 key={column.key}
-                label={column.label}
+                label={columnLabel(column)}
                 name={column.key as Path<AdminFormValues>}
                 type={formInput === "color" ? "color" : "text"}
                 multiline={formInput === "textarea"}
                 rules={
                   column.key === "name"
-                    ? { required: `${column.label} is required` }
+                    ? { required: `${columnLabel(column)} is required` }
                     : undefined
                 }
                 className={formInput === "color" ? "h-12 p-1" : undefined}

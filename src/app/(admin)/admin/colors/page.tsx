@@ -4,6 +4,8 @@ import { colors } from "@/lib/admin-data";
 export default function Page() {
   return (
     <AdminResourcePage
+      resourceKey="colors"
+      groupKey="catalog"
       eyebrow="Catalog"
       title="Colors"
       description="Maintain the color families and recommended shades customers choose before WhatsApp confirmation."
