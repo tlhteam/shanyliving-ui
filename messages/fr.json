@@ -406,7 +406,13 @@
       "requestQuote": "Demander un devis",
       "ask": "Poser une question",
       "availableIn": "Disponible en {range}",
-      "priceOnRequest": "Prix sur demande"
+      "priceOnRequest": "Prix sur demande",
+      "customMade": "Sur mesure",
+      "viewCustomize": "Voir et personnaliser",
+      "wishlist": "Enregistrer {name}",
+      "quoteOnly": "Cet article est disponible sur devis du showroom. Posez-nous une question.",
+      "adminBlocked": "Les comptes admin ne peuvent pas passer commande. Utilisez un compte client.",
+      "added": "{name} ajoute au panier."
     },
     "detail": {
       "home": "Accueil",
@@ -488,6 +494,30 @@
       "consultTitle": "Un canape sur mesure, pour vous",
       "consultText": "Choisissez la taille, le tissu, la couleur et plus encore. Notre equipe vous aide a creer le canape parfait.",
       "consultCta": "Ouvrir le configurateur"
+    },
+    "badges": {
+      "Best Seller": "Meilleure vente",
+      "New": "Nouveau",
+      "Customizable": "Personnalisable",
+      "Featured": "En vedette",
+      "Showroom product": "Produit showroom"
+    },
+    "options": {
+      "Left chaise": "Meridienne gauche",
+      "Right chaise": "Meridienne droite",
+      "Standard sofa": "Canape standard",
+      "Sectional": "Modulaire",
+      "Custom layout": "Agencement sur mesure",
+      "Boucle": "Boucle",
+      "Linen": "Lin",
+      "Chenille": "Chenille",
+      "Velvet": "Velours",
+      "Leather": "Cuir",
+      "Light Beige": "Beige clair",
+      "Sand": "Sable",
+      "Caramel": "Caramel",
+      "Espresso": "Espresso",
+      "Forest": "Foret"
     }
   },
   "cart": {
@@ -1858,5 +1888,87 @@
         ]
       }
     ]
+  },
+  "customizer": {
+    "eyebrow": "Personnalisez votre canape",
+    "steps": {
+      "model": "Modele",
+      "size": "Taille",
+      "fabric": "Tissu et couleur",
+      "review": "Recapitulatif"
+    },
+    "modelTitle": "Choisissez votre modele",
+    "modelHint": "Selectionnez le modele a personnaliser",
+    "sizeTitle": "Choisissez la taille (largeur)",
+    "sizeHint": "Toutes les tailles sont approximatives",
+    "customSize": "Taille sur mesure",
+    "configuration": "Configuration",
+    "fabricTitle": "Choisissez le tissu",
+    "fabricColorTitle": "Choisissez tissu et couleur",
+    "colorTitle": "Choisissez la couleur - {fabric}",
+    "preview": "Apercu",
+    "previewCaption": "{fabric} en {color}",
+    "previewHint": "Apercu indicatif avant le recapitulatif.",
+    "reviewTitle": "Verifiez votre design",
+    "reviewHint": "Voici votre canape sur mesure",
+    "next": "Suivant",
+    "backToModel": "Retour au modele",
+    "backToSize": "Retour a la taille",
+    "backToFabric": "Retour au tissu",
+    "totalPrice": "Prix total",
+    "delivery": "Livraison estimee : 21-28 jours",
+    "deliveryShort": "Livraison 21-28 jours",
+    "customNote": "Chaque canape est fabrique pour vous — obtenez votre prix exact aupres d'un conseiller Shany Living.",
+    "reviewNote": "Votre canape est personnalise selon vos specifications. Contactez-nous pour votre devis personnel.",
+    "addToCart": "Ajouter au panier",
+    "saveDesign": "Enregistrer la configuration",
+    "shareDesign": "Partager le design",
+    "seeInRoom": "Voir chez moi (IA)",
+    "quoteWhatsapp": "Obtenir mon devis sur WhatsApp",
+    "callForPrice": "Appeler pour le prix",
+    "summary": {
+      "model": "Modele",
+      "size": "Taille",
+      "configuration": "Configuration",
+      "fabric": "Tissu",
+      "color": "Couleur"
+    },
+    "room": {
+      "back": "Retour au configurateur",
+      "title": "Voyez votre canape chez vous",
+      "subtitle": "Chargez une photo de votre espace et voyez le rendu.",
+      "subtitleLong": "Chargez une photo et voyez comment {product} rend en {fabric}, {color}.",
+      "upload": "Charger une photo",
+      "uploadHint": "JPG ou PNG, prise depuis l'emplacement du canape",
+      "uploaded": "Piece chargee",
+      "tipsTitle": "Conseils photo",
+      "tips": {
+        "light": "Piece bien eclairee",
+        "perspective": "Prise depuis l'emplacement du canape",
+        "clear": "Degagez la zone"
+      },
+      "generating": "Generation du rendu realiste...",
+      "generatingHint": "Fusion du canape, du tissu et de la lumiere",
+      "ready": "Parfait !",
+      "readyHint": "{product} avec {fabric}, {color}.",
+      "generate": "Generer le rendu IA",
+      "talkToDesigner": "Parler a un designer",
+      "tryAnother": "Essayer une autre photo",
+      "poweredBy": "Propulse par ShiputzAI",
+      "uploadFirst": "Chargez d'abord une photo.",
+      "generated": "Rendu genere."
+    },
+    "toasts": {
+      "adminBlocked": "Les comptes admin ne peuvent pas enregistrer de designs client.",
+      "saved": "Design enregistre sur votre compte.",
+      "shareTitle": "Design de canape Shany Living",
+      "copied": "Details du design copies."
+    },
+    "signInTitle": "Enregistrez votre design",
+    "signIn": "Se connecter",
+    "createAccount": "Creer un compte",
+    "signInText": "Creez un compte ou connectez-vous pour retrouver ce design dans vos designs enregistres.",
+    "continueTo": "Continuer vers {step}",
+    "backTo": "Retour a {step}"
   }
 }

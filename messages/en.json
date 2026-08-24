@@ -406,7 +406,13 @@
       "requestQuote": "Request Quote",
       "ask": "Ask about this piece",
       "availableIn": "Available in {range}",
-      "priceOnRequest": "Price on request"
+      "priceOnRequest": "Price on request",
+      "customMade": "Custom Made",
+      "viewCustomize": "View & Customize",
+      "wishlist": "Save {name}",
+      "quoteOnly": "This item is available by showroom quote. Please ask about this piece.",
+      "adminBlocked": "Admin accounts cannot create storefront transactions. Please use a customer account.",
+      "added": "{name} added to cart."
     },
     "detail": {
       "home": "Home",
@@ -488,6 +494,30 @@
       "consultTitle": "Custom Sofa, made for you",
       "consultText": "Choose your size, fabric, color and more. Our team is here to help you create the perfect sofa.",
       "consultCta": "Open Customizer"
+    },
+    "badges": {
+      "Best Seller": "Best Seller",
+      "New": "New",
+      "Customizable": "Customizable",
+      "Featured": "Featured",
+      "Showroom product": "Showroom product"
+    },
+    "options": {
+      "Left chaise": "Left chaise",
+      "Right chaise": "Right chaise",
+      "Standard sofa": "Standard sofa",
+      "Sectional": "Sectional",
+      "Custom layout": "Custom layout",
+      "Boucle": "Boucle",
+      "Linen": "Linen",
+      "Chenille": "Chenille",
+      "Velvet": "Velvet",
+      "Leather": "Leather",
+      "Light Beige": "Light Beige",
+      "Sand": "Sand",
+      "Caramel": "Caramel",
+      "Espresso": "Espresso",
+      "Forest": "Forest"
     }
   },
   "cart": {
@@ -1858,5 +1888,87 @@
         ]
       }
     ]
+  },
+  "customizer": {
+    "eyebrow": "Customize your sofa",
+    "steps": {
+      "model": "Model",
+      "size": "Size",
+      "fabric": "Fabric & Color",
+      "review": "Review"
+    },
+    "modelTitle": "Choose your model",
+    "modelHint": "Select the model you want to customize",
+    "sizeTitle": "Choose size (width)",
+    "sizeHint": "All sizes are approximate",
+    "customSize": "Custom Size",
+    "configuration": "Configuration",
+    "fabricTitle": "Choose fabric",
+    "fabricColorTitle": "Choose fabric and color",
+    "colorTitle": "Choose color - {fabric}",
+    "preview": "Preview",
+    "previewCaption": "{fabric} in {color}",
+    "previewHint": "Soft rendered preview before review.",
+    "reviewTitle": "Review your design",
+    "reviewHint": "Here is your custom sofa",
+    "next": "Next",
+    "backToModel": "Back to Model",
+    "backToSize": "Back to Size",
+    "backToFabric": "Back to Fabric & Color",
+    "totalPrice": "Total Price",
+    "delivery": "Estimated delivery: 21-28 days",
+    "deliveryShort": "Delivery 21-28 days",
+    "customNote": "Every sofa is made specifically for you — get your exact price from a Shany Living advisor.",
+    "reviewNote": "Your sofa is customized to your specifications. Contact us to receive your exact personal quote.",
+    "addToCart": "Add to Cart",
+    "saveDesign": "Save Configuration",
+    "shareDesign": "Share Design",
+    "seeInRoom": "See It In My Room (AI)",
+    "quoteWhatsapp": "Get My Quote on WhatsApp",
+    "callForPrice": "Call for Price & Details",
+    "summary": {
+      "model": "Model",
+      "size": "Size",
+      "configuration": "Configuration",
+      "fabric": "Fabric",
+      "color": "Color"
+    },
+    "room": {
+      "back": "Back to customizer",
+      "title": "See your sofa in your room",
+      "subtitle": "Upload a photo of your space and preview how it looks.",
+      "subtitleLong": "Upload a photo of your space and preview how {product} looks in {fabric}, {color}.",
+      "upload": "Upload room photo",
+      "uploadHint": "JPG or PNG, taken from where the sofa will sit",
+      "uploaded": "Uploaded room",
+      "tipsTitle": "Photo tips",
+      "tips": {
+        "light": "Well-lit room",
+        "perspective": "Take from sofa perspective",
+        "clear": "Clear the area"
+      },
+      "generating": "Generating realistic room preview...",
+      "generatingHint": "Blending sofa, fabric, and lighting",
+      "ready": "Looks perfect!",
+      "readyHint": "{product} with {fabric}, {color}.",
+      "generate": "Generate AI Result",
+      "talkToDesigner": "Talk to Designer",
+      "tryAnother": "Try Another Photo",
+      "poweredBy": "Powered by ShiputzAI",
+      "uploadFirst": "Upload a room photo first.",
+      "generated": "Room preview generated."
+    },
+    "toasts": {
+      "adminBlocked": "Admin accounts cannot save customer designs.",
+      "saved": "Design saved to your account.",
+      "shareTitle": "Shany Living sofa design",
+      "copied": "Design details copied."
+    },
+    "signInTitle": "Save your sofa design",
+    "signIn": "Sign In",
+    "createAccount": "Create Account",
+    "signInText": "Create an account or sign in so this design appears in your Saved Designs panel.",
+    "continueTo": "Continue to {step}",
+    "backTo": "Back to {step}"
   }
 }

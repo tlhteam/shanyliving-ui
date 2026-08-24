@@ -406,7 +406,13 @@
       "requestQuote": "Richiedi preventivo",
       "ask": "Chiedi informazioni",
       "availableIn": "Disponibile in {range}",
-      "priceOnRequest": "Prezzo su richiesta"
+      "priceOnRequest": "Prezzo su richiesta",
+      "customMade": "Su misura",
+      "viewCustomize": "Vedi e personalizza",
+      "wishlist": "Salva {name}",
+      "quoteOnly": "Questo articolo e disponibile su preventivo dello showroom. Scrivici pure.",
+      "adminBlocked": "Gli account admin non possono effettuare acquisti. Usa un account cliente.",
+      "added": "{name} aggiunto al carrello."
     },
     "detail": {
       "home": "Home",
@@ -488,6 +494,30 @@
       "consultTitle": "Divano su misura, per te",
       "consultText": "Scegli misura, tessuto, colore e altro. Il nostro team ti aiuta a creare il divano perfetto.",
       "consultCta": "Apri il configuratore"
+    },
+    "badges": {
+      "Best Seller": "Piu venduto",
+      "New": "Nuovo",
+      "Customizable": "Personalizzabile",
+      "Featured": "In evidenza",
+      "Showroom product": "Prodotto showroom"
+    },
+    "options": {
+      "Left chaise": "Chaise sinistra",
+      "Right chaise": "Chaise destra",
+      "Standard sofa": "Divano standard",
+      "Sectional": "Componibile",
+      "Custom layout": "Layout su misura",
+      "Boucle": "Boucle",
+      "Linen": "Lino",
+      "Chenille": "Ciniglia",
+      "Velvet": "Velluto",
+      "Leather": "Pelle",
+      "Light Beige": "Beige chiaro",
+      "Sand": "Sabbia",
+      "Caramel": "Caramello",
+      "Espresso": "Espresso",
+      "Forest": "Foresta"
     }
   },
   "cart": {
@@ -1858,5 +1888,87 @@
         ]
       }
     ]
+  },
+  "customizer": {
+    "eyebrow": "Personalizza il tuo divano",
+    "steps": {
+      "model": "Modello",
+      "size": "Misura",
+      "fabric": "Tessuto e colore",
+      "review": "Riepilogo"
+    },
+    "modelTitle": "Scegli il modello",
+    "modelHint": "Seleziona il modello da personalizzare",
+    "sizeTitle": "Scegli la misura (larghezza)",
+    "sizeHint": "Tutte le misure sono approssimative",
+    "customSize": "Misura su richiesta",
+    "configuration": "Configurazione",
+    "fabricTitle": "Scegli il tessuto",
+    "fabricColorTitle": "Scegli tessuto e colore",
+    "colorTitle": "Scegli il colore - {fabric}",
+    "preview": "Anteprima",
+    "previewCaption": "{fabric} in {color}",
+    "previewHint": "Anteprima indicativa prima del riepilogo.",
+    "reviewTitle": "Rivedi il tuo progetto",
+    "reviewHint": "Ecco il tuo divano su misura",
+    "next": "Avanti",
+    "backToModel": "Torna al modello",
+    "backToSize": "Torna alla misura",
+    "backToFabric": "Torna al tessuto",
+    "totalPrice": "Prezzo totale",
+    "delivery": "Consegna stimata: 21-28 giorni",
+    "deliveryShort": "Consegna 21-28 giorni",
+    "customNote": "Ogni divano e realizzato su misura per te — ricevi il prezzo esatto da un consulente Shany Living.",
+    "reviewNote": "Il divano e personalizzato secondo le tue specifiche. Contattaci per il preventivo personale.",
+    "addToCart": "Aggiungi al carrello",
+    "saveDesign": "Salva configurazione",
+    "shareDesign": "Condividi progetto",
+    "seeInRoom": "Guardalo a casa mia (AI)",
+    "quoteWhatsapp": "Ricevi il preventivo su WhatsApp",
+    "callForPrice": "Chiama per prezzo e dettagli",
+    "summary": {
+      "model": "Modello",
+      "size": "Misura",
+      "configuration": "Configurazione",
+      "fabric": "Tessuto",
+      "color": "Colore"
+    },
+    "room": {
+      "back": "Torna al configuratore",
+      "title": "Guarda il divano nella tua stanza",
+      "subtitle": "Carica una foto del tuo spazio e vedi il risultato.",
+      "subtitleLong": "Carica una foto e guarda come sta {product} in {fabric}, {color}.",
+      "upload": "Carica foto della stanza",
+      "uploadHint": "JPG o PNG, scattata da dove andra il divano",
+      "uploaded": "Stanza caricata",
+      "tipsTitle": "Consigli per la foto",
+      "tips": {
+        "light": "Stanza ben illuminata",
+        "perspective": "Scatta dalla posizione del divano",
+        "clear": "Libera l'area"
+      },
+      "generating": "Generazione anteprima realistica...",
+      "generatingHint": "Combino divano, tessuto e luce",
+      "ready": "Perfetto!",
+      "readyHint": "{product} con {fabric}, {color}.",
+      "generate": "Genera risultato AI",
+      "talkToDesigner": "Parla con un designer",
+      "tryAnother": "Prova un'altra foto",
+      "poweredBy": "Powered by ShiputzAI",
+      "uploadFirst": "Carica prima una foto.",
+      "generated": "Anteprima generata."
+    },
+    "toasts": {
+      "adminBlocked": "Gli account admin non possono salvare progetti dei clienti.",
+      "saved": "Progetto salvato nel tuo account.",
+      "shareTitle": "Progetto divano Shany Living",
+      "copied": "Dettagli del progetto copiati."
+    },
+    "signInTitle": "Salva il tuo progetto",
+    "signIn": "Accedi",
+    "createAccount": "Crea account",
+    "signInText": "Crea un account o accedi per trovare questo progetto nei tuoi progetti salvati.",
+    "continueTo": "Continua con {step}",
+    "backTo": "Torna a {step}"
   }
 }

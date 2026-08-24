@@ -406,7 +406,13 @@
       "requestQuote": "בקשת הצעת מחיר",
       "ask": "שאלו על הפריט",
       "availableIn": "זמין ב{range}",
-      "priceOnRequest": "מחיר לפי בקשה"
+      "priceOnRequest": "מחיר לפי בקשה",
+      "customMade": "בייצור אישי",
+      "viewCustomize": "צפה והתאם",
+      "wishlist": "שמור {name}",
+      "quoteOnly": "הפריט זמין בהצעת מחיר מהאולם. שלח לנו שאלה על הפריט.",
+      "adminBlocked": "חשבונות ניהול אינם יכולים לבצע רכישות בחנות. השתמש בחשבון לקוח.",
+      "added": "{name} נוסף לעגלה."
     },
     "detail": {
       "home": "דף הבית",
@@ -488,6 +494,30 @@
       "consultTitle": "ספה בהתאמה אישית, בשבילך",
       "consultText": "בחר מידה, בד, צבע ועוד. הצוות שלנו כאן כדי לעזור לך ליצור את הספה המושלמת.",
       "consultCta": "פתח את המעצב"
+    },
+    "badges": {
+      "Best Seller": "רב מכר",
+      "New": "חדש",
+      "Customizable": "בהתאמה אישית",
+      "Featured": "מומלץ",
+      "Showroom product": "מוצר אולם תצוגה"
+    },
+    "options": {
+      "Left chaise": "שזלונג שמאל",
+      "Right chaise": "שזלונג ימין",
+      "Standard sofa": "ספה רגילה",
+      "Sectional": "ספה פינתית",
+      "Custom layout": "פריסה מותאמת",
+      "Boucle": "בוקלה",
+      "Linen": "פשתן",
+      "Chenille": "שניל",
+      "Velvet": "קטיפה",
+      "Leather": "עור",
+      "Light Beige": "בז' בהיר",
+      "Sand": "חול",
+      "Caramel": "קרמל",
+      "Espresso": "אספרסו",
+      "Forest": "ירוק יער"
     }
   },
   "cart": {
@@ -1858,5 +1888,87 @@
         ]
       }
     ]
+  },
+  "customizer": {
+    "eyebrow": "התאם את הספה שלך",
+    "steps": {
+      "model": "דגם",
+      "size": "מידה",
+      "fabric": "בד וצבע",
+      "review": "סיכום"
+    },
+    "modelTitle": "בחר דגם",
+    "modelHint": "בחר את הדגם שתרצה להתאים",
+    "sizeTitle": "בחר מידה (רוחב)",
+    "sizeHint": "כל המידות משוערות",
+    "customSize": "מידה מיוחדת",
+    "configuration": "תצורה",
+    "fabricTitle": "בחר בד",
+    "fabricColorTitle": "בחר בד וצבע",
+    "colorTitle": "בחר צבע - {fabric}",
+    "preview": "תצוגה מקדימה",
+    "previewCaption": "{fabric} בגוון {color}",
+    "previewHint": "תצוגה מקדימה רכה לפני הסיכום.",
+    "reviewTitle": "סיכום העיצוב",
+    "reviewHint": "הנה הספה המותאמת שלך",
+    "next": "הבא",
+    "backToModel": "חזרה לדגם",
+    "backToSize": "חזרה למידה",
+    "backToFabric": "חזרה לבד וצבע",
+    "totalPrice": "מחיר כולל",
+    "delivery": "אספקה משוערת: 21-28 ימים",
+    "deliveryShort": "אספקה 21-28 ימים",
+    "customNote": "כל ספה מיוצרת במיוחד עבורך — קבל מחיר מדויק מיועץ שני ליבינג.",
+    "reviewNote": "הספה מותאמת למפרט שלך. צור קשר לקבלת הצעת מחיר אישית מדויקת.",
+    "addToCart": "הוסף לעגלה",
+    "saveDesign": "שמור תצורה",
+    "shareDesign": "שתף עיצוב",
+    "seeInRoom": "ראה בחדר שלי (AI)",
+    "quoteWhatsapp": "קבל הצעת מחיר בוואטסאפ",
+    "callForPrice": "התקשר למחיר ופרטים",
+    "summary": {
+      "model": "דגם",
+      "size": "מידה",
+      "configuration": "תצורה",
+      "fabric": "בד",
+      "color": "צבע"
+    },
+    "room": {
+      "back": "חזרה למעצב",
+      "title": "ראה את הספה בחדר שלך",
+      "subtitle": "העלה תמונה של החלל שלך וראה איך זה נראה.",
+      "subtitleLong": "העלה תמונה של החלל וראה איך {product} נראית ב{fabric}, {color}.",
+      "upload": "העלה תמונת חדר",
+      "uploadHint": "JPG או PNG, מהמקום שבו תעמוד הספה",
+      "uploaded": "החדר שהועלה",
+      "tipsTitle": "טיפים לצילום",
+      "tips": {
+        "light": "חדר מואר",
+        "perspective": "צלם מזווית הספה",
+        "clear": "פנה את השטח"
+      },
+      "generating": "יוצר תצוגה מציאותית של החדר...",
+      "generatingHint": "משלב ספה, בד ותאורה",
+      "ready": "נראה מושלם!",
+      "readyHint": "{product} עם {fabric}, {color}.",
+      "generate": "צור תוצאת AI",
+      "talkToDesigner": "דבר עם מעצב",
+      "tryAnother": "נסה תמונה אחרת",
+      "poweredBy": "מופעל על ידי ShiputzAI",
+      "uploadFirst": "העלה קודם תמונת חדר.",
+      "generated": "תצוגת החדר נוצרה."
+    },
+    "toasts": {
+      "adminBlocked": "חשבונות ניהול אינם יכולים לשמור עיצובי לקוח.",
+      "saved": "העיצוב נשמר בחשבון שלך.",
+      "shareTitle": "עיצוב ספה של שני ליבינג",
+      "copied": "פרטי העיצוב הועתקו."
+    },
+    "signInTitle": "שמור את עיצוב הספה",
+    "signIn": "התחברות",
+    "createAccount": "פתח חשבון",
+    "signInText": "פתח חשבון או התחבר כדי שהעיצוב יופיע בעיצובים השמורים שלך.",
+    "continueTo": "המשך ל{step}",
+    "backTo": "חזרה ל{step}"
   }
 }
