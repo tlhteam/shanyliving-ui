@@ -1,12 +1,10 @@
-import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getTranslations } from "next-intl/server";
-import { AppButton } from "@/components/app/AppButton";
-import { AppImage } from "@/components/app/AppImage";
 import { AppSection } from "@/components/app/AppSection";
 import { SiteIcon, SiteIconName } from "@/components/icons/SiteIcon";
 import { ProductCard } from "@/components/storefront/ProductCard";
 import { ProductDetailHero } from "@/components/storefront/ProductDetailHero";
+import { Testimonials } from "@/components/storefront/Testimonials";
 import { getCatalogProduct } from "@/lib/catalog";
 import { mapCatalogProduct } from "@/lib/storefront-catalog";
 import { isUsableImagePath } from "@/lib/media";
@@ -16,15 +14,6 @@ import { getStorefrontProduct, storefrontProducts } from "@/lib/storefront-pages
 type ProductDetailPageProps = {
   params: Promise<{ slug: string }>;
 };
-
-const fallbackFabricImages = [
-  "/images/category-sofas.png",
-  "/images/look-warm-minimalism.png",
-  "/images/sofa-noa.png",
-  "/images/category-living-room.png",
-  "/images/look-urban-luxury.png",
-  "/images/showroom-interior.png"
-];
 
 const benefits = [
   { key: "quality", icon: "shield" },
@@ -45,19 +34,14 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
     notFound();
   }
 
-  const related = storefrontProducts.filter((item) => item.slug !== product.slug).slice(0, 5);
+  const related = storefrontProducts.filter((item) => item.slug !== product.slug && item.category === product.category).slice(0, 5);
   const relatedMobileSlug = mobileVisibleSlug(related);
-  const galleryImages = (
-    product.galleryImages?.length
-      ? product.galleryImages
-      : [product.image, "/images/sofa-luna.png", "/images/sofa-noa.png", "/images/sofa-ella.png", "/images/look-modern-elegance.png"]
-  ).filter(isUsableImagePath);
-  const fabricImages = product.fabricImages?.length ? product.fabricImages : fallbackFabricImages;
+  const galleryImages = (product.galleryImages?.length ? product.galleryImages : [product.image]).filter(isUsableImagePath);
 
   return (
     <>
       <AppSection className="pt-6 pb-8 sm:pt-10 sm:pb-12">
-        <ProductDetailHero product={product} images={galleryImages} />
+        <ProductDetailHero key={product.slug} product={product} images={galleryImages} />
       </AppSection>
 
       <section className="border-y border-neutral-200 bg-white dark:border-white/10 dark:bg-neutral-950">
@@ -74,44 +58,18 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
         </div>
       </section>
 
-      <section className="bg-neutral-100 dark:bg-neutral-900">
-        <AppSection className="grid items-center gap-6 py-8 lg:grid-cols-[1fr_260px]">
-          <div className="grid grid-cols-3 gap-2.5 sm:grid-cols-6 sm:gap-3">
-            {fabricImages.map((image) => (
-              <AppImage key={image} src={image} alt={t("fabricAlt")} className="aspect-square rounded-lg" sizes="(max-width: 640px) 30vw, 16vw" />
+      <Testimonials />
+
+      {related.length > 0 ? (
+        <AppSection>
+          <h2 className="font-serif text-xl font-bold sm:text-2xl">{t("related")}</h2>
+          <div className="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-5">
+            {related.map((item) => (
+              <ProductCard key={item.slug} product={item} className={mobileOnlyClass(item.slug, relatedMobileSlug)} />
             ))}
           </div>
-          <div>
-            <h2 className="font-serif text-xl font-bold sm:text-2xl">{t("fabricTitle")}</h2>
-            <p className="mt-2 text-sm leading-6 text-neutral-700 dark:text-neutral-300">{t("fabricText")}</p>
-            <Link href="/customize-your-sofa" className="block">
-              <AppButton variant="outline" className="mt-4 w-full sm:w-auto">{t("fabricCta")}</AppButton>
-            </Link>
-          </div>
         </AppSection>
-      </section>
-
-      <AppSection>
-        <h2 className="font-serif text-xl font-bold sm:text-2xl">{t("related")}</h2>
-        <div className="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-5">
-          {related.map((item) => (
-            <ProductCard key={item.slug} product={item} className={mobileOnlyClass(item.slug, relatedMobileSlug)} />
-          ))}
-        </div>
-      </AppSection>
-
-      <section className="bg-neutral-100 dark:bg-neutral-900">
-        <AppSection className="grid items-center gap-6 lg:grid-cols-[1.2fr_0.8fr]">
-          <AppImage src="/images/showroom-consultation.png" alt={t("consultAlt")} className="aspect-[1.6/1] rounded-lg sm:aspect-[1.9/1]" sizes="(max-width: 1024px) 100vw, 55vw" />
-          <div>
-            <h2 className="font-serif text-2xl font-bold sm:text-3xl">{t("consultTitle")}</h2>
-            <p className="mt-3 text-sm leading-6 text-neutral-700 dark:text-neutral-300">{t("consultText")}</p>
-            <Link href="/customize-your-sofa" className="block">
-              <AppButton className="mt-6 w-full sm:w-auto">{t("consultCta")}</AppButton>
-            </Link>
-          </div>
-        </AppSection>
-      </section>
+      ) : null}
     </>
   );
 }

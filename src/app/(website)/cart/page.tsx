@@ -32,14 +32,14 @@ export default function CartPage() {
           <h1 className="font-serif text-3xl font-bold sm:text-4xl">{t("title", { count: cart.length })}</h1>
           <p className="mt-2 text-sm text-neutral-600 dark:text-neutral-400">{t("subtitle")}</p>
         </div>
-        <Link href="/sofas" className="shrink-0"><AppButton variant="outline">{t("continueShopping")}</AppButton></Link>
+        <Link href="/collections" className="shrink-0"><AppButton variant="outline">{t("continueShopping")}</AppButton></Link>
       </div>
 
       {cart.length === 0 ? (
         <div className="grid place-items-center rounded-lg border border-neutral-200 bg-white p-12 text-center dark:border-white/10 dark:bg-neutral-900">
           <SiteIcon name="bag" className="size-10 text-neutral-400" />
           <p className="mt-3 font-bold">{t("empty")}</p>
-          <Link href="/sofas"><AppButton className="mt-5">{t("browse")}</AppButton></Link>
+          <Link href="/collections"><AppButton className="mt-5">{t("browse")}</AppButton></Link>
         </div>
       ) : (
         <div className="grid gap-6 lg:grid-cols-[1fr_300px]">
@@ -54,7 +54,7 @@ export default function CartPage() {
                   <button type="button" className="mt-3 text-xs font-bold text-neutral-500 underline dark:text-neutral-400" onClick={() => removeFromCart(item.slug)}>{t("remove")}</button>
                 </div>
                 <div className="flex items-center gap-2 self-start">
-                  <button type="button" className="grid size-9 place-items-center rounded-md border border-neutral-300 dark:border-white/15" aria-label={t("decrease")} onClick={() => updateQuantity(item.slug, item.quantity - 1)}>-</button>
+                  <button type="button" disabled={item.quantity <= 1} className="grid size-9 place-items-center rounded-md border border-neutral-300 disabled:opacity-40 dark:border-white/15" aria-label={t("decrease")} onClick={() => updateQuantity(item.slug, item.quantity - 1)}>-</button>
                   <span className="grid size-9 place-items-center text-sm font-bold">{item.quantity}</span>
                   <button type="button" className="grid size-9 place-items-center rounded-md border border-neutral-300 dark:border-white/15" aria-label={t("increase")} onClick={() => updateQuantity(item.slug, item.quantity + 1)}>+</button>
                 </div>
@@ -101,7 +101,7 @@ export default function CartPage() {
                   aria-label={t("alsoLike")}
                   onClick={() => {
                     addToCart(product, { size: product.seatRange ?? "Standard", configuration: product.subcategory, color: product.colors?.[0] });
-                    toast.success(product.name);
+                    toast.success(t("added", { name: product.name }));
                   }}
                   className="grid size-9 place-items-center rounded-full bg-neutral-950 text-white transition hover:bg-neutral-800 dark:bg-white dark:text-neutral-950"
                 >

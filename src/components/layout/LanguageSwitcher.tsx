@@ -15,9 +15,11 @@ export function LanguageSwitcher({ className, variant = "icon" }: { className?: 
   const menuRef = useRef<HTMLDivElement>(null);
   const [open, setOpen] = useState(false);
   const [dropUp, setDropUp] = useState(false);
+  const [alignRight, setAlignRight] = useState(false);
   const [pending, startTransition] = useTransition();
   const active = localeOption(locale);
   const menuHeight = 210;
+  const menuWidth = 176;
 
   useEffect(() => {
     const close = (event: MouseEvent) => {
@@ -57,6 +59,7 @@ export function LanguageSwitcher({ className, variant = "icon" }: { className?: 
 
           if (rect) {
             setDropUp(window.innerHeight - rect.bottom < menuHeight && rect.top > menuHeight);
+            setAlignRight(rect.left + menuWidth > window.innerWidth);
           }
 
           setOpen((current) => !current);
@@ -76,7 +79,8 @@ export function LanguageSwitcher({ className, variant = "icon" }: { className?: 
       {open ? (
         <div
           className={cn(
-            "absolute start-0 z-80 w-44 rounded-lg border border-neutral-200 bg-white p-1 text-neutral-950 shadow-xl dark:border-white/10 dark:bg-neutral-950 dark:text-neutral-50",
+            "absolute z-80 w-44 rounded-lg border border-neutral-200 bg-white p-1 text-neutral-950 shadow-xl dark:border-white/10 dark:bg-neutral-950 dark:text-neutral-50",
+            alignRight ? "right-0" : "left-0",
             dropUp ? "bottom-full mb-2" : "top-full mt-2"
           )}
         >

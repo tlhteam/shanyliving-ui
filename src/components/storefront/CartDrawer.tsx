@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useLocale, useTranslations } from "next-intl";
+import { toast } from "sonner";
 import { AppButton } from "@/components/app/AppButton";
 import { AppImage } from "@/components/app/AppImage";
 import { SiteIcon } from "@/components/icons/SiteIcon";
@@ -42,7 +43,7 @@ export function CartDrawer() {
               <div>
                 <SiteIcon name="bag" className="mx-auto size-10 text-neutral-400" />
                 <p className="mt-3 font-bold">{t("empty")}</p>
-                <Link href="/sofas" onClick={closeCart}><AppButton className="mt-5">{t("browse")}</AppButton></Link>
+                <Link href="/collections" onClick={closeCart}><AppButton className="mt-5">{t("browse")}</AppButton></Link>
               </div>
             </div>
           ) : (
@@ -62,7 +63,7 @@ export function CartDrawer() {
                       </button>
                     </div>
                     <div className="mt-3 inline-flex items-center rounded-md border border-neutral-300 dark:border-white/15">
-                      <button type="button" aria-label={t("decrease")} className="grid size-9 place-items-center" onClick={() => updateQuantity(item.slug, item.quantity - 1)}>-</button>
+                      <button type="button" aria-label={t("decrease")} disabled={item.quantity <= 1} className="grid size-9 place-items-center disabled:opacity-40" onClick={() => updateQuantity(item.slug, item.quantity - 1)}>-</button>
                       <span className="grid size-9 place-items-center text-sm font-bold">{item.quantity}</span>
                       <button type="button" aria-label={t("increase")} className="grid size-9 place-items-center" onClick={() => updateQuantity(item.slug, item.quantity + 1)}>+</button>
                     </div>
@@ -77,7 +78,15 @@ export function CartDrawer() {
               <h3 className="font-serif text-xl font-bold">{t("alsoLike")}</h3>
               <div className="mt-3 grid grid-cols-2 gap-3">
                 {suggestions.map((product) => (
-                  <button key={product.slug} type="button" onClick={() => addToCart(product)} className="rounded-lg border border-neutral-200 bg-white p-2 text-start dark:border-white/10 dark:bg-neutral-900">
+                  <button
+                    key={product.slug}
+                    type="button"
+                    onClick={() => {
+                      addToCart(product, { size: product.seatRange ?? "Standard", configuration: product.subcategory, color: product.colors?.[0] });
+                      toast.success(t("added", { name: product.name }));
+                    }}
+                    className="rounded-lg border border-neutral-200 bg-white p-2 text-start dark:border-white/10 dark:bg-neutral-900"
+                  >
                     <AppImage src={product.image} alt={product.name} className="aspect-square rounded-md" sizes="160px" />
                     <p className="mt-2 text-sm font-bold">{product.name}</p>
                     <p className="text-xs text-neutral-600 dark:text-neutral-400">{formatPrice(product.price)}</p>

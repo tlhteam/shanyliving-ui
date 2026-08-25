@@ -7,6 +7,7 @@ import { useForm } from "react-hook-form";
 import { useTranslations } from "next-intl";
 import { z } from "zod";
 import { AppButton } from "@/components/app/AppButton";
+import { AppPasswordInput } from "@/components/app/AppPasswordInput";
 
 type FormValues = {
   email: string;
@@ -55,9 +56,8 @@ export function AdminLoginForm({ callbackUrl }: { callbackUrl?: string }) {
       </div>
       <div>
         <label htmlFor="admin-password" className="mb-2 block text-sm font-medium text-neutral-800 dark:text-neutral-200">{t("password")}</label>
-        <input
+        <AppPasswordInput
           id="admin-password"
-          type="password"
           autoComplete="current-password"
           placeholder={t("passwordPlaceholder")}
           aria-invalid={Boolean(form.formState.errors.password)}

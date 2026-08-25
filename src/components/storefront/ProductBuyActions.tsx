@@ -1,10 +1,12 @@
 "use client";
 
+import Link from "next/link";
 import { toast } from "sonner";
 import { useSession } from "next-auth/react";
 import { useTranslations } from "next-intl";
 import { AppButton } from "@/components/app/AppButton";
 import { SiteIcon } from "@/components/icons/SiteIcon";
+import { isCustomOrderCategory } from "@/lib/custom-order";
 import type { StorefrontProduct } from "@/lib/storefront-pages";
 import { useCustomerCommerceStore } from "@/stores/customer-commerce-store";
 
@@ -14,6 +16,17 @@ export function ProductBuyActions({ product, compact = false }: { product: Store
   const addToCart = useCustomerCommerceStore((state) => state.addToCart);
   const openCart = useCustomerCommerceStore((state) => state.openCart);
   const isQuoteOnly = product.price <= 0;
+
+  if (isCustomOrderCategory(product.category)) {
+    return (
+      <Link href={`/sofas/${product.slug}`} className="block">
+        <AppButton size={compact ? "sm" : "md"} className="w-full gap-2">
+          <SiteIcon name="sparkle" className="size-4" />
+          {t("viewCustomize")}
+        </AppButton>
+      </Link>
+    );
+  }
 
   const handleAdd = () => {
     if (isQuoteOnly) {

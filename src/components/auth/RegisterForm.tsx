@@ -8,6 +8,7 @@ import { useForm } from "react-hook-form";
 import { useTranslations } from "next-intl";
 import { z } from "zod";
 import { AppButton } from "@/components/app/AppButton";
+import { AppPasswordInput } from "@/components/app/AppPasswordInput";
 import { RecaptchaV2 } from "@/components/auth/RecaptchaV2";
 import { SocialAuthButtons } from "@/components/auth/SocialAuthButtons";
 import { apiUrl } from "@/lib/api";
@@ -110,12 +111,16 @@ export function RegisterForm() {
       <div className="grid gap-4 sm:grid-cols-2">
         <div>
           <label htmlFor="register-password" className="mb-2 block text-sm font-semibold text-neutral-800 dark:text-neutral-200">{t("password")}</label>
-          <input id="register-password" type="password" autoComplete="new-password" placeholder={t("newPasswordPlaceholder")} {...form.register("password")} className={fieldClass} />
-          {form.formState.errors.password?.message ? <p className="mt-1.5 text-sm text-red-600">{form.formState.errors.password.message}</p> : null}
+          <AppPasswordInput id="register-password" autoComplete="new-password" placeholder={t("newPasswordPlaceholder")} {...form.register("password")} className={fieldClass} />
+          {form.formState.errors.password?.message ? (
+            <p className="mt-1.5 text-sm text-red-600">{form.formState.errors.password.message}</p>
+          ) : (
+            <p className="mt-1.5 text-xs text-neutral-500 dark:text-neutral-400">{t("newPasswordPlaceholder")}</p>
+          )}
         </div>
         <div>
           <label htmlFor="register-password-confirm" className="mb-2 block text-sm font-semibold text-neutral-800 dark:text-neutral-200">{t("confirmPassword")}</label>
-          <input id="register-password-confirm" type="password" autoComplete="new-password" placeholder={t("confirmPasswordPlaceholder")} {...form.register("password_confirmation")} className={fieldClass} />
+          <AppPasswordInput id="register-password-confirm" autoComplete="new-password" placeholder={t("confirmPasswordPlaceholder")} {...form.register("password_confirmation")} className={fieldClass} />
           {form.formState.errors.password_confirmation?.message ? <p className="mt-1.5 text-sm text-red-600">{form.formState.errors.password_confirmation.message}</p> : null}
         </div>
       </div>

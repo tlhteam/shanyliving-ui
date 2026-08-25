@@ -11,7 +11,7 @@ export default async function NotFound() {
   return (
     <>
       <AppHeader />
-      <main className="grid min-h-[62vh] place-items-center bg-[#f5f1ea] px-4 py-20 text-center text-neutral-950 dark:bg-neutral-950 dark:text-neutral-50">
+      <main className="grid min-h-[62vh] place-items-center bg-surface-cream px-4 py-20 text-center text-neutral-950 dark:bg-neutral-950 dark:text-neutral-50">
         <div className="max-w-xl">
           <AppLogo className="justify-center dark:hidden" imageClassName="w-48" />
           <AppLogo variant="light" className="hidden justify-center dark:inline-flex" imageClassName="w-48" />
@@ -20,7 +20,7 @@ export default async function NotFound() {
           <p className="mx-auto mt-4 max-w-md text-sm leading-6 text-neutral-600 dark:text-neutral-400">{t("text")}</p>
           <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
             <Link href="/" className="block"><AppButton className="w-full sm:w-auto">{t("home")}</AppButton></Link>
-            <Link href="/sofas" className="block"><AppButton variant="outline" className="w-full sm:w-auto">{t("sofas")}</AppButton></Link>
+            <Link href="/collections" className="block"><AppButton variant="outline" className="w-full sm:w-auto">{t("browse")}</AppButton></Link>
           </div>
         </div>
       </main>

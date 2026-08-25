@@ -8,6 +8,7 @@ import { AppImage } from "@/components/app/AppImage";
 import { AppSection } from "@/components/app/AppSection";
 import { SiteIcon } from "@/components/icons/SiteIcon";
 import { ProductCard } from "@/components/storefront/ProductCard";
+import { isCustomOrderCategory } from "@/lib/custom-order";
 import { isUsableImagePath } from "@/lib/media";
 import { mobileOnlyClass, mobileVisibleSlug } from "@/lib/mobile-catalog";
 import { whatsappHref } from "@/lib/whatsapp";
@@ -142,6 +143,8 @@ function FilterTile({
 
 export function ProductGridPage({ page, slug }: { page: StorefrontPage; slug?: string }) {
   const t = useTranslations("storefront");
+  const showPriceSort = !isCustomOrderCategory(slug);
+  const availableSortOptions = showPriceSort ? sortOptions : sortOptions.filter((option) => option.value === "featured");
   const common = useTranslations("common");
   const copy = (field: "title" | "eyebrow" | "description", fallback: string) => {
     const key = "pages." + (slug ?? "") + "." + field;
@@ -270,7 +273,7 @@ export function ProductGridPage({ page, slug }: { page: StorefrontPage; slug?: s
                 <span />
               )}
 
-              <div className="flex shrink-0 items-center gap-2">
+              <div className={cn("flex shrink-0 items-center gap-2", !showPriceSort && "hidden")}>
                 <label htmlFor="product-sort" className="text-[11px] font-bold uppercase tracking-[0.16em] text-neutral-500 dark:text-neutral-400">{t("filters.sort")}</label>
                 <div className="relative">
                   <select
@@ -279,7 +282,7 @@ export function ProductGridPage({ page, slug }: { page: StorefrontPage; slug?: s
                     onChange={(event) => setSortMode(event.target.value as SortMode)}
                     className="h-10 appearance-none rounded-md border border-neutral-300 bg-white pe-9 ps-3 text-sm font-semibold text-neutral-950 outline-none focus:border-neutral-950 dark:border-white/15 dark:bg-neutral-950 dark:text-neutral-50 dark:focus:border-white"
                   >
-                    {sortOptions.map((option) => (
+                    {availableSortOptions.map((option) => (
                       <option key={option.value} value={option.value}>{t("filters." + option.key)}</option>
                     ))}
                   </select>

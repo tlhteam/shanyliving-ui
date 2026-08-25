@@ -118,14 +118,6 @@ export default function CheckoutPage() {
         <h1 className="font-serif text-3xl font-bold sm:text-4xl">{t("title")}</h1>
         <p className="mt-2 text-sm text-neutral-600 dark:text-neutral-400">{t("subtitle")}</p>
       </div>
-      <div className="mb-8 flex items-center gap-3 text-sm font-bold">
-        <span className="grid size-8 place-items-center rounded-full bg-neutral-950 text-white dark:bg-white dark:text-neutral-950">1</span>
-        <span className="h-px flex-1 bg-neutral-300 dark:bg-white/15" />
-        <span className="grid size-8 place-items-center rounded-full border border-neutral-300 dark:border-white/20">2</span>
-        <span className="h-px flex-1 bg-neutral-300 dark:bg-white/15" />
-        <span className="grid size-8 place-items-center rounded-full border border-neutral-300 dark:border-white/20">3</span>
-      </div>
-
       {status !== "authenticated" ? (
         <div className="mb-6">
           <SignInGate namespace="checkout" callbackUrl="/checkout" />
@@ -137,8 +129,8 @@ export default function CheckoutPage() {
           <h2 className="font-serif text-2xl font-bold">{t("contact")}</h2>
           <div className="mt-5 grid gap-4 sm:grid-cols-2">
             <input value={checkout.fullName} onChange={(event) => setCheckout({ fullName: event.target.value })} placeholder={t("fullName")} className="h-11 rounded-md border border-neutral-300 bg-white px-3 text-sm text-neutral-950 placeholder:text-neutral-400 dark:border-white/15 dark:bg-neutral-950 dark:text-white" />
-            <input value={checkout.email} onChange={(event) => setCheckout({ email: event.target.value })} placeholder={t("email")} className="h-11 rounded-md border border-neutral-300 bg-white px-3 text-sm text-neutral-950 placeholder:text-neutral-400 dark:border-white/15 dark:bg-neutral-950 dark:text-white" />
-            <input value={checkout.phone} onChange={(event) => setCheckout({ phone: event.target.value })} placeholder={t("phone")} className="h-11 rounded-md border border-neutral-300 bg-white px-3 text-sm text-neutral-950 placeholder:text-neutral-400 dark:border-white/15 dark:bg-neutral-950 dark:text-white" />
+            <input type="email" inputMode="email" value={checkout.email} onChange={(event) => setCheckout({ email: event.target.value })} placeholder={t("email")} className="h-11 rounded-md border border-neutral-300 bg-white px-3 text-sm text-neutral-950 placeholder:text-neutral-400 dark:border-white/15 dark:bg-neutral-950 dark:text-white" />
+            <input type="tel" inputMode="tel" value={checkout.phone} onChange={(event) => setCheckout({ phone: event.target.value })} placeholder={t("phone")} className="h-11 rounded-md border border-neutral-300 bg-white px-3 text-sm text-neutral-950 placeholder:text-neutral-400 dark:border-white/15 dark:bg-neutral-950 dark:text-white" />
             <input value={checkout.address} onChange={(event) => setCheckout({ address: event.target.value })} placeholder={t("address")} className="h-11 rounded-md border border-neutral-300 bg-white px-3 text-sm text-neutral-950 placeholder:text-neutral-400 dark:border-white/15 dark:bg-neutral-950 dark:text-white" />
             <input value={checkout.apartment} onChange={(event) => setCheckout({ apartment: event.target.value })} placeholder={t("apartment")} className="h-11 rounded-md border border-neutral-300 bg-white px-3 text-sm text-neutral-950 placeholder:text-neutral-400 dark:border-white/15 dark:bg-neutral-950 dark:text-white sm:col-span-2" />
           </div>
