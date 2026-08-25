@@ -88,8 +88,8 @@ export function HomeJourney({ fromSocial = false }: { fromSocial?: boolean }) {
           })}
         </div>
 
-        <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
-          <Link href="/sofas" className="sm:w-auto">
+        <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-center">
+          <Link href="/collections" className="sm:w-auto">
             <AppButton className="w-full sm:w-auto">{fromSocial ? t("instagram.cta") : t("cta")}</AppButton>
           </Link>
           <Link href="/customize-your-sofa" className="sm:w-auto">

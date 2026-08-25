@@ -38,6 +38,33 @@ function itemTitle(order: CustomerOrder) {
   return item?.product_name ?? item?.title ?? item?.name ?? `Order ${order.reference}`;
 }
 
+const productionStages = [
+  "Order Confirmed",
+  "Production Started",
+  "Production Completed",
+  "Quality Check",
+  "Delivery Scheduled",
+  "Out for Delivery",
+  "Delivered & Installed"
+] as const;
+
+// Best-effort mapping until the backend exposes a dedicated production-stage field
+// (see docs/backend-requirements-log.md, "Production & Delivery Status Notifications").
+function resolveStageIndex(order: CustomerOrder): number {
+  const value = `${order.fulfillment_status ?? ""} ${order.status ?? ""}`.toLowerCase();
+  const matchers: Array<[RegExp, number]> = [
+    [/deliver.*install|install.*complet/, 6],
+    [/out.?for.?deliver|dispatch|in.?transit/, 5],
+    [/deliver.*schedul|ready.?to.?ship|ready.?for.?deliver/, 4],
+    [/quality/, 3],
+    [/production.*complet|manufactur.*complet/, 2],
+    [/production|manufactur|processing|in.?progress/, 1],
+    [/deliver|complet|fulfilled/, 6]
+  ];
+
+  return matchers.find(([pattern]) => pattern.test(value))?.[1] ?? 0;
+}
+
 export default function CustomerOrdersPage() {
   const t = useTranslations("customer.orders");
   const locale = useLocale();
@@ -144,16 +171,26 @@ export default function CustomerOrdersPage() {
               </div>
             </div>
             <div className="mt-5 border-t border-neutral-200 pt-5">
-              {["Order Confirmed", "In Production", "Quality Check", "Ready to Ship", "Delivered"].map((step, index) => (
-                <div key={step} className="grid grid-cols-[20px_1fr_auto] gap-3 pb-4 text-sm">
-                  <span className={`mt-1 size-3 rounded-full ${index < 2 ? "bg-black dark:bg-white" : "border border-neutral-400 bg-white dark:bg-neutral-950"}`} />
-                  <span>
-                    <span className="block font-bold">{step}</span>
-                    <span className="text-xs text-neutral-600 dark:text-neutral-400">{index < 2 ? "Your order is moving forward." : "Pending"}</span>
-                  </span>
-                  <span className="text-xs text-neutral-500 dark:text-neutral-400">{index < 2 && selected.placed_at ? new Date(selected.placed_at).toLocaleDateString() : "Pending"}</span>
-                </div>
-              ))}
+              {productionStages.map((step, index) => {
+                const currentStage = resolveStageIndex(selected);
+                const isDone = index < currentStage;
+                const isCurrent = index === currentStage;
+
+                return (
+                  <div key={step} className="grid grid-cols-[20px_1fr_auto] gap-3 pb-4 text-sm">
+                    <span className={`mt-1 size-3 rounded-full ${isDone || isCurrent ? "bg-black dark:bg-white" : "border border-neutral-400 bg-white dark:bg-neutral-950"}`} />
+                    <span>
+                      <span className="block font-bold">{step}</span>
+                      <span className="text-xs text-neutral-600 dark:text-neutral-400">
+                        {isDone ? "Completed" : isCurrent ? "In progress" : "Pending"}
+                      </span>
+                    </span>
+                    <span className="text-xs text-neutral-500 dark:text-neutral-400">
+                      {index === 0 && selected.placed_at ? new Date(selected.placed_at).toLocaleDateString() : "—"}
+                    </span>
+                  </div>
+                );
+              })}
             </div>
             <AppButton className="mt-2 w-full">View Order Details</AppButton>
           </AppCard>

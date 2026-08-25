@@ -5,14 +5,27 @@ import { useLocale, useTranslations } from "next-intl";
 import { AppImage } from "@/components/app/AppImage";
 import { SiteIcon } from "@/components/icons/SiteIcon";
 import { ProductBuyActions } from "@/components/storefront/ProductBuyActions";
+import { isCustomOrderCategory } from "@/lib/custom-order";
 import { formatMoney } from "@/lib/format";
 import { cn } from "@/lib/utils";
 import type { StorefrontProduct } from "@/lib/storefront-pages";
 
+function shortDescription(product: StorefrontProduct) {
+  const intro = product.description?.split(/\n{2,}/)[0];
+  const sentence = intro?.match(/^[^.]+\./)?.[0]?.trim();
+
+  return sentence || product.subcategory || undefined;
+}
+
 export function ProductCard({ product, className }: { product: StorefrontProduct; className?: string }) {
   const t = useTranslations("storefront.card");
   const locale = useLocale();
-  const priceLabel = product.price > 0 ? formatMoney(product.price, locale) : t("priceOnRequest");
+  const priceLabel = isCustomOrderCategory(product.category)
+    ? t("customMade")
+    : product.price > 0
+      ? formatMoney(product.price, locale)
+      : t("priceOnRequest");
+  const description = shortDescription(product);
 
   return (
     <article className={cn("group overflow-hidden rounded-lg border border-neutral-200 bg-white text-neutral-950 shadow-sm transition duration-300 hover:shadow-xl sm:hover:-translate-y-1 dark:border-white/10 dark:bg-neutral-900 dark:text-neutral-50", className)}>
@@ -37,8 +50,8 @@ export function ProductCard({ product, className }: { product: StorefrontProduct
         <Link href={`/sofas/${product.slug}`} className="font-bold text-neutral-950 transition hover:text-neutral-600 dark:text-neutral-50 dark:hover:text-neutral-300">
           {product.name}
         </Link>
+        {description ? <p className="mt-1 line-clamp-2 text-xs text-neutral-600 dark:text-neutral-400">{description}</p> : null}
         <p className="mt-1 text-sm font-bold">{priceLabel}</p>
-        {product.seatRange ? <p className="mt-4 text-xs text-neutral-600 dark:text-neutral-400">{t("availableIn", { range: product.seatRange })}</p> : <div className="mt-4 h-4" />}
         <div className="mt-3 flex items-center gap-1.5">
           {(product.colors ?? ["#eee9df", "#6a5845", "#0d5f43"]).slice(0, 3).map((color) => (
             <span key={`${product.slug}-${color}`} className="size-4 rounded-full border border-neutral-200 dark:border-white/30" style={{ backgroundColor: color }} />

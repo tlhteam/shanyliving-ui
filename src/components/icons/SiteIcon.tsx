@@ -37,6 +37,7 @@ export type SiteIconName =
   | "shield"
   | "sofa"
   | "sparkle"
+  | "star"
   | "trash"
   | "truck"
   | "upload"
@@ -86,6 +87,7 @@ const paths: Record<SiteIconName, string[]> = {
   shield: ["M12 21s7-3.4 7-9V5l-7-3-7 3v7c0 5.6 7 9 7 9Z", "M8.5 12l2.4 2.4 4.8-5"],
   sofa: ["M5 11V8a3 3 0 0 1 3-3h8a3 3 0 0 1 3 3v3", "M4 12h16a2 2 0 0 1 2 2v4H2v-4a2 2 0 0 1 2-2Z", "M5 18v2", "M19 18v2"],
   sparkle: ["M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9L12 3Z", "M19 15l.8 2.2L22 18l-2.2.8L19 21l-.8-2.2L16 18l2.2-.8L19 15Z"],
+  star: ["M12 3.2 14.6 9l6.4.5-4.9 4.2 1.5 6.1L12 16.6 6.4 19.8 7.9 13.7 3 9.5 9.4 9 12 3.2Z"],
   trash: ["M4 7h16", "M9 7V5h6v2", "M7 7l1 13h8l1-13", "M10 11v5", "M14 11v5"],
   truck: ["M3 6h11v10H3Z", "M14 10h4l3 3v3h-7Z", "M7 19a2 2 0 1 0 0-4 2 2 0 0 0 0 4Z", "M17 19a2 2 0 1 0 0-4 2 2 0 0 0 0 4Z"],
   upload: ["M12 16V4", "M7 9l5-5 5 5", "M5 20h14"],

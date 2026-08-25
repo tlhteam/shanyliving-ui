@@ -59,7 +59,7 @@ export default function OrderConfirmationPage() {
         </ol>
         <div className="mt-6 grid gap-3">
           <Link href="/customer/orders" className="block"><AppButton className="w-full">{t("track")}</AppButton></Link>
-          <Link href="/sofas" className="block"><AppButton variant="outline" className="w-full">{t("continue")}</AppButton></Link>
+          <Link href="/collections" className="block"><AppButton variant="outline" className="w-full">{t("continue")}</AppButton></Link>
         </div>
       </div>
     </AppSection>

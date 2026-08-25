@@ -42,7 +42,7 @@ export function CartDrawer() {
               <div>
                 <SiteIcon name="bag" className="mx-auto size-10 text-neutral-400" />
                 <p className="mt-3 font-bold">{t("empty")}</p>
-                <Link href="/sofas" onClick={closeCart}><AppButton className="mt-5">{t("browse")}</AppButton></Link>
+                <Link href="/collections" onClick={closeCart}><AppButton className="mt-5">{t("browse")}</AppButton></Link>
               </div>
             </div>
           ) : (

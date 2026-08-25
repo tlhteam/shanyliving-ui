@@ -20,7 +20,12 @@
     "whatsapp": "WhatsApp",
     "search": "Search",
     "closeSearch": "Close search",
-    "searchPlaceholder": "Search sofas, fabrics, showroom, or services",
+    "searchPlaceholder": "Search sofas, living room, dining, bedroom...",
+    "quickCategories": "Popular Categories",
+    "noResults": "No results found. Try a different search.",
+    "explorePlaceholder": "Explore",
+    "wishlist": "Wishlist",
+    "aiRoomPreview": "See it in my room (AI)",
     "announcements": [
       "Custom sizes, fabrics, and colors available",
       "Personal consultation through WhatsApp",
@@ -29,27 +34,11 @@
       "Send your selection directly to WhatsApp"
     ],
     "nav": {
-      "sofas": "Sofas",
-      "livingRoom": "Living Room",
-      "dining": "Dining",
-      "bedroom": "Bedroom",
-      "newArrivals": "New Arrivals",
-      "inspiration": "Inspiration",
-      "customize": "Customize Your Sofa",
-      "showroom": "Showroom"
-    },
-    "searchTypes": {
-      "sofa": "Sofa",
-      "fabric": "Fabric",
-      "service": "Service",
-      "feature": "Feature"
-    },
-    "searchResults": {
-      "cloudModular": "Custom 3-4 seater",
-      "lunaSofa": "Warm modular comfort",
-      "performanceLinen": "Premium easy-clean fabric",
-      "showroomVisit": "Herzl 34, Tel Aviv",
-      "roomPhoto": "Upload a room photo"
+      "home": "Home",
+      "categories": "Categories",
+      "collections": "Collections",
+      "howItWorks": "How It Works",
+      "about": "About Shany Living"
     },
     "whatsappDialog": {
       "title": "WhatsApp consultation",
@@ -65,10 +54,13 @@
   "home": {
     "hero": {
       "title": "Design Your Perfect Living Space",
-      "subtitle": "Premium furniture crafted for modern homes, with customizable sofas made to fit your style.",
-      "primaryCta": "Customize Your Sofa",
+      "subtitle": "Premium furniture created for modern living. Custom-made to fit your style.",
+      "primaryCta": "Customize your sofa",
       "secondaryCta": "Explore Collection",
       "imageAlt": "Shany Living showroom living space"
+    },
+    "about": {
+      "cta": "Learn More About Us"
     },
     "categories": {
       "title": "Shop by Category",
@@ -92,7 +84,7 @@
       "instagram": {
         "badge": "Arriving from Instagram",
         "title": "Welcome from the Shany Living ad",
-        "text": "You saw the sofa on Instagram. Here is exactly what happens next, from browsing to order confirmation.",
+        "text": "You saw it on Instagram. Here is exactly what happens next, from browsing to order confirmation.",
         "cta": "See the journey"
       },
       "steps": {
@@ -102,7 +94,7 @@
         },
         "collection": {
           "title": "Browse the collection",
-          "text": "Filter the sofa models that fit your room."
+          "text": "Filter sofas, living room, dining and bedroom pieces that fit your space."
         },
         "product": {
           "title": "Open the product page",
@@ -141,18 +133,18 @@
           "text": "A priced quote for your exact configuration."
         },
         "payment": {
-          "title": "Pay with your advisor",
-          "text": "Secure payment link, bank transfer or by phone."
+          "title": "Your advisor handles payment",
+          "text": "A secure payment link, sent personally by your advisor — by card, bank transfer or phone."
         },
         "confirmed": {
           "title": "Order confirmed",
-          "text": "Production and delivery updates until it arrives."
+          "text": "Your advisor keeps you updated, from production to the day it arrives."
         }
       }
     },
     "featured": {
-      "title": "Featured Collection",
-      "viewAll": "View all Collection"
+      "title": "Our Featured Collection",
+      "viewAll": "See Full Collection"
     },
     "customization": {
       "title": "How Customization Works",
@@ -203,11 +195,13 @@
       "imageAlt": "Shany Living showroom consultation"
     },
     "club": {
-      "title": "Join the SHANY LIVING Club",
+      "title": "Join the Shany Living Club",
       "text": "Be the first to discover new collections, exclusive offers, and interior inspiration.",
       "emailLabel": "Email",
       "emailPlaceholder": "Enter your email",
       "subscribe": "Subscribe",
+      "subscribeSuccess": "You're on the list — welcome to the club.",
+      "subscribeInvalid": "Enter a valid email address.",
       "perks": {
         "offers": "Exclusive Offers",
         "arrivals": "New Arrivals",
@@ -240,7 +234,7 @@
         "text": "Safe & encrypted"
       }
     },
-    "whatsappFloating": "WhatsApp consultation"
+    "whatsappFloating": "Free Consultation via WhatsApp"
   },
   "sofas": {
     "eyebrow": "Collection",
@@ -255,7 +249,7 @@
   },
   "about": {
     "eyebrow": "Our story",
-    "title": "About SHANY Living",
+    "title": "About Shany Living",
     "subtitle": "A premium Tel Aviv furniture showroom focused on customizable sofas, modern furniture and personal service.",
     "imageAlt": "Shany Living showroom",
     "storyTitle": "Furniture designed around your room",
@@ -290,7 +284,8 @@
     "subtitle": "Sit on the models, feel the fabrics, and plan your sofa with a designer.",
     "formTitle": "Talk to the team",
     "whatsappCta": "Chat on WhatsApp",
-    "browseCta": "Browse sofas",
+    "callCta": "Call for Price & Details",
+    "browseCta": "Browse Collection",
     "imageAlt": "Shany Living showroom interior",
     "details": {
       "showroom": {
@@ -389,11 +384,19 @@
       "requestQuote": "Request Quote",
       "ask": "Ask about this piece",
       "availableIn": "Available in {range}",
-      "priceOnRequest": "Price on request"
+      "priceOnRequest": "Price on request",
+      "customMade": "Custom Made",
+      "viewCustomize": "View & Customize"
     },
     "detail": {
       "home": "Home",
-      "collection": "Sofas",
+      "collectionLabels": {
+        "sofas": "Sofas",
+        "living-room": "Living Room",
+        "dining": "Dining Room",
+        "bedroom": "Bedroom",
+        "new-arrivals": "New Arrivals"
+      },
       "ready": "Ready to order",
       "trusted": "Trusted showroom pick",
       "reviews": "4.8 (36 reviews)",
@@ -401,9 +404,28 @@
       "priceVaries": "Price varies by size and configuration",
       "priceOnRequest": "Price on request",
       "quoteNote": "Available by showroom quote",
+      "customPricing": "Custom pricing based on size, configuration and selected materials.",
+      "paymentFlexibility": "Flexible payment arranged with your advisor — by card, bank transfer or phone.",
+      "deliveryEstimate": "Estimated delivery: 21-28 days — made to order for your exact space.",
+      "deliveryLabel": "Delivery",
+      "deliveryInfo": "Delivered across Israel — Tel Aviv and the central district by our own crews, other regions via trusted partner carriers. Delivery and assembly are quoted with your order based on region, quantity and site access, and confirmed by your advisor before you approve the price.",
+      "installationLabel": "Installation",
+      "installationInfo": "Standard delivery includes carrying every piece in, assembling it in the room and removing all packaging. Tell your advisor in advance about narrow staircases, lifts, tight doorways or any access restrictions so the crew arrives fully prepared.",
+      "whatsappForDetails": "WhatsApp for Details",
+      "requestPersonalPrice": "Request My Personal Price",
+      "angle": "Photo {number}",
       "dimensions": "Dimensions",
+      "sizesLabel": "Available Sizes",
+      "configurationLabel": "Configuration",
+      "colorsLabel": "Available Colors",
+      "fabricsLabel": "Fabric Options",
+      "materialsLabel": "Materials & Care",
+      "dimensionsFallback": "Exact dimensions are confirmed with your Shany Living advisor based on your final configuration.",
+      "configurationFallback": "Configuration options are confirmed with your Shany Living advisor based on your space.",
+      "materialsFallback": "Premium upholstery fabrics with easy-clean finishes. Ask your advisor about care instructions.",
       "selection": "Your selection",
-      "customize": "Customize Your Sofa",
+      "customize": "Customize This Sofa",
+      "requestCustomOrder": "Request Custom Order",
       "seeInRoom": "See It In My Room (AI)",
       "ctaNote": "Add to cart for checkout, customize in 4 steps, or preview the sofa in your room.",
       "askShowroom": "Ask Showroom Team",
@@ -466,7 +488,7 @@
       "fabricTitle": "Choose Your Fabric",
       "fabricText": "Over 120 premium fabrics to choose from.",
       "fabricCta": "View all fabrics",
-      "related": "Complete the look",
+      "related": "Similar Sofas",
       "consultAlt": "Custom sofa consultation",
       "consultTitle": "Custom Sofa, made for you",
       "consultText": "Choose your size, fabric, color and more. Our team is here to help you create the perfect sofa.",
@@ -1303,6 +1325,20 @@
     "buildText": "Share one inspiration room and the showroom team can match products, fabrics and colors for your space.",
     "buildCta": "Book a consultation"
   },
+  "collections": {
+    "eyebrow": "All Collections",
+    "title": "Explore Every Collection",
+    "subtitle": "Browse Sofas, Living Room, Dining Room and Bedroom — every piece is custom-made to your exact specifications.",
+    "imageAlt": "Shany Living showroom interior",
+    "browse": "Browse collection",
+    "helpTitle": "Not sure where to start?",
+    "helpText": "Tell us about your space and our advisors will point you to the right collection and pieces.",
+    "helpCta": "Talk to an advisor"
+  },
+  "testimonials": {
+    "title": "What Our Customers Say",
+    "subtitle": "Real feedback from people who've furnished their homes with Shany Living."
+  },
   "showroomPage": {
     "title": "Experience Comfort Before You Decide",
     "subtitle": "Feel every fabric, compare finishes and customize your sofa live with our design specialists.",
@@ -1391,13 +1427,13 @@
     "confirmPasswordPlaceholder": "Repeat your password",
     "signIn": "Sign in",
     "createAccount": "Create account",
-    "customerHeroTitle": "Your SHANY Living account",
+    "customerHeroTitle": "Your Shany Living account",
     "customerHeroText": "Track orders, continue saved sofa designs, manage addresses, cards, gift cards, and messages with the showroom team.",
     "customerTitle": "Customer sign in",
     "customerSubtitle": "Access your orders, saved designs, wishlist, messages and settings.",
-    "newHere": "New to SHANY Living?",
+    "newHere": "New to Shany Living?",
     "createAccountLink": "Create an account",
-    "registerHeroTitle": "Create your SHANY Living account",
+    "registerHeroTitle": "Create your Shany Living account",
     "registerHeroText": "Save sofa designs, follow your orders, keep addresses and gift cards in one place, and talk to the showroom team.",
     "registerTitle": "Create an account",
     "registerSubtitle": "It takes a minute and keeps every design and order together.",
@@ -1423,9 +1459,9 @@
   "notFound": {
     "eyebrow": "404",
     "title": "Page not found",
-    "text": "The page may have moved, but our sofas are still exactly where they should be.",
+    "text": "The page may have moved, but our furniture is still exactly where it should be.",
     "home": "Back to Home",
-    "sofas": "View Sofas"
+    "browse": "Browse Collection"
   },
   "faq": {
     "eyebrow": "Help centre",

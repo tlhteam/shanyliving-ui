@@ -10,17 +10,13 @@ import { AppDialog } from "@/components/app/AppDialog";
 import { AppImage } from "@/components/app/AppImage";
 import { SocialAuthButtons } from "@/components/auth/SocialAuthButtons";
 import { SiteIcon } from "@/components/icons/SiteIcon";
+import { SofaBlockDiagram } from "@/components/sofa/SofaBlockDiagram";
+import { WhatsappIcon } from "@/components/icons/WhatsappIcon";
+import { StickyContactBar } from "@/components/storefront/StickyContactBar";
+import { fabrics } from "@/lib/fabrics";
+import { sofaConfigurations as configurations, sofaSizes as sizes } from "@/lib/sofa-options";
 import { getStorefrontProduct, storefrontProducts } from "@/lib/storefront-pages";
-import { useCustomerCommerceStore } from "@/stores/customer-commerce-store";
-
-const sizes = ["2.2m", "2.4m", "2.8m", "3.2m"];
-const configurations = ["Left chaise", "Right chaise"];
-const fabrics = [
-  { name: "Boucle", image: "/images/category-sofas.png" },
-  { name: "Linen", image: "/images/product-linen-cushion.png" },
-  { name: "Chenille", image: "/images/look-warm-minimalism.png" },
-  { name: "Velvet", image: "/images/look-urban-luxury.png" }
-];
+import { buildPhoneUrl, buildSofaQuoteMessage, buildWhatsAppUrl, generateConfigId } from "@/lib/whatsapp";
 const colors = [
   { name: "Light Beige", value: "#eee9df" },
   { name: "Sand", value: "#d9d4ca" },
@@ -32,7 +28,7 @@ const colors = [
 const stepLabels: Record<number, string> = {
   1: "Model",
   2: "Size",
-  3: "Fabric",
+  3: "Fabric & Color",
   4: "Review"
 };
 
@@ -54,10 +50,6 @@ function stepFromQuery(value: string | null): 1 | 2 | 3 | 4 {
   return stepQueryAliases[String(value ?? "").toLowerCase()] ?? 1;
 }
 
-function formatPrice(price: number) {
-  return `₪ ${new Intl.NumberFormat("en").format(price)}`;
-}
-
 function readFile(file: File) {
   return new Promise<string>((resolve, reject) => {
     const reader = new FileReader();
@@ -70,8 +62,6 @@ function readFile(file: File) {
 export function SofaStepConfigurator() {
   const searchParams = useSearchParams();
   const { data: session } = useSession();
-  const addToCart = useCustomerCommerceStore((state) => state.addToCart);
-  const openCart = useCustomerCommerceStore((state) => state.openCart);
   const productSlug = searchParams.get("product");
   const requestedStep = searchParams.get("step");
   const requestedRoom = requestedStep === "room";
@@ -81,7 +71,8 @@ export function SofaStepConfigurator() {
   const [roomMode, setRoomMode] = useState(requestedRoom);
   const [product, setProduct] = useState(initialProduct ?? sofaProducts[0]);
   const [size, setSize] = useState("2.8m");
-  const [configuration, setConfiguration] = useState("Right chaise");
+  const [customSizeDetail, setCustomSizeDetail] = useState("");
+  const [configuration, setConfiguration] = useState("Standard sofa");
   const [fabric, setFabric] = useState(fabrics[0]);
   const [color, setColor] = useState(colors[0]);
   const [roomPhoto, setRoomPhoto] = useState<string | null>(null);
@@ -90,22 +81,27 @@ export function SofaStepConfigurator() {
   const [authOpen, setAuthOpen] = useState(false);
 
   const canTransact = session?.user?.role !== "admin";
-  const finalPrice = product.price + (size === "3.2m" ? 900 : size === "2.8m" ? 400 : 0);
+  const configId = useMemo(() => generateConfigId(), []);
+  const sizeSummary = size === "Custom Size" ? `Custom${customSizeDetail ? ` (${customSizeDetail})` : ""}` : size;
+  const whatsappHref =
+    buildWhatsAppUrl(
+      process.env.NEXT_PUBLIC_WHATSAPP_NUMBER,
+      buildSofaQuoteMessage({
+        productName: product.name,
+        productId: product.slug,
+        size: sizeSummary,
+        configuration,
+        fabric: fabric.name,
+        color: color.name,
+        configId,
+        customerName: session?.user?.name ?? undefined,
+        customerEmail: session?.user?.email ?? undefined
+      })
+    ) ?? "/contact";
+  const phoneHref = buildPhoneUrl(process.env.NEXT_PUBLIC_PHONE_NUMBER) ?? "/contact";
 
-  const addDesignToCart = () => {
-    if (!canTransact) {
-      toast.error("Admin accounts cannot create storefront transactions. Please use a customer account.");
-      return;
-    }
-
-    addToCart(product, {
-      size,
-      configuration,
-      fabric: fabric.name,
-      color: color.name
-    });
-    toast.success(`${product.name} added to cart.`);
-    openCart();
+  const openWhatsAppQuote = () => {
+    window.open(whatsappHref, "_blank");
   };
 
   const saveDesign = () => {
@@ -120,18 +116,6 @@ export function SofaStepConfigurator() {
     }
 
     toast.success("Design saved to your account.");
-  };
-
-  const shareDesign = async () => {
-    const text = `${product.name} - ${size}, ${configuration}, ${fabric.name}, ${color.name}`;
-
-    if (navigator.share) {
-      await navigator.share({ title: "Shany Living sofa design", text }).catch(() => undefined);
-      return;
-    }
-
-    await navigator.clipboard?.writeText(text);
-    toast.success("Design details copied.");
   };
 
   const handleRoomUpload = async (event: ChangeEvent<HTMLInputElement>) => {
@@ -163,19 +147,22 @@ export function SofaStepConfigurator() {
 
   const summaryRows: Array<[string, string]> = [
     ["Model", product.name.replace(" Sofa", "")],
-    ["Size", size],
+    ["Size", sizeSummary],
     ["Configuration", configuration],
     ["Fabric", fabric.name],
     ["Color", color.name]
   ];
 
-  const modelPicker = (columns: string) => (
+  const modelPicker = (columns: string, advanceOnSelect = false) => (
     <div className={columns}>
       {sofaProducts.map((item) => (
         <button
           key={item.slug}
           type="button"
-          onClick={() => setProduct(item)}
+          onClick={() => {
+            setProduct(item);
+            if (advanceOnSelect) setStep(2);
+          }}
           className={`w-full overflow-hidden rounded-lg border bg-white p-2 transition hover:-translate-y-0.5 hover:shadow-md dark:bg-neutral-900 ${product.slug === item.slug ? "border-neutral-950 dark:border-white" : "border-neutral-200 dark:border-white/10"}`}
         >
           <AppImage src={item.image} alt={item.name} className="aspect-[2.4/1] rounded-md" sizes="(max-width: 1024px) 100vw, 320px" />
@@ -199,8 +186,26 @@ export function SofaStepConfigurator() {
           </button>
         ))}
       </div>
+      {size === "Custom Size" ? (
+        <div className="mt-4 space-y-2 rounded-md border border-neutral-200 bg-neutral-50 p-4 dark:border-white/10 dark:bg-neutral-900">
+          <label htmlFor="custom-size-detail" className="block text-xs font-bold text-neutral-700 dark:text-neutral-300">
+            Tell us your measurements
+          </label>
+          <input
+            id="custom-size-detail"
+            type="text"
+            value={customSizeDetail}
+            onChange={(event) => setCustomSizeDetail(event.target.value)}
+            placeholder="e.g. 350 x 110 cm, or describe your space"
+            className="w-full rounded-md border border-neutral-300 bg-white px-3 py-2.5 text-sm outline-none focus:border-neutral-950 dark:border-white/15 dark:bg-neutral-950 dark:focus:border-white"
+          />
+          <p className="text-xs text-neutral-500 dark:text-neutral-400">
+            Not sure of the exact measurements? Leave a note and a Shany Living advisor will help you get it right.
+          </p>
+        </div>
+      ) : null}
       <h2 className="mt-8 font-bold">Configuration</h2>
-      <div className="mt-4 grid grid-cols-2 gap-3">
+      <div className="mt-4 flex flex-wrap gap-3">
         {configurations.map((item) => (
           <button
             key={item}
@@ -217,7 +222,7 @@ export function SofaStepConfigurator() {
 
   const fabricPicker = (
     <>
-      <div className="grid grid-cols-4 gap-3">
+      <div className="grid grid-cols-5 gap-2 sm:gap-3">
         {fabrics.map((item) => (
           <button key={item.name} type="button" onClick={() => setFabric(item)} className="text-center text-xs font-bold">
             <AppImage
@@ -246,16 +251,18 @@ export function SofaStepConfigurator() {
   );
 
   const stepRail = (
-    <div className="relative flex items-center justify-between">
-      <div className="absolute inset-x-4 top-1/2 z-0 border-t border-dashed border-neutral-300 dark:border-white/25" />
+    <div className="relative flex items-start justify-between">
+      <div className="absolute inset-x-4 top-[18px] z-0 border-t border-dashed border-neutral-300 dark:border-white/25" />
       {[1, 2, 3, 4].map((item) => (
-        <button
-          key={item}
-          type="button"
-          onClick={() => setStep(item as 1 | 2 | 3 | 4)}
-          className={`relative z-10 grid size-9 place-items-center rounded-full border bg-white text-sm font-bold transition hover:scale-105 dark:bg-neutral-950 ${step === item ? "border-neutral-950 bg-neutral-950 text-white dark:border-white dark:bg-white dark:text-neutral-950" : "border-neutral-300 text-neutral-600 dark:border-white/20 dark:text-neutral-300"}`}
-        >
-          {item}
+        <button key={item} type="button" onClick={() => setStep(item as 1 | 2 | 3 | 4)} className="relative z-10 flex flex-col items-center gap-1.5">
+          <span
+            className={`grid size-9 place-items-center rounded-full border bg-white text-sm font-bold transition hover:scale-105 dark:bg-neutral-950 ${step === item ? "border-neutral-950 bg-neutral-950 text-white dark:border-white dark:bg-white dark:text-neutral-950" : "border-neutral-300 text-neutral-600 dark:border-white/20 dark:text-neutral-300"}`}
+          >
+            {item}
+          </span>
+          <span className={`max-w-16 text-center text-[10px] leading-tight font-bold ${step === item ? "text-neutral-950 dark:text-white" : "text-neutral-500 dark:text-neutral-400"}`}>
+            {stepLabels[item]}
+          </span>
         </button>
       ))}
     </div>
@@ -281,7 +288,7 @@ export function SofaStepConfigurator() {
                 <div className="grid grid-cols-[88px_1fr] gap-3">
                   <AppImage src={product.image} alt={product.name} className="aspect-[1.25/1] rounded-md" sizes="88px" />
                   <div>
-                    <p className="font-bold">Looks perfect!</p>
+                    <p className="font-bold">Here is your sofa in your room.</p>
                     <p className="mt-1 text-xs text-neutral-600 dark:text-neutral-400">{product.name} with {fabric.name}, {color.name}.</p>
                   </div>
                 </div>
@@ -313,9 +320,21 @@ export function SofaStepConfigurator() {
       <div className="space-y-3">
         {aiReady ? (
           <>
-            <AppButton className="w-full" onClick={addDesignToCart}>Add to Cart</AppButton>
-            <Link href="/showroom"><AppButton variant="outline" className="w-full">Talk to Designer</AppButton></Link>
-            <AppButton variant="outline" className="w-full" onClick={() => { setRoomPhoto(null); setAiReady(false); setAiGenerating(false); }}>Try Another Photo</AppButton>
+            <AppButton className="w-full gap-2" onClick={openWhatsAppQuote}>
+              <WhatsappIcon className="size-4" /> Get My Quote on WhatsApp
+            </AppButton>
+            <Link href={phoneHref} className="block">
+              <AppButton variant="outline" className="w-full gap-2">
+                <SiteIcon name="phone" className="size-4" /> Call Shany Living
+              </AppButton>
+            </Link>
+            <AppButton
+              variant="outline"
+              className="w-full"
+              onClick={() => { setRoomPhoto(null); setAiReady(false); setAiGenerating(false); }}
+            >
+              Try Another Photo
+            </AppButton>
           </>
         ) : (
           <AppButton className="w-full" onClick={generateRoomPreview} disabled={!roomPhoto || aiGenerating} loading={aiGenerating}>Generate AI Result</AppButton>
@@ -325,7 +344,7 @@ export function SofaStepConfigurator() {
 
     return (
       <div className="bg-white text-neutral-950 dark:bg-neutral-950 dark:text-neutral-50">
-        <div className="mx-auto min-h-screen max-w-md px-4 py-8 lg:hidden">
+        <div className="mx-auto min-h-screen max-w-md px-4 py-8 pb-24 lg:hidden">
           <button type="button" onClick={() => setRoomMode(false)} className="mb-5 text-sm font-bold">Back to customizer</button>
           <h1 className="text-2xl font-bold">See your sofa in your room</h1>
           <p className="mt-2 text-sm text-neutral-600 dark:text-neutral-400">Upload a photo of your space and preview how it looks.</p>
@@ -334,6 +353,8 @@ export function SofaStepConfigurator() {
           <p className="mt-10 text-center text-xs font-bold text-neutral-500">Powered by ShiputzAI</p>
           <div className="mt-6">{roomActions}</div>
         </div>
+
+        <StickyContactBar whatsappHref={whatsappHref} />
 
         <div className="mx-auto hidden min-h-screen w-full max-w-6xl px-8 py-12 lg:block">
           <button type="button" onClick={() => setRoomMode(false)} className="mb-6 text-sm font-bold">Back to customizer</button>
@@ -359,15 +380,14 @@ export function SofaStepConfigurator() {
 
   return (
     <div className="bg-white text-neutral-950 dark:bg-neutral-950 dark:text-neutral-50">
-      <div className="mx-auto min-h-screen max-w-md px-4 py-8 lg:hidden">
+      <div className="mx-auto min-h-screen max-w-md px-4 py-8 pb-24 lg:hidden">
         <div className="mb-8">{stepRail}</div>
 
         {step === 1 ? (
           <section>
             <h1 className="font-bold">Choose your model</h1>
             <p className="mt-1 text-xs text-neutral-600 dark:text-neutral-400">Select the model you want to customize</p>
-            {modelPicker("mt-5 space-y-3")}
-            <AppButton className="mt-8 w-full" onClick={() => setStep(2)}>Next</AppButton>
+            {modelPicker("mt-5 space-y-3", true)}
           </section>
         ) : null}
 
@@ -376,8 +396,7 @@ export function SofaStepConfigurator() {
             <h1 className="font-bold">Choose size (width)</h1>
             <p className="mt-1 text-xs text-neutral-600 dark:text-neutral-400">All sizes are approximate</p>
             <div className="mt-8">{sizePicker}</div>
-            <AppImage src={product.image} alt={product.name} className="mt-10 aspect-[1.4/1] rounded-lg" sizes="448px" imageClassName="object-contain" />
-            <AppButton className="mt-8 w-full" onClick={() => setStep(3)}>Next</AppButton>
+            <SofaBlockDiagram configuration={configuration} color={color.value} className="mt-10" />
           </section>
         ) : null}
 
@@ -385,19 +404,32 @@ export function SofaStepConfigurator() {
           <section>
             <h1 className="font-bold">Choose fabric</h1>
             <div className="mt-5">{fabricPicker}</div>
-            <div className="mt-6 overflow-hidden rounded-lg border border-neutral-200 bg-neutral-50 p-3 dark:border-white/10 dark:bg-neutral-900">
+            <div className="mt-6 rounded-lg border border-neutral-200 bg-neutral-50 p-4 dark:border-white/10 dark:bg-neutral-900">
               <p className="text-xs font-bold uppercase tracking-[0.14em] text-neutral-500 dark:text-neutral-400">Preview</p>
-              <div className="mt-3 grid grid-cols-[84px_1fr] items-center gap-3">
-                <AppImage src={product.image} alt={`${fabric.name} ${color.name} preview`} className="aspect-[1.2/1] rounded-md" sizes="84px" />
-                <div>
-                  <p className="font-bold">{fabric.name} in {color.name}</p>
-                  <p className="mt-1 text-xs text-neutral-600 dark:text-neutral-400">Soft rendered preview before review.</p>
-                </div>
-              </div>
+              <p className="mt-1 text-sm font-bold">{fabric.name} in {color.name}</p>
+              <SofaBlockDiagram configuration={configuration} color={color.value} className="mt-4" />
             </div>
-            <AppImage src={product.image} alt={product.name} className="mt-8 aspect-[0.9/1] rounded-lg" sizes="448px" />
-            <AppButton className="mt-6 w-full" onClick={() => setStep(4)}>Next</AppButton>
           </section>
+        ) : null}
+
+        {step < 4 ? (
+          <div className="mt-8 border-t border-neutral-200 pt-5 dark:border-white/10">
+            <p className="text-sm leading-6 text-neutral-700 dark:text-neutral-300">
+              Every sofa is made specifically for you — get your exact price from a Shany Living advisor.
+            </p>
+            <AppButton className="mt-5 w-full" onClick={() => setStep((step + 1) as 1 | 2 | 3 | 4)}>
+              Next
+            </AppButton>
+            {step > 1 ? (
+              <button
+                type="button"
+                onClick={() => setStep((step - 1) as 1 | 2 | 3 | 4)}
+                className="mt-4 w-full text-center text-sm font-bold text-neutral-600 underline dark:text-neutral-300"
+              >
+                Back to {stepLabels[step - 1]}
+              </button>
+            ) : null}
+          </div>
         ) : null}
 
         {step === 4 ? (
@@ -411,19 +443,26 @@ export function SofaStepConfigurator() {
               ))}
             </div>
             <div className="mt-8 border-t border-neutral-200 pt-5 dark:border-white/10">
-              <p className="text-sm font-bold">Total Price</p>
-              <p className="font-serif text-3xl font-bold">{formatPrice(finalPrice)}</p>
+              <p className="text-sm leading-6 text-neutral-700 dark:text-neutral-300">
+                Your sofa is customized to your specifications. Contact us to receive your exact personal quote.
+              </p>
               <p className="mt-1 text-xs text-neutral-600 dark:text-neutral-400">Estimated delivery: 21-28 days</p>
             </div>
-            <AppButton className="mt-6 w-full" onClick={addDesignToCart}>Add to Cart</AppButton>
-            <div className="mt-3 grid grid-cols-2 gap-3">
-              <AppButton variant="outline" onClick={saveDesign}>Save Design</AppButton>
-              <AppButton variant="outline" onClick={shareDesign}>Share Design</AppButton>
-            </div>
-            <AppButton variant="outline" className="mt-3 w-full" onClick={() => setRoomMode(true)}>See It In My Room (AI)</AppButton>
+            <AppButton className="mt-6 w-full gap-2" onClick={openWhatsAppQuote}>
+              <WhatsappIcon className="size-4" /> Get My Quote on WhatsApp
+            </AppButton>
+            <Link href={phoneHref} className="mt-3 block">
+              <AppButton variant="outline" className="w-full gap-2">
+                <SiteIcon name="phone" className="size-4" /> Call for Price & Details
+              </AppButton>
+            </Link>
+            <AppButton variant="outline" className="mt-3 w-full gap-2" onClick={saveDesign}><SiteIcon name="heart" className="size-4" /> Save Configuration</AppButton>
+            <AppButton variant="outline" className="mt-3 w-full" onClick={() => setRoomMode(true)}>See It In My Room – AI</AppButton>
           </section>
         ) : null}
       </div>
+
+      {step === 4 ? <StickyContactBar whatsappHref={whatsappHref} /> : null}
 
       <div className="mx-auto hidden min-h-screen w-full max-w-7xl px-8 py-12 lg:block">
         <div className="mb-10 flex items-end justify-between gap-6">
@@ -450,19 +489,14 @@ export function SofaStepConfigurator() {
 
         <div className="grid gap-10 lg:grid-cols-[1fr_420px] lg:items-start">
           <div className="sticky top-24 space-y-4">
-            <AppImage src={product.image} alt={product.name} className="aspect-[1.35/1] rounded-lg border border-neutral-200 dark:border-white/10" sizes="820px" imageClassName="object-contain" />
-            <div className="grid grid-cols-4 gap-3">
-              {sofaProducts.slice(0, 4).map((item) => (
-                <button
-                  key={item.slug}
-                  type="button"
-                  onClick={() => setProduct(item)}
-                  className={`overflow-hidden rounded-md border transition hover:-translate-y-0.5 ${product.slug === item.slug ? "border-neutral-950 dark:border-white" : "border-neutral-200 dark:border-white/10"}`}
-                >
-                  <AppImage src={item.image} alt={item.name} className="aspect-[1.5/1]" sizes="180px" />
-                </button>
-              ))}
-            </div>
+            {step === 2 || step === 3 ? (
+              <div className="rounded-lg border border-neutral-200 p-6 dark:border-white/10">
+                {step === 3 ? <p className="mb-4 text-center text-sm font-bold">{fabric.name} · {color.name}</p> : null}
+                <SofaBlockDiagram configuration={configuration} color={color.value} />
+              </div>
+            ) : (
+              <AppImage src={product.image} alt={product.name} className="aspect-[1.35/1] rounded-lg border border-neutral-200 dark:border-white/10" sizes="820px" imageClassName="object-contain" />
+            )}
           </div>
 
           <aside className="space-y-6 rounded-lg border border-neutral-200 p-6 dark:border-white/10">
@@ -504,24 +538,31 @@ export function SofaStepConfigurator() {
             ) : null}
 
             <div className="border-t border-neutral-200 pt-5 dark:border-white/10">
-              <div className="flex items-end justify-between">
-                <div>
-                  <p className="text-sm font-bold">Total Price</p>
-                  <p className="font-serif text-3xl font-bold">{formatPrice(finalPrice)}</p>
-                </div>
-                <p className="text-xs text-neutral-600 dark:text-neutral-400">Delivery 21-28 days</p>
+              <div className="flex items-end justify-between gap-4">
+                <p className="text-sm leading-6 text-neutral-700 dark:text-neutral-300">
+                  {step === 4
+                    ? "Your sofa is customized to your specifications. Contact us to receive your exact personal quote."
+                    : "Every sofa is made specifically for you — get your exact price from a Shany Living advisor."}
+                </p>
+                <p className="shrink-0 text-xs text-neutral-600 dark:text-neutral-400">Delivery 21-28 days</p>
               </div>
 
               {step < 4 ? (
-                <AppButton className="mt-5 w-full" onClick={() => setStep((step + 1) as 1 | 2 | 3 | 4)}>Continue to {stepLabels[step + 1]}</AppButton>
+                <AppButton className="mt-5 w-full" onClick={() => setStep((step + 1) as 1 | 2 | 3 | 4)}>
+                  Next
+                </AppButton>
               ) : (
                 <>
-                  <AppButton className="mt-5 w-full" onClick={addDesignToCart}>Add to Cart</AppButton>
-                  <div className="mt-3 grid grid-cols-2 gap-3">
-                    <AppButton variant="outline" onClick={saveDesign}>Save Design</AppButton>
-                    <AppButton variant="outline" onClick={shareDesign}>Share Design</AppButton>
-                  </div>
-                  <AppButton variant="outline" className="mt-3 w-full" onClick={() => setRoomMode(true)}>See It In My Room (AI)</AppButton>
+                  <AppButton className="mt-5 w-full gap-2" onClick={openWhatsAppQuote}>
+                    <WhatsappIcon className="size-4" /> Get My Quote on WhatsApp
+                  </AppButton>
+                  <Link href={phoneHref} className="mt-3 block">
+                    <AppButton variant="outline" className="w-full gap-2">
+                      <SiteIcon name="phone" className="size-4" /> Call for Price & Details
+                    </AppButton>
+                  </Link>
+                  <AppButton variant="outline" className="mt-3 w-full gap-2" onClick={saveDesign}><SiteIcon name="heart" className="size-4" /> Save Configuration</AppButton>
+                  <AppButton variant="outline" className="mt-3 w-full" onClick={() => setRoomMode(true)}>See It In My Room – AI</AppButton>
                 </>
               )}
 

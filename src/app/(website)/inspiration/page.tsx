@@ -47,7 +47,7 @@ export default async function InspirationPage() {
                 <div className="p-5">
                   <h2 className="font-serif text-xl font-bold sm:text-2xl">{t(`rooms.${room.key}.title`)}</h2>
                   <p className="mt-2 text-sm leading-6 text-neutral-700 dark:text-neutral-300">{t(`rooms.${room.key}.text`)}</p>
-                  <Link href="/sofas" className="mt-5 inline-flex items-center gap-2 text-sm font-bold hover:underline">
+                  <Link href="/collections" className="mt-5 inline-flex items-center gap-2 text-sm font-bold hover:underline">
                     {t("explore")} <SiteIcon name="arrow-right" className="size-4 rtl:rotate-180" />
                   </Link>
                 </div>

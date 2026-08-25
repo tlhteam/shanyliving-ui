@@ -19,9 +19,9 @@ export const AppButton = forwardRef<HTMLButtonElement, AppButtonProps>(
         variant === "outline" && "border border-neutral-300 bg-white text-neutral-950 hover:bg-neutral-100 dark:border-white/15 dark:bg-neutral-950 dark:text-neutral-50 dark:hover:bg-white/10",
         variant === "ghost" && "text-neutral-800 hover:bg-neutral-100 dark:text-neutral-200 dark:hover:bg-white/10",
         variant === "danger" && "bg-red-600 text-white hover:bg-red-700",
-        size === "sm" && "h-9 px-3 text-sm",
-        size === "md" && "h-11 px-5 text-sm",
-        size === "lg" && "h-13 px-7 text-base",
+        size === "sm" && "min-h-9 px-3 py-2 text-sm",
+        size === "md" && "min-h-11 px-5 py-3 text-sm",
+        size === "lg" && "min-h-13 px-7 py-3.5 text-base",
         className
       )}
       aria-busy={loading || undefined}

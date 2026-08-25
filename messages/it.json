@@ -20,7 +20,12 @@
     "whatsapp": "WhatsApp",
     "search": "Cerca",
     "closeSearch": "Chiudi ricerca",
-    "searchPlaceholder": "Cerca divani, tessuti, showroom o servizi",
+    "searchPlaceholder": "Cerca divani, soggiorno, sala da pranzo, camera...",
+    "quickCategories": "Categorie popolari",
+    "noResults": "Nessun risultato. Prova un'altra ricerca.",
+    "explorePlaceholder": "Esplora",
+    "wishlist": "Lista dei desideri",
+    "aiRoomPreview": "Guardalo in casa (AI)",
     "announcements": [
       "Disponibili misure, tessuti e colori personalizzati",
       "Consulenza personale tramite WhatsApp",
@@ -29,27 +34,11 @@
       "Invia la tua selezione direttamente su WhatsApp"
     ],
     "nav": {
-      "sofas": "Divani",
-      "livingRoom": "Soggiorno",
-      "dining": "Sala da pranzo",
-      "bedroom": "Camera da letto",
-      "newArrivals": "Nuovi arrivi",
-      "inspiration": "Ispirazione",
-      "customize": "Personalizza il tuo divano",
-      "showroom": "Showroom"
-    },
-    "searchTypes": {
-      "sofa": "Divano",
-      "fabric": "Tessuto",
-      "service": "Servizio",
-      "feature": "Caratteristica"
-    },
-    "searchResults": {
-      "cloudModular": "Divano personalizzato da 3-4 posti",
-      "lunaSofa": "Comfort modulare dai toni caldi",
-      "performanceLinen": "Tessuto premium facile da pulire",
-      "showroomVisit": "Herzl 34, Tel Aviv",
-      "roomPhoto": "Carica una foto della stanza"
+      "home": "Home",
+      "categories": "Categorie",
+      "collections": "Collezioni",
+      "howItWorks": "Come funziona",
+      "about": "Chi è Shany Living"
     },
     "whatsappDialog": {
       "title": "Consulenza WhatsApp",
@@ -65,10 +54,13 @@
   "home": {
     "hero": {
       "title": "Progetta il tuo spazio abitativo perfetto",
-      "subtitle": "Arredi premium realizzati per case moderne, con divani personalizzabili pensati per adattarsi al tuo stile.",
+      "subtitle": "Arredi premium pensati per la vita moderna. Realizzati su misura per il tuo stile.",
       "primaryCta": "Personalizza il tuo divano",
       "secondaryCta": "Esplora la collezione",
       "imageAlt": "Spazio abitativo nello showroom SHANY Living"
+    },
+    "about": {
+      "cta": "Scopri di più su di noi"
     },
     "categories": {
       "title": "Acquista per categoria",
@@ -92,7 +84,7 @@
       "instagram": {
         "badge": "Arrivi da Instagram",
         "title": "Benvenuto dall'annuncio Shany Living",
-        "text": "Hai visto il divano su Instagram. Ecco cosa succede ora, dalla navigazione alla conferma.",
+        "text": "L'hai visto su Instagram. Ecco cosa succede ora, dalla navigazione alla conferma.",
         "cta": "Guarda il percorso"
       },
       "steps": {
@@ -141,18 +133,18 @@
           "text": "Un preventivo per la tua configurazione esatta."
         },
         "payment": {
-          "title": "Paga con il consulente",
-          "text": "Link sicuro, bonifico o pagamento telefonico."
+          "title": "Il tuo consulente si occupa del pagamento",
+          "text": "Un link di pagamento sicuro, inviato personalmente dal tuo consulente — con carta, bonifico bancario o telefono."
         },
         "confirmed": {
           "title": "Ordine confermato",
-          "text": "Aggiornamenti su produzione e consegna fino all'arrivo."
+          "text": "Il tuo consulente ti tiene aggiornato, dalla produzione al giorno della consegna."
         }
       }
     },
     "featured": {
-      "title": "Collezione in evidenza",
-      "viewAll": "Visualizza tutta la collezione"
+      "title": "La nostra collezione in evidenza",
+      "viewAll": "Vedi la collezione completa"
     },
     "customization": {
       "title": "Come funziona la personalizzazione",
@@ -203,11 +195,13 @@
       "imageAlt": "Consulenza nello showroom SHANY Living"
     },
     "club": {
-      "title": "Entra nel club SHANY LIVING",
+      "title": "Entra nel club Shany Living",
       "text": "Scopri per primo nuove collezioni, offerte esclusive e ispirazioni per l’arredamento.",
       "emailLabel": "Email",
       "emailPlaceholder": "Inserisci la tua email",
       "subscribe": "Iscriviti",
+      "subscribeSuccess": "Iscrizione confermata — benvenuto nel club.",
+      "subscribeInvalid": "Inserisci un indirizzo email valido.",
       "perks": {
         "offers": "Offerte esclusive",
         "arrivals": "Nuovi arrivi",
@@ -240,7 +234,7 @@
         "text": "Sicuri e crittografati"
       }
     },
-    "whatsappFloating": "Consulenza WhatsApp"
+    "whatsappFloating": "Consulenza gratuita via WhatsApp"
   },
   "sofas": {
     "eyebrow": "Collezione",
@@ -255,7 +249,7 @@
   },
   "about": {
     "eyebrow": "La nostra storia",
-    "title": "Chi è SHANY Living",
+    "title": "Chi è Shany Living",
     "subtitle": "Uno showroom premium di Tel Aviv specializzato in divani personalizzabili, arredi moderni e servizio personale.",
     "imageAlt": "Showroom SHANY Living",
     "storyTitle": "Arredi progettati intorno alla tua stanza",
@@ -290,7 +284,8 @@
     "subtitle": "Prova i modelli, tocca i tessuti e progetta il tuo divano con un designer.",
     "formTitle": "Parla con il team",
     "whatsappCta": "Chatta su WhatsApp",
-    "browseCta": "Sfoglia i divani",
+    "callCta": "Chiama per prezzo e dettagli",
+    "browseCta": "Sfoglia la collezione",
     "imageAlt": "Interno dello showroom SHANY Living",
     "details": {
       "showroom": {
@@ -389,11 +384,19 @@
       "requestQuote": "Richiedi preventivo",
       "ask": "Chiedi informazioni",
       "availableIn": "Disponibile in {range}",
-      "priceOnRequest": "Prezzo su richiesta"
+      "priceOnRequest": "Prezzo su richiesta",
+      "customMade": "Su misura",
+      "viewCustomize": "Visualizza e personalizza"
     },
     "detail": {
       "home": "Home",
-      "collection": "Divani",
+      "collectionLabels": {
+        "sofas": "Divani",
+        "living-room": "Soggiorno",
+        "dining": "Sala da pranzo",
+        "bedroom": "Camera da letto",
+        "new-arrivals": "Novita"
+      },
       "ready": "Pronto da ordinare",
       "trusted": "Scelta dello showroom",
       "reviews": "4.8 (36 recensioni)",
@@ -401,9 +404,28 @@
       "priceVaries": "Il prezzo varia in base a misura e configurazione",
       "priceOnRequest": "Prezzo su richiesta",
       "quoteNote": "Disponibile con preventivo dello showroom",
+      "customPricing": "Prezzo personalizzato in base alla misura, alla configurazione e ai materiali scelti.",
+      "paymentFlexibility": "Pagamento flessibile concordato con il vostro consulente — con carta, bonifico bancario o telefono.",
+      "deliveryEstimate": "Consegna stimata: 21-28 giorni — realizzato su misura per il vostro spazio.",
+      "deliveryLabel": "Consegna",
+      "deliveryInfo": "Consegniamo in tutto Israele — Tel Aviv e il distretto centrale con i nostri team, le altre aree tramite corrieri partner di fiducia. Consegna e montaggio vengono quotati con l'ordine in base alla zona, alla quantita e all'accesso al sito, e confermati dal vostro consulente prima di approvare il prezzo.",
+      "installationLabel": "Installazione",
+      "installationInfo": "La consegna standard include il trasporto di ogni pezzo all'interno, il montaggio nella stanza e la rimozione di tutti gli imballaggi. Informate in anticipo il vostro consulente di scale strette, ascensori, porte strette o eventuali limitazioni di accesso, cosi il team arrivera preparato.",
+      "whatsappForDetails": "WhatsApp per dettagli",
+      "requestPersonalPrice": "Richiedi il mio prezzo personalizzato",
+      "angle": "Foto {number}",
       "dimensions": "Dimensioni",
+      "sizesLabel": "Misure disponibili",
+      "configurationLabel": "Configurazione",
+      "colorsLabel": "Colori disponibili",
+      "fabricsLabel": "Opzioni tessuto",
+      "materialsLabel": "Materiali e cura",
+      "dimensionsFallback": "Le dimensioni esatte vengono confermate con il tuo consulente Shany Living in base alla configurazione finale.",
+      "configurationFallback": "Le opzioni di configurazione vengono confermate con il tuo consulente Shany Living in base al tuo spazio.",
+      "materialsFallback": "Tessuti di rivestimento premium con finiture facili da pulire. Chiedi al tuo consulente le istruzioni di cura.",
       "selection": "La tua selezione",
-      "customize": "Personalizza il divano",
+      "customize": "Personalizza questo divano",
+      "requestCustomOrder": "Richiedi un ordine personalizzato",
       "seeInRoom": "Guardalo in casa (AI)",
       "ctaNote": "Aggiungi al carrello, personalizza in 4 passaggi o visualizza il divano nella tua stanza.",
       "askShowroom": "Contatta lo showroom",
@@ -466,7 +488,7 @@
       "fabricTitle": "Scegli il tessuto",
       "fabricText": "Oltre 120 tessuti premium tra cui scegliere.",
       "fabricCta": "Vedi tutti i tessuti",
-      "related": "Completa il look",
+      "related": "Divani simili",
       "consultAlt": "Consulenza divano su misura",
       "consultTitle": "Divano su misura, per te",
       "consultText": "Scegli misura, tessuto, colore e altro. Il nostro team ti aiuta a creare il divano perfetto.",
@@ -1114,167 +1136,167 @@
     }
   },
   "legal": {
-    "updated": "Last updated: August 2026",
-    "reviewNotice": "This page is a working draft prepared for the Shany Living site. Have it reviewed by legal counsel before launch, and replace the bracketed details with the registered company information.",
+    "updated": "Ultimo aggiornamento: agosto 2026",
+    "reviewNotice": "Questa pagina è una bozza di lavoro preparata per il sito Shany Living. Fatela revisionare da un consulente legale prima del lancio e sostituite i dettagli tra parentesi con le informazioni ufficiali dell'azienda.",
     "privacy": {
-      "title": "Privacy Policy",
-      "intro": "This policy explains what personal information Shany Living Furniture collects when you browse the site, configure a sofa or place an order, and how that information is used.",
+      "title": "Informativa sulla privacy",
+      "intro": "Questa informativa spiega quali dati personali raccoglie Shany Living Furniture quando navigate sul sito, configurate un divano o effettuate un ordine, e come vengono utilizzati.",
       "sections": [
         {
-          "heading": "Who we are",
-          "body": "Shany Living Furniture, Herzl 34, Tel Aviv, Israel. Company registration number [to be completed]. For any privacy question, write to info@shanyliving.com."
+          "heading": "Chi siamo",
+          "body": "Shany Living Furniture, Herzl 34, Tel Aviv, Israele. Numero di registrazione aziendale [da completare]. Per qualsiasi domanda sulla privacy, scrivete a info@shanyliving.com."
         },
         {
-          "heading": "What we collect",
-          "body": "Contact details you enter at checkout or in a consultation request (name, email, phone, delivery address); the sofa configuration you build; order and payment status; and basic technical data such as your language preference and the pages you visit."
+          "heading": "Cosa raccogliamo",
+          "body": "I dati di contatto inseriti al checkout o in una richiesta di consulenza (nome, e-mail, telefono, indirizzo di consegna); la configurazione del divano che create; lo stato dell'ordine e del pagamento; e dati tecnici di base come la lingua preferita e le pagine visitate."
         },
         {
-          "heading": "Why we use it",
-          "body": "To prepare quotes, produce and deliver your order, provide advisor support over WhatsApp or phone, and keep records required by Israeli tax and consumer law."
+          "heading": "Perché li utilizziamo",
+          "body": "Per preparare i preventivi, produrre e consegnare il vostro ordine, offrire assistenza tramite WhatsApp o telefono, e conservare i registri richiesti dalla normativa fiscale e sui consumatori israeliana."
         },
         {
-          "heading": "Who we share it with",
-          "body": "Delivery contractors, our production workshop, and the payment provider handling your transaction. We do not sell personal information, and we do not share it for advertising without your consent."
+          "heading": "Con chi li condividiamo",
+          "body": "Corrieri per la consegna, il nostro laboratorio di produzione e il fornitore del servizio di pagamento che gestisce la vostra transazione. Non vendiamo dati personali e non li condividiamo a scopo pubblicitario senza il vostro consenso."
         },
         {
-          "heading": "Your rights",
-          "body": "Under the Israeli Protection of Privacy Law you may ask to see the personal information we hold about you, correct it, or ask us to delete it where we are not required to keep it. Send the request to info@shanyliving.com and we will respond within a reasonable period."
+          "heading": "I vostri diritti",
+          "body": "Ai sensi della legge israeliana sulla protezione della privacy potete richiedere di vedere i dati personali che conserviamo su di voi, correggerli o chiederci di eliminarli quando non siamo tenuti a conservarli. Inviate la richiesta a info@shanyliving.com e risponderemo entro un termine ragionevole."
         },
         {
-          "heading": "Cookies",
-          "body": "The site stores your language choice and cart contents in your browser. These are required for the site to work and are not used to track you across other sites."
+          "heading": "Cookie",
+          "body": "Il sito salva la lingua scelta e il contenuto del carrello nel vostro browser. Sono necessari al funzionamento del sito e non vengono utilizzati per tracciarvi su altri siti."
         }
       ]
     },
     "terms": {
-      "title": "Terms and Conditions",
-      "intro": "These terms apply to the Shany Living site and to made-to-order furniture purchased through it.",
+      "title": "Termini e condizioni",
+      "intro": "Questi termini si applicano al sito Shany Living e ai mobili su misura acquistati tramite esso.",
       "sections": [
         {
-          "heading": "Made-to-order products",
-          "body": "Sofas are produced to the size, configuration, fabric and colour you select. Because each piece is made for you, the specification is confirmed with an advisor before production begins."
+          "heading": "Prodotti su misura",
+          "body": "I divani vengono realizzati secondo la misura, la configurazione, il tessuto e il colore selezionati. Poiché ogni pezzo è realizzato su misura per voi, la specifica viene confermata con un consulente prima dell'inizio della produzione."
         },
         {
-          "heading": "Prices and quotes",
-          "body": "Prices shown are in new Israeli shekels and include VAT unless stated otherwise. Items marked price on request are quoted individually, and a written quote is valid for the period stated on it."
+          "heading": "Prezzi e preventivi",
+          "body": "I prezzi indicati sono in nuovi shekel israeliani e comprendono l'IVA salvo diversa indicazione. Gli articoli contrassegnati come \"prezzo su richiesta\" vengono quotati singolarmente, e un preventivo scritto è valido per il periodo indicato."
         },
         {
-          "heading": "Orders and payment",
-          "body": "An order is created when you submit your details on the site. Payment is arranged with your advisor by secure payment link, bank transfer or by phone. Production is scheduled after payment terms are agreed."
+          "heading": "Ordini e pagamento",
+          "body": "Un ordine viene creato quando inviate i vostri dati sul sito. Il pagamento viene concordato con il vostro consulente tramite link di pagamento sicuro, bonifico bancario o telefono. La produzione viene programmata dopo l'accordo sui termini di pagamento."
         },
         {
-          "heading": "Delivery and assembly",
-          "body": "Estimated production and delivery times are given at the time of order and confirmed by your advisor. Delivery includes placement in the room of your choice and assembly where required."
+          "heading": "Consegna e montaggio",
+          "body": "I tempi stimati di produzione e consegna vengono comunicati al momento dell'ordine e confermati dal vostro consulente. La consegna include il posizionamento nella stanza scelta e il montaggio, dove necessario."
         },
         {
-          "heading": "Cancellation and returns",
-          "body": "Consumer cancellation rights under Israeli law apply, with the exception for goods manufactured specially for the customer. Your advisor will explain what applies to your specific order before production starts."
+          "heading": "Annullamento e resi",
+          "body": "Si applicano i diritti di recesso del consumatore previsti dalla legge israeliana, con l'eccezione dei beni realizzati appositamente per il cliente. Il vostro consulente vi spiegherà cosa si applica al vostro ordine specifico prima dell'inizio della produzione."
         },
         {
-          "heading": "Warranty",
-          "body": "Frames and workmanship are covered against manufacturing defects for the period stated on your order confirmation. Normal wear, misuse and unapproved alterations are not covered."
+          "heading": "Garanzia",
+          "body": "Le strutture e la lavorazione sono coperte da garanzia contro i difetti di fabbricazione per il periodo indicato sulla conferma d'ordine. L'usura normale, l'uso improprio e le modifiche non autorizzate non sono coperte."
         }
       ]
     },
     "accessibility": {
-      "title": "Accessibility Statement",
-      "intro": "Shany Living wants the site and the showroom to be usable by everyone, including people using assistive technology.",
+      "title": "Dichiarazione di accessibilità",
+      "intro": "Shany Living vuole che il sito e lo showroom siano utilizzabili da tutti, comprese le persone che utilizzano tecnologie assistive.",
       "sections": [
         {
-          "heading": "What we have done",
-          "body": "The site is built with semantic headings and landmarks, keyboard focus styles, text alternatives for images, colour contrast checked in both light and dark themes, and layouts that reflow down to small screens without horizontal scrolling."
+          "heading": "Cosa abbiamo fatto",
+          "body": "Il sito è costruito con intestazioni e landmark semantici, stili di focus per la tastiera, testi alternativi per le immagini, contrasto colore verificato sia in tema chiaro che scuro, e layout che si adattano agli schermi piccoli senza scorrimento orizzontale."
         },
         {
-          "heading": "Standard we aim for",
-          "body": "We work towards the Israeli standard SI 5568, which is based on WCAG 2.0 level AA. Some areas are still being improved, in particular third-party embedded content such as the map."
+          "heading": "Standard a cui puntiamo",
+          "body": "Lavoriamo per rispettare lo standard israeliano SI 5568, basato sul WCAG 2.0 livello AA. Alcune aree sono ancora in fase di miglioramento, in particolare i contenuti incorporati di terze parti come la mappa."
         },
         {
-          "heading": "The showroom",
-          "body": "Our Herzl 34 showroom is at street level. Call 03-1234567 before your visit and the team will arrange assistance and a quiet time slot if that helps."
+          "heading": "Lo showroom",
+          "body": "Il nostro showroom di Herzl 34 è a livello strada. Chiamate lo 03-1234567 prima della visita e il team organizzerà assistenza e una fascia oraria tranquilla, se utile."
         },
         {
-          "heading": "Accessibility coordinator",
-          "body": "Contact [name to be completed] at info@shanyliving.com or 03-1234567 with any accessibility problem you hit on the site. Tell us the page and what happened, and we will respond and fix what we can."
+          "heading": "Coordinatore per l'accessibilità",
+          "body": "Contattate [nome da completare] a info@shanyliving.com o allo 03-1234567 per qualsiasi problema di accessibilità riscontrato sul sito. Indicateci la pagina e cosa è successo: risponderemo e risolveremo ciò che possiamo."
         },
         {
-          "heading": "Reporting a problem",
-          "body": "If something on this site blocks you, we treat it as a defect. Report it and we will give you the information or complete the task with you by phone or WhatsApp in the meantime."
+          "heading": "Segnalare un problema",
+          "body": "Se qualcosa su questo sito vi blocca, lo consideriamo un difetto. Segnalatelo e nel frattempo vi forniremo le informazioni o completeremo l'operazione insieme a voi per telefono o WhatsApp."
         }
       ]
     },
     "shipping": {
-      "title": "Shipping and Delivery",
-      "intro": "How we build, ship and install your furniture across Israel, and what to expect at each step.",
+      "title": "Spedizione e consegna",
+      "intro": "Come costruiamo, spediamo e installiamo i vostri mobili in tutto Israele, e cosa aspettarsi in ogni fase.",
       "sections": [
         {
-          "heading": "Production time",
-          "body": "Made-to-order sofas leave production 4 to 6 weeks after the specification is confirmed. Stocked pieces and accessories ship within 5 business days. Your advisor confirms the schedule in writing once the order is placed."
+          "heading": "Tempi di produzione",
+          "body": "I divani su misura escono dalla produzione da 4 a 6 settimane dopo la conferma della specifica. I pezzi e gli accessori disponibili a magazzino vengono spediti entro 5 giorni lavorativi. Il vostro consulente conferma il programma per iscritto una volta effettuato l'ordine."
         },
         {
-          "heading": "Delivery areas",
-          "body": "We deliver across Israel. Tel Aviv and the central district are covered by our own crews; other regions are served by partner carriers. Delivery outside the central district may add a few days to the schedule."
+          "heading": "Zone di consegna",
+          "body": "Consegniamo in tutto Israele. Tel Aviv e il distretto centrale sono coperti dai nostri squadre; le altre regioni sono servite da corrieri partner. La consegna al di fuori del distretto centrale può aggiungere qualche giorno al programma."
         },
         {
-          "heading": "Delivery fees",
-          "body": "Delivery and assembly are quoted with the order and depend on the region, the number of pieces and access at the address. The fee appears on the order before you approve it, and is not calculated automatically at checkout."
+          "heading": "Costi di consegna",
+          "body": "La consegna e il montaggio vengono quotati insieme all'ordine e dipendono dalla zona, dal numero di pezzi e dall'accessibilità dell'indirizzo. Il costo appare sull'ordine prima della vostra approvazione e non viene calcolato automaticamente al checkout."
         },
         {
-          "heading": "Booking a delivery slot",
-          "body": "We call two to three days before delivery to agree a window. Someone over 18 must be present to receive the furniture and sign for it."
+          "heading": "Prenotazione della fascia di consegna",
+          "body": "Vi chiamiamo due o tre giorni prima della consegna per concordare una fascia oraria. Una persona maggiorenne deve essere presente per ricevere i mobili e firmare."
         },
         {
-          "heading": "Access and assembly",
-          "body": "Tell us in advance about narrow staircases, lifts, tight doorways or crane requirements so the crew arrives prepared. Standard delivery includes carrying the pieces in, assembling them in the room and removing the packaging."
+          "heading": "Accesso e montaggio",
+          "body": "Segnalateci in anticipo scale strette, ascensori, porte anguste o la necessità di una gru, così la squadra arriva preparata. La consegna standard include il trasporto dei pezzi all'interno, il montaggio nella stanza e la rimozione dell'imballaggio."
         },
         {
-          "heading": "Inspection on arrival",
-          "body": "Check the furniture with the crew before they leave and note anything on the delivery form. Report transport damage within 48 hours with photographs so we can resolve it quickly."
+          "heading": "Controllo all'arrivo",
+          "body": "Controllate i mobili insieme alla squadra prima che se ne vada e annotate eventuali problemi sul modulo di consegna. Segnalate i danni da trasporto entro 48 ore con fotografie, così possiamo risolverli rapidamente."
         },
         {
-          "heading": "Missed deliveries",
-          "body": "If nobody is at the address for the agreed window, the crew leaves and a second delivery is scheduled. A repeat delivery fee may apply."
+          "heading": "Consegne mancate",
+          "body": "Se nessuno è presente all'indirizzo nella fascia oraria concordata, la squadra se ne va e viene programmata una seconda consegna. Potrebbe essere applicato un costo per la nuova consegna."
         },
         {
-          "heading": "Returns and cancellations",
-          "body": "Made-to-order pieces are produced for you and cannot be returned once production begins. Cancellations before production starts are handled by your advisor. Stocked items follow the return rights in the Israeli Consumer Protection Law."
+          "heading": "Resi e annullamenti",
+          "body": "I pezzi su misura sono realizzati appositamente per voi e non possono essere restituiti una volta iniziata la produzione. Gli annullamenti prima dell'inizio della produzione vengono gestiti dal vostro consulente. Gli articoli a magazzino seguono i diritti di reso previsti dalla legge israeliana sulla protezione dei consumatori."
         }
       ]
     },
     "warranty": {
-      "title": "Warranty",
-      "intro": "What the Shany Living warranty covers, for how long, and how to open a claim.",
+      "title": "Garanzia",
+      "intro": "Cosa copre la garanzia Shany Living, per quanto tempo e come aprire una richiesta.",
       "sections": [
         {
-          "heading": "Frame and structure",
-          "body": "The internal frame and structural joinery carry a 10 year warranty against manufacturing defects under normal domestic use."
+          "heading": "Struttura e telaio",
+          "body": "Il telaio interno e la struttura portante sono coperti da una garanzia di 10 anni contro i difetti di fabbricazione in condizioni di uso domestico normale."
         },
         {
-          "heading": "Cushions and suspension",
-          "body": "Seat and back cushion cores, webbing and springs carry a 5 year warranty. Softening and settling of foam and feather fill is normal and is not a defect."
+          "heading": "Cuscini e sospensioni",
+          "body": "I cuscini di seduta e schienale, le cinghie e le molle sono coperti da una garanzia di 5 anni. L'ammorbidimento e l'assestamento della schiuma e dell'imbottitura in piuma sono normali e non costituiscono un difetto."
         },
         {
-          "heading": "Upholstery and stitching",
-          "body": "Fabric, leather and stitching carry a 2 year warranty against manufacturing defects. Fading from direct sunlight, pilling from abrasion, stains and pet damage are not covered."
+          "heading": "Rivestimento e cuciture",
+          "body": "Tessuto, pelle e cuciture sono coperti da una garanzia di 2 anni contro i difetti di fabbricazione. Scolorimento da luce solare diretta, pilling da abrasione, macchie e danni causati da animali domestici non sono coperti."
         },
         {
-          "heading": "Mechanisms and legs",
-          "body": "Recliner mechanisms, sofa bed frames, castors and legs carry a 2 year warranty on parts and labour."
+          "heading": "Meccanismi e gambe",
+          "body": "I meccanismi reclinabili, le strutture dei divani letto, le rotelle e le gambe sono coperti da una garanzia di 2 anni su pezzi e manodopera."
         },
         {
-          "heading": "What is not covered",
-          "body": "Normal wear, damage from misuse, accidents, cleaning products not recommended for the material, alterations made after delivery, commercial use and pieces sold as showroom clearance are outside the warranty."
+          "heading": "Cosa non è coperto",
+          "body": "Usura normale, danni da uso improprio, incidenti, prodotti per la pulizia non consigliati per il materiale, modifiche apportate dopo la consegna, uso commerciale e pezzi venduti come liquidazione showroom sono esclusi dalla garanzia."
         },
         {
-          "heading": "Opening a claim",
-          "body": "Send your order reference and photographs of the issue from the Messages tab in your account, or contact your advisor. We assess the claim and repair, replace the part or replace the piece, in that order of preference."
+          "heading": "Aprire una richiesta",
+          "body": "Inviate il riferimento dell'ordine e le fotografie del problema dalla scheda Messaggi del vostro account, oppure contattate il vostro consulente. Valutiamo la richiesta e ripariamo, sostituiamo il componente o sostituiamo il pezzo, in questo ordine di preferenza."
         },
         {
-          "heading": "Care and cleaning",
-          "body": "Rotate and plump cushions weekly, vacuum upholstery with a soft brush, blot spills immediately and keep furniture out of direct sunlight and away from heaters. Following the care card supplied with the order keeps the warranty valid."
+          "heading": "Cura e pulizia",
+          "body": "Ruotate e rigonfiate i cuscini ogni settimana, aspirate il rivestimento con una spazzola morbida, tamponate subito le macchie e tenete i mobili lontani dalla luce solare diretta e dalle fonti di calore. Seguire la scheda di cura fornita con l'ordine mantiene valida la garanzia."
         },
         {
-          "heading": "Transfer",
-          "body": "The warranty covers the original purchaser at the delivery address and is not transferable when the furniture is sold on."
+          "heading": "Trasferimento",
+          "body": "La garanzia copre l'acquirente originale all'indirizzo di consegna e non è trasferibile in caso di rivendita dei mobili."
         }
       ]
     }
@@ -1302,6 +1324,20 @@
     "buildTitle": "Progettiamo una stanza insieme",
     "buildText": "Condividi una stanza di ispirazione e il team dello showroom abbinera prodotti, tessuti e colori al tuo spazio.",
     "buildCta": "Prenota una consulenza"
+  },
+  "collections": {
+    "eyebrow": "Tutte le collezioni",
+    "title": "Esplora ogni collezione",
+    "subtitle": "Sfoglia Divani, Soggiorno, Sala da pranzo e Camera da letto — ogni pezzo e realizzato su misura secondo le tue specifiche esatte.",
+    "imageAlt": "Interno dello showroom Shany Living",
+    "browse": "Vedi la collezione",
+    "helpTitle": "Non sai da dove iniziare?",
+    "helpText": "Raccontaci del tuo spazio e i nostri consulenti ti indirizzeranno verso la collezione e i pezzi giusti.",
+    "helpCta": "Parla con un consulente"
+  },
+  "testimonials": {
+    "title": "Cosa dicono i nostri clienti",
+    "subtitle": "Recensioni reali di chi ha arredato casa con Shany Living."
   },
   "showroomPage": {
     "title": "Prova il comfort prima di decidere",
@@ -1391,13 +1427,13 @@
     "confirmPasswordPlaceholder": "Ripeti la password",
     "signIn": "Accedi",
     "createAccount": "Crea account",
-    "customerHeroTitle": "Il tuo account SHANY Living",
+    "customerHeroTitle": "Il tuo account Shany Living",
     "customerHeroText": "Segui gli ordini, riprendi i divani salvati, gestisci indirizzi, carte, gift card e messaggi con il team dello showroom.",
     "customerTitle": "Accesso clienti",
     "customerSubtitle": "Accedi a ordini, progetti salvati, preferiti, messaggi e impostazioni.",
-    "newHere": "Nuovo su SHANY Living?",
+    "newHere": "Nuovo su Shany Living?",
     "createAccountLink": "Crea un account",
-    "registerHeroTitle": "Crea il tuo account SHANY Living",
+    "registerHeroTitle": "Crea il tuo account Shany Living",
     "registerHeroText": "Salva i progetti dei divani, segui gli ordini, tieni indirizzi e gift card in un posto e parla con il team dello showroom.",
     "registerTitle": "Crea un account",
     "registerSubtitle": "Basta un minuto e tieni insieme ogni progetto e ordine.",
@@ -1423,92 +1459,92 @@
   "notFound": {
     "eyebrow": "404",
     "title": "Pagina non trovata",
-    "text": "La pagina potrebbe essere stata spostata, ma i nostri divani sono al loro posto.",
+    "text": "La pagina potrebbe essere stata spostata, ma i nostri mobili sono al loro posto.",
     "home": "Torna alla home",
-    "sofas": "Vedi i divani"
+    "browse": "Vedi la collezione"
   },
   "faq": {
-    "eyebrow": "Help centre",
-    "title": "Frequently asked questions",
-    "subtitle": "Answers about customizing, ordering, delivery and aftercare. If something is missing, message us and we will answer within one business day.",
-    "ctaTitle": "Still have a question?",
-    "ctaText": "Talk to an advisor on WhatsApp, book a showroom visit, or send us a message from your account.",
-    "ctaContact": "Contact us",
-    "ctaShowroom": "Book a showroom visit",
+    "eyebrow": "Centro assistenza",
+    "title": "Domande frequenti",
+    "subtitle": "Risposte su personalizzazione, ordini, consegna e assistenza post-vendita. Se manca qualcosa, scriveteci e risponderemo entro un giorno lavorativo.",
+    "ctaTitle": "Avete ancora una domanda?",
+    "ctaText": "Parlate con un consulente su WhatsApp, prenotate una visita allo showroom, oppure inviateci un messaggio dal vostro account.",
+    "ctaContact": "Contattaci",
+    "ctaShowroom": "Prenota una visita allo showroom",
     "groups": [
       {
-        "heading": "Customizing",
+        "heading": "Personalizzazione",
         "items": [
           {
-            "question": "How does the sofa customizer work?",
-            "answer": "Pick a model, then set the size, configuration, fabric and colour step by step. The preview updates as you choose, and your design is saved to your account so you can come back to it."
+            "question": "Come funziona il configuratore del divano?",
+            "answer": "Scegliete un modello, quindi impostate misura, configurazione, tessuto e colore passo dopo passo. L'anteprima si aggiorna man mano che scegliete, e il vostro progetto viene salvato nel vostro account così potete tornarci in qualsiasi momento."
           },
           {
-            "question": "How many fabrics can I choose from?",
-            "answer": "Over 120 fabrics and leathers, grouped by feel and durability. Order free swatches from the showroom page if you want to see them at home before deciding."
+            "question": "Tra quanti tessuti posso scegliere?",
+            "answer": "Oltre 120 tessuti e pellami, raggruppati per tatto e resistenza. Ordinate campioni gratuiti dalla pagina dello showroom se volete vederli a casa prima di decidere."
           },
           {
-            "question": "Can I order a size that is not listed?",
-            "answer": "Yes. Tell your advisor the dimensions you need and we quote the piece as a bespoke build. Bespoke sizes take the same 4 to 6 weeks as standard made-to-order pieces."
+            "question": "Posso ordinare una misura non in elenco?",
+            "answer": "Sì. Indicate al vostro consulente le dimensioni desiderate e vi prepareremo un preventivo su misura. Le misure personalizzate richiedono le stesse 4-6 settimane dei pezzi standard su ordinazione."
           },
           {
-            "question": "Do I need an account to save a design?",
-            "answer": "Yes, saved designs live in your account so an advisor can pick them up with you. Signing in with Google takes a few seconds."
+            "question": "Serve un account per salvare un progetto?",
+            "answer": "Sì, i progetti salvati restano nel vostro account così un consulente può riprenderli insieme a voi. Accedere con Google richiede pochi secondi."
           }
         ]
       },
       {
-        "heading": "Orders and payment",
+        "heading": "Ordini e pagamento",
         "items": [
           {
-            "question": "How do I place an order?",
-            "answer": "Add the piece to your cart and complete checkout. The order is created and saved to your account immediately, and an advisor confirms the specification with you before production starts."
+            "question": "Come effettuo un ordine?",
+            "answer": "Aggiungete il pezzo al carrello e completate il checkout. L'ordine viene creato e salvato immediatamente nel vostro account, e un consulente conferma con voi la specifica prima dell'inizio della produzione."
           },
           {
-            "question": "How do I pay?",
-            "answer": "Payment is arranged with your advisor by secure link, bank transfer or over the phone. No card details are taken on the website."
+            "question": "Come posso pagare?",
+            "answer": "Il pagamento viene concordato con il vostro consulente tramite link sicuro, bonifico bancario o telefono. Nessun dato della carta viene raccolto sul sito."
           },
           {
-            "question": "Can I change my order after placing it?",
-            "answer": "Yes, until production starts. Contact your advisor with the order reference and we will update the specification or the delivery address."
+            "question": "Posso modificare l'ordine dopo averlo effettuato?",
+            "answer": "Sì, finché la produzione non è iniziata. Contattate il vostro consulente con il riferimento dell'ordine e aggiorneremo la specifica o l'indirizzo di consegna."
           },
           {
-            "question": "Where do I track my order?",
-            "answer": "In My Orders in your account. Every order shows its reference, status and items, and the status moves as the piece goes through production and delivery."
+            "question": "Dove posso tracciare il mio ordine?",
+            "answer": "In I miei ordini, nel vostro account. Ogni ordine mostra il riferimento, lo stato e gli articoli, e lo stato avanza man mano che il pezzo procede tra produzione e consegna."
           }
         ]
       },
       {
-        "heading": "Delivery",
+        "heading": "Consegna",
         "items": [
           {
-            "question": "How long does delivery take?",
-            "answer": "Made-to-order pieces leave production 4 to 6 weeks after the specification is confirmed. Stocked items ship within 5 business days."
+            "question": "Quanto tempo richiede la consegna?",
+            "answer": "I pezzi su ordinazione escono dalla produzione da 4 a 6 settimane dopo la conferma della specifica. Gli articoli a magazzino vengono spediti entro 5 giorni lavorativi."
           },
           {
-            "question": "Do you assemble the furniture?",
-            "answer": "Yes. Standard delivery includes carrying the pieces in, assembling them in the room and taking the packaging away."
+            "question": "Effettuate il montaggio dei mobili?",
+            "answer": "Sì. La consegna standard include il trasporto dei pezzi all'interno, il montaggio nella stanza e la rimozione dell'imballaggio."
           },
           {
-            "question": "How much is delivery?",
-            "answer": "Delivery is quoted with the order and depends on the region, the number of pieces and access at the address. It is not calculated automatically at checkout."
+            "question": "Quanto costa la consegna?",
+            "answer": "La consegna viene quotata insieme all'ordine e dipende dalla zona, dal numero di pezzi e dall'accessibilità dell'indirizzo. Non viene calcolata automaticamente al checkout."
           }
         ]
       },
       {
-        "heading": "Aftercare",
+        "heading": "Assistenza post-vendita",
         "items": [
           {
-            "question": "What does the warranty cover?",
-            "answer": "Ten years on the frame, five on cushion cores and suspension, and two on upholstery and mechanisms. The warranty page has the full terms."
+            "question": "Cosa copre la garanzia?",
+            "answer": "Dieci anni sulla struttura, cinque su cuscini e sospensioni, e due su rivestimento e meccanismi. La pagina garanzia riporta tutti i termini completi."
           },
           {
-            "question": "How do I clean my sofa?",
-            "answer": "Vacuum with a soft brush, blot spills straight away and use only the products named on the care card supplied with your order. Keep the piece out of direct sunlight."
+            "question": "Come pulisco il mio divano?",
+            "answer": "Aspirate con una spazzola morbida, tamponate subito le macchie e utilizzate solo i prodotti indicati sulla scheda di cura fornita con l'ordine. Tenete il pezzo lontano dalla luce solare diretta."
           },
           {
-            "question": "Can I buy replacement cushion covers?",
-            "answer": "Yes, if the fabric is still in the collection. Send your order reference to your advisor and we will quote the covers."
+            "question": "Posso acquistare fodere di ricambio per i cuscini?",
+            "answer": "Sì, se il tessuto è ancora in collezione. Inviate il riferimento dell'ordine al vostro consulente e vi prepareremo un preventivo per le fodere."
           }
         ]
       }

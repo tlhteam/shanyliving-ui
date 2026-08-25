@@ -3,14 +3,13 @@
 import Link from "next/link";
 import { Headphones, Plus, Sofa } from "lucide-react";
 import { useMemo, useState } from "react";
-import { useLocale, useTranslations } from "next-intl";
+import { useTranslations } from "next-intl";
 import { AppButton } from "@/components/app/AppButton";
 import { AppCard } from "@/components/app/AppCard";
 import { AppConfirmationDialog } from "@/components/app/AppConfirmationDialog";
 import { AppDialog } from "@/components/app/AppDialog";
 import { AppImage } from "@/components/app/AppImage";
 import { CustomerTopbar } from "@/components/customer/CustomerShell";
-import { formatMoney } from "@/lib/format";
 import { useCustomerMutation, useCustomerQuery } from "@/hooks/use-customer";
 import type { CustomerSavedDesign } from "@/types/customer";
 
@@ -22,7 +21,6 @@ type DesignForm = {
   size: string;
   extras: string;
   image: string;
-  price: string;
   notes: string;
 };
 
@@ -34,20 +32,12 @@ const emptyForm: DesignForm = {
   size: "",
   extras: "",
   image: "",
-  price: "",
   notes: ""
 };
 
 const statuses = ["in_progress", "requested", "consulted", "ordered"] as const;
 
-const fields: Array<keyof DesignForm> = ["title", "configuration", "fabric", "size", "extras", "image", "price", "notes"];
-
-function toPayload(form: DesignForm) {
-  return {
-    ...form,
-    price: form.price ? Number(form.price) : null
-  };
-}
+const fields: Array<keyof DesignForm> = ["title", "configuration", "fabric", "size", "extras", "image", "notes"];
 
 function configurationSummary(design: CustomerSavedDesign) {
   if (!design.configuration) {
@@ -64,7 +54,6 @@ function configurationSummary(design: CustomerSavedDesign) {
 
 export default function SavedDesignsPage() {
   const t = useTranslations("customer.savedDesigns");
-  const locale = useLocale();
   const [open, setOpen] = useState(false);
   const [editing, setEditing] = useState<CustomerSavedDesign | null>(null);
   const [viewing, setViewing] = useState<CustomerSavedDesign | null>(null);
@@ -90,7 +79,7 @@ export default function SavedDesignsPage() {
     "saved-designs",
     (values) => ({
       path: editing ? `/customer/saved-designs/${editing.id}` : "/customer/saved-designs",
-      options: { method: editing ? "PATCH" : "POST", body: toPayload(values) }
+      options: { method: editing ? "PATCH" : "POST", body: values }
     }),
     { successMessage: t("saved"), onSuccess: closeDialog }
   );
@@ -129,7 +118,6 @@ export default function SavedDesignsPage() {
       size: design.size ?? "",
       extras: design.extras ?? "",
       image: design.image ?? "",
-      price: design.price ? String(design.price) : "",
       notes: design.notes ?? ""
     });
     setOpen(true);
@@ -257,7 +245,6 @@ export default function SavedDesignsPage() {
               <div><dt className="font-bold">{t("fabric")}</dt><dd>{viewing.fabric ?? "-"}</dd></div>
               <div><dt className="font-bold">{t("size")}</dt><dd>{viewing.size ?? "-"}</dd></div>
               <div><dt className="font-bold">{t("extras")}</dt><dd>{viewing.extras ?? "-"}</dd></div>
-              <div><dt className="font-bold">{t("price")}</dt><dd>{viewing.price ? formatMoney(Number(viewing.price), locale) : "-"}</dd></div>
             </dl>
             {viewing.notes ? <p className="rounded-md bg-neutral-100 p-3 text-sm text-neutral-700 dark:bg-white/10 dark:text-neutral-200">{viewing.notes}</p> : null}
           </div>

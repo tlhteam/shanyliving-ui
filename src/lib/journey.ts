@@ -16,7 +16,7 @@ export const journeyPhases: JourneyPhase[] = [
     key: "discover",
     steps: [
       { key: "home", icon: "grid", href: "/" },
-      { key: "collection", icon: "search", href: "/sofas" },
+      { key: "collection", icon: "search", href: "/collections" },
       { key: "product", icon: "sofa", href: "/sofas/lian-sofa" }
     ]
   },
@@ -41,8 +41,8 @@ export const journeyPhases: JourneyPhase[] = [
   {
     key: "own",
     steps: [
-      { key: "payment", icon: "lock", href: "/checkout" },
-      { key: "confirmed", icon: "award", href: "/order-confirmation" }
+      { key: "payment", icon: "lock", href: "/contact" },
+      { key: "confirmed", icon: "award", href: "/contact" }
     ]
   }
 ];

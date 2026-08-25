@@ -7,14 +7,13 @@ import { SiteIcon, SiteIconName } from "@/components/icons/SiteIcon";
 import { WhatsappIcon } from "@/components/icons/WhatsappIcon";
 import { AppLogo } from "@/components/layout/AppLogo";
 import { paymentMethods, siteImages } from "@/lib/images";
+import { buildPhoneUrl, buildWhatsAppUrl } from "@/lib/whatsapp";
 
 const shopLinks = [
   { key: "sofas", href: "/sofas" },
   { key: "livingRoom", href: "/living-room" },
   { key: "diningRoom", href: "/dining" },
   { key: "bedroom", href: "/bedroom" },
-  { key: "coffeeTables", href: "/living-room" },
-  { key: "chairs", href: "/dining" },
   { key: "newArrivals", href: "/new-arrivals" }
 ];
 const serviceLinks = [
@@ -42,10 +41,15 @@ const contactRows = [
 export async function AppFooter() {
   const t = await getTranslations("footer");
   const instagramUrl = process.env.NEXT_PUBLIC_INSTAGRAM_URL ?? "https://www.instagram.com/shanyliving";
+  const phoneHref = buildPhoneUrl(t("contactRows.phone")) ?? undefined;
+  const emailHref = `mailto:${t("contactRows.email")}`;
+  const whatsappHref =
+    buildWhatsAppUrl(process.env.NEXT_PUBLIC_WHATSAPP_NUMBER, "היי שני ליווינג, אשמח לקבל פרטים נוספים.") ?? undefined;
+  const contactRowHrefs: Partial<Record<string, string>> = { phone: phoneHref, email: emailHref, whatsapp: whatsappHref };
 
   return (
     <footer className="bg-neutral-950 text-neutral-300">
-      <div className="mx-auto grid max-w-7xl gap-10 px-4 py-12 sm:grid-cols-2 sm:px-6 lg:grid-cols-[1fr_1fr_1fr_1.2fr_1.8fr] lg:px-8">
+      <div className="mx-auto grid max-w-7xl grid-cols-2 gap-x-6 gap-y-10 px-4 py-12 sm:px-6 lg:grid-cols-[1fr_1fr_1fr_1.2fr_1.8fr] lg:gap-10 lg:px-8">
         <div>
           <h3 className="text-sm font-bold uppercase tracking-wide text-white">{t("shop")}</h3>
           <div className="mt-5 flex flex-col gap-3 text-sm">
@@ -67,15 +71,25 @@ export async function AppFooter() {
         <div>
           <h3 className="text-sm font-bold uppercase tracking-wide text-white">{t("contact")}</h3>
           <div className="mt-5 flex flex-col gap-3 text-sm">
-            {contactRows.map((row) => (
-              <span key={row.key} className="flex items-start gap-2.5">
-                {row.icon === "whatsapp" ? <WhatsappIcon className="mt-0.5 size-4 shrink-0" /> : <SiteIcon name={row.icon as SiteIconName} className="mt-0.5 size-4" />}
-                <bdi>{t(`contactRows.${row.key}`)}</bdi>
-              </span>
-            ))}
+            {contactRows.map((row) => {
+              const icon = row.icon === "whatsapp" ? <WhatsappIcon className="mt-0.5 size-4 shrink-0" /> : <SiteIcon name={row.icon as SiteIconName} className="mt-0.5 size-4" />;
+              const href = contactRowHrefs[row.key];
+
+              return href ? (
+                <a key={row.key} href={href} target={row.key === "whatsapp" ? "_blank" : undefined} className="flex items-start gap-2.5 transition hover:text-white">
+                  {icon}
+                  <bdi>{t(`contactRows.${row.key}`)}</bdi>
+                </a>
+              ) : (
+                <span key={row.key} className="flex items-start gap-2.5">
+                  {icon}
+                  <bdi>{t(`contactRows.${row.key}`)}</bdi>
+                </span>
+              );
+            })}
           </div>
         </div>
-        <div className="sm:col-span-2 lg:col-span-1">
+        <div className="col-span-2 lg:col-span-1">
           <h3 className="text-sm font-bold uppercase tracking-wide text-white">{t("follow")}</h3>
           <Link href={instagramUrl} target="_blank" rel="noreferrer noopener" className="group mt-5 block overflow-hidden rounded-lg border border-white/10">
             <AppImage
