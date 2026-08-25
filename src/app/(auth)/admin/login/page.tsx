@@ -29,7 +29,7 @@ export default async function LoginPage({ searchParams }: PageProps) {
   }
 
   return (
-    <main className="grid min-h-screen place-items-center bg-[#eee8df] p-4 text-neutral-950 transition-colors dark:bg-neutral-950 dark:text-neutral-50">
+    <main className="grid min-h-screen place-items-center bg-surface-cream p-4 text-neutral-950 transition-colors dark:bg-neutral-950 dark:text-neutral-50">
       <AppCard className="w-full max-w-md overflow-hidden p-0 dark:border-white/10 dark:bg-neutral-900 dark:text-neutral-50">
         <div className="border-b border-neutral-200 bg-neutral-50 px-6 py-6 dark:border-white/10 dark:bg-neutral-950 sm:px-7">
           <AppLogo className="justify-center dark:hidden" imageClassName="w-40 sm:w-44" />

@@ -11,7 +11,7 @@ export default async function NotFound() {
   return (
     <>
       <AppHeader />
-      <main className="grid min-h-[62vh] place-items-center bg-[#f5f1ea] px-4 py-20 text-center text-neutral-950 dark:bg-neutral-950 dark:text-neutral-50">
+      <main className="grid min-h-[62vh] place-items-center bg-surface-cream px-4 py-20 text-center text-neutral-950 dark:bg-neutral-950 dark:text-neutral-50">
         <div className="max-w-xl">
           <AppLogo className="justify-center dark:hidden" imageClassName="w-48" />
           <AppLogo variant="light" className="hidden justify-center dark:inline-flex" imageClassName="w-48" />

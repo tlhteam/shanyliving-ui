@@ -118,14 +118,6 @@ export default function CheckoutPage() {
         <h1 className="font-serif text-3xl font-bold sm:text-4xl">{t("title")}</h1>
         <p className="mt-2 text-sm text-neutral-600 dark:text-neutral-400">{t("subtitle")}</p>
       </div>
-      <div className="mb-8 flex items-center gap-3 text-sm font-bold">
-        <span className="grid size-8 place-items-center rounded-full bg-neutral-950 text-white dark:bg-white dark:text-neutral-950">1</span>
-        <span className="h-px flex-1 bg-neutral-300 dark:bg-white/15" />
-        <span className="grid size-8 place-items-center rounded-full border border-neutral-300 dark:border-white/20">2</span>
-        <span className="h-px flex-1 bg-neutral-300 dark:bg-white/15" />
-        <span className="grid size-8 place-items-center rounded-full border border-neutral-300 dark:border-white/20">3</span>
-      </div>
-
       {status !== "authenticated" ? (
         <div className="mb-6">
           <SignInGate namespace="checkout" callbackUrl="/checkout" />

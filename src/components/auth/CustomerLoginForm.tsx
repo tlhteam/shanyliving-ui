@@ -7,6 +7,7 @@ import { useForm } from "react-hook-form";
 import { useTranslations } from "next-intl";
 import { z } from "zod";
 import { AppButton } from "@/components/app/AppButton";
+import { AppPasswordInput } from "@/components/app/AppPasswordInput";
 import { SocialAuthButtons } from "@/components/auth/SocialAuthButtons";
 
 type FormValues = {
@@ -62,9 +63,8 @@ export function CustomerLoginForm({ callbackUrl }: { callbackUrl?: string }) {
       </div>
       <div>
         <label htmlFor="customer-password" className="mb-2 block text-sm font-semibold text-neutral-800 dark:text-neutral-200">{t("password")}</label>
-        <input
+        <AppPasswordInput
           id="customer-password"
-          type="password"
           autoComplete="current-password"
           placeholder={t("passwordPlaceholder")}
           {...form.register("password")}

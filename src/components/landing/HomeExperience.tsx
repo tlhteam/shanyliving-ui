@@ -152,13 +152,13 @@ export function HomeExperience({ catalog, fromSocial = false }: { catalog: HomeC
           objectPosition="30% center"
         />
         <div className="absolute inset-0 bg-black/55 lg:bg-linear-to-r lg:from-black/25 lg:via-black/40 lg:to-black/70" />
-        <AppSection className="relative grid min-h-105 items-center lg:grid-cols-[1fr_480px]">
+        <AppSection dir="ltr" className="relative grid min-h-105 items-center lg:grid-cols-[1fr_480px]">
           <div className="hidden lg:block" />
-          <div className="text-center lg:text-start">
+          <div className="text-center lg:text-end">
             <h2 className="font-serif text-3xl sm:text-4xl lg:text-5xl">{t("showroom.title")}</h2>
-            <p className="mt-5 flex items-center justify-center gap-2 text-sm lg:justify-start"><SiteIcon name="map-pin" className="size-4" /> {t("showroom.address")}</p>
+            <p className="mt-5 flex items-center justify-center gap-2 text-sm lg:justify-end"><SiteIcon name="map-pin" className="size-4" /> <bdi>{t("showroom.address")}</bdi></p>
             <p className="mt-4 text-sm leading-6 text-white/90"><bdi>{t("showroom.weekHours")}</bdi><br /><bdi>{t("showroom.weekendHours")}</bdi></p>
-            <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:justify-center lg:justify-start">
+            <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:justify-center lg:justify-end">
               <Link href="/contact"><AppButton className="w-full sm:w-auto">{t("showroom.bookCta")}</AppButton></Link>
             </div>
           </div>
@@ -223,7 +223,7 @@ export function HomeExperience({ catalog, fromSocial = false }: { catalog: HomeC
         aria-label={t("whatsappFloating")}
         href={whatsappLink}
         target="_blank"
-        className="fixed bottom-20 end-4 z-40 inline-flex items-center gap-2 whitespace-nowrap rounded-full bg-[#25d366] px-4 py-3 text-xs font-bold text-white shadow-lg transition hover:scale-105 sm:bottom-6 sm:end-6 sm:text-sm"
+        className="fixed bottom-20 end-4 z-40 inline-flex items-center gap-2 whitespace-nowrap rounded-full bg-whatsapp-brand px-4 py-3 text-xs font-bold text-white shadow-lg transition hover:scale-105 sm:bottom-6 sm:end-6 sm:text-sm"
       >
         <WhatsappIcon className="size-6 shrink-0 sm:size-7" />
         {t("whatsappFloating")}

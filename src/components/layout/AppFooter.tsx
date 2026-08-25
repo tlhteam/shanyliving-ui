@@ -13,8 +13,7 @@ const shopLinks = [
   { key: "sofas", href: "/sofas" },
   { key: "livingRoom", href: "/living-room" },
   { key: "diningRoom", href: "/dining" },
-  { key: "bedroom", href: "/bedroom" },
-  { key: "newArrivals", href: "/new-arrivals" }
+  { key: "bedroom", href: "/bedroom" }
 ];
 const serviceLinks = [
   { key: "contact", href: "/contact" },

@@ -25,7 +25,9 @@
       "delete": "Elimina"
     },
     "whatsappProductMessage": "Ciao Shany Living, vorrei dettagli e un prezzo per {product}.",
-    "whatsappDesignMessage": "Ciao Shany Living, ho creato un progetto di divano e vorrei un preventivo esatto."
+    "whatsappDesignMessage": "Ciao Shany Living, ho creato un progetto di divano e vorrei un preventivo esatto.",
+    "showPassword": "Mostra password",
+    "hidePassword": "Nascondi password"
   },
   "language": {
     "trigger": "Lingua",
@@ -87,8 +89,8 @@
     },
     "journey": {
       "eyebrow": "Percorso cliente",
-      "title": "Come funziona, dall'annuncio al tuo salotto",
-      "text": "Quattordici passaggi del flusso mobile, riassunti in quattro fasi da seguire con calma.",
+      "title": "Come funziona, dalla scoperta al tuo salotto",
+      "text": "Quattro fasi da seguire con calma, dal primo sguardo alla consegna finale.",
       "phases": {
         "discover": "Scoprire",
         "customize": "Personalizzare",
@@ -108,8 +110,8 @@
       },
       "steps": {
         "home": {
-          "title": "Arrivo su Shany Living",
-          "text": "L'annuncio porta direttamente allo store."
+          "title": "Scopri le possibilita",
+          "text": "La homepage mostra l'intera gamma, dai pezzi pronti al divano completamente personalizzato."
         },
         "collection": {
           "title": "Sfoglia la collezione",
@@ -343,8 +345,7 @@
       "diningRoom": "Sala da pranzo",
       "bedroom": "Camera da letto",
       "coffeeTables": "Tavolini da caffè",
-      "chairs": "Sedie",
-      "newArrivals": "Nuovi arrivi"
+      "chairs": "Sedie"
     },
     "serviceLinks": {
       "contact": "Contatti",
@@ -417,8 +418,7 @@
         "sofas": "Divani",
         "living-room": "Soggiorno",
         "dining": "Sala da pranzo",
-        "bedroom": "Camera da letto",
-        "new-arrivals": "Novita"
+        "bedroom": "Camera da letto"
       },
       "ready": "Pronto da ordinare",
       "trusted": "Scelta dello showroom",
@@ -499,11 +499,6 @@
         "eyebrow": "Comfort silenzioso",
         "title": "Camera",
         "description": "Letti, comodini, cassettiere e accessori che completano la camera."
-      },
-      "new-arrivals": {
-        "eyebrow": "Novita",
-        "title": "Novita",
-        "description": "Gli ultimi arrivi dello showroom tra divani, camera, sala da pranzo e soggiorno."
       }
     },
     "detailPage": {
@@ -511,7 +506,7 @@
       "fabricTitle": "Scegli il tessuto",
       "fabricText": "Oltre 120 tessuti premium tra cui scegliere.",
       "fabricCta": "Vedi tutti i tessuti",
-      "related": "Divani simili",
+      "related": "Potrebbe piacerti anche",
       "consultAlt": "Consulenza divano su misura",
       "consultTitle": "Divano su misura, per te",
       "consultText": "Scegli misura, tessuto, colore e altro. Il nostro team ti aiuta a creare il divano perfetto.",
@@ -565,7 +560,8 @@
     "increase": "Aumenta quantita",
     "decrease": "Riduci quantita",
     "summary": "Riepilogo ordine",
-    "shippingReview": "Calcolata dopo la verifica"
+    "shippingReview": "Calcolata dopo la verifica",
+    "added": "{name} aggiunto al carrello."
   },
   "checkout": {
     "title": "Pagamento",
@@ -1829,7 +1825,8 @@
     },
     "google": "Continua con Google",
     "apple": "Continua con Apple",
-    "appleSoon": "L'accesso con Apple arrivera presto."
+    "appleSoon": "L'accesso con Apple arrivera presto.",
+    "soon": "Presto"
   },
   "notFound": {
     "eyebrow": "404",
@@ -2004,7 +2001,7 @@
     "signIn": "Accedi",
     "createAccount": "Crea account",
     "signInText": "Crea un account o accedi per trovare questo progetto nei tuoi progetti salvati.",
-    "continueTo": "Continua con {step}",
+    "next": "Avanti",
     "backTo": "Torna a {step}"
   }
 }

@@ -10,6 +10,7 @@ import { AppCard } from "@/components/app/AppCard";
 import { AppConfirmationDialog } from "@/components/app/AppConfirmationDialog";
 import { AppDialog } from "@/components/app/AppDialog";
 import { AppPagination } from "@/components/app/AppPagination";
+import { AppPasswordInput } from "@/components/app/AppPasswordInput";
 import { Badge } from "@/components/ui/badge";
 import { useApi } from "@/hooks/use-api";
 import type { AdminUserAccount } from "@/types/customer";
@@ -212,7 +213,7 @@ export default function AdminUsersPage() {
             <option value="customer">{t("customer")}</option>
             <option value="admin">{t("admin")}</option>
           </select>
-          <input value={form.password} type="password" onChange={(event) => setForm((current) => ({ ...current, password: event.target.value }))} placeholder={editing ? t("passwordOptional") : t("password")} className="h-11 rounded-md border border-neutral-300 bg-white px-3 text-sm outline-none focus:border-neutral-950 dark:border-white/15 dark:bg-neutral-950 dark:text-neutral-50 dark:focus:border-white" />
+          <AppPasswordInput value={form.password} onChange={(event) => setForm((current) => ({ ...current, password: event.target.value }))} placeholder={editing ? t("passwordOptional") : t("password")} className="h-11 rounded-md border border-neutral-300 bg-white px-3 text-sm outline-none focus:border-neutral-950 dark:border-white/15 dark:bg-neutral-950 dark:text-neutral-50 dark:focus:border-white" />
         </div>
       </AppDialog>
 

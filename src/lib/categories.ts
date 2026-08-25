@@ -17,5 +17,4 @@ export const productCategoryHref: Record<string, string> = {
   "living-room": "/living-room",
   dining: "/dining",
   bedroom: "/bedroom",
-  "new-arrivals": "/new-arrivals",
 };

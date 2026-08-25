@@ -25,7 +25,9 @@
       "delete": "Supprimer"
     },
     "whatsappProductMessage": "Bonjour Shany Living, je voudrais des details et un prix pour {product}.",
-    "whatsappDesignMessage": "Bonjour Shany Living, j'ai cree un design de canape et je voudrais un devis exact."
+    "whatsappDesignMessage": "Bonjour Shany Living, j'ai cree un design de canape et je voudrais un devis exact.",
+    "showPassword": "Afficher le mot de passe",
+    "hidePassword": "Masquer le mot de passe"
   },
   "language": {
     "trigger": "Langue",
@@ -87,8 +89,8 @@
     },
     "journey": {
       "eyebrow": "Parcours client",
-      "title": "Comment ca marche, de l'annonce a votre salon",
-      "text": "Quatorze etapes du parcours mobile, resumees en quatre phases a suivre a votre rythme.",
+      "title": "Comment ca marche, de la decouverte a votre salon",
+      "text": "Quatre phases a suivre a votre rythme, du premier apercu a la livraison finale.",
       "phases": {
         "discover": "Decouvrir",
         "customize": "Personnaliser",
@@ -108,8 +110,8 @@
       },
       "steps": {
         "home": {
-          "title": "Arrivee sur Shany Living",
-          "text": "L'annonce mene directement a la boutique."
+          "title": "Decouvrez les possibilites",
+          "text": "La page d'accueil presente toute la gamme, des pieces pretes a l'emploi au canape entierement personnalise."
         },
         "collection": {
           "title": "Parcourir la collection",
@@ -343,8 +345,7 @@
       "diningRoom": "Salle à manger",
       "bedroom": "Chambre",
       "coffeeTables": "Tables basses",
-      "chairs": "Chaises",
-      "newArrivals": "Nouveautés"
+      "chairs": "Chaises"
     },
     "serviceLinks": {
       "contact": "Contact",
@@ -417,8 +418,7 @@
         "sofas": "Canapes",
         "living-room": "Salon",
         "dining": "Salle a manger",
-        "bedroom": "Chambre",
-        "new-arrivals": "Nouveautes"
+        "bedroom": "Chambre"
       },
       "ready": "Pret a commander",
       "trusted": "Selection du showroom",
@@ -499,11 +499,6 @@
         "eyebrow": "Confort paisible",
         "title": "Chambre",
         "description": "Lits, chevets, commodes et accessoires qui completent la chambre."
-      },
-      "new-arrivals": {
-        "eyebrow": "Nouveautes",
-        "title": "Nouveautes",
-        "description": "Les dernieres arrivees du showroom: canapes, chambre, salle a manger et salon."
       }
     },
     "detailPage": {
@@ -511,7 +506,7 @@
       "fabricTitle": "Choisissez votre tissu",
       "fabricText": "Plus de 120 tissus premium au choix.",
       "fabricCta": "Voir tous les tissus",
-      "related": "Canapes similaires",
+      "related": "Vous aimerez aussi",
       "consultAlt": "Consultation canape sur mesure",
       "consultTitle": "Un canape sur mesure, pour vous",
       "consultText": "Choisissez la taille, le tissu, la couleur et plus encore. Notre equipe vous aide a creer le canape parfait.",
@@ -565,7 +560,8 @@
     "increase": "Augmenter la quantite",
     "decrease": "Diminuer la quantite",
     "summary": "Recapitulatif",
-    "shippingReview": "Calculee apres verification"
+    "shippingReview": "Calculee apres verification",
+    "added": "{name} ajoute au panier."
   },
   "checkout": {
     "title": "Paiement",
@@ -1829,7 +1825,8 @@
     },
     "google": "Continuer avec Google",
     "apple": "Continuer avec Apple",
-    "appleSoon": "La connexion Apple arrive bientot."
+    "appleSoon": "La connexion Apple arrive bientot.",
+    "soon": "Bientot"
   },
   "notFound": {
     "eyebrow": "404",
@@ -2004,7 +2001,7 @@
     "signIn": "Se connecter",
     "createAccount": "Creer un compte",
     "signInText": "Creez un compte ou connectez-vous pour retrouver ce design dans vos designs enregistres.",
-    "continueTo": "Continuer vers {step}",
+    "next": "Suivant",
     "backTo": "Retour a {step}"
   }
 }

@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import { AppButton } from "@/components/app/AppButton";
 import { AppCard } from "@/components/app/AppCard";
 import { AppDialog } from "@/components/app/AppDialog";
+import { AppPasswordInput } from "@/components/app/AppPasswordInput";
 import { AppSwitch } from "@/components/app/AppSwitch";
 import { CustomerTopbar } from "@/components/customer/CustomerShell";
 import { useCustomerMutation, useCustomerQuery } from "@/hooks/use-customer";
@@ -188,15 +189,13 @@ export default function SettingsPage() {
           <AppCard className="p-5">
             <h2 className="font-serif text-2xl font-bold">{t("changePassword")}</h2>
             <div className="mt-4 space-y-3">
-              <input
-                type="password"
+              <AppPasswordInput
                 value={passwordForm.password}
                 onChange={(event) => setPasswordForm((current) => ({ ...current, password: event.target.value }))}
                 placeholder={t("newPassword")}
                 className="h-11 w-full rounded-md border border-neutral-300 bg-white px-3 text-sm outline-none focus:border-neutral-950 dark:border-white/15 dark:bg-neutral-950 dark:focus:border-white"
               />
-              <input
-                type="password"
+              <AppPasswordInput
                 value={passwordForm.password_confirmation}
                 onChange={(event) => setPasswordForm((current) => ({ ...current, password_confirmation: event.target.value }))}
                 placeholder={t("confirmPassword")}

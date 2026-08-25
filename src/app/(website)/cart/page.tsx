@@ -54,7 +54,7 @@ export default function CartPage() {
                   <button type="button" className="mt-3 text-xs font-bold text-neutral-500 underline dark:text-neutral-400" onClick={() => removeFromCart(item.slug)}>{t("remove")}</button>
                 </div>
                 <div className="flex items-center gap-2 self-start">
-                  <button type="button" className="grid size-9 place-items-center rounded-md border border-neutral-300 dark:border-white/15" aria-label={t("decrease")} onClick={() => updateQuantity(item.slug, item.quantity - 1)}>-</button>
+                  <button type="button" disabled={item.quantity <= 1} className="grid size-9 place-items-center rounded-md border border-neutral-300 disabled:opacity-40 dark:border-white/15" aria-label={t("decrease")} onClick={() => updateQuantity(item.slug, item.quantity - 1)}>-</button>
                   <span className="grid size-9 place-items-center text-sm font-bold">{item.quantity}</span>
                   <button type="button" className="grid size-9 place-items-center rounded-md border border-neutral-300 dark:border-white/15" aria-label={t("increase")} onClick={() => updateQuantity(item.slug, item.quantity + 1)}>+</button>
                 </div>
@@ -101,7 +101,7 @@ export default function CartPage() {
                   aria-label={t("alsoLike")}
                   onClick={() => {
                     addToCart(product, { size: product.seatRange ?? "Standard", configuration: product.subcategory, color: product.colors?.[0] });
-                    toast.success(product.name);
+                    toast.success(t("added", { name: product.name }));
                   }}
                   className="grid size-9 place-items-center rounded-full bg-neutral-950 text-white transition hover:bg-neutral-800 dark:bg-white dark:text-neutral-950"
                 >

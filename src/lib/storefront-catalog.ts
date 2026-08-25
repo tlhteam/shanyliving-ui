@@ -11,7 +11,6 @@ const categoryBySlug: Record<string, StorefrontProduct["category"]> = {
   dining: "dining",
   "dining-room": "dining",
   bedroom: "bedroom",
-  "new-arrivals": "new-arrivals",
 };
 
 export function mapCatalogProduct(

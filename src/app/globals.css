@@ -76,6 +76,8 @@ a {
   --color-card: var(--card);
   --color-foreground: var(--foreground);
   --color-background: var(--background);
+  --color-surface-cream: var(--surface-cream);
+  --color-whatsapp-brand: var(--whatsapp-brand);
   --radius-sm: calc(var(--radius) * 0.6);
   --radius-md: calc(var(--radius) * 0.8);
   --radius-lg: var(--radius);
@@ -121,6 +123,12 @@ a {
   --sidebar-accent-foreground: oklch(0.205 0 0);
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
+  --shadow-elevation-1: 0 1px 2px rgba(0, 0, 0, .05), 0 6px 16px rgba(0, 0, 0, .06);
+  --shadow-elevation-2: 0 3px 8px rgba(0, 0, 0, .08), 0 18px 36px rgba(0, 0, 0, .1);
+  --shadow-press: inset 0 1px 3px rgba(0, 0, 0, .18), inset 0 -1px 0 rgba(255, 255, 255, .5);
+  --surface-cream: #eee8df;
+  --placeholder-gradient: linear-gradient(135deg, #f7f3ec, #e4ddd2 48%, #f7f7f5);
+  --whatsapp-brand: #25d366;
 }
 
 .dark {

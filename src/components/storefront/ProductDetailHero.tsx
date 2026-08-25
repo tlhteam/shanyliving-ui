@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useMemo, useState } from "react";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { AppButton } from "@/components/app/AppButton";
 import { AppImage } from "@/components/app/AppImage";
 import { SiteIcon } from "@/components/icons/SiteIcon";
@@ -12,6 +12,7 @@ import { productCategoryHref } from "@/lib/categories";
 import { isCustomOrderCategory } from "@/lib/custom-order";
 import { fabrics } from "@/lib/fabrics";
 import { sofaConfigurations, sofaSizes } from "@/lib/sofa-options";
+import { localizedProductDescription, localizedProductName } from "@/lib/storefront-pages";
 import { buildProductQuoteMessage, buildSofaQuoteMessage, whatsappHref } from "@/lib/whatsapp";
 import type { StorefrontOptionGroup, StorefrontProduct } from "@/lib/storefront-pages";
 
@@ -77,20 +78,30 @@ function configurationSummary(groups?: StorefrontOptionGroup[]) {
 
 export function ProductDetailHero({ product, images }: ProductDetailHeroProps) {
   const t = useTranslations("storefront.detail");
+  const locale = useLocale();
+  const name = localizedProductName(product, locale);
+  const description = localizedProductDescription(product, locale);
   const { intro, specs } = useMemo(
-    () => parseDescription(product.description),
-    [product.description],
+    () => parseDescription(description),
+    [description],
   );
   const materials = specs.find((spec) => /material|care|fabric/i.test(spec.label))?.value;
 
   const [activeImage, setActiveImage] = useState(0);
   const [selectedColor, setSelectedColor] = useState(0);
+  const [selectedFabric, setSelectedFabric] = useState(0);
 
   const heroImage = images[activeImage] ?? images[0] ?? product.image;
   const isSofa = product.category === "sofas";
   const isCustomOrder = isCustomOrderCategory(product.category);
+  const selectedColorName = product.colorNames?.[selectedColor] ?? product.colors?.[selectedColor];
   const quoteMessage = isSofa
-    ? buildSofaQuoteMessage({ productName: product.name, productId: product.slug })
+    ? buildSofaQuoteMessage({
+        productName: product.name,
+        productId: product.slug,
+        fabric: fabrics[selectedFabric]?.name,
+        color: selectedColorName
+      })
     : buildProductQuoteMessage({ productName: product.name, productId: product.slug, category: product.subcategory, colorNames: product.colorNames });
   const quoteHref = whatsappHref(quoteMessage);
   const configuration = isSofa ? sofaConfigurations.join(", ") : configurationSummary(product.optionGroups);
@@ -114,7 +125,7 @@ export function ProductDetailHero({ product, images }: ProductDetailHeroProps) {
         <div className="relative aspect-square overflow-hidden rounded-lg bg-neutral-100 sm:aspect-[1.15/1] dark:bg-neutral-900">
           <AppImage
             src={heroImage}
-            alt={`${product.name} — ${t("angle", { number: activeImage + 1 })}`}
+            alt={`${name} — ${t("angle", { number: activeImage + 1 })}`}
             className="absolute inset-0"
             sizes="(max-width: 1024px) 100vw, 55vw"
             preload
@@ -151,12 +162,12 @@ export function ProductDetailHero({ product, images }: ProductDetailHeroProps) {
           <Link href={productCategoryHref[product.category] ?? "/sofas"}>{t(`collectionLabels.${product.category}`)}</Link>
           <SiteIcon name="chevron-right" className="size-3 rtl:rotate-180" />
           <span className="text-neutral-950 dark:text-neutral-50">
-            {product.name}
+            {name}
           </span>
         </nav>
 
         <h1 className="font-serif text-3xl leading-tight font-bold sm:text-4xl lg:text-5xl">
-          {product.name}
+          {name}
         </h1>
 
         {intro ? (
@@ -178,11 +189,20 @@ export function ProductDetailHero({ product, images }: ProductDetailHeroProps) {
               {t("fabricsLabel")}
             </p>
             <div className="mt-3 flex flex-wrap gap-3">
-              {fabrics.map((item) => (
-                <div key={item.name} className="text-center text-xs font-bold">
-                  <AppImage src={item.image} alt={item.name} className="size-14 rounded-md border border-neutral-200 dark:border-white/10" sizes="56px" />
+              {fabrics.map((item, index) => (
+                <button key={item.name} type="button" onClick={() => setSelectedFabric(index)} aria-current={index === selectedFabric} className="group text-center text-xs font-bold">
+                  <AppImage
+                    src={item.image}
+                    alt={item.name}
+                    className={`size-14 rounded-md border transition group-hover:scale-105 ${
+                      index === selectedFabric
+                        ? "border-neutral-950 ring-2 ring-neutral-950/15 dark:border-white dark:ring-white/25"
+                        : "border-neutral-200 dark:border-white/10"
+                    }`}
+                    sizes="56px"
+                  />
                   <span className="mt-1.5 block text-neutral-700 dark:text-neutral-300">{item.name}</span>
-                </div>
+                </button>
               ))}
             </div>
           </div>

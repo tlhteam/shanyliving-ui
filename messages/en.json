@@ -25,7 +25,9 @@
       "delete": "Delete"
     },
     "whatsappProductMessage": "Hi Shany Living, I would like details and a price for {product}.",
-    "whatsappDesignMessage": "Hi Shany Living, I built a sofa design and would like an exact quote."
+    "whatsappDesignMessage": "Hi Shany Living, I built a sofa design and would like an exact quote.",
+    "showPassword": "Show password",
+    "hidePassword": "Hide password"
   },
   "language": {
     "trigger": "Language",
@@ -87,8 +89,8 @@
     },
     "journey": {
       "eyebrow": "Customer journey",
-      "title": "How it works, from the ad to your living room",
-      "text": "Fourteen steps on the mobile flow, condensed into four phases you can follow at your own pace.",
+      "title": "How it works, from browsing to your living room",
+      "text": "Four phases you can follow at your own pace, from first look to final delivery.",
       "phases": {
         "discover": "Discover",
         "customize": "Customize",
@@ -108,8 +110,8 @@
       },
       "steps": {
         "home": {
-          "title": "Land on Shany Living",
-          "text": "The ad drops you straight onto the storefront."
+          "title": "See what's possible",
+          "text": "The homepage shows the full range — from ready-made pieces to a fully customized sofa."
         },
         "collection": {
           "title": "Browse the collection",
@@ -343,8 +345,7 @@
       "diningRoom": "Dining Room",
       "bedroom": "Bedroom",
       "coffeeTables": "Coffee Tables",
-      "chairs": "Chairs",
-      "newArrivals": "New Arrivals"
+      "chairs": "Chairs"
     },
     "serviceLinks": {
       "contact": "Contact",
@@ -417,8 +418,7 @@
         "sofas": "Sofas",
         "living-room": "Living Room",
         "dining": "Dining Room",
-        "bedroom": "Bedroom",
-        "new-arrivals": "New Arrivals"
+        "bedroom": "Bedroom"
       },
       "ready": "Ready to order",
       "trusted": "Trusted showroom pick",
@@ -499,11 +499,6 @@
         "eyebrow": "Quiet comfort",
         "title": "Bedroom",
         "description": "Beds, nightstands, dressers and accessories that make the bedroom feel finished."
-      },
-      "new-arrivals": {
-        "eyebrow": "Fresh pieces",
-        "title": "New Arrivals",
-        "description": "Latest showroom arrivals across sofas, bedroom, dining and living room collections."
       }
     },
     "detailPage": {
@@ -511,7 +506,7 @@
       "fabricTitle": "Choose Your Fabric",
       "fabricText": "Over 120 premium fabrics to choose from.",
       "fabricCta": "View all fabrics",
-      "related": "Similar Sofas",
+      "related": "You May Also Like",
       "consultAlt": "Custom sofa consultation",
       "consultTitle": "Custom Sofa, made for you",
       "consultText": "Choose your size, fabric, color and more. Our team is here to help you create the perfect sofa.",
@@ -565,7 +560,8 @@
     "increase": "Increase quantity",
     "decrease": "Decrease quantity",
     "summary": "Order summary",
-    "shippingReview": "Calculated after review"
+    "shippingReview": "Calculated after review",
+    "added": "{name} added to cart."
   },
   "checkout": {
     "title": "Checkout",
@@ -1829,7 +1825,8 @@
     },
     "google": "Continue with Google",
     "apple": "Continue with Apple",
-    "appleSoon": "Apple sign in is coming soon."
+    "appleSoon": "Apple sign in is coming soon.",
+    "soon": "Soon"
   },
   "notFound": {
     "eyebrow": "404",
@@ -2004,7 +2001,7 @@
     "signIn": "Sign In",
     "createAccount": "Create Account",
     "signInText": "Create an account or sign in so this design appears in your Saved Designs panel.",
-    "continueTo": "Continue to {step}",
+    "next": "Next",
     "backTo": "Back to {step}"
   }
 }

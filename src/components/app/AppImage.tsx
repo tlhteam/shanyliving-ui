@@ -29,7 +29,7 @@ export function AppImage({
   const usesNativeImage = resolvedSrc?.startsWith("data:") || resolvedSrc?.startsWith("blob:");
 
   return (
-    <div className={cn("relative overflow-hidden bg-[linear-gradient(135deg,#f7f3ec,#e4ddd2_48%,#f7f7f5)]", className)}>
+    <div className={cn("relative overflow-hidden bg-[image:var(--placeholder-gradient)]", className)}>
       {resolvedSrc && usesNativeImage ? (
         <div
           role="img"

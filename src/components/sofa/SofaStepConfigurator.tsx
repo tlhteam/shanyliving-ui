@@ -14,10 +14,12 @@ import { SiteIcon } from "@/components/icons/SiteIcon";
 import { SofaBlockDiagram } from "@/components/sofa/SofaBlockDiagram";
 import { WhatsappIcon } from "@/components/icons/WhatsappIcon";
 import { StickyContactBar } from "@/components/storefront/StickyContactBar";
+import { useCustomerMutation } from "@/hooks/use-customer";
 import { fabrics } from "@/lib/fabrics";
 import { sofaConfigurations as configurations, sofaSizes as sizes } from "@/lib/sofa-options";
 import { getStorefrontProduct, storefrontProducts } from "@/lib/storefront-pages";
 import { buildSofaQuoteMessage, generateConfigId, whatsappHref } from "@/lib/whatsapp";
+import type { CustomerSavedDesign } from "@/types/customer";
 const colors = [
   { name: "Light Beige", value: "#eee9df" },
   { name: "Sand", value: "#d9d4ca" },
@@ -106,6 +108,27 @@ export function SofaStepConfigurator() {
     window.open(quoteHref, "_blank");
   };
 
+  const saveDesignMutation = useCustomerMutation<void, CustomerSavedDesign>(
+    "saved-designs",
+    () => ({
+      path: "/customer/saved-designs",
+      options: {
+        method: "POST",
+        body: {
+          title: product.name,
+          status: "in_progress",
+          configuration: JSON.stringify({ product: product.name, style: configuration, color: color.name }),
+          fabric: fabric.name,
+          size: sizeSummary,
+          extras: "",
+          image: product.image,
+          notes: ""
+        }
+      }
+    }),
+    { successMessage: t("toasts.saved") }
+  );
+
   const saveDesign = () => {
     if (!session?.user) {
       setAuthOpen(true);
@@ -117,7 +140,7 @@ export function SofaStepConfigurator() {
       return;
     }
 
-    toast.success(t("toasts.saved"));
+    saveDesignMutation.mutate();
   };
 
   const handleRoomUpload = async (event: ChangeEvent<HTMLInputElement>) => {
@@ -165,7 +188,7 @@ export function SofaStepConfigurator() {
             setProduct(item);
             if (advanceOnSelect) setStep(2);
           }}
-          className={`w-full overflow-hidden rounded-lg border bg-white p-2 transition hover:-translate-y-0.5 hover:shadow-md dark:bg-neutral-900 ${product.slug === item.slug ? "border-neutral-950 dark:border-white" : "border-neutral-200 dark:border-white/10"}`}
+          className={`w-full overflow-hidden rounded-2xl bg-white p-2 shadow-[var(--shadow-elevation-1)] transition duration-200 hover:shadow-[var(--shadow-elevation-2)] dark:border dark:border-white/10 dark:bg-neutral-900 ${product.slug === item.slug ? "scale-[0.98] shadow-[var(--shadow-press)] ring-2 ring-neutral-950 dark:ring-white" : ""}`}
         >
           <AppImage src={item.image} alt={item.name} className="aspect-[2.4/1] rounded-md" sizes="(max-width: 1024px) 100vw, 320px" />
           <p className="mt-2 text-center text-sm font-bold">{item.name.replace(" Sofa", "")}</p>
@@ -258,7 +281,7 @@ export function SofaStepConfigurator() {
       {[1, 2, 3, 4].map((item) => (
         <button key={item} type="button" onClick={() => setStep(item as 1 | 2 | 3 | 4)} className="relative z-10 flex flex-col items-center gap-1.5">
           <span
-            className={`grid size-9 place-items-center rounded-full border bg-white text-sm font-bold transition hover:scale-105 dark:bg-neutral-950 ${step === item ? "border-neutral-950 bg-neutral-950 text-white dark:border-white dark:bg-white dark:text-neutral-950" : "border-neutral-300 text-neutral-600 dark:border-white/20 dark:text-neutral-300"}`}
+            className={`grid size-9 place-items-center rounded-full border text-sm font-bold transition hover:scale-105 ${step === item ? "border-neutral-950 bg-neutral-950 text-white dark:border-white dark:bg-white dark:text-neutral-950" : "border-neutral-300 bg-white text-neutral-600 dark:border-white/20 dark:bg-neutral-950 dark:text-neutral-300"}`}
           >
             {item}
           </span>
@@ -420,7 +443,7 @@ export function SofaStepConfigurator() {
               {t("customNote")}
             </p>
             <AppButton className="mt-5 w-full" onClick={() => setStep((step + 1) as 1 | 2 | 3 | 4)}>
-              {t("continueTo", { step: t(`steps.${stepKeys[step + 1]}`) })}
+              {t("next")}
             </AppButton>
             {step > 1 ? (
               <button
@@ -458,7 +481,7 @@ export function SofaStepConfigurator() {
                 <SiteIcon name="phone" className="size-4" /> {t("callForPrice")}
               </AppButton>
             </Link>
-            <AppButton variant="outline" className="mt-3 w-full gap-2" onClick={saveDesign}><SiteIcon name="heart" className="size-4" /> {t("saveDesign")}</AppButton>
+            <AppButton variant="outline" className="mt-3 w-full gap-2" loading={saveDesignMutation.isPending} onClick={saveDesign}><SiteIcon name="heart" className="size-4" /> {t("saveDesign")}</AppButton>
             <AppButton variant="outline" className="mt-3 w-full" onClick={() => setRoomMode(true)}>{t("seeInRoom")}</AppButton>
           </section>
         ) : null}
@@ -549,7 +572,7 @@ export function SofaStepConfigurator() {
 
               {step < 4 ? (
                 <AppButton className="mt-5 w-full" onClick={() => setStep((step + 1) as 1 | 2 | 3 | 4)}>
-                  {t("continueTo", { step: t(`steps.${stepKeys[step + 1]}`) })}
+                  {t("next")}
                 </AppButton>
               ) : (
                 <>
@@ -561,7 +584,7 @@ export function SofaStepConfigurator() {
                       <SiteIcon name="phone" className="size-4" /> {t("callForPrice")}
                     </AppButton>
                   </Link>
-                  <AppButton variant="outline" className="mt-3 w-full gap-2" onClick={saveDesign}><SiteIcon name="heart" className="size-4" /> {t("saveDesign")}</AppButton>
+                  <AppButton variant="outline" className="mt-3 w-full gap-2" loading={saveDesignMutation.isPending} onClick={saveDesign}><SiteIcon name="heart" className="size-4" /> {t("saveDesign")}</AppButton>
                   <AppButton variant="outline" className="mt-3 w-full" onClick={() => setRoomMode(true)}>{t("seeInRoom")}</AppButton>
                 </>
               )}

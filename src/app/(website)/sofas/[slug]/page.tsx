@@ -34,13 +34,9 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
     notFound();
   }
 
-  const related = storefrontProducts.filter((item) => item.slug !== product.slug).slice(0, 5);
+  const related = storefrontProducts.filter((item) => item.slug !== product.slug && item.category === product.category).slice(0, 5);
   const relatedMobileSlug = mobileVisibleSlug(related);
-  const galleryImages = (
-    product.galleryImages?.length
-      ? product.galleryImages
-      : [product.image, "/images/sofa-luna.png", "/images/sofa-noa.png", "/images/sofa-ella.png", "/images/look-modern-elegance.png"]
-  ).filter(isUsableImagePath);
+  const galleryImages = (product.galleryImages?.length ? product.galleryImages : [product.image]).filter(isUsableImagePath);
 
   return (
     <>
@@ -64,14 +60,16 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
 
       <Testimonials />
 
-      <AppSection>
-        <h2 className="font-serif text-xl font-bold sm:text-2xl">{t("related")}</h2>
-        <div className="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-5">
-          {related.map((item) => (
-            <ProductCard key={item.slug} product={item} className={mobileOnlyClass(item.slug, relatedMobileSlug)} />
-          ))}
-        </div>
-      </AppSection>
+      {related.length > 0 ? (
+        <AppSection>
+          <h2 className="font-serif text-xl font-bold sm:text-2xl">{t("related")}</h2>
+          <div className="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-5">
+            {related.map((item) => (
+              <ProductCard key={item.slug} product={item} className={mobileOnlyClass(item.slug, relatedMobileSlug)} />
+            ))}
+          </div>
+        </AppSection>
+      ) : null}
     </>
   );
 }
