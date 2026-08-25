@@ -4,6 +4,8 @@ import { appointments } from "@/lib/admin-data";
 export default function Page() {
   return (
     <AdminResourcePage
+      resourceKey="appointments"
+      groupKey="people"
       eyebrow="People"
       title="Appointments"
       description="Coordinate showroom consultations, fabric reviews and quote follow-up visits."

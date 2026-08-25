@@ -72,6 +72,7 @@ export function CustomerTopbar({ title, subtitle }: { title: string; subtitle?: 
 }
 
 export function CustomerShell({ children, defaultCollapsed = false }: { children: React.ReactNode; defaultCollapsed?: boolean }) {
+  const common = useTranslations("common");
   const { data: session } = useSession();
   const [collapsed, setCollapsed] = useState(defaultCollapsed);
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -121,7 +122,7 @@ export function CustomerShell({ children, defaultCollapsed = false }: { children
               </SheetTrigger>
               <SheetContent side="left" className="w-80 max-w-[86vw] bg-white p-0">
                 <SheetHeader>
-                  <SheetTitle>My account</SheetTitle>
+                  <SheetTitle>{common("myAccount")}</SheetTitle>
                 </SheetHeader>
                 <div className="min-h-0 flex-1 overflow-y-auto px-4 pb-6">
                   <CustomerNav onNavigate={() => setMobileOpen(false)} />
@@ -131,8 +132,8 @@ export function CustomerShell({ children, defaultCollapsed = false }: { children
             <AppLogo className="dark:hidden lg:hidden" imageClassName="w-28" />
             <AppLogo variant="light" className="hidden dark:inline-flex lg:hidden" imageClassName="w-28" />
             <div className="hidden min-w-0 lg:block">
-              <p className="text-sm font-bold uppercase tracking-[0.16em] text-neutral-500">My Account</p>
-              <p className="truncate text-xs text-neutral-500">Orders, designs, wishlist and messages</p>
+              <p className="text-sm font-bold uppercase tracking-[0.16em] text-neutral-500">{common("myAccount")}</p>
+              <p className="truncate text-xs text-neutral-500">{common("accountHint")}</p>
             </div>
           </div>
           <div className="flex shrink-0 items-center gap-2 sm:gap-3">

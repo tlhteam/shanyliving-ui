@@ -1,6 +1,7 @@
 "use client";
 
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useTranslations } from "next-intl";
 import { useRef, useState } from "react";
 import { toast } from "sonner";
 import { Check, FileText, Search, Upload } from "lucide-react";
@@ -28,6 +29,7 @@ export function MediaPicker({
   folder = "products",
   title = "Select image",
 }: MediaPickerProps) {
+  const ts = useTranslations("adminPanel.shell");
   const { request, token } = useApi();
   const queryClient = useQueryClient();
   const fileInput = useRef<HTMLInputElement>(null);
@@ -130,7 +132,7 @@ export function MediaPicker({
             <input
               value={search}
               onChange={(event) => setSearch(event.target.value)}
-              placeholder="Search files"
+              placeholder={ts("searchFiles")}
               className="h-10 min-w-0 flex-1 bg-transparent text-sm outline-none"
             />
           </div>

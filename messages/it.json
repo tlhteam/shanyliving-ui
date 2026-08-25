@@ -6,7 +6,26 @@
     "priceFrom": "A partire da ₪ {price}",
     "price": "₪ {price}",
     "saveItem": "Salva {name}",
-    "askAbout": "Chiedi informazioni su {name}"
+    "askAbout": "Chiedi informazioni su {name}",
+    "whatsappMessage": "Ciao Shany Living, vorrei aiuto per scegliere un divano.",
+    "whatsappShowroomMessage": "Ciao Shany Living, vorrei prenotare una visita allo showroom.",
+    "notifications": "Notifiche",
+    "unreadCount": "{count} non lette",
+    "noNotifications": "Nessuna notifica.",
+    "viewAll": "Vedi tutto",
+    "myAccount": "Il mio account",
+    "accountHint": "Ordini, progetti, preferiti e messaggi",
+    "confirm": {
+      "title": "Elimina record",
+      "thisRecord": "questo record",
+      "hint": "Digita {value} per confermare l'eliminazione di {item}.",
+      "warning": "Serve a evitare eliminazioni accidentali.",
+      "body": "Eliminando {item} verra rimosso da questa lista admin.",
+      "cancel": "Annulla",
+      "delete": "Elimina"
+    },
+    "whatsappProductMessage": "Ciao Shany Living, vorrei dettagli e un prezzo per {product}.",
+    "whatsappDesignMessage": "Ciao Shany Living, ho creato un progetto di divano e vorrei un preventivo esatto."
   },
   "language": {
     "trigger": "Lingua",
@@ -386,7 +405,11 @@
       "availableIn": "Disponibile in {range}",
       "priceOnRequest": "Prezzo su richiesta",
       "customMade": "Su misura",
-      "viewCustomize": "Visualizza e personalizza"
+      "viewCustomize": "Vedi e personalizza",
+      "wishlist": "Salva {name}",
+      "quoteOnly": "Questo articolo e disponibile su preventivo dello showroom. Scrivici pure.",
+      "adminBlocked": "Gli account admin non possono effettuare acquisti. Usa un account cliente.",
+      "added": "{name} aggiunto al carrello."
     },
     "detail": {
       "home": "Home",
@@ -493,6 +516,30 @@
       "consultTitle": "Divano su misura, per te",
       "consultText": "Scegli misura, tessuto, colore e altro. Il nostro team ti aiuta a creare il divano perfetto.",
       "consultCta": "Apri il configuratore"
+    },
+    "badges": {
+      "Best Seller": "Piu venduto",
+      "New": "Nuovo",
+      "Customizable": "Personalizzabile",
+      "Featured": "In evidenza",
+      "Showroom product": "Prodotto showroom"
+    },
+    "options": {
+      "Left chaise": "Chaise sinistra",
+      "Right chaise": "Chaise destra",
+      "Standard sofa": "Divano standard",
+      "Sectional": "Componibile",
+      "Custom layout": "Layout su misura",
+      "Boucle": "Boucle",
+      "Linen": "Lino",
+      "Chenille": "Ciniglia",
+      "Velvet": "Velluto",
+      "Leather": "Pelle",
+      "Light Beige": "Beige chiaro",
+      "Sand": "Sabbia",
+      "Caramel": "Caramello",
+      "Espresso": "Espresso",
+      "Forest": "Foresta"
     }
   },
   "cart": {
@@ -576,7 +623,11 @@
       "payment": "Pagamento",
       "paymentPending": "In attesa del pagamento con il consulente",
       "shipping": "Indirizzo di consegna",
-      "view": "Vedi"
+      "view": "Vedi",
+      "filter": "Filtra",
+      "pending": "In attesa",
+      "viewDetails": "Vedi dettagli ordine",
+      "moving": "Il tuo ordine sta avanzando."
     },
     "dashboard": {
       "welcome": "Bentornato,",
@@ -911,7 +962,36 @@
       "error": "Impossibile caricare i record dall API.",
       "view": "Vedi",
       "edit": "Modifica",
-      "delete": "Elimina"
+      "delete": "Elimina",
+      "addTitle": "Aggiungi {resource}",
+      "editTitle": "Modifica {resource}",
+      "dialogHint": "Inserisci i dettagli del record. Questi campi valgono anche per il CRUD via API.",
+      "create": "Crea",
+      "saveChanges": "Salva modifiche",
+      "cancel": "Annulla",
+      "uploadImage": "Carica immagine",
+      "uploadImages": "Carica immagini",
+      "addImage": "Aggiungi immagine",
+      "addImages": "Aggiungi immagini",
+      "imageHint": "PNG, JPG o WebP",
+      "noImage": "Nessuna immagine",
+      "removeImage": "Rimuovi immagine",
+      "showMore": "Mostra altro",
+      "showLess": "Mostra meno",
+      "actions": "Azioni",
+      "yes": "Si",
+      "no": "No",
+      "previous": "Precedente",
+      "next": "Successivo",
+      "pageOf": "Pagina {page} di {pages}",
+      "range": "{start}-{end} di {total}",
+      "listTitle": "Elenco {resource}",
+      "detailsTitle": "Dettagli {resource}",
+      "loadFailed": "Impossibile caricare {resource}",
+      "saved": "{resource} salvato",
+      "deleted": "{resource} eliminato",
+      "detailsOpened": "Dettagli di {resource} aperti",
+      "refreshed": "Dati {resource} aggiornati"
     },
     "mailbox": {
       "title": "Email",
@@ -1133,6 +1213,301 @@
       "uploaded": "File caricato.",
       "deleted": "Media eliminato.",
       "updated": "Media aggiornato."
+    },
+    "columns": {
+      "id": "ID",
+      "sku": "SKU",
+      "name": "Nome",
+      "product": "Prodotto",
+      "slug": "Slug",
+      "image": "Immagine principale",
+      "gallery": "Galleria",
+      "textureImage": "Immagine texture",
+      "swatch": "Campione",
+      "category": "Categoria",
+      "subcategory": "Sottocategoria",
+      "price": "Prezzo",
+      "startingPrice": "Prezzo iniziale",
+      "variants": "Varianti",
+      "description": "Descrizione",
+      "features": "Caratteristiche",
+      "colors": "Codici colore",
+      "production": "Produzione",
+      "status": "Stato",
+      "customizable": "Personalizzabile",
+      "products": "Prodotti",
+      "sortOrder": "Ordine",
+      "visibility": "Visibilita",
+      "family": "Famiglia",
+      "fabric": "Tessuto",
+      "priceTier": "Fascia di prezzo",
+      "shade": "Tonalita",
+      "reference": "Riferimento",
+      "customer": "Cliente",
+      "structure": "Struttura",
+      "size": "Misura",
+      "source": "Fonte",
+      "value": "Valore",
+      "phone": "Telefono",
+      "saved": "Salvati",
+      "lastActivity": "Ultima attivita",
+      "event": "Evento",
+      "count": "Conteggio",
+      "trend": "Tendenza",
+      "priority": "Priorita",
+      "date": "Data",
+      "time": "Ora",
+      "purpose": "Scopo",
+      "card": "Carta",
+      "balance": "Saldo",
+      "redeemedBy": "Riscattata da",
+      "code": "Codice",
+      "color": "Colore",
+      "role": "Ruolo",
+      "created": "Creato",
+      "user": "Utente",
+      "email": "Email",
+      "title": "Titolo",
+      "folder": "Cartella",
+      "alt": "Testo alternativo"
+    },
+    "values": {
+      "Active": "Attivo",
+      "Draft": "Bozza",
+      "Visible": "Visibile",
+      "Hidden": "Nascosto",
+      "Made to Order": "Su ordinazione",
+      "Available Now": "Disponibile",
+      "Premium": "Premium",
+      "Standard": "Standard",
+      "Yes": "Si",
+      "No": "No",
+      "High": "Alta",
+      "Critical": "Critica",
+      "Booked": "Prenotato",
+      "Pending": "In attesa",
+      "No variants": "Nessuna variante",
+      "Not applicable": "Non applicabile"
+    },
+    "groups": {
+      "overview": "Panoramica",
+      "catalog": "Catalogo",
+      "salesFlow": "Flusso vendite",
+      "people": "Persone",
+      "content": "Contenuti",
+      "system": "Sistema",
+      "account": "Account"
+    },
+    "pages": {
+      "products": {
+        "title": "Prodotti",
+        "description": "Gestisci modelli di divani, prodotti in stock, prezzi, misure disponibili e personalizzazione.",
+        "action": "Aggiungi prodotto",
+        "singular": "prodotto"
+      },
+      "categories": {
+        "title": "Categorie",
+        "description": "Organizza la navigazione dello store e mostra le categorie solo quando hanno abbastanza prodotti.",
+        "action": "Aggiungi categoria",
+        "singular": "categoria"
+      },
+      "fabrics": {
+        "title": "Tessuti",
+        "description": "Gestisci le famiglie di tessuti mostrate nel configuratore semplice.",
+        "action": "Aggiungi tessuto",
+        "singular": "tessuto"
+      },
+      "colors": {
+        "title": "Colori",
+        "description": "Gestisci le famiglie di colori e le tonalita consigliate prima della conferma via WhatsApp.",
+        "action": "Aggiungi colore",
+        "singular": "colore"
+      },
+      "configurations": {
+        "title": "Configurazioni",
+        "description": "Rivedi le selezioni salvate con modello, struttura, misura, tessuto, colore e stato del lead.",
+        "action": "Crea configurazione",
+        "singular": "configurazione"
+      },
+      "leads": {
+        "title": "Lead",
+        "description": "Rivedi le conversazioni WhatsApp qualificate e porta ogni lead verso preventivo o vendita.",
+        "action": "Aggiungi lead",
+        "singular": "lead"
+      },
+      "customers": {
+        "title": "Clienti",
+        "description": "Traccia contatti, configurazioni salvate, appuntamenti e follow-up commerciale.",
+        "action": "Aggiungi cliente",
+        "singular": "cliente"
+      },
+      "appointments": {
+        "title": "Appuntamenti",
+        "description": "Coordina consulenze in showroom, revisioni tessuti e visite di follow-up.",
+        "action": "Prenota appuntamento",
+        "singular": "appuntamento"
+      },
+      "analytics": {
+        "title": "Analisi",
+        "description": "Traccia il percorso del cliente dalla visita pubblicitaria al configuratore e al clic WhatsApp.",
+        "action": "Esporta analisi",
+        "singular": "evento"
+      }
+    },
+    "dashboard": {
+      "title": "Dashboard",
+      "description": "Segui il percorso del cliente SHANY Living dalle visualizzazioni prodotto ai lead qualificati su WhatsApp.",
+      "action": "Crea report",
+      "stats": {
+        "products": "Prodotti",
+        "newLeads": "Nuovi lead",
+        "whatsappClicks": "Clic WhatsApp",
+        "wonLeads": "Lead vinti"
+      },
+      "flowTitle": "Processo commerciale",
+      "flow": {
+        "model": "Il cliente scegli il modello",
+        "options": "Sceglie misura, struttura, tessuto e colore",
+        "photo": "Foto della stanza (opzionale)",
+        "summary": "Riepilogo salvato con riferimento",
+        "whatsapp": "Intento WhatsApp registrato",
+        "quote": "Il team invia un preventivo o prenota lo showroom"
+      },
+      "leftTitle": "Cosa manca",
+      "left": {
+        "products": "Ai prodotti servono ancora le azioni di creazione, modifica, caricamento e ordinamento collegate al backend.",
+        "storefront": "Allo store pubblico servono ancora le pagine prodotto e il configuratore completo.",
+        "integrations": "Analisi, appuntamenti e media sono pronti come sezioni admin, ma servono integrazioni reali prima del lancio."
+      },
+      "featured": "Prodotti in evidenza",
+      "activeConfigurations": "Configurazioni attive",
+      "upcomingAppointments": "Appuntamenti in arrivo",
+      "priorityLeads": "Lead prioritari",
+      "keyEvents": "Eventi chiave",
+      "priority": "Priorita {priority}"
+    },
+    "giftCards": {
+      "title": "Gift card",
+      "description": "Crea gift card e crediti che i clienti possono riscattare.",
+      "add": "Aggiungi gift card",
+      "edit": "Modifica gift card",
+      "search": "Cerca codice, nome o cliente...",
+      "notRedeemed": "Non riscattata",
+      "empty": "Nessuna gift card trovata.",
+      "dialogHint": "I clienti riscattano le card attive dalla loro pagina Gift card.",
+      "cancel": "Annulla",
+      "save": "Salva gift card",
+      "code": "Codice",
+      "name": "Nome",
+      "initialBalance": "Saldo iniziale",
+      "currentBalance": "Saldo attuale",
+      "currency": "Valuta",
+      "active": "Attiva",
+      "paused": "In pausa",
+      "expired": "Scaduta",
+      "thisCard": "questa gift card",
+      "created": "Gift card creata.",
+      "updated": "Gift card aggiornata.",
+      "deleted": "Gift card eliminata."
+    },
+    "shell": {
+      "adminPanelTitle": "Pannello admin",
+      "adminPanelHint": "Catalogo, lead e operazioni showroom",
+      "adminMenu": "Admin SHANY",
+      "openMenu": "Apri menu",
+      "searchFiles": "Cerca file"
+    },
+    "settings": {
+      "title": "Impostazioni",
+      "description": "Configura i valori predefiniti dello store, i canali clienti, il tracciamento e i contenuti legali.",
+      "action": "Salva impostazioni",
+      "sectionsLabel": "Sezioni impostazioni",
+      "tabs": {
+        "general": "Generale",
+        "channels": "Canali",
+        "localization": "Localizzazione",
+        "tracking": "Tracciamento",
+        "legal": "Legale"
+      },
+      "generalTitle": "Impostazioni generali",
+      "generalDescription": "Gestisci i valori usati nel pannello admin, nell'area cliente e nello store pubblico.",
+      "update": "Aggiorna impostazioni",
+      "cards": {
+        "notifications": {
+          "title": "Notifiche",
+          "text": "Preferenze per ordini, messaggi, appuntamenti e avvisi admin."
+        },
+        "localization": {
+          "title": "Localizzazione",
+          "text": "Lingua, layout RTL, valuta e visualizzazione regionale."
+        },
+        "launch": {
+          "title": "Controlli di lancio",
+          "text": "Pagine legali, pixel di tracciamento e protezione account."
+        }
+      },
+      "groups": {
+        "storefront": {
+          "title": "Predefiniti dello store",
+          "description": "Controlla l'esperienza di acquisto pubblica e il comportamento pronto al lancio.",
+          "rows": {
+            "language": {
+              "label": "Lingua predefinita",
+              "value": "Ebraico RTL per il lancio"
+            },
+            "theme": {
+              "label": "Comportamento del tema",
+              "value": "Chiaro, scuro o di sistema scelto dal cliente"
+            },
+            "homepage": {
+              "label": "Contenuti della home",
+              "value": "Sezioni catalogo dinamiche, prodotti in evidenza, showroom"
+            }
+          }
+        },
+        "communication": {
+          "title": "Comunicazione con i clienti",
+          "description": "Tieni pronti i canali di contatto e le notifiche.",
+          "rows": {
+            "whatsapp": {
+              "label": "Numero WhatsApp",
+              "value": "Numero aziendale collegato"
+            },
+            "orders": {
+              "label": "Notifiche ordine",
+              "value": "Flusso di notifiche admin e cliente"
+            },
+            "replies": {
+              "label": "Risposte ai messaggi",
+              "value": "Conversazioni cliente e admin"
+            }
+          }
+        },
+        "compliance": {
+          "title": "Tracciamento e conformita",
+          "description": "Rivedi i requisiti analitici e legali prima del rilascio pubblico.",
+          "rows": {
+            "pixels": {
+              "label": "Pixel di tracciamento",
+              "value": "GA4, Meta, TikTok"
+            },
+            "legal": {
+              "label": "Pagine legali",
+              "value": "Privacy, accessibilita, termini"
+            },
+            "security": {
+              "label": "Sicurezza",
+              "value": "CAPTCHA, protezione account, controlli solo admin"
+            }
+          }
+        }
+      },
+      "statuses": {
+        "Planned": "Pianificato",
+        "Active": "Attivo",
+        "Required": "Richiesto",
+        "Needs review": "Da revisionare"
+      }
     }
   },
   "legal": {
@@ -1549,5 +1924,87 @@
         ]
       }
     ]
+  },
+  "customizer": {
+    "eyebrow": "Personalizza il tuo divano",
+    "steps": {
+      "model": "Modello",
+      "size": "Misura",
+      "fabric": "Tessuto e colore",
+      "review": "Riepilogo"
+    },
+    "modelTitle": "Scegli il modello",
+    "modelHint": "Seleziona il modello da personalizzare",
+    "sizeTitle": "Scegli la misura (larghezza)",
+    "sizeHint": "Tutte le misure sono approssimative",
+    "customSize": "Misura su richiesta",
+    "configuration": "Configurazione",
+    "fabricTitle": "Scegli il tessuto",
+    "fabricColorTitle": "Scegli tessuto e colore",
+    "colorTitle": "Scegli il colore - {fabric}",
+    "preview": "Anteprima",
+    "previewCaption": "{fabric} in {color}",
+    "previewHint": "Anteprima indicativa prima del riepilogo.",
+    "reviewTitle": "Rivedi il tuo progetto",
+    "reviewHint": "Ecco il tuo divano su misura",
+    "next": "Avanti",
+    "backToModel": "Torna al modello",
+    "backToSize": "Torna alla misura",
+    "backToFabric": "Torna al tessuto",
+    "totalPrice": "Prezzo totale",
+    "delivery": "Consegna stimata: 21-28 giorni",
+    "deliveryShort": "Consegna 21-28 giorni",
+    "customNote": "Ogni divano e realizzato su misura per te — ricevi il prezzo esatto da un consulente Shany Living.",
+    "reviewNote": "Il divano e personalizzato secondo le tue specifiche. Contattaci per il preventivo personale.",
+    "addToCart": "Aggiungi al carrello",
+    "saveDesign": "Salva configurazione",
+    "shareDesign": "Condividi progetto",
+    "seeInRoom": "Guardalo a casa mia (AI)",
+    "quoteWhatsapp": "Ricevi il preventivo su WhatsApp",
+    "callForPrice": "Chiama per prezzo e dettagli",
+    "summary": {
+      "model": "Modello",
+      "size": "Misura",
+      "configuration": "Configurazione",
+      "fabric": "Tessuto",
+      "color": "Colore"
+    },
+    "room": {
+      "back": "Torna al configuratore",
+      "title": "Guarda il divano nella tua stanza",
+      "subtitle": "Carica una foto del tuo spazio e vedi il risultato.",
+      "subtitleLong": "Carica una foto e guarda come sta {product} in {fabric}, {color}.",
+      "upload": "Carica foto della stanza",
+      "uploadHint": "JPG o PNG, scattata da dove andra il divano",
+      "uploaded": "Stanza caricata",
+      "tipsTitle": "Consigli per la foto",
+      "tips": {
+        "light": "Stanza ben illuminata",
+        "perspective": "Scatta dalla posizione del divano",
+        "clear": "Libera l'area"
+      },
+      "generating": "Generazione anteprima realistica...",
+      "generatingHint": "Combino divano, tessuto e luce",
+      "ready": "Perfetto!",
+      "readyHint": "{product} con {fabric}, {color}.",
+      "generate": "Genera risultato AI",
+      "talkToDesigner": "Parla con un designer",
+      "tryAnother": "Prova un'altra foto",
+      "poweredBy": "Powered by ShiputzAI",
+      "uploadFirst": "Carica prima una foto.",
+      "generated": "Anteprima generata."
+    },
+    "toasts": {
+      "adminBlocked": "Gli account admin non possono salvare progetti dei clienti.",
+      "saved": "Progetto salvato nel tuo account.",
+      "shareTitle": "Progetto divano Shany Living",
+      "copied": "Dettagli del progetto copiati."
+    },
+    "signInTitle": "Salva il tuo progetto",
+    "signIn": "Accedi",
+    "createAccount": "Crea account",
+    "signInText": "Crea un account o accedi per trovare questo progetto nei tuoi progetti salvati.",
+    "continueTo": "Continua con {step}",
+    "backTo": "Torna a {step}"
   }
 }

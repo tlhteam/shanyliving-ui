@@ -11,6 +11,7 @@ import { ProductCard } from "@/components/storefront/ProductCard";
 import { isCustomOrderCategory } from "@/lib/custom-order";
 import { isUsableImagePath } from "@/lib/media";
 import { mobileOnlyClass, mobileVisibleSlug } from "@/lib/mobile-catalog";
+import { whatsappHref } from "@/lib/whatsapp";
 import { cn } from "@/lib/utils";
 import type { StorefrontPage, StorefrontProduct } from "@/lib/storefront-pages";
 
@@ -144,6 +145,7 @@ export function ProductGridPage({ page, slug }: { page: StorefrontPage; slug?: s
   const t = useTranslations("storefront");
   const showPriceSort = !isCustomOrderCategory(slug);
   const availableSortOptions = showPriceSort ? sortOptions : sortOptions.filter((option) => option.value === "featured");
+  const common = useTranslations("common");
   const copy = (field: "title" | "eyebrow" | "description", fallback: string) => {
     const key = "pages." + (slug ?? "") + "." + field;
 
@@ -320,7 +322,12 @@ export function ProductGridPage({ page, slug }: { page: StorefrontPage; slug?: s
               <h2 className="font-serif text-xl font-bold sm:text-2xl">{t("help.title")}</h2>
               <p className="mt-2 max-w-2xl text-sm leading-6 text-neutral-700 dark:text-neutral-300">{t("help.text")}</p>
             </div>
-            <Link href="/showroom" className="block">
+            <Link
+              href={whatsappHref(common("whatsappMessage"))}
+              target="_blank"
+              rel="noreferrer noopener"
+              className="block"
+            >
               <AppButton className="w-full lg:w-auto">{t("help.cta")}</AppButton>
             </Link>
           </div>

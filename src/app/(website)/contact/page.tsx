@@ -1,12 +1,12 @@
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";
+import { whatsappHref } from "@/lib/whatsapp";
 import { AppButton } from "@/components/app/AppButton";
 import { AppImage } from "@/components/app/AppImage";
 import { AppSection } from "@/components/app/AppSection";
 import { SiteIcon, SiteIconName } from "@/components/icons/SiteIcon";
 import { WhatsappIcon } from "@/components/icons/WhatsappIcon";
 import { siteImages } from "@/lib/images";
-import { buildPhoneUrl, buildWhatsAppUrl } from "@/lib/whatsapp";
 
 const details = [
   { key: "showroom", icon: "map-pin" },
@@ -17,9 +17,8 @@ const details = [
 
 export default async function ContactPage() {
   const t = await getTranslations("contact");
-  const whatsappHref =
-    buildWhatsAppUrl(process.env.NEXT_PUBLIC_WHATSAPP_NUMBER, "היי שני ליווינג, אשמח לקבל פרטים נוספים.") ?? undefined;
-  const phoneHref = buildPhoneUrl(t("details.phone.value")) ?? undefined;
+  const common = await getTranslations("common");
+  const phoneHref = `tel:${t("details.phone.value").replace(/\D/g, "")}`;
   const emailHref = `mailto:${t("details.email.value")}`;
   const detailHrefs: Partial<Record<string, string>> = { phone: phoneHref, email: emailHref };
 
@@ -73,16 +72,14 @@ export default async function ContactPage() {
             })}
           </div>
           <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-            <Link href={whatsappHref ?? phoneHref ?? "/collections"} target={whatsappHref ? "_blank" : undefined} className="block">
+            <Link href={whatsappHref(common("whatsappMessage"))} target="_blank" rel="noreferrer noopener" className="block">
               <AppButton className="w-full gap-2 sm:w-auto"><WhatsappIcon className="size-4" /> {t("whatsappCta")}</AppButton>
             </Link>
-            {phoneHref ? (
-              <Link href={phoneHref} className="block">
-                <AppButton variant="outline" className="w-full gap-2 sm:w-auto">
-                  <SiteIcon name="phone" className="size-4" /> {t("callCta")}
-                </AppButton>
-              </Link>
-            ) : null}
+            <Link href={phoneHref} className="block">
+              <AppButton variant="outline" className="w-full gap-2 sm:w-auto">
+                <SiteIcon name="phone" className="size-4" /> {t("callCta")}
+              </AppButton>
+            </Link>
             <Link href="/collections"><AppButton variant="outline" className="w-full sm:w-auto">{t("browseCta")}</AppButton></Link>
           </div>
         </div>

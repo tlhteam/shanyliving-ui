@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";
+import { whatsappHref } from "@/lib/whatsapp";
 import { AppButton } from "@/components/app/AppButton";
 import { AppImage } from "@/components/app/AppImage";
 import { AppSection } from "@/components/app/AppSection";
@@ -31,6 +32,7 @@ const gallery = [
 export default async function ShowroomPage() {
   const t = await getTranslations("showroomPage");
   const contact = await getTranslations("contact.details");
+  const common = await getTranslations("common");
 
   return (
     <>
@@ -41,7 +43,7 @@ export default async function ShowroomPage() {
           <h1 className="max-w-2xl font-serif text-3xl leading-tight sm:text-5xl lg:text-6xl">{t("title")}</h1>
           <p className="mt-4 max-w-xl text-sm leading-6 text-white/90">{t("subtitle")}</p>
           <div className="mt-6 flex flex-col gap-3 sm:flex-row">
-            <Link href="#book" className="block">
+            <Link href={whatsappHref(common("whatsappShowroomMessage"))} target="_blank" rel="noreferrer noopener" className="block">
               <AppButton className="w-full gap-2 sm:w-auto"><SiteIcon name="message" className="size-4" /> {t("whatsapp")}</AppButton>
             </Link>
             <Link href="#book" className="block">
@@ -98,8 +100,12 @@ export default async function ShowroomPage() {
               <p><bdi>{contact("hours.value")}</bdi></p>
             </div>
             <div className="mt-6 flex flex-col gap-3 sm:flex-row">
-              <AppButton className="w-full sm:w-auto">{t("whatsapp")}</AppButton>
-              <AppButton variant="outline" className="w-full sm:w-auto">{t("book")}</AppButton>
+              <Link href={whatsappHref(common("whatsappShowroomMessage"))} target="_blank" rel="noreferrer noopener" className="block">
+                <AppButton className="w-full sm:w-auto">{t("whatsapp")}</AppButton>
+              </Link>
+              <Link href="/contact" className="block">
+                <AppButton variant="outline" className="w-full sm:w-auto">{t("book")}</AppButton>
+              </Link>
             </div>
           </div>
           <div className="overflow-hidden rounded-lg border border-neutral-300 bg-white dark:border-white/15 dark:bg-neutral-950">

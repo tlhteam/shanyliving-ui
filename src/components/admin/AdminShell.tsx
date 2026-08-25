@@ -63,6 +63,7 @@ function AdminNav({ collapsed = false, onNavigate }: { collapsed?: boolean; onNa
 }
 
 export function AdminShell({ children, defaultCollapsed = false }: { children: React.ReactNode; defaultCollapsed?: boolean }) {
+  const ts = useTranslations("adminPanel.shell");
   const { data: session } = useSession();
   const [collapsed, setCollapsed] = useState(defaultCollapsed);
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -107,12 +108,12 @@ export function AdminShell({ children, defaultCollapsed = false }: { children: R
         <header className="sticky top-0 z-40 flex h-16 items-center justify-between gap-3 border-b border-neutral-200 bg-white/90 px-4 backdrop-blur dark:border-white/10 dark:bg-neutral-900/90 sm:px-6">
           <div className="flex min-w-0 items-center gap-3">
             <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
-              <SheetTrigger render={<Button variant="outline" size="icon" aria-label="Open menu" className="lg:hidden" />}>
+              <SheetTrigger render={<Button variant="outline" size="icon" aria-label={ts("openMenu")} className="lg:hidden" />}>
                 <Menu className="size-4" />
               </SheetTrigger>
               <SheetContent side="left" className="w-80 max-w-[86vw] p-0">
                 <SheetHeader>
-                  <SheetTitle>SHANY Admin</SheetTitle>
+                  <SheetTitle>{ts("adminMenu")}</SheetTitle>
                 </SheetHeader>
                 <div className="min-h-0 flex-1 overflow-y-auto px-4 pb-6">
                   <AdminNav onNavigate={() => setMobileOpen(false)} />
@@ -120,8 +121,8 @@ export function AdminShell({ children, defaultCollapsed = false }: { children: R
               </SheetContent>
             </Sheet>
             <div className="min-w-0">
-              <p className="text-sm font-bold uppercase tracking-[0.16em] text-neutral-500 dark:text-neutral-400">Admin Panel</p>
-              <p className="truncate text-xs text-neutral-500 dark:text-neutral-400">Catalog, leads and showroom operations</p>
+              <p className="text-sm font-bold uppercase tracking-[0.16em] text-neutral-500 dark:text-neutral-400">{ts("adminPanelTitle")}</p>
+              <p className="truncate text-xs text-neutral-500 dark:text-neutral-400">{ts("adminPanelHint")}</p>
             </div>
           </div>
           <div className="flex shrink-0 items-center gap-2">

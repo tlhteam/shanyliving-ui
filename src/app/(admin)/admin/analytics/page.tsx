@@ -4,6 +4,8 @@ import { analyticsEvents } from "@/lib/admin-data";
 export default function Page() {
   return (
     <AdminResourcePage
+      resourceKey="analytics"
+      groupKey="content"
       eyebrow="Content"
       title="Analytics"
       description="Track the customer path from ad visit to configurator completion and WhatsApp click."

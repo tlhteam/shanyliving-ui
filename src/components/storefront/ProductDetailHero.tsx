@@ -12,7 +12,7 @@ import { productCategoryHref } from "@/lib/categories";
 import { isCustomOrderCategory } from "@/lib/custom-order";
 import { fabrics } from "@/lib/fabrics";
 import { sofaConfigurations, sofaSizes } from "@/lib/sofa-options";
-import { buildProductQuoteMessage, buildSofaQuoteMessage, buildWhatsAppUrl } from "@/lib/whatsapp";
+import { buildProductQuoteMessage, buildSofaQuoteMessage, whatsappHref } from "@/lib/whatsapp";
 import type { StorefrontOptionGroup, StorefrontProduct } from "@/lib/storefront-pages";
 
 type ProductDetailHeroProps = {
@@ -92,7 +92,7 @@ export function ProductDetailHero({ product, images }: ProductDetailHeroProps) {
   const quoteMessage = isSofa
     ? buildSofaQuoteMessage({ productName: product.name, productId: product.slug })
     : buildProductQuoteMessage({ productName: product.name, productId: product.slug, category: product.subcategory, colorNames: product.colorNames });
-  const whatsappHref = buildWhatsAppUrl(process.env.NEXT_PUBLIC_WHATSAPP_NUMBER, quoteMessage) ?? "/contact";
+  const quoteHref = whatsappHref(quoteMessage);
   const configuration = isSofa ? sofaConfigurations.join(", ") : configurationSummary(product.optionGroups);
 
   const accordionItems = [
@@ -110,7 +110,7 @@ export function ProductDetailHero({ product, images }: ProductDetailHeroProps) {
 
   return (
     <div className={`grid gap-8 lg:grid-cols-[1.1fr_0.9fr] ${isCustomOrder ? "pb-24 lg:pb-0" : ""}`}>
-      <section className="min-w-0">
+      <section className="min-w-0 self-start lg:sticky lg:top-24">
         <div className="relative aspect-square overflow-hidden rounded-lg bg-neutral-100 sm:aspect-[1.15/1] dark:bg-neutral-900">
           <AppImage
             src={heroImage}
@@ -271,7 +271,7 @@ export function ProductDetailHero({ product, images }: ProductDetailHeroProps) {
           </div>
         ) : isCustomOrder ? (
           <div className="mt-6">
-            <Link href={whatsappHref} target="_blank" className="block">
+            <Link href={quoteHref} target="_blank" className="block">
               <AppButton className="w-full gap-2">
                 <WhatsappIcon className="size-4" />
                 {t("requestCustomOrder")}
@@ -284,7 +284,7 @@ export function ProductDetailHero({ product, images }: ProductDetailHeroProps) {
 
         {isSofa ? (
           <div className="mt-4 hidden lg:block">
-            <Link href={whatsappHref} target="_blank" className="block">
+            <Link href={quoteHref} target="_blank" className="block">
               <AppButton variant="outline" className="w-full gap-2">
                 <WhatsappIcon className="size-4" />
                 {t("whatsappForDetails")}
@@ -303,7 +303,7 @@ export function ProductDetailHero({ product, images }: ProductDetailHeroProps) {
         ) : null}
       </aside>
 
-      {isCustomOrder ? <StickyContactBar whatsappHref={whatsappHref} /> : null}
+      {isCustomOrder ? <StickyContactBar whatsappHref={quoteHref} /> : null}
     </div>
   );
 }

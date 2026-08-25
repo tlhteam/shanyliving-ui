@@ -4,6 +4,8 @@ import { customers } from "@/lib/admin-data";
 export default function Page() {
   return (
     <AdminResourcePage
+      resourceKey="customers"
+      groupKey="people"
       eyebrow="People"
       title="Customers"
       description="Track customer contact details, saved configurations, appointment activity and sales follow-up."

@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 import { Bell } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
@@ -21,6 +22,7 @@ type AppNotificationBellProps = {
 };
 
 export function AppNotificationBell({ items, viewAllHref, className }: AppNotificationBellProps) {
+  const t = useTranslations("common");
   const unread = items.filter((item) => item.unread).length;
 
   return (
@@ -49,8 +51,8 @@ export function AppNotificationBell({ items, viewAllHref, className }: AppNotifi
       <DropdownMenuContent align="end" className="w-80 max-w-[92vw]">
         <DropdownMenuGroup>
           <DropdownMenuLabel className="flex items-center justify-between gap-2">
-            <span className="text-xs font-bold uppercase tracking-wide text-neutral-500">Notifications</span>
-            {unread ? <span className="text-xs font-semibold text-neutral-500">{unread} unread</span> : null}
+            <span className="text-xs font-bold uppercase tracking-wide text-neutral-500">{t("notifications")}</span>
+            {unread ? <span className="text-xs font-semibold text-neutral-500">{t("unreadCount", { count: unread })}</span> : null}
           </DropdownMenuLabel>
           <DropdownMenuSeparator />
           {items.length ? (
@@ -65,13 +67,13 @@ export function AppNotificationBell({ items, viewAllHref, className }: AppNotifi
               </DropdownMenuItem>
             ))
           ) : (
-            <p className="px-2 py-6 text-center text-sm text-neutral-500">No notifications yet.</p>
+            <p className="px-2 py-6 text-center text-sm text-neutral-500">{t("noNotifications")}</p>
           )}
           {viewAllHref ? (
             <>
               <DropdownMenuSeparator />
               <DropdownMenuItem render={<Link href={viewAllHref} />} className="justify-center text-sm font-bold">
-                View all
+                {t("viewAll")}
               </DropdownMenuItem>
             </>
           ) : null}

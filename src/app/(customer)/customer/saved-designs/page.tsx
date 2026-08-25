@@ -10,6 +10,7 @@ import { AppConfirmationDialog } from "@/components/app/AppConfirmationDialog";
 import { AppDialog } from "@/components/app/AppDialog";
 import { AppImage } from "@/components/app/AppImage";
 import { CustomerTopbar } from "@/components/customer/CustomerShell";
+import { whatsappHref } from "@/lib/whatsapp";
 import { useCustomerMutation, useCustomerQuery } from "@/hooks/use-customer";
 import type { CustomerSavedDesign } from "@/types/customer";
 
@@ -54,6 +55,7 @@ function configurationSummary(design: CustomerSavedDesign) {
 
 export default function SavedDesignsPage() {
   const t = useTranslations("customer.savedDesigns");
+  const common = useTranslations("common");
   const [open, setOpen] = useState(false);
   const [editing, setEditing] = useState<CustomerSavedDesign | null>(null);
   const [viewing, setViewing] = useState<CustomerSavedDesign | null>(null);
@@ -185,7 +187,7 @@ export default function SavedDesignsPage() {
 
       <AppCard className="mt-5 flex flex-col gap-4 p-5 sm:flex-row sm:items-center sm:justify-between">
         <div className="flex items-center gap-3"><Headphones className="size-8" /><div><p className="font-bold">{t("helpTitle")}</p><p className="text-sm text-neutral-600 dark:text-neutral-400">{t("helpText")}</p></div></div>
-        <Link href="/showroom" className="block"><AppButton className="w-full sm:w-auto">{t("helpCta")}</AppButton></Link>
+        <Link href={whatsappHref(common("whatsappDesignMessage"))} target="_blank" rel="noreferrer noopener" className="block"><AppButton className="w-full sm:w-auto">{t("helpCta")}</AppButton></Link>
       </AppCard>
 
       <AppDialog

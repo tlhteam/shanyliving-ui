@@ -33,6 +33,8 @@ function mapCategoryRow(row: Record<string, unknown>): AdminRow {
 export function CategoriesAdminClient() {
   return (
     <AdminResourcePage
+      resourceKey="categories"
+      groupKey="catalog"
       eyebrow="Catalog"
       title="Categories"
       description="Organize storefront navigation and keep MVP categories visible only when they have enough products."

@@ -15,6 +15,7 @@ import { Testimonials } from "@/components/storefront/Testimonials";
 import { categoryHrefBySlug, primaryCategorySlugs } from "@/lib/categories";
 import { categoryImage, siteImages } from "@/lib/images";
 import { getStorefrontProduct, type StorefrontProduct } from "@/lib/storefront-pages";
+import { whatsappHref } from "@/lib/whatsapp";
 import type { HomeCatalog, CatalogCategory } from "@/lib/catalog";
 
 const featuredSlugs = ["lian-sofa", "elysian-cloud-living-set", "heritage-oak-dining-set", "imperial-luxe-channel-bed"];
@@ -58,8 +59,8 @@ function CategoryTile({ category, index, circular = false }: { category: Catalog
 export function HomeExperience({ catalog, fromSocial = false }: { catalog: HomeCatalog; fromSocial?: boolean }) {
   const t = useTranslations("home");
   const tAbout = useTranslations("about");
-  const whatsappNumber = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER?.replace(/\D/g, "");
-  const whatsappHref = whatsappNumber ? `https://wa.me/${whatsappNumber}` : "/contact";
+  const common = useTranslations("common");
+  const whatsappLink = whatsappHref(common("whatsappMessage"));
   const categories = catalog.categories.filter((category) => primaryCategorySlugs.includes(category.slug));
   const featuredProducts = featuredSlugs
     .map((slug) => getStorefrontProduct(slug))
@@ -220,8 +221,8 @@ export function HomeExperience({ catalog, fromSocial = false }: { catalog: HomeC
 
       <Link
         aria-label={t("whatsappFloating")}
-        href={whatsappHref}
-        target={whatsappNumber ? "_blank" : undefined}
+        href={whatsappLink}
+        target="_blank"
         className="fixed bottom-20 end-4 z-40 inline-flex items-center gap-2 whitespace-nowrap rounded-full bg-[#25d366] px-4 py-3 text-xs font-bold text-white shadow-lg transition hover:scale-105 sm:bottom-6 sm:end-6 sm:text-sm"
       >
         <WhatsappIcon className="size-6 shrink-0 sm:size-7" />

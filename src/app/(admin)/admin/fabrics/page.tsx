@@ -4,6 +4,8 @@ import { fabrics } from "@/lib/admin-data";
 export default function Page() {
   return (
     <AdminResourcePage
+      resourceKey="fabrics"
+      groupKey="catalog"
       eyebrow="Catalog"
       title="Fabrics"
       description="Manage fabric families shown in the simple configurator before detailed showroom guidance."

@@ -30,12 +30,12 @@ export function ProductBuyActions({ product, compact = false }: { product: Store
 
   const handleAdd = () => {
     if (isQuoteOnly) {
-      toast.info("This item is available by showroom quote. Please ask about this piece.");
+      toast.info(t("quoteOnly"));
       return;
     }
 
     if (session?.user?.role === "admin") {
-      toast.error("Admin accounts cannot create storefront transactions. Please use a customer account.");
+      toast.error(t("adminBlocked"));
       return;
     }
 
@@ -45,7 +45,7 @@ export function ProductBuyActions({ product, compact = false }: { product: Store
       fabric: product.category === "sofas" ? "Boucle" : undefined,
       color: product.colors?.[0]
     });
-    toast.success(`${product.name} added to cart.`);
+    toast.success(t("added", { name: product.name }));
     openCart();
   };
 

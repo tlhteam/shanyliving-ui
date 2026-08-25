@@ -7,7 +7,7 @@ import { SiteIcon, SiteIconName } from "@/components/icons/SiteIcon";
 import { WhatsappIcon } from "@/components/icons/WhatsappIcon";
 import { AppLogo } from "@/components/layout/AppLogo";
 import { paymentMethods, siteImages } from "@/lib/images";
-import { buildPhoneUrl, buildWhatsAppUrl } from "@/lib/whatsapp";
+import { whatsappHref } from "@/lib/whatsapp";
 
 const shopLinks = [
   { key: "sofas", href: "/sofas" },
@@ -40,12 +40,16 @@ const contactRows = [
 
 export async function AppFooter() {
   const t = await getTranslations("footer");
+  const common = await getTranslations("common");
   const instagramUrl = process.env.NEXT_PUBLIC_INSTAGRAM_URL ?? "https://www.instagram.com/shanyliving";
-  const phoneHref = buildPhoneUrl(t("contactRows.phone")) ?? undefined;
+  const phoneDigits = t("contactRows.phone").replace(/\D/g, "");
+  const phoneHref = phoneDigits ? `tel:${phoneDigits}` : undefined;
   const emailHref = `mailto:${t("contactRows.email")}`;
-  const whatsappHref =
-    buildWhatsAppUrl(process.env.NEXT_PUBLIC_WHATSAPP_NUMBER, "היי שני ליווינג, אשמח לקבל פרטים נוספים.") ?? undefined;
-  const contactRowHrefs: Partial<Record<string, string>> = { phone: phoneHref, email: emailHref, whatsapp: whatsappHref };
+  const contactRowHrefs: Partial<Record<string, string>> = {
+    phone: phoneHref,
+    email: emailHref,
+    whatsapp: whatsappHref(common("whatsappMessage"))
+  };
 
   return (
     <footer className="bg-neutral-950 text-neutral-300">

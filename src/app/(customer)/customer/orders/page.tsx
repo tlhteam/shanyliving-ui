@@ -115,7 +115,7 @@ export default function CustomerOrdersPage() {
             setSearch(event.target.value);
             setPage(1);
           }} placeholder={t("search")} className="h-10 w-full rounded-md border border-neutral-300 bg-white px-3 text-sm outline-none focus:border-neutral-950 dark:border-white/15 dark:bg-neutral-950 dark:focus:border-white lg:w-72" />
-          <AppButton variant="outline" className="gap-2"><SlidersHorizontal className="size-4" /> Filter</AppButton>
+          <AppButton variant="outline" className="gap-2"><SlidersHorizontal className="size-4" /> {t("filter")}</AppButton>
         </div>
       </div>
 
@@ -175,24 +175,25 @@ export default function CustomerOrdersPage() {
                 const currentStage = resolveStageIndex(selected);
                 const isDone = index < currentStage;
                 const isCurrent = index === currentStage;
+                const isReached = isDone || isCurrent;
 
                 return (
                   <div key={step} className="grid grid-cols-[20px_1fr_auto] gap-3 pb-4 text-sm">
-                    <span className={`mt-1 size-3 rounded-full ${isDone || isCurrent ? "bg-black dark:bg-white" : "border border-neutral-400 bg-white dark:bg-neutral-950"}`} />
+                    <span className={`mt-1 size-3 rounded-full ${isReached ? "bg-black dark:bg-white" : "border border-neutral-400 bg-white dark:bg-neutral-950"}`} />
                     <span>
                       <span className="block font-bold">{step}</span>
                       <span className="text-xs text-neutral-600 dark:text-neutral-400">
-                        {isDone ? "Completed" : isCurrent ? "In progress" : "Pending"}
+                        {isReached ? t("moving") : t("pending")}
                       </span>
                     </span>
                     <span className="text-xs text-neutral-500 dark:text-neutral-400">
-                      {index === 0 && selected.placed_at ? new Date(selected.placed_at).toLocaleDateString() : "—"}
+                      {index === 0 && selected.placed_at ? formatDate(selected.placed_at, locale) : t("pending")}
                     </span>
                   </div>
                 );
               })}
             </div>
-            <AppButton className="mt-2 w-full">View Order Details</AppButton>
+            <AppButton className="mt-2 w-full">{t("viewDetails")}</AppButton>
           </AppCard>
         </div>
       ) : null}
