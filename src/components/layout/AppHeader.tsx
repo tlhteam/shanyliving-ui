@@ -10,7 +10,6 @@ import { AppMenu } from "@/components/app/AppMenu";
 import { SiteIcon } from "@/components/icons/SiteIcon";
 import { AppLogo } from "@/components/layout/AppLogo";
 import { LanguageSwitcher } from "@/components/layout/LanguageSwitcher";
-import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { productCategoryHref } from "@/lib/categories";
 import { localizedProductName, storefrontProducts } from "@/lib/storefront-pages";
 
@@ -27,10 +26,8 @@ const quickSearchCategories = ["sofas", "living-room", "dining", "bedroom"];
 export function AppHeader() {
   const t = useTranslations("header");
   const tDetail = useTranslations("storefront.detail");
-  const common = useTranslations("common");
   const locale = useLocale();
   const [searchOpen, setSearchOpen] = useState(false);
-  const [mobileNavOpen, setMobileNavOpen] = useState(false);
   const [searchValue, setSearchValue] = useState("");
   const [query, setQuery] = useState("");
   const searchInputRef = useRef<HTMLInputElement>(null);
@@ -80,37 +77,6 @@ export function AppHeader() {
     <header className="sticky top-0 z-50 bg-white text-neutral-950 shadow-sm transition-colors dark:bg-neutral-950 dark:text-neutral-50">
       <div className="mx-auto flex min-h-18 max-w-7xl items-center justify-between gap-2 px-4 sm:min-h-20 sm:gap-4 sm:px-6 lg:px-8">
         <div className="flex items-center gap-4 sm:gap-6 xl:gap-7">
-          <Sheet open={mobileNavOpen} onOpenChange={setMobileNavOpen}>
-            <SheetTrigger
-              render={
-                <button
-                  type="button"
-                  aria-label={t("openMenu")}
-                  title={t("openMenu")}
-                  className="rounded-md p-2 text-neutral-950 transition hover:bg-neutral-100 dark:text-neutral-50 dark:hover:bg-white/10 lg:hidden"
-                />
-              }
-            >
-              <SiteIcon name="menu" className="size-5" />
-            </SheetTrigger>
-            <SheetContent side="left" className="w-72 max-w-[86vw] bg-white p-0 dark:bg-neutral-950">
-              <SheetHeader>
-                <SheetTitle>{common("brand")}</SheetTitle>
-              </SheetHeader>
-              <nav className="flex flex-col gap-1 px-4 pb-6">
-                {menuItems.map((item) => (
-                  <Link
-                    key={item.href}
-                    href={item.href}
-                    onClick={() => setMobileNavOpen(false)}
-                    className="rounded-md px-3 py-2.5 text-sm font-bold text-neutral-800 transition hover:bg-neutral-100 dark:text-neutral-200 dark:hover:bg-white/10"
-                  >
-                    {item.label}
-                  </Link>
-                ))}
-              </nav>
-            </SheetContent>
-          </Sheet>
           <AppLogo className="shrink-0" />
           <AppMenu items={menuItems} className="hidden gap-6 lg:flex xl:gap-7" />
         </div>
