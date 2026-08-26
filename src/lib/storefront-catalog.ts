@@ -1,8 +1,10 @@
 import { apiUrl } from "@/lib/api";
 import { getUserLocale } from "@/i18n/locale";
+import { categorySlugByPage } from "@/lib/categories";
+import { categoryImage } from "@/lib/images";
 import { isUsableImagePath } from "@/lib/media";
 import { getStorefrontProduct, storefrontPages } from "@/lib/storefront-pages";
-import type { CatalogProduct } from "@/lib/catalog";
+import type { CatalogCategory, CatalogProduct } from "@/lib/catalog";
 import type { StorefrontPage, StorefrontProduct } from "@/lib/storefront-pages";
 
 const categoryBySlug: Record<string, StorefrontProduct["category"]> = {
@@ -176,6 +178,35 @@ async function fetchCategoryProducts(
   }
 }
 
+async function fetchPageCategory(pageSlug: string): Promise<CatalogCategory | null> {
+  if (!apiUrl) {
+    return null;
+  }
+
+  const categorySlug = categorySlugByPage[pageSlug] ?? pageSlug;
+
+  try {
+    const locale = await getUserLocale();
+    const response = await fetch(
+      `${apiUrl}/storefront/categories/${encodeURIComponent(categorySlug)}?locale=${locale}`,
+      {
+        headers: { Accept: "application/json" },
+        next: { revalidate: 60 },
+      },
+    );
+
+    if (!response.ok) {
+      return null;
+    }
+
+    const body = await response.json();
+
+    return (body?.data ?? null) as CatalogCategory | null;
+  } catch {
+    return null;
+  }
+}
+
 export async function getStorefrontPage(
   pageSlug: string,
 ): Promise<StorefrontPage> {
@@ -185,15 +216,30 @@ export async function getStorefrontPage(
     throw new Error(`Unknown storefront page: ${pageSlug}`);
   }
 
-  const collectionProducts = await fetchCollectionProducts(pageSlug);
+  const [collectionProducts, category] = await Promise.all([
+    fetchCollectionProducts(pageSlug),
+    fetchPageCategory(pageSlug),
+  ]);
   const apiProducts = collectionProducts.length
     ? collectionProducts
     : await fetchCategoryProducts(pageSlug);
 
+  const products = apiProducts.map((product) =>
+    mapCatalogProduct(product, getStorefrontProduct(product.slug)),
+  );
+
+  if (!category) {
+    return { ...staticPage, products };
+  }
+
   return {
     ...staticPage,
-    products: apiProducts.map((product) =>
-      mapCatalogProduct(product, getStorefrontProduct(product.slug)),
-    ),
+    title: category.hero_title ?? category.name ?? staticPage.title,
+    eyebrow: category.hero_eyebrow ?? staticPage.eyebrow,
+    description: category.hero_description ?? category.description ?? staticPage.description,
+    heroImage: categoryImage(category) ?? staticPage.heroImage,
+    content: category.content ?? undefined,
+    isManaged: true,
+    products,
   };
 }

@@ -1504,6 +1504,53 @@
         "Required": "Required",
         "Needs review": "Needs review"
       }
+    },
+    "categoryEditor": {
+      "eyebrow": "Catalog",
+      "title": "Category page",
+      "back": "Back to categories",
+      "discard": "Discard",
+      "save": "Save",
+      "saved": "Category saved.",
+      "defaultTab": "Default",
+      "localeNotice": "Editing the {locale} translation. Empty fields fall back to the default text.",
+      "contentHint": "Leave a blank line between paragraphs. This text shows under the banner on the collection page.",
+      "bannerSaved": "Banner updated.",
+      "bannerRemoved": "Banner removed.",
+      "settings": {
+        "title": "Page settings"
+      },
+      "fields": {
+        "name": "Category name",
+        "slug": "Slug",
+        "description": "Short description",
+        "heroEyebrow": "Banner eyebrow",
+        "heroTitle": "Banner title",
+        "heroDescription": "Banner description",
+        "content": "Page content",
+        "sortOrder": "Sort order",
+        "visibility": "Visible on storefront",
+        "visibleHint": "Shown in navigation and on the homepage.",
+        "hiddenHint": "Hidden from the storefront."
+      },
+      "banner": {
+        "title": "Banner image",
+        "hint": "JPG, PNG, WebP or AVIF, up to 20 MB. Uploads are added to the media library.",
+        "alt": "{category} banner",
+        "upload": "Upload banner",
+        "replace": "Replace banner",
+        "remove": "Remove"
+      },
+      "products": {
+        "title": "Products in this category",
+        "hint": "The order here is the order shoppers see on the collection page.",
+        "add": "Add",
+        "choose": "Choose a product",
+        "empty": "No products are assigned to this category yet.",
+        "moveUp": "Move up",
+        "moveDown": "Move down",
+        "remove": "Remove from category"
+      }
     }
   },
   "legal": {
@@ -2001,7 +2048,6 @@
     "signIn": "Sign In",
     "createAccount": "Create Account",
     "signInText": "Create an account or sign in so this design appears in your Saved Designs panel.",
-    "next": "Next",
     "backTo": "Back to {step}"
   }
 }

@@ -5,7 +5,7 @@ import { AppImage } from "@/components/app/AppImage";
 import { AppSection } from "@/components/app/AppSection";
 import { SiteIcon } from "@/components/icons/SiteIcon";
 import { getHomeCatalog } from "@/lib/catalog";
-import { categoryHrefBySlug, primaryCategorySlugs } from "@/lib/categories";
+import { categoryHref } from "@/lib/categories";
 import { categoryImage, siteImages } from "@/lib/images";
 
 export const revalidate = 60;
@@ -14,7 +14,7 @@ export default async function CollectionsPage() {
   const t = await getTranslations("collections");
   const tCategories = await getTranslations("categories");
   const catalog = await getHomeCatalog();
-  const categories = catalog.categories.filter((category) => primaryCategorySlugs.includes(category.slug));
+  const categories = catalog.categories;
 
   return (
     <>
@@ -34,8 +34,8 @@ export default async function CollectionsPage() {
         <AppSection>
           <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
             {categories.map((category, index) => {
-              const label = tCategories.has(category.slug) ? tCategories(category.slug) : category.name;
-              const href = categoryHrefBySlug[category.slug] ?? "/sofas";
+              const label = category.name || (tCategories.has(category.slug) ? tCategories(category.slug) : category.slug);
+              const href = categoryHref(category.slug);
 
               return (
                 <Link

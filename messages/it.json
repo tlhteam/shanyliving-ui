@@ -1504,6 +1504,53 @@
         "Required": "Richiesto",
         "Needs review": "Da revisionare"
       }
+    },
+    "categoryEditor": {
+      "eyebrow": "Catalogo",
+      "title": "Pagina categoria",
+      "back": "Torna alle categorie",
+      "discard": "Annulla",
+      "save": "Salva",
+      "saved": "Categoria salvata.",
+      "defaultTab": "Predefinito",
+      "localeNotice": "Stai modificando la traduzione {locale}. I campi vuoti usano il testo predefinito.",
+      "contentHint": "Lascia una riga vuota tra i paragrafi. Questo testo compare sotto il banner nella pagina della collezione.",
+      "bannerSaved": "Banner aggiornato.",
+      "bannerRemoved": "Banner rimosso.",
+      "settings": {
+        "title": "Impostazioni pagina"
+      },
+      "fields": {
+        "name": "Nome della categoria",
+        "slug": "Slug",
+        "description": "Descrizione breve",
+        "heroEyebrow": "Sopratitolo del banner",
+        "heroTitle": "Titolo del banner",
+        "heroDescription": "Descrizione del banner",
+        "content": "Contenuto della pagina",
+        "sortOrder": "Ordine di visualizzazione",
+        "visibility": "Visibile nello store",
+        "visibleHint": "Mostrata nella navigazione e in homepage.",
+        "hiddenHint": "Nascosta dallo store."
+      },
+      "banner": {
+        "title": "Immagine banner",
+        "hint": "JPG, PNG, WebP o AVIF, fino a 20 MB. I file entrano nella libreria media.",
+        "alt": "Banner {category}",
+        "upload": "Carica banner",
+        "replace": "Sostituisci banner",
+        "remove": "Rimuovi"
+      },
+      "products": {
+        "title": "Prodotti in questa categoria",
+        "hint": "L'ordine impostato qui e quello che vedono i clienti nella pagina della collezione.",
+        "add": "Aggiungi",
+        "choose": "Scegli un prodotto",
+        "empty": "Nessun prodotto e ancora assegnato a questa categoria.",
+        "moveUp": "Sposta su",
+        "moveDown": "Sposta giu",
+        "remove": "Rimuovi dalla categoria"
+      }
     }
   },
   "legal": {
@@ -2001,7 +2048,6 @@
     "signIn": "Accedi",
     "createAccount": "Crea account",
     "signInText": "Crea un account o accedi per trovare questo progetto nei tuoi progetti salvati.",
-    "next": "Avanti",
     "backTo": "Torna a {step}"
   }
 }

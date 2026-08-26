@@ -43,6 +43,8 @@ export function CategoriesAdminClient() {
       apiPath="/admin/catalog/categories"
       mapApiRow={mapCategoryRow}
       getResourceKey={(row) => String(row.slug ?? row.categoryId)}
+      editHref={(row) => `/admin/categories/${row.slug}`}
+      viewHref={(row) => `/admin/categories/${row.slug}`}
       columns={[
         { key: "categoryId", label: "ID" },
         { key: "name", label: "Name" },

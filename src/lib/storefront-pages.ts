@@ -45,6 +45,8 @@ export type StorefrontPage = {
   heroImage: string;
   filters: string[];
   products: StorefrontProduct[];
+  content?: string;
+  isManaged?: boolean;
 };
 
 const colors = ["#eee9df", "#6a5845", "#0d5f43", "#d9d4ca"];

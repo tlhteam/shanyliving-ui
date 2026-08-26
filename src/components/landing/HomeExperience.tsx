@@ -12,7 +12,7 @@ import { SiteIcon, SiteIconName } from "@/components/icons/SiteIcon";
 import { WhatsappIcon } from "@/components/icons/WhatsappIcon";
 import { ProductCard } from "@/components/storefront/ProductCard";
 import { Testimonials } from "@/components/storefront/Testimonials";
-import { categoryHrefBySlug, primaryCategorySlugs } from "@/lib/categories";
+import { categoryHref } from "@/lib/categories";
 import { categoryImage, siteImages } from "@/lib/images";
 import type { StorefrontProduct } from "@/lib/storefront-pages";
 import { whatsappHref } from "@/lib/whatsapp";
@@ -35,8 +35,8 @@ const features = [
 
 function CategoryTile({ category, index, circular = false }: { category: CatalogCategory; index: number; circular?: boolean }) {
   const t = useTranslations("categories");
-  const label = t.has(category.slug) ? t(category.slug) : category.name;
-  const href = categoryHrefBySlug[category.slug] ?? "/sofas";
+  const label = category.name || (t.has(category.slug) ? t(category.slug) : category.slug);
+  const href = categoryHref(category.slug);
 
   return (
     <div>
@@ -67,7 +67,7 @@ export function HomeExperience({
   const tAbout = useTranslations("about");
   const common = useTranslations("common");
   const whatsappLink = whatsappHref(common("whatsappMessage"));
-  const categories = catalog.categories.filter((category) => primaryCategorySlugs.includes(category.slug));
+  const categories = catalog.categories;
   const [subscribeEmail, setSubscribeEmail] = useState("");
 
   const handleSubscribe = (event: FormEvent<HTMLFormElement>) => {

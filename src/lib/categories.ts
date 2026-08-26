@@ -1,4 +1,8 @@
-export const primaryCategorySlugs = ["sofas", "living-room", "dining-room", "bedroom"];
+// Categories the admin adds have no dedicated route yet, so anything without an entry in
+// categoryHrefBySlug lands on the collections overview instead of a dead link.
+export function categoryHref(slug: string) {
+  return categoryHrefBySlug[slug] ?? "/collections";
+}
 
 // Catalog category slugs don't map 1:1 onto the actual routes (e.g. "dining-room" -> /dining),
 // so this is the single source of truth for that mapping — reused by the homepage's category
@@ -17,4 +21,17 @@ export const productCategoryHref: Record<string, string> = {
   "living-room": "/living-room",
   dining: "/dining",
   bedroom: "/bedroom",
+};
+
+// Collection page slugs are not always the category slug in the API (the /dining page is
+// backed by the "dining-room" category), so this maps a page to the category that owns its
+// banner and hero copy.
+export const categorySlugByPage: Record<string, string> = {
+  sofas: "sofas",
+  "living-room": "living-room",
+  dining: "dining-room",
+  "dining-room": "dining-room",
+  bedroom: "bedroom",
+  chairs: "chairs",
+  "coffee-tables": "coffee-tables",
 };

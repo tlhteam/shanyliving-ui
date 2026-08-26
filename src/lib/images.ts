@@ -73,7 +73,13 @@ export function storageUrl(path?: string | null) {
 export function categoryImage(category: CatalogCategory, index = 0) {
   const gallery = Object.values(categoryImages);
 
-  return storageUrl(category.image) ?? categoryImages[category.slug] ?? gallery[index % gallery.length];
+  return (
+    category.banner_url ??
+    storageUrl(category.banner_path ? `categories/${category.banner_path}` : null) ??
+    storageUrl(category.image) ??
+    categoryImages[category.slug] ??
+    gallery[index % gallery.length]
+  );
 }
 
 export function productImage(product: CatalogProduct, index = 0) {

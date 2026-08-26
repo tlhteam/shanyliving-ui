@@ -57,6 +57,7 @@ type AdminResourcePageProps = {
   getResourceKey?: (row: AdminRow) => string;
   createHref?: string;
   editHref?: (row: AdminRow) => string;
+  viewHref?: (row: AdminRow) => string;
   onRowClick?: (row: AdminRow) => void;
 };
 
@@ -352,6 +353,7 @@ export function AdminResourcePage({
   getResourceKey,
   createHref,
   editHref,
+  viewHref,
   onRowClick,
 }: AdminResourcePageProps) {
   const router = useRouter();
@@ -758,19 +760,25 @@ export function AdminResourcePage({
       })),
       {
         id: "actions",
-        header: "Actions",
+        header: tt("actions"),
         cell: ({ row }) => (
           <div className="flex justify-end gap-2">
             <Button
               variant="outline"
               size="sm"
               onClick={() => {
+                if (viewHref) {
+                  router.push(viewHref(row.original));
+
+                  return;
+                }
+
                 openView(row.original);
                 toast.info(tt("detailsOpened", { resource: resourceNoun }));
               }}
             >
               <Eye className="size-3.5" />
-              View
+              {tt("view")}
             </Button>
             <Button
               variant="ghost"
@@ -782,7 +790,7 @@ export function AdminResourcePage({
               }
             >
               <Pencil className="size-3.5" />
-              Edit
+              {tt("edit")}
             </Button>
             <Button
               variant="destructive"
@@ -790,7 +798,7 @@ export function AdminResourcePage({
               onClick={() => openDelete(row.original)}
             >
               <Trash2 className="size-3.5" />
-              Delete
+              {tt("delete")}
             </Button>
           </div>
         ),
@@ -808,6 +816,7 @@ export function AdminResourcePage({
       resourceNoun,
       router,
       tt,
+      viewHref,
     ],
   );
 

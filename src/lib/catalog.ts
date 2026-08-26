@@ -19,9 +19,43 @@ export type CatalogCategory = {
   id: number | string;
   name: string;
   slug: string;
-  description?: string;
+  description?: string | null;
   sort_order?: number;
   image?: string | null;
+  banner_path?: string | null;
+  banner_url?: string | null;
+  hero_eyebrow?: string | null;
+  hero_title?: string | null;
+  hero_description?: string | null;
+  content?: string | null;
+  is_active?: boolean;
+  products_count?: number;
+};
+
+export type CatalogCategoryTranslation = {
+  locale: string;
+  name?: string | null;
+  description?: string | null;
+  hero_eyebrow?: string | null;
+  hero_title?: string | null;
+  hero_description?: string | null;
+  content?: string | null;
+};
+
+export type CatalogCategoryProduct = {
+  id: number;
+  name: string;
+  slug: string;
+  sku?: string | null;
+  price?: number | null;
+  sort_order?: number | null;
+  is_active?: boolean;
+  image_url?: string | null;
+};
+
+export type AdminCategory = CatalogCategory & {
+  translations?: CatalogCategoryTranslation[];
+  products?: CatalogCategoryProduct[];
 };
 
 export type CatalogCollection = {

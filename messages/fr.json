@@ -1504,6 +1504,53 @@
         "Required": "Requis",
         "Needs review": "A revoir"
       }
+    },
+    "categoryEditor": {
+      "eyebrow": "Catalogue",
+      "title": "Page de categorie",
+      "back": "Retour aux categories",
+      "discard": "Annuler",
+      "save": "Enregistrer",
+      "saved": "Categorie enregistree.",
+      "defaultTab": "Par defaut",
+      "localeNotice": "Vous modifiez la traduction {locale}. Les champs vides reprennent le texte par defaut.",
+      "contentHint": "Laissez une ligne vide entre les paragraphes. Ce texte s'affiche sous la banniere sur la page de collection.",
+      "bannerSaved": "Banniere mise a jour.",
+      "bannerRemoved": "Banniere supprimee.",
+      "settings": {
+        "title": "Reglages de la page"
+      },
+      "fields": {
+        "name": "Nom de la categorie",
+        "slug": "Slug",
+        "description": "Description courte",
+        "heroEyebrow": "Surtitre de la banniere",
+        "heroTitle": "Titre de la banniere",
+        "heroDescription": "Description de la banniere",
+        "content": "Contenu de la page",
+        "sortOrder": "Ordre d'affichage",
+        "visibility": "Visible sur la boutique",
+        "visibleHint": "Affichee dans la navigation et sur la page d'accueil.",
+        "hiddenHint": "Masquee de la boutique."
+      },
+      "banner": {
+        "title": "Image de banniere",
+        "hint": "JPG, PNG, WebP ou AVIF, jusqu'a 20 Mo. Les fichiers rejoignent la mediatheque.",
+        "alt": "Banniere {category}",
+        "upload": "Televerser une banniere",
+        "replace": "Remplacer la banniere",
+        "remove": "Supprimer"
+      },
+      "products": {
+        "title": "Produits de cette categorie",
+        "hint": "L'ordre defini ici est celui que voient les clients sur la page de collection.",
+        "add": "Ajouter",
+        "choose": "Choisir un produit",
+        "empty": "Aucun produit n'est encore rattache a cette categorie.",
+        "moveUp": "Monter",
+        "moveDown": "Descendre",
+        "remove": "Retirer de la categorie"
+      }
     }
   },
   "legal": {
@@ -2001,7 +2048,6 @@
     "signIn": "Se connecter",
     "createAccount": "Creer un compte",
     "signInText": "Creez un compte ou connectez-vous pour retrouver ce design dans vos designs enregistres.",
-    "next": "Suivant",
     "backTo": "Retour a {step}"
   }
 }

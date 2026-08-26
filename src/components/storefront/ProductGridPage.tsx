@@ -146,10 +146,14 @@ export function ProductGridPage({ page, slug }: { page: StorefrontPage; slug?: s
   const showPriceSort = !isCustomOrderCategory(slug);
   const availableSortOptions = showPriceSort ? sortOptions : sortOptions.filter((option) => option.value === "featured");
   const common = useTranslations("common");
-  const copy = (field: "title" | "eyebrow" | "description", fallback: string) => {
+  const copy = (field: "title" | "eyebrow" | "description", value: string) => {
+    if (page.isManaged) {
+      return value;
+    }
+
     const key = "pages." + (slug ?? "") + "." + field;
 
-    return slug && t.has(key) ? t(key) : fallback;
+    return slug && t.has(key) ? t(key) : value;
   };
   const [subcategory, setSubcategory] = useState("");
   const [color, setColor] = useState("");
@@ -208,6 +212,18 @@ export function ProductGridPage({ page, slug }: { page: StorefrontPage; slug?: s
           <p className="mt-3 max-w-xl text-sm leading-6 text-white/90 sm:text-base">{copy("description", page.description)}</p>
         </div>
       </section>
+
+      {page.content ? (
+        <div className="border-b border-neutral-200 bg-white text-neutral-950 dark:border-white/10 dark:bg-neutral-950 dark:text-neutral-50">
+          <AppSection className="py-8 sm:py-10">
+            <div className="max-w-3xl space-y-4 text-sm leading-7 text-neutral-700 dark:text-neutral-300 sm:text-base">
+              {page.content.split(/\n{2,}/).map((paragraph) => (
+                <p key={paragraph.slice(0, 40)}>{paragraph}</p>
+              ))}
+            </div>
+          </AppSection>
+        </div>
+      ) : null}
 
       <div className="bg-white text-neutral-950 dark:bg-neutral-950 dark:text-neutral-50">
         <AppSection className="py-8 sm:py-10 lg:py-14">
