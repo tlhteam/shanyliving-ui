@@ -27,7 +27,9 @@
     "whatsappProductMessage": "Bonjour Shany Living, je voudrais des details et un prix pour {product}.",
     "whatsappDesignMessage": "Bonjour Shany Living, j'ai cree un design de canape et je voudrais un devis exact.",
     "showPassword": "Afficher le mot de passe",
-    "hidePassword": "Masquer le mot de passe"
+    "hidePassword": "Masquer le mot de passe",
+    "previous": "Precedent",
+    "next": "Suivant"
   },
   "language": {
     "trigger": "Langue",
@@ -454,7 +456,8 @@
       "customTitle": "Canape sur mesure, pour vous",
       "customText": "Choisissez taille, tissu, couleur et plus. Notre equipe vous aide a creer le canape parfait.",
       "customCta": "Ouvrir le configurateur",
-      "save": "Enregistrer {name}"
+      "save": "Enregistrer {name}",
+      "gallery": "Galerie du produit"
     },
     "benefits": {
       "quality": {
@@ -515,21 +518,32 @@
       "Showroom product": "Produit showroom"
     },
     "options": {
-      "Left chaise": "Meridienne gauche",
-      "Right chaise": "Meridienne droite",
-      "Standard sofa": "Canape standard",
-      "Sectional": "Modulaire",
-      "Custom layout": "Agencement sur mesure",
+      "Blue": "Bleu",
       "Boucle": "Boucle",
-      "Linen": "Lin",
-      "Chenille": "Chenille",
-      "Velvet": "Velours",
-      "Leather": "Cuir",
-      "Light Beige": "Beige clair",
-      "Sand": "Sable",
       "Caramel": "Caramel",
+      "Chenille": "Chenille",
+      "Color": "Couleur",
+      "Configuration": "Configuration",
+      "Custom layout": "Agencement sur mesure",
       "Espresso": "Espresso",
-      "Forest": "Foret"
+      "Fabric": "Tissu",
+      "Forest": "Foret",
+      "Grey": "Gris",
+      "Leather": "Cuir",
+      "Left": "Gauche",
+      "Left chaise": "Meridienne gauche",
+      "Light Beige": "Beige clair",
+      "Light Gray": "Gris clair",
+      "Linen": "Lin",
+      "Performance Linen": "Lin performance",
+      "Right": "Droite",
+      "Right chaise": "Meridienne droite",
+      "Sand": "Sable",
+      "Sectional": "Modulaire",
+      "Size": "Taille",
+      "Standard sofa": "Canape standard",
+      "Velvet": "Velours",
+      "White": "Blanc"
     }
   },
   "customer": {
@@ -933,7 +947,11 @@
       "saved": "{resource} enregistre",
       "deleted": "{resource} supprime",
       "detailsOpened": "Details de {resource} ouverts",
-      "refreshed": "Donnees {resource} actualisees"
+      "refreshed": "Donnees {resource} actualisees",
+      "markFollowUp": "Marquer pour suivi",
+      "followUpQueued": "Enregistrement ajoute au suivi.",
+      "refreshedHint": "La liste correspond maintenant a l'API.",
+      "reload": "Recharger"
     },
     "mailbox": {
       "title": "E-mail",

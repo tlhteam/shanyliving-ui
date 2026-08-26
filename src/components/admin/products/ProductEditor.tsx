@@ -3,6 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useSession } from "next-auth/react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useMemo, useState } from "react";
 import { useTranslations } from "next-intl";
@@ -28,6 +29,7 @@ import { AppCard } from "@/components/app/AppCard";
 import { AppRichTextEditor } from "@/components/app/AppRichTextEditor";
 import { AppSwitch } from "@/components/app/AppSwitch";
 import { AppTagInput } from "@/components/app/AppTagInput";
+import { AdminEditorSkeleton } from "@/components/admin/AdminEditorSkeleton";
 import { MediaPicker } from "@/components/admin/MediaPicker";
 import {
   VariantEditor,
@@ -258,6 +260,7 @@ function fieldClass(invalid = false) {
 export function ProductEditor({ slug }: { slug?: string }) {
   const t = useTranslations("adminPanel.productEditor");
   const router = useRouter();
+  const { status: sessionStatus } = useSession();
   const { request, token } = useApi();
   const queryClient = useQueryClient();
   const editing = Boolean(slug);
@@ -291,7 +294,7 @@ export function ProductEditor({ slug }: { slug?: string }) {
 
   const productQuery = useQuery({
     queryKey: ["admin-product", slug],
-    enabled: editing && Boolean(token),
+    enabled: editing && Boolean(token) && sessionStatus === "authenticated",
     queryFn: () => request<AdminProduct>(`/admin/catalog/products/${slug}`),
   });
 
@@ -579,12 +582,6 @@ export function ProductEditor({ slug }: { slug?: string }) {
 
   const fieldError = (key: string) => errors[key]?.[0];
 
-  if (editing && productQuery.isLoading) {
-    return (
-      <div className="h-96 animate-pulse rounded-lg bg-neutral-200 dark:bg-white/10" />
-    );
-  }
-
   if (editing && productQuery.isError) {
     return (
       <AppCard className="p-6 dark:border-white/10 dark:bg-neutral-900">
@@ -598,6 +595,10 @@ export function ProductEditor({ slug }: { slug?: string }) {
         </Link>
       </AppCard>
     );
+  }
+
+  if (editing && !hydratedProduct) {
+    return <AdminEditorSkeleton rows={6} />;
   }
 
   return (

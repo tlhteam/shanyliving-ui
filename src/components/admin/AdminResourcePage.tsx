@@ -936,8 +936,8 @@ export function AdminResourcePage({
               onClick={() => {
                 queryClient.invalidateQueries({ queryKey });
                 toast.success(tt("refreshed", { resource: localisedTitle }), {
-                  description: "The list now matches the API.",
-                  action: { label: "Reload", onClick: () => refetchResource() },
+                  description: tt("refreshedHint"),
+                  action: { label: tt("reload"), onClick: () => refetchResource() },
                 });
               }}
             >
@@ -972,13 +972,13 @@ export function AdminResourcePage({
         open={mode === "view"}
         onOpenChange={(open) => !open && close()}
         title={tt("detailsTitle", { resource: resourceNoun })}
-        description="Review the selected record before editing or syncing with the API."
+        description={tt("dialogHint")}
         footer={
           <AppButton
             type="button"
-            onClick={() => toast.success("Record queued for follow-up")}
+            onClick={() => toast.success(tt("followUpQueued"))}
           >
-            Mark for Follow-up
+            {tt("markFollowUp")}
           </AppButton>
         }
       >

@@ -27,7 +27,9 @@
     "whatsappProductMessage": "היי שני ליבינג, אשמח לפרטים ומחיר עבור {product}.",
     "whatsappDesignMessage": "היי שני ליבינג, יצרתי עיצוב ספה ואשמח להצעת מחיר מדויקת.",
     "showPassword": "הצג סיסמה",
-    "hidePassword": "הסתר סיסמה"
+    "hidePassword": "הסתר סיסמה",
+    "previous": "הקודם",
+    "next": "הבא"
   },
   "language": {
     "trigger": "שפה",
@@ -454,7 +456,8 @@
       "customTitle": "ספה מותאמת עבורכם",
       "customText": "בחרו מידה, בד, צבע ועוד. הצוות שלנו כאן כדי לעזור לכם ליצור את הספה המושלמת.",
       "customCta": "פתיחת ההתאמה",
-      "save": "שמירת {name}"
+      "save": "שמירת {name}",
+      "gallery": "גלריית המוצר"
     },
     "benefits": {
       "quality": {
@@ -515,21 +518,32 @@
       "Showroom product": "מוצר אולם תצוגה"
     },
     "options": {
-      "Left chaise": "שזלונג שמאל",
-      "Right chaise": "שזלונג ימין",
-      "Standard sofa": "ספה רגילה",
-      "Sectional": "ספה פינתית",
-      "Custom layout": "פריסה מותאמת",
+      "Blue": "כחול",
       "Boucle": "בוקלה",
-      "Linen": "פשתן",
-      "Chenille": "שניל",
-      "Velvet": "קטיפה",
-      "Leather": "עור",
-      "Light Beige": "בז' בהיר",
-      "Sand": "חול",
       "Caramel": "קרמל",
+      "Chenille": "שניל",
+      "Color": "צבע",
+      "Configuration": "תצורה",
+      "Custom layout": "פריסה מותאמת",
       "Espresso": "אספרסו",
-      "Forest": "ירוק יער"
+      "Fabric": "בד",
+      "Forest": "ירוק יער",
+      "Grey": "אפור",
+      "Leather": "עור",
+      "Left": "שמאל",
+      "Left chaise": "שזלונג שמאל",
+      "Light Beige": "בז' בהיר",
+      "Light Gray": "אפור בהיר",
+      "Linen": "פשתן",
+      "Performance Linen": "פשתן עמיד",
+      "Right": "ימין",
+      "Right chaise": "שזלונג ימין",
+      "Sand": "חול",
+      "Sectional": "ספה פינתית",
+      "Size": "מידה",
+      "Standard sofa": "ספה רגילה",
+      "Velvet": "קטיפה",
+      "White": "לבן"
     }
   },
   "customer": {
@@ -933,7 +947,11 @@
       "saved": "{resource} נשמר",
       "deleted": "{resource} נמחק",
       "detailsOpened": "פרטי {resource} נפתחו",
-      "refreshed": "נתוני {resource} רועננו"
+      "refreshed": "נתוני {resource} רועננו",
+      "markFollowUp": "סמן למעקב",
+      "followUpQueued": "הרשומה נוספה לרשימת המעקב.",
+      "refreshedHint": "הרשימה מעודכנת מול ה-API.",
+      "reload": "רענן"
     },
     "mailbox": {
       "title": "אימייל",

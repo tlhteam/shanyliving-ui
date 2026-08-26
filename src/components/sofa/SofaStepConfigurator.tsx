@@ -15,6 +15,7 @@ import { SofaBlockDiagram } from "@/components/sofa/SofaBlockDiagram";
 import { WhatsappIcon } from "@/components/icons/WhatsappIcon";
 import { StickyContactBar } from "@/components/storefront/StickyContactBar";
 import { useCustomerMutation } from "@/hooks/use-customer";
+import { useOptionLabel } from "@/hooks/use-option-label";
 import { fabrics } from "@/lib/fabrics";
 import { sofaConfigurations as configurations, sofaSizes as sizes } from "@/lib/sofa-options";
 import type { StorefrontProduct } from "@/lib/storefront-pages";
@@ -64,8 +65,7 @@ function readFile(file: File) {
 
 export function SofaStepConfigurator({ sofaProducts }: { sofaProducts: StorefrontProduct[] }) {
   const t = useTranslations("customizer");
-  const options = useTranslations("storefront.options");
-  const optionLabel = (value: string) => (options.has(value) ? options(value) : value);
+  const optionLabel = useOptionLabel();
   const searchParams = useSearchParams();
   const { data: session } = useSession();
   const productSlug = searchParams.get("product");

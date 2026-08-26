@@ -27,7 +27,9 @@
     "whatsappProductMessage": "Ciao Shany Living, vorrei dettagli e un prezzo per {product}.",
     "whatsappDesignMessage": "Ciao Shany Living, ho creato un progetto di divano e vorrei un preventivo esatto.",
     "showPassword": "Mostra password",
-    "hidePassword": "Nascondi password"
+    "hidePassword": "Nascondi password",
+    "previous": "Precedente",
+    "next": "Successivo"
   },
   "language": {
     "trigger": "Lingua",
@@ -454,7 +456,8 @@
       "customTitle": "Divano su misura per te",
       "customText": "Scegli misura, tessuto, colore e altro. Il nostro team ti aiuta a creare il divano perfetto.",
       "customCta": "Apri il configuratore",
-      "save": "Salva {name}"
+      "save": "Salva {name}",
+      "gallery": "Galleria del prodotto"
     },
     "benefits": {
       "quality": {
@@ -515,21 +518,32 @@
       "Showroom product": "Prodotto showroom"
     },
     "options": {
-      "Left chaise": "Chaise sinistra",
-      "Right chaise": "Chaise destra",
-      "Standard sofa": "Divano standard",
-      "Sectional": "Componibile",
-      "Custom layout": "Layout su misura",
+      "Blue": "Blu",
       "Boucle": "Boucle",
-      "Linen": "Lino",
-      "Chenille": "Ciniglia",
-      "Velvet": "Velluto",
-      "Leather": "Pelle",
-      "Light Beige": "Beige chiaro",
-      "Sand": "Sabbia",
       "Caramel": "Caramello",
+      "Chenille": "Ciniglia",
+      "Color": "Colore",
+      "Configuration": "Configurazione",
+      "Custom layout": "Layout su misura",
       "Espresso": "Espresso",
-      "Forest": "Foresta"
+      "Fabric": "Tessuto",
+      "Forest": "Foresta",
+      "Grey": "Grigio",
+      "Leather": "Pelle",
+      "Left": "Sinistra",
+      "Left chaise": "Chaise sinistra",
+      "Light Beige": "Beige chiaro",
+      "Light Gray": "Grigio chiaro",
+      "Linen": "Lino",
+      "Performance Linen": "Lino performance",
+      "Right": "Destra",
+      "Right chaise": "Chaise destra",
+      "Sand": "Sabbia",
+      "Sectional": "Componibile",
+      "Size": "Misura",
+      "Standard sofa": "Divano standard",
+      "Velvet": "Velluto",
+      "White": "Bianco"
     }
   },
   "customer": {
@@ -933,7 +947,11 @@
       "saved": "{resource} salvato",
       "deleted": "{resource} eliminato",
       "detailsOpened": "Dettagli di {resource} aperti",
-      "refreshed": "Dati {resource} aggiornati"
+      "refreshed": "Dati {resource} aggiornati",
+      "markFollowUp": "Segna per follow-up",
+      "followUpQueued": "Record aggiunto al follow-up.",
+      "refreshedHint": "L'elenco ora corrisponde all'API.",
+      "reload": "Ricarica"
     },
     "mailbox": {
       "title": "Email",

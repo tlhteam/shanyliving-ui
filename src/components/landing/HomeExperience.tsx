@@ -5,6 +5,7 @@ import { useState, type FormEvent } from "react";
 import { toast } from "sonner";
 import { useTranslations } from "next-intl";
 import { AppButton } from "@/components/app/AppButton";
+import { AppCarousel } from "@/components/app/AppCarousel";
 import { AppImage } from "@/components/app/AppImage";
 import { AppSection } from "@/components/app/AppSection";
 import { HomeJourney } from "@/components/landing/HomeJourney";
@@ -85,11 +86,14 @@ export function HomeExperience({
   return (
     <>
       <section id="hero" className="relative isolate grid min-h-120 scroll-mt-24 place-items-center overflow-hidden px-4 py-20 text-center text-white sm:min-h-140 lg:min-h-160">
-        <div
-          role="img"
-          aria-label={t("hero.imageAlt")}
-          className="absolute inset-0 bg-scroll bg-cover bg-bottom sm:bg-fixed"
-          style={{ backgroundImage: `url(${siteImages.hero})` }}
+        <AppImage
+          src={siteImages.hero}
+          alt={t("hero.imageAlt")}
+          className="absolute inset-0"
+          sizes="100vw"
+          objectPosition="center 65%"
+          preload
+          loading="eager"
         />
         <div className="absolute inset-0 bg-linear-to-b from-black/55 via-black/40 to-black/60" />
         <div className="relative mx-auto max-w-3xl">
@@ -118,16 +122,18 @@ export function HomeExperience({
         <div className="mb-7 flex flex-wrap items-end justify-between gap-3">
           <h2 className="font-serif text-2xl font-bold sm:text-3xl">{t("categories.title")}</h2>
         </div>
-        <div className="hidden sm:grid sm:grid-cols-4 sm:gap-4">
+        <div className="hidden sm:grid sm:grid-cols-3 sm:gap-4 lg:grid-cols-4">
           {categories.map((category, index) => (
             <CategoryTile key={category.slug} category={category} index={index} />
           ))}
         </div>
-        <div className="grid grid-cols-4 gap-2 sm:hidden">
+        <AppCarousel ariaLabel={t("categories.title")} className="sm:hidden" arrows={false}>
           {categories.map((category, index) => (
-            <CategoryTile key={category.slug} category={category} index={index} circular />
+            <div key={category.slug} className="w-28 shrink-0 snap-start">
+              <CategoryTile category={category} index={index} circular />
+            </div>
           ))}
-        </div>
+        </AppCarousel>
       </AppSection>
 
       <AppSection id="featured" className="scroll-mt-24 text-neutral-950 dark:text-neutral-50">
@@ -137,11 +143,18 @@ export function HomeExperience({
             {t("featured.viewAll")} <SiteIcon name="arrow-right" className="size-4 rtl:rotate-180" />
           </Link>
         </div>
-        <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="hidden gap-5 sm:grid sm:grid-cols-2 lg:grid-cols-4">
           {featured.map((product) => (
             <ProductCard key={product.slug} product={product} />
           ))}
         </div>
+        <AppCarousel ariaLabel={t("featured.title")} className="sm:hidden" arrows={false}>
+          {featured.map((product) => (
+            <div key={product.slug} className="w-[78vw] shrink-0 snap-start">
+              <ProductCard product={product} className="h-full" />
+            </div>
+          ))}
+        </AppCarousel>
       </AppSection>
 
       <HomeJourney fromSocial={fromSocial} />
@@ -154,8 +167,8 @@ export function HomeExperience({
           sizes="100vw"
           objectPosition="30% center"
         />
-        <div className="absolute inset-0 bg-black/55 lg:bg-linear-to-r lg:from-black/25 lg:via-black/40 lg:to-black/70" />
-        <AppSection dir="ltr" className="relative grid min-h-105 items-center lg:grid-cols-[1fr_480px]">
+        <div className="absolute inset-0 bg-black/45 lg:bg-linear-to-r lg:from-black/10 lg:via-black/30 lg:to-black/65" />
+        <AppSection dir="ltr" className="relative grid min-h-120 items-center sm:min-h-105 lg:grid-cols-[1fr_480px]">
           <div className="hidden lg:block" />
           <div className="text-center lg:text-end">
             <h2 className="font-serif text-3xl sm:text-4xl lg:text-5xl">{t("showroom.title")}</h2>

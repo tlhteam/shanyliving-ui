@@ -4,10 +4,12 @@ import Link from "next/link";
 import { useMemo, useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import { AppButton } from "@/components/app/AppButton";
+import { AppCarousel } from "@/components/app/AppCarousel";
 import { AppImage } from "@/components/app/AppImage";
 import { SiteIcon } from "@/components/icons/SiteIcon";
 import { WhatsappIcon } from "@/components/icons/WhatsappIcon";
 import { StickyContactBar } from "@/components/storefront/StickyContactBar";
+import { useOptionLabel } from "@/hooks/use-option-label";
 import { productCategoryHref } from "@/lib/categories";
 import { isCustomOrderCategory } from "@/lib/custom-order";
 import { fabrics } from "@/lib/fabrics";
@@ -78,6 +80,8 @@ function configurationSummary(groups?: StorefrontOptionGroup[]) {
 
 export function ProductDetailHero({ product, images }: ProductDetailHeroProps) {
   const t = useTranslations("storefront.detail");
+  const common = useTranslations("common");
+  const optionLabel = useOptionLabel();
   const locale = useLocale();
   const name = localizedProductName(product, locale);
   const description = localizedProductDescription(product, locale);
@@ -131,10 +135,34 @@ export function ProductDetailHero({ product, images }: ProductDetailHeroProps) {
             preload
             loading="eager"
           />
+
+          {images.length > 1 ? (
+            <>
+              <button
+                type="button"
+                aria-label={common("previous")}
+                onClick={() => setActiveImage((current) => (current - 1 + images.length) % images.length)}
+                className="absolute start-3 top-1/2 grid -translate-y-1/2 place-items-center rounded-full border border-neutral-200 bg-white/90 p-2.5 shadow-[var(--shadow-elevation-2)] transition hover:bg-white dark:border-white/15 dark:bg-neutral-900/90 dark:hover:bg-neutral-900"
+              >
+                <SiteIcon name="chevron-left" className="size-4 rtl:rotate-180" />
+              </button>
+              <button
+                type="button"
+                aria-label={common("next")}
+                onClick={() => setActiveImage((current) => (current + 1) % images.length)}
+                className="absolute end-3 top-1/2 grid -translate-y-1/2 place-items-center rounded-full border border-neutral-200 bg-white/90 p-2.5 shadow-[var(--shadow-elevation-2)] transition hover:bg-white dark:border-white/15 dark:bg-neutral-900/90 dark:hover:bg-neutral-900"
+              >
+                <SiteIcon name="chevron-right" className="size-4 rtl:rotate-180" />
+              </button>
+              <span className="absolute bottom-3 end-3 rounded-full bg-black/60 px-2.5 py-1 text-[11px] font-bold text-white">
+                {activeImage + 1} / {images.length}
+              </span>
+            </>
+          ) : null}
         </div>
 
         {images.length > 1 ? (
-          <div className="mt-3 flex gap-2 overflow-x-auto pb-1">
+          <AppCarousel ariaLabel={t("gallery")} className="mt-3" loop railClassName="gap-2">
             {images.map((image, index) => (
               <button
                 key={`${image}-${index}`}
@@ -142,7 +170,7 @@ export function ProductDetailHero({ product, images }: ProductDetailHeroProps) {
                 onClick={() => setActiveImage(index)}
                 aria-label={t("angle", { number: index + 1 })}
                 aria-current={index === activeImage}
-                className={`relative size-16 shrink-0 overflow-hidden rounded-md border transition sm:size-20 ${
+                className={`relative size-16 shrink-0 snap-start overflow-hidden rounded-md border transition sm:size-20 ${
                   index === activeImage
                     ? "border-neutral-950 ring-2 ring-neutral-950/15 dark:border-white dark:ring-white/25"
                     : "border-neutral-200 hover:border-neutral-400 dark:border-white/10"
@@ -151,7 +179,7 @@ export function ProductDetailHero({ product, images }: ProductDetailHeroProps) {
                 <AppImage src={image} alt="" className="absolute inset-0" sizes="80px" />
               </button>
             ))}
-          </div>
+          </AppCarousel>
         ) : null}
       </section>
 
@@ -201,7 +229,7 @@ export function ProductDetailHero({ product, images }: ProductDetailHeroProps) {
                     }`}
                     sizes="56px"
                   />
-                  <span className="mt-1.5 block text-neutral-700 dark:text-neutral-300">{item.name}</span>
+                  <span className="mt-1.5 block text-neutral-700 dark:text-neutral-300">{optionLabel(item.name)}</span>
                 </button>
               ))}
             </div>
@@ -229,9 +257,9 @@ export function ProductDetailHero({ product, images }: ProductDetailHeroProps) {
                         setActiveImage(imageIndex);
                       }
                     }}
-                    aria-label={colorName}
+                    aria-label={optionLabel(colorName)}
                     aria-current={index === selectedColor}
-                    title={colorName}
+                    title={optionLabel(colorName)}
                     className="group text-center"
                   >
                     <span
@@ -247,7 +275,7 @@ export function ProductDetailHero({ product, images }: ProductDetailHeroProps) {
               })}
             </div>
             <p className="mt-2 text-xs text-neutral-600 dark:text-neutral-400">
-              {product.colorNames?.[selectedColor] ?? product.colors[selectedColor]}
+              {optionLabel(product.colorNames?.[selectedColor] ?? product.colors[selectedColor])}
             </p>
           </div>
         ) : null}

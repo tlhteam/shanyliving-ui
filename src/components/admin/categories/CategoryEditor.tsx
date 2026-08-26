@@ -10,6 +10,7 @@ import { ArrowDown, ArrowLeft, ArrowUp, ImagePlus, Trash2, X } from "lucide-reac
 import { AppButton } from "@/components/app/AppButton";
 import { AppCard } from "@/components/app/AppCard";
 import { AppSwitch } from "@/components/app/AppSwitch";
+import { AdminEditorSkeleton } from "@/components/admin/AdminEditorSkeleton";
 import { useApi } from "@/hooks/use-api";
 import { localeOptions } from "@/i18n/config";
 import { cn } from "@/lib/utils";
@@ -236,10 +237,6 @@ export function CategoryEditor({ slug }: { slug: string }) {
     setProductToAdd("");
   };
 
-  if (categoryQuery.isLoading) {
-    return <p className="p-4 text-sm text-neutral-600 dark:text-neutral-400">{tt("loading")}</p>;
-  }
-
   if (categoryQuery.isError) {
     return (
       <div className="p-4">
@@ -249,6 +246,10 @@ export function CategoryEditor({ slug }: { slug: string }) {
         </AppButton>
       </div>
     );
+  }
+
+  if (!category) {
+    return <AdminEditorSkeleton rows={6} />;
   }
 
   return (

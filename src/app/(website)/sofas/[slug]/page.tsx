@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
 import { getTranslations } from "next-intl/server";
+import { AppCarousel } from "@/components/app/AppCarousel";
 import { AppSection } from "@/components/app/AppSection";
 import { SiteIcon, SiteIconName } from "@/components/icons/SiteIcon";
 import { ProductCard } from "@/components/storefront/ProductCard";
@@ -67,11 +68,18 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
       {related.length > 0 ? (
         <AppSection>
           <h2 className="font-serif text-xl font-bold sm:text-2xl">{t("related")}</h2>
-          <div className="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-5">
+          <div className="mt-5 hidden gap-5 sm:grid sm:grid-cols-2 lg:grid-cols-5">
             {related.map((item) => (
-              <ProductCard key={item.slug} product={item} className={mobileOnlyClass(item.slug, relatedMobileSlug)} />
+              <ProductCard key={item.slug} product={item} />
             ))}
           </div>
+          <AppCarousel ariaLabel={t("related")} className="mt-5 sm:hidden" arrows={false}>
+            {related.map((item) => (
+              <div key={item.slug} className={`w-[78vw] shrink-0 snap-start ${mobileOnlyClass(item.slug, relatedMobileSlug)}`}>
+                <ProductCard product={item} className="h-full" />
+              </div>
+            ))}
+          </AppCarousel>
         </AppSection>
       ) : null}
     </>

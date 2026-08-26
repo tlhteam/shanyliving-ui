@@ -27,7 +27,9 @@
     "whatsappProductMessage": "Hi Shany Living, I would like details and a price for {product}.",
     "whatsappDesignMessage": "Hi Shany Living, I built a sofa design and would like an exact quote.",
     "showPassword": "Show password",
-    "hidePassword": "Hide password"
+    "hidePassword": "Hide password",
+    "previous": "Previous",
+    "next": "Next"
   },
   "language": {
     "trigger": "Language",
@@ -454,7 +456,8 @@
       "customTitle": "Custom Sofa, made for you",
       "customText": "Choose your size, fabric, color and more. Our team is here to help you create the perfect sofa.",
       "customCta": "Open Customizer",
-      "save": "Save {name}"
+      "save": "Save {name}",
+      "gallery": "Product gallery"
     },
     "benefits": {
       "quality": {
@@ -515,21 +518,32 @@
       "Showroom product": "Showroom product"
     },
     "options": {
-      "Left chaise": "Left chaise",
-      "Right chaise": "Right chaise",
-      "Standard sofa": "Standard sofa",
-      "Sectional": "Sectional",
-      "Custom layout": "Custom layout",
+      "Blue": "Blue",
       "Boucle": "Boucle",
-      "Linen": "Linen",
-      "Chenille": "Chenille",
-      "Velvet": "Velvet",
-      "Leather": "Leather",
-      "Light Beige": "Light Beige",
-      "Sand": "Sand",
       "Caramel": "Caramel",
+      "Chenille": "Chenille",
+      "Color": "Color",
+      "Configuration": "Configuration",
+      "Custom layout": "Custom layout",
       "Espresso": "Espresso",
-      "Forest": "Forest"
+      "Fabric": "Fabric",
+      "Forest": "Forest",
+      "Grey": "Grey",
+      "Leather": "Leather",
+      "Left": "Left",
+      "Left chaise": "Left chaise",
+      "Light Beige": "Light Beige",
+      "Light Gray": "Light gray",
+      "Linen": "Linen",
+      "Performance Linen": "Performance linen",
+      "Right": "Right",
+      "Right chaise": "Right chaise",
+      "Sand": "Sand",
+      "Sectional": "Sectional",
+      "Size": "Size",
+      "Standard sofa": "Standard sofa",
+      "Velvet": "Velvet",
+      "White": "White"
     }
   },
   "customer": {
@@ -933,7 +947,11 @@
       "saved": "{resource} saved",
       "deleted": "{resource} deleted",
       "detailsOpened": "{resource} details opened",
-      "refreshed": "{resource} data refreshed"
+      "refreshed": "{resource} data refreshed",
+      "markFollowUp": "Mark for follow-up",
+      "followUpQueued": "Record queued for follow-up.",
+      "refreshedHint": "The list now matches the API.",
+      "reload": "Reload"
     },
     "mailbox": {
       "title": "Email",

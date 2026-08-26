@@ -48,8 +48,6 @@ const productionStages = [
   "Delivered & Installed"
 ] as const;
 
-// Best-effort mapping until the backend exposes a dedicated production-stage field
-// (see docs/backend-requirements-log.md, "Production & Delivery Status Notifications").
 function resolveStageIndex(order: CustomerOrder): number {
   const value = `${order.fulfillment_status ?? ""} ${order.status ?? ""}`.toLowerCase();
   const matchers: Array<[RegExp, number]> = [
