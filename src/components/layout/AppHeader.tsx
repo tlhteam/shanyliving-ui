@@ -11,7 +11,8 @@ import { SiteIcon } from "@/components/icons/SiteIcon";
 import { AppLogo } from "@/components/layout/AppLogo";
 import { LanguageSwitcher } from "@/components/layout/LanguageSwitcher";
 import { productCategoryHref } from "@/lib/categories";
-import { localizedProductName, storefrontProducts } from "@/lib/storefront-pages";
+import { localizedProductName } from "@/lib/storefront-pages";
+import { useCatalogProducts } from "@/hooks/use-catalog-products";
 
 const navItems = [
   { key: "home", href: "/#hero" },
@@ -34,10 +35,11 @@ export function AppHeader() {
   const { status } = useSession();
   const accountHref = status === "authenticated" ? "/customer" : "/login";
   const debouncedQuery = useMemo(() => debounce(setQuery, 220), []);
+  const { products: catalogProducts } = useCatalogProducts();
   const menuItems = navItems.map((item) => ({ label: t(`nav.${item.key}`), href: item.href }));
   const normalizedQuery = query.trim().toLowerCase();
   const results = normalizedQuery
-    ? storefrontProducts
+    ? catalogProducts
         .filter((product) => `${localizedProductName(product, locale)} ${product.name} ${product.subcategory}`.toLowerCase().includes(normalizedQuery))
         .slice(0, 8)
         .map((product) => ({

@@ -9,7 +9,8 @@ import { getCatalogProduct } from "@/lib/catalog";
 import { mapCatalogProduct } from "@/lib/storefront-catalog";
 import { isUsableImagePath } from "@/lib/media";
 import { mobileOnlyClass, mobileVisibleSlug } from "@/lib/mobile-catalog";
-import { getStorefrontProduct, storefrontProducts } from "@/lib/storefront-pages";
+import { getStorefrontProduct } from "@/lib/storefront-pages";
+import { getCatalogProducts } from "@/lib/storefront-products";
 
 type ProductDetailPageProps = {
   params: Promise<{ slug: string }>;
@@ -34,7 +35,10 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
     notFound();
   }
 
-  const related = storefrontProducts.filter((item) => item.slug !== product.slug && item.category === product.category).slice(0, 5);
+  const catalog = await getCatalogProducts();
+  const related = catalog
+    .filter((item) => item.slug !== product.slug && item.category === product.category)
+    .slice(0, 5);
   const relatedMobileSlug = mobileVisibleSlug(related);
   const galleryImages = (product.galleryImages?.length ? product.galleryImages : [product.image]).filter(isUsableImagePath);
 

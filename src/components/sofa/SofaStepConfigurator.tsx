@@ -17,7 +17,8 @@ import { StickyContactBar } from "@/components/storefront/StickyContactBar";
 import { useCustomerMutation } from "@/hooks/use-customer";
 import { fabrics } from "@/lib/fabrics";
 import { sofaConfigurations as configurations, sofaSizes as sizes } from "@/lib/sofa-options";
-import { getStorefrontProduct, storefrontProducts } from "@/lib/storefront-pages";
+import { getStorefrontProduct } from "@/lib/storefront-pages";
+import { useCatalogProducts } from "@/hooks/use-catalog-products";
 import { buildSofaQuoteMessage, generateConfigId, whatsappHref } from "@/lib/whatsapp";
 import type { CustomerSavedDesign } from "@/types/customer";
 const colors = [
@@ -71,7 +72,11 @@ export function SofaStepConfigurator() {
   const productSlug = searchParams.get("product");
   const requestedStep = searchParams.get("step");
   const requestedRoom = requestedStep === "room";
-  const sofaProducts = useMemo(() => storefrontProducts.filter((product) => product.category === "sofas").slice(0, 5), []);
+  const { products: catalogProducts } = useCatalogProducts();
+  const sofaProducts = useMemo(
+    () => catalogProducts.filter((product) => product.category === "sofas").slice(0, 5),
+    [catalogProducts]
+  );
   const initialProduct = productSlug ? getStorefrontProduct(productSlug) : sofaProducts[0];
   const [step, setStep] = useState<1 | 2 | 3 | 4>(requestedRoom ? 4 : stepFromQuery(requestedStep));
   const [roomMode, setRoomMode] = useState(requestedRoom);

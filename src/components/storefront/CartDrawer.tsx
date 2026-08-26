@@ -7,7 +7,7 @@ import { AppButton } from "@/components/app/AppButton";
 import { AppImage } from "@/components/app/AppImage";
 import { SiteIcon } from "@/components/icons/SiteIcon";
 import { formatMoney } from "@/lib/format";
-import { storefrontProducts } from "@/lib/storefront-pages";
+import { useCatalogProducts } from "@/hooks/use-catalog-products";
 import { useCustomerCommerceStore } from "@/stores/customer-commerce-store";
 
 export function CartDrawer() {
@@ -21,7 +21,8 @@ export function CartDrawer() {
   const removeFromCart = useCustomerCommerceStore((state) => state.removeFromCart);
   const addToCart = useCustomerCommerceStore((state) => state.addToCart);
   const subtotal = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
-  const suggestions = storefrontProducts.filter((product) => product.price > 0 && !cart.some((item) => item.slug === product.slug)).slice(0, 2);
+  const { products: catalogProducts } = useCatalogProducts();
+  const suggestions = catalogProducts.filter((product) => !cart.some((item) => item.slug === product.slug)).slice(0, 2);
 
   if (!open) {
     return null;
