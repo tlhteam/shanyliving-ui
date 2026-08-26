@@ -27,13 +27,13 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
   const { slug } = await params;
   const t = await getTranslations("storefront.detailPage");
   const benefitCopy = await getTranslations("storefront.benefits");
-  const fallbackProduct = getStorefrontProduct(slug);
   const apiProduct = await getCatalogProduct(slug);
-  const product = apiProduct ? mapCatalogProduct(apiProduct, fallbackProduct) : fallbackProduct;
 
-  if (!product) {
+  if (!apiProduct) {
     notFound();
   }
+
+  const product = mapCatalogProduct(apiProduct, getStorefrontProduct(slug));
 
   const catalog = await getCatalogProducts();
   const related = catalog

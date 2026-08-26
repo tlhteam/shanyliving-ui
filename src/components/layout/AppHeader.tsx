@@ -24,6 +24,8 @@ const navItems = [
 
 const quickSearchCategories = ["sofas", "living-room", "dining", "bedroom"];
 
+const announcementIcons = ["check", "message", "map-pin", "check", "message"] as const;
+
 export function AppHeader() {
   const t = useTranslations("header");
   const tDetail = useTranslations("storefront.detail");
@@ -36,6 +38,10 @@ export function AppHeader() {
   const accountHref = status === "authenticated" ? "/customer" : "/login";
   const debouncedQuery = useMemo(() => debounce(setQuery, 220), []);
   const { products: catalogProducts } = useCatalogProducts();
+  const announcements = (t.raw("announcements") as string[]).map((text, index) => ({
+    text,
+    icon: announcementIcons[index % announcementIcons.length]
+  }));
   const menuItems = navItems.map((item) => ({ label: t(`nav.${item.key}`), href: item.href }));
   const normalizedQuery = query.trim().toLowerCase();
   const results = normalizedQuery
@@ -77,6 +83,22 @@ export function AppHeader() {
 
   return (
     <header className="sticky top-0 z-50 bg-white text-neutral-950 shadow-sm transition-colors dark:bg-neutral-950 dark:text-neutral-50">
+      <div className="bg-black text-white">
+        <div className="mx-auto max-w-7xl overflow-hidden px-4 sm:px-6 lg:px-8">
+          <div className="flex whitespace-nowrap py-2 text-[11px] font-semibold">
+            {[0, 1].map((copy) => (
+              <div key={copy} aria-hidden={copy === 1} className="flex min-w-max animate-shany-marquee items-center gap-8 pe-8 sm:gap-12 sm:pe-12">
+                {announcements.map(({ text, icon }) => (
+                  <span key={`${copy}-${text}`} className="inline-flex items-center gap-2">
+                    <SiteIcon name={icon} className="size-3.5 shrink-0" />
+                    {text}
+                  </span>
+                ))}
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
       <div className="mx-auto flex min-h-18 max-w-7xl items-center justify-between gap-2 px-4 sm:min-h-20 sm:gap-4 sm:px-6 lg:px-8">
         <div className="flex items-center gap-4 sm:gap-6 xl:gap-7">
           <AppLogo className="shrink-0" />

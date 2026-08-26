@@ -14,11 +14,9 @@ import { ProductCard } from "@/components/storefront/ProductCard";
 import { Testimonials } from "@/components/storefront/Testimonials";
 import { categoryHrefBySlug, primaryCategorySlugs } from "@/lib/categories";
 import { categoryImage, siteImages } from "@/lib/images";
-import { getStorefrontProduct, type StorefrontProduct } from "@/lib/storefront-pages";
+import type { StorefrontProduct } from "@/lib/storefront-pages";
 import { whatsappHref } from "@/lib/whatsapp";
 import type { HomeCatalog, CatalogCategory } from "@/lib/catalog";
-
-const featuredSlugs = ["lian-sofa", "elysian-cloud-living-set", "heritage-oak-dining-set", "imperial-luxe-channel-bed"];
 
 const clubPerks = [
   { key: "offers", icon: "gift" },
@@ -56,15 +54,20 @@ function CategoryTile({ category, index, circular = false }: { category: Catalog
   );
 }
 
-export function HomeExperience({ catalog, fromSocial = false }: { catalog: HomeCatalog; fromSocial?: boolean }) {
+export function HomeExperience({
+  catalog,
+  featured,
+  fromSocial = false
+}: {
+  catalog: HomeCatalog;
+  featured: StorefrontProduct[];
+  fromSocial?: boolean;
+}) {
   const t = useTranslations("home");
   const tAbout = useTranslations("about");
   const common = useTranslations("common");
   const whatsappLink = whatsappHref(common("whatsappMessage"));
   const categories = catalog.categories.filter((category) => primaryCategorySlugs.includes(category.slug));
-  const featuredProducts = featuredSlugs
-    .map((slug) => getStorefrontProduct(slug))
-    .filter((product): product is StorefrontProduct => Boolean(product));
   const [subscribeEmail, setSubscribeEmail] = useState("");
 
   const handleSubscribe = (event: FormEvent<HTMLFormElement>) => {
@@ -135,7 +138,7 @@ export function HomeExperience({ catalog, fromSocial = false }: { catalog: HomeC
           </Link>
         </div>
         <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
-          {featuredProducts.map((product) => (
+          {featured.map((product) => (
             <ProductCard key={product.slug} product={product} />
           ))}
         </div>

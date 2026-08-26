@@ -17,8 +17,7 @@ import { StickyContactBar } from "@/components/storefront/StickyContactBar";
 import { useCustomerMutation } from "@/hooks/use-customer";
 import { fabrics } from "@/lib/fabrics";
 import { sofaConfigurations as configurations, sofaSizes as sizes } from "@/lib/sofa-options";
-import { getStorefrontProduct } from "@/lib/storefront-pages";
-import { useCatalogProducts } from "@/hooks/use-catalog-products";
+import type { StorefrontProduct } from "@/lib/storefront-pages";
 import { buildSofaQuoteMessage, generateConfigId, whatsappHref } from "@/lib/whatsapp";
 import type { CustomerSavedDesign } from "@/types/customer";
 const colors = [
@@ -63,7 +62,7 @@ function readFile(file: File) {
   });
 }
 
-export function SofaStepConfigurator() {
+export function SofaStepConfigurator({ sofaProducts }: { sofaProducts: StorefrontProduct[] }) {
   const t = useTranslations("customizer");
   const options = useTranslations("storefront.options");
   const optionLabel = (value: string) => (options.has(value) ? options(value) : value);
@@ -72,15 +71,10 @@ export function SofaStepConfigurator() {
   const productSlug = searchParams.get("product");
   const requestedStep = searchParams.get("step");
   const requestedRoom = requestedStep === "room";
-  const { products: catalogProducts } = useCatalogProducts();
-  const sofaProducts = useMemo(
-    () => catalogProducts.filter((product) => product.category === "sofas").slice(0, 5),
-    [catalogProducts]
-  );
-  const initialProduct = productSlug ? getStorefrontProduct(productSlug) : sofaProducts[0];
+  const initialProduct = sofaProducts.find((item) => item.slug === productSlug) ?? sofaProducts[0];
   const [step, setStep] = useState<1 | 2 | 3 | 4>(requestedRoom ? 4 : stepFromQuery(requestedStep));
   const [roomMode, setRoomMode] = useState(requestedRoom);
-  const [product, setProduct] = useState(initialProduct ?? sofaProducts[0]);
+  const [product, setProduct] = useState(initialProduct);
   const [size, setSize] = useState("2.8m");
   const [customSizeDetail, setCustomSizeDetail] = useState("");
   const [configuration, setConfiguration] = useState("Standard sofa");

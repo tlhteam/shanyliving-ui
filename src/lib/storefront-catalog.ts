@@ -190,10 +190,6 @@ export async function getStorefrontPage(
     ? collectionProducts
     : await fetchCategoryProducts(pageSlug);
 
-  if (!apiProducts.length) {
-    return staticPage;
-  }
-
   return {
     ...staticPage,
     products: apiProducts.map((product) =>

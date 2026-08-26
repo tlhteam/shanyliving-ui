@@ -12,6 +12,38 @@ html {
   scroll-behavior: smooth;
 }
 
+@keyframes shany-marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-100%);
+  }
+}
+
+@keyframes shany-marquee-rtl {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(100%);
+  }
+}
+
+.animate-shany-marquee {
+  animation: shany-marquee 32s linear infinite;
+}
+
+[dir="rtl"] .animate-shany-marquee {
+  animation-name: shany-marquee-rtl;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-shany-marquee {
+    animation: none;
+  }
+}
+
 body {
   margin: 0;
 }
