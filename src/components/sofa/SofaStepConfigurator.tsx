@@ -11,24 +11,14 @@ import { AppDialog } from "@/components/app/AppDialog";
 import { AppImage } from "@/components/app/AppImage";
 import { SocialAuthButtons } from "@/components/auth/SocialAuthButtons";
 import { SiteIcon } from "@/components/icons/SiteIcon";
-import { SofaBlockDiagram } from "@/components/sofa/SofaBlockDiagram";
 import { WhatsappIcon } from "@/components/icons/WhatsappIcon";
 import { StickyContactBar } from "@/components/storefront/StickyContactBar";
 import { useCustomerMutation } from "@/hooks/use-customer";
 import { useOptionLabel } from "@/hooks/use-option-label";
-import { fabrics } from "@/lib/fabrics";
-import { sofaConfigurations as configurations, sofaSizes as sizes } from "@/lib/sofa-options";
+import { productColors, productConfigurations, productFabrics, productSizes, variantImage } from "@/lib/product-options";
 import type { StorefrontProduct } from "@/lib/storefront-pages";
 import { buildSofaQuoteMessage, generateConfigId, whatsappHref } from "@/lib/whatsapp";
 import type { CustomerSavedDesign } from "@/types/customer";
-const colors = [
-  { name: "Light Beige", value: "#eee9df" },
-  { name: "Sand", value: "#d9d4ca" },
-  { name: "Caramel", value: "#b1845f" },
-  { name: "Espresso", value: "#3d271c" },
-  { name: "Forest", value: "#183421" }
-];
-
 const stepKeys: Record<number, "model" | "size" | "fabric" | "review"> = {
   1: "model",
   2: "size",
@@ -63,6 +53,18 @@ function readFile(file: File) {
   });
 }
 
+function SofaPreview({ src, alt, className }: { src: string; alt: string; className?: string }) {
+  return (
+    <AppImage
+      src={src}
+      alt={alt}
+      className={`aspect-[1.35/1] rounded-lg border border-neutral-200 bg-white dark:border-white/10 dark:bg-neutral-900 ${className ?? ""}`}
+      sizes="(max-width: 1024px) 92vw, 820px"
+      imageClassName="object-contain"
+    />
+  );
+}
+
 export function SofaStepConfigurator({ sofaProducts }: { sofaProducts: StorefrontProduct[] }) {
   const t = useTranslations("customizer");
   const optionLabel = useOptionLabel();
@@ -75,15 +77,40 @@ export function SofaStepConfigurator({ sofaProducts }: { sofaProducts: Storefron
   const [step, setStep] = useState<1 | 2 | 3 | 4>(requestedRoom ? 4 : stepFromQuery(requestedStep));
   const [roomMode, setRoomMode] = useState(requestedRoom);
   const [product, setProduct] = useState(initialProduct);
-  const [size, setSize] = useState("2.8m");
   const [customSizeDetail, setCustomSizeDetail] = useState("");
-  const [configuration, setConfiguration] = useState("Standard sofa");
-  const [fabric, setFabric] = useState(fabrics[0]);
-  const [color, setColor] = useState(colors[0]);
+  const [selection, setSelection] = useState<{ size: string; configuration: string; fabric: string; color: string }>({
+    size: "",
+    configuration: "",
+    fabric: "",
+    color: ""
+  });
   const [roomPhoto, setRoomPhoto] = useState<string | null>(null);
   const [aiReady, setAiReady] = useState(false);
   const [aiGenerating, setAiGenerating] = useState(false);
   const [authOpen, setAuthOpen] = useState(false);
+
+  const sizes = useMemo(() => productSizes(product), [product]);
+  const configurations = useMemo(() => productConfigurations(product), [product]);
+  const fabricChoices = useMemo(() => productFabrics(product), [product]);
+  const colorChoices = useMemo(() => productColors(product), [product]);
+
+  const size = sizes.includes(selection.size) ? selection.size : (sizes[Math.min(2, sizes.length - 1)] ?? "");
+  const configuration = configurations.includes(selection.configuration)
+    ? selection.configuration
+    : (configurations[0] ?? "");
+  const fabric = fabricChoices.find((item) => item.label === selection.fabric) ?? fabricChoices[0];
+  const color = colorChoices.find((item) => item.label === selection.color) ?? colorChoices[0];
+
+  const setSize = (value: string) => setSelection((current) => ({ ...current, size: value }));
+  const setConfiguration = (value: string) => setSelection((current) => ({ ...current, configuration: value }));
+  const setFabric = (value: string) => setSelection((current) => ({ ...current, fabric: value }));
+  const setColor = (value: string) => setSelection((current) => ({ ...current, color: value }));
+
+  const previewImage =
+    variantImage(product, { Color: color?.label, Fabric: fabric?.label, Size: size, Configuration: configuration }) ??
+    color?.image ??
+    fabric?.image ??
+    product.image;
 
   const canTransact = session?.user?.role !== "admin";
   const configId = useMemo(() => generateConfigId(), []);
@@ -93,8 +120,8 @@ export function SofaStepConfigurator({ sofaProducts }: { sofaProducts: Storefron
     productId: product.slug,
     size: sizeSummary,
     configuration,
-    fabric: fabric.name,
-    color: color.name,
+    fabric: fabric?.label,
+    color: color?.label,
     configId,
     customerName: session?.user?.name ?? undefined,
     customerEmail: session?.user?.email ?? undefined
@@ -116,8 +143,8 @@ export function SofaStepConfigurator({ sofaProducts }: { sofaProducts: Storefron
         body: {
           title: product.name,
           status: "in_progress",
-          configuration: JSON.stringify({ product: product.name, style: configuration, color: color.name }),
-          fabric: fabric.name,
+          configuration: JSON.stringify({ product: product.name, style: configuration, color: color?.label }),
+          fabric: fabric?.label,
           size: sizeSummary,
           extras: "",
           image: product.image,
@@ -173,8 +200,8 @@ export function SofaStepConfigurator({ sofaProducts }: { sofaProducts: Storefron
     [t("summary.model"), product.name.replace(" Sofa", "")],
     [t("summary.size"), sizeSummary],
     [t("summary.configuration"), optionLabel(configuration)],
-    [t("summary.fabric"), optionLabel(fabric.name)],
-    [t("summary.color"), optionLabel(color.name)]
+    [t("summary.fabric"), optionLabel(fabric?.label)],
+    [t("summary.color"), optionLabel(color?.label)]
   ];
 
   const modelPicker = (columns: string, advanceOnSelect = false) => (
@@ -213,19 +240,17 @@ export function SofaStepConfigurator({ sofaProducts }: { sofaProducts: Storefron
       {size === "Custom Size" ? (
         <div className="mt-4 space-y-2 rounded-md border border-neutral-200 bg-neutral-50 p-4 dark:border-white/10 dark:bg-neutral-900">
           <label htmlFor="custom-size-detail" className="block text-xs font-bold text-neutral-700 dark:text-neutral-300">
-            Tell us your measurements
+            {t("customSizeLabel")}
           </label>
           <input
             id="custom-size-detail"
             type="text"
             value={customSizeDetail}
             onChange={(event) => setCustomSizeDetail(event.target.value)}
-            placeholder="e.g. 350 x 110 cm, or describe your space"
+            placeholder={t("customSizePlaceholder")}
             className="w-full rounded-md border border-neutral-300 bg-white px-3 py-2.5 text-sm outline-none focus:border-neutral-950 dark:border-white/15 dark:bg-neutral-950 dark:focus:border-white"
           />
-          <p className="text-xs text-neutral-500 dark:text-neutral-400">
-            Not sure of the exact measurements? Leave a note and a Shany Living advisor will help you get it right.
-          </p>
+          <p className="text-xs text-neutral-500 dark:text-neutral-400">{t("customSizeHint")}</p>
         </div>
       ) : null}
       <h2 className="mt-8 font-bold">{t("configuration")}</h2>
@@ -246,28 +271,32 @@ export function SofaStepConfigurator({ sofaProducts }: { sofaProducts: Storefron
 
   const fabricPicker = (
     <>
-      <div className="grid grid-cols-5 gap-2 sm:gap-3">
-        {fabrics.map((item) => (
-          <button key={item.name} type="button" onClick={() => setFabric(item)} className="text-center text-xs font-bold">
+      <div className="grid grid-cols-3 gap-2 sm:grid-cols-5 sm:gap-3">
+        {fabricChoices.map((item) => (
+          <button key={item.label} type="button" onClick={() => setFabric(item.label)} className="text-center text-xs font-bold">
             <AppImage
-              src={item.image}
-              alt={item.name}
-              className={`aspect-square rounded-md border transition hover:scale-[1.03] ${fabric.name === item.name ? "border-neutral-950 ring-2 ring-neutral-950/15 dark:border-white dark:ring-white/25" : "border-neutral-200 dark:border-white/10"}`}
+              src={item.image ?? ""}
+              alt={optionLabel(item.label)}
+              className={`aspect-square rounded-md border transition hover:scale-[1.03] ${fabric?.label === item.label ? "border-neutral-950 ring-2 ring-neutral-950/15 dark:border-white dark:ring-white/25" : "border-neutral-200 dark:border-white/10"}`}
               sizes="120px"
             />
-            <span className="mt-2 block">{optionLabel(item.name)}</span>
+            <span className="mt-2 block leading-tight">{optionLabel(item.label)}</span>
           </button>
         ))}
       </div>
-      <h2 className="mt-8 font-bold">{t("colorTitle", { fabric: optionLabel(fabric.name) })}</h2>
+      <h2 className="mt-8 font-bold">{t("colorTitle", { fabric: optionLabel(fabric?.label) })}</h2>
       <div className="mt-5 flex flex-wrap gap-4">
-        {colors.map((item) => (
-          <button key={item.name} type="button" onClick={() => setColor(item)} aria-label={optionLabel(item.name)} title={optionLabel(item.name)} className="group text-center text-xs font-bold">
+        {colorChoices.map((item) => (
+          <button key={item.label} type="button" onClick={() => setColor(item.label)} aria-label={optionLabel(item.label)} title={optionLabel(item.label)} className="group text-center text-xs font-bold">
             <span
-              className={`block size-12 rounded-full border-2 transition group-hover:scale-110 ${color.name === item.name ? "border-neutral-950 ring-2 ring-neutral-950/15 dark:border-white dark:ring-white/25" : "border-transparent"}`}
-              style={{ backgroundColor: item.value }}
-            />
-            <span className="mt-2 block max-w-16 text-[10px] leading-tight text-neutral-700 dark:text-neutral-300">{optionLabel(item.name)}</span>
+              className={`block size-12 overflow-hidden rounded-full border-2 transition group-hover:scale-110 ${color?.label === item.label ? "border-neutral-950 ring-2 ring-neutral-950/15 dark:border-white dark:ring-white/25" : "border-transparent"}`}
+              style={item.swatch ? { backgroundColor: item.swatch } : undefined}
+            >
+              {!item.swatch && item.image ? (
+                <AppImage src={item.image} alt={optionLabel(item.label)} className="size-full" sizes="48px" />
+              ) : null}
+            </span>
+            <span className="mt-2 block max-w-16 text-[10px] leading-tight text-neutral-700 dark:text-neutral-300">{optionLabel(item.label)}</span>
           </button>
         ))}
       </div>
@@ -313,7 +342,7 @@ export function SofaStepConfigurator({ sofaProducts }: { sofaProducts: Storefron
                   <AppImage src={product.image} alt={product.name} className="aspect-[1.25/1] rounded-md" sizes="88px" />
                   <div>
                     <p className="font-bold">{t("room.ready")}</p>
-                    <p className="mt-1 text-xs text-neutral-600 dark:text-neutral-400">{t("room.readyHint", { product: product.name, fabric: optionLabel(fabric.name), color: optionLabel(color.name) })}</p>
+                    <p className="mt-1 text-xs text-neutral-600 dark:text-neutral-400">{t("room.readyHint", { product: product.name, fabric: optionLabel(fabric?.label), color: optionLabel(color?.label) })}</p>
                   </div>
                 </div>
               </div>
@@ -385,7 +414,7 @@ export function SofaStepConfigurator({ sofaProducts }: { sofaProducts: Storefron
           <div className="grid gap-10 lg:grid-cols-[1fr_360px] lg:items-start">
             <div>
               <h1 className="font-serif text-4xl font-bold">{t("room.title")}</h1>
-              <p className="mt-3 max-w-xl text-neutral-600 dark:text-neutral-400">{t("room.subtitleLong", { product: product.name, fabric: optionLabel(fabric.name), color: optionLabel(color.name) })}</p>
+              <p className="mt-3 max-w-xl text-neutral-600 dark:text-neutral-400">{t("room.subtitleLong", { product: product.name, fabric: optionLabel(fabric?.label), color: optionLabel(color?.label) })}</p>
               <div className="mt-8">{uploadPane}</div>
             </div>
             <aside className="sticky top-24 space-y-6 rounded-lg border border-neutral-200 p-6 dark:border-white/10">
@@ -420,7 +449,7 @@ export function SofaStepConfigurator({ sofaProducts }: { sofaProducts: Storefron
             <h1 className="font-bold">{t("sizeTitle")}</h1>
             <p className="mt-1 text-xs text-neutral-600 dark:text-neutral-400">{t("sizeHint")}</p>
             <div className="mt-8">{sizePicker}</div>
-            <SofaBlockDiagram configuration={configuration} color={color.value} className="mt-10" />
+            <SofaPreview src={previewImage} alt={product.name} className="mt-10" />
           </section>
         ) : null}
 
@@ -430,8 +459,8 @@ export function SofaStepConfigurator({ sofaProducts }: { sofaProducts: Storefron
             <div className="mt-5">{fabricPicker}</div>
             <div className="mt-6 rounded-lg border border-neutral-200 bg-neutral-50 p-4 dark:border-white/10 dark:bg-neutral-900">
               <p className="text-xs font-bold uppercase tracking-[0.14em] text-neutral-500 dark:text-neutral-400">{t("preview")}</p>
-              <p className="mt-1 text-sm font-bold">{t("previewCaption", { fabric: optionLabel(fabric.name), color: optionLabel(color.name) })}</p>
-              <SofaBlockDiagram configuration={configuration} color={color.value} className="mt-4" />
+              <p className="mt-1 text-sm font-bold">{t("previewCaption", { fabric: optionLabel(fabric?.label), color: optionLabel(color?.label) })}</p>
+              <SofaPreview src={previewImage} alt={product.name} className="mt-4" />
             </div>
           </section>
         ) : null}
@@ -513,14 +542,14 @@ export function SofaStepConfigurator({ sofaProducts }: { sofaProducts: Storefron
 
         <div className="grid gap-10 lg:grid-cols-[1fr_420px] lg:items-start">
           <div className="sticky top-24 space-y-4">
-            {step === 2 || step === 3 ? (
-              <div className="rounded-lg border border-neutral-200 p-6 dark:border-white/10">
-                {step === 3 ? <p className="mb-4 text-center text-sm font-bold">{fabric.name} · {color.name}</p> : null}
-                <SofaBlockDiagram configuration={configuration} color={color.value} />
-              </div>
-            ) : (
-              <AppImage src={product.image} alt={product.name} className="aspect-[1.35/1] rounded-lg border border-neutral-200 dark:border-white/10" sizes="820px" imageClassName="object-contain" />
-            )}
+            <div className="rounded-lg border border-neutral-200 p-6 dark:border-white/10">
+              {step === 3 ? (
+                <p className="mb-4 text-center text-sm font-bold">
+                  {optionLabel(fabric?.label)} · {optionLabel(color?.label)}
+                </p>
+              ) : null}
+              <SofaPreview src={step === 1 ? product.image : previewImage} alt={product.name} />
+            </div>
           </div>
 
           <aside className="space-y-6 rounded-lg border border-neutral-200 p-6 dark:border-white/10">

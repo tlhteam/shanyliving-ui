@@ -12,8 +12,7 @@ import { StickyContactBar } from "@/components/storefront/StickyContactBar";
 import { useOptionLabel } from "@/hooks/use-option-label";
 import { productCategoryHref } from "@/lib/categories";
 import { isCustomOrderCategory } from "@/lib/custom-order";
-import { fabrics } from "@/lib/fabrics";
-import { sofaConfigurations, sofaSizes } from "@/lib/sofa-options";
+import { productConfigurations, productFabrics, productSizes } from "@/lib/product-options";
 import { localizedProductDescription, localizedProductName } from "@/lib/storefront-pages";
 import { buildProductQuoteMessage, buildSofaQuoteMessage, whatsappHref } from "@/lib/whatsapp";
 import type { StorefrontOptionGroup, StorefrontProduct } from "@/lib/storefront-pages";
@@ -94,6 +93,7 @@ export function ProductDetailHero({ product, images }: ProductDetailHeroProps) {
   const [activeImage, setActiveImage] = useState(0);
   const [selectedColor, setSelectedColor] = useState(0);
   const [selectedFabric, setSelectedFabric] = useState(0);
+  const fabricChoices = useMemo(() => productFabrics(product), [product]);
 
   const heroImage = images[activeImage] ?? images[0] ?? product.image;
   const isSofa = product.category === "sofas";
@@ -103,16 +103,20 @@ export function ProductDetailHero({ product, images }: ProductDetailHeroProps) {
     ? buildSofaQuoteMessage({
         productName: product.name,
         productId: product.slug,
-        fabric: fabrics[selectedFabric]?.name,
+        fabric: fabricChoices[selectedFabric]?.label,
         color: selectedColorName
       })
     : buildProductQuoteMessage({ productName: product.name, productId: product.slug, category: product.subcategory, colorNames: product.colorNames });
   const quoteHref = whatsappHref(quoteMessage);
-  const configuration = isSofa ? sofaConfigurations.join(", ") : configurationSummary(product.optionGroups);
+  const sizeChoices = productSizes(product).filter((size) => size !== "Custom Size");
+  const configurationChoices = productConfigurations(product);
+  const configuration = isSofa
+    ? configurationChoices.map((item) => optionLabel(item)).join(", ")
+    : configurationSummary(product.optionGroups);
 
   const accordionItems = [
     { key: "dimensions", label: t("dimensions"), content: product.dimensions || t("dimensionsFallback") },
-    ...(isSofa ? [{ key: "sizes", label: t("sizesLabel"), content: sofaSizes.join(", ") }] : []),
+    ...(isSofa && sizeChoices.length ? [{ key: "sizes", label: t("sizesLabel"), content: sizeChoices.join(", ") }] : []),
     { key: "configuration", label: t("configurationLabel"), content: configuration || t("configurationFallback") },
     { key: "materials", label: t("materialsLabel"), content: materials || t("materialsFallback") },
     ...(isCustomOrder
@@ -211,17 +215,23 @@ export function ProductDetailHero({ product, images }: ProductDetailHeroProps) {
           </p>
         ) : null}
 
-        {isSofa ? (
+        {isSofa && fabricChoices.length ? (
           <div className="mt-6">
             <p className="text-xs font-bold uppercase tracking-[0.14em] text-neutral-500 dark:text-neutral-400">
               {t("fabricsLabel")}
             </p>
             <div className="mt-3 flex flex-wrap gap-3">
-              {fabrics.map((item, index) => (
-                <button key={item.name} type="button" onClick={() => setSelectedFabric(index)} aria-current={index === selectedFabric} className="group text-center text-xs font-bold">
+              {fabricChoices.map((item, index) => (
+                <button
+                  key={item.label}
+                  type="button"
+                  onClick={() => setSelectedFabric(index)}
+                  aria-current={index === selectedFabric}
+                  className="group w-14 text-center text-xs font-bold"
+                >
                   <AppImage
-                    src={item.image}
-                    alt={item.name}
+                    src={item.image ?? ""}
+                    alt={optionLabel(item.label)}
                     className={`size-14 rounded-md border transition group-hover:scale-105 ${
                       index === selectedFabric
                         ? "border-neutral-950 ring-2 ring-neutral-950/15 dark:border-white dark:ring-white/25"
@@ -229,7 +239,9 @@ export function ProductDetailHero({ product, images }: ProductDetailHeroProps) {
                     }`}
                     sizes="56px"
                   />
-                  <span className="mt-1.5 block text-neutral-700 dark:text-neutral-300">{optionLabel(item.name)}</span>
+                  <span className="mt-1.5 block leading-tight text-neutral-700 dark:text-neutral-300">
+                    {optionLabel(item.label)}
+                  </span>
                 </button>
               ))}
             </div>

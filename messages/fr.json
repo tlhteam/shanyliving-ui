@@ -1994,6 +1994,9 @@
     "signIn": "Se connecter",
     "createAccount": "Creer un compte",
     "signInText": "Creez un compte ou connectez-vous pour retrouver ce design dans vos designs enregistres.",
-    "backTo": "Retour a {step}"
+    "backTo": "Retour a {step}",
+    "customSizeLabel": "Indiquez vos mesures",
+    "customSizePlaceholder": "ex. 350 x 110 cm, ou decrivez votre espace",
+    "customSizeHint": "Vous ne connaissez pas les mesures exactes ? Laissez une note et un conseiller Shany Living vous aidera."
   }
 }
