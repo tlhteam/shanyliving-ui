@@ -12,10 +12,24 @@ import { StickyContactBar } from "@/components/storefront/StickyContactBar";
 import { useOptionLabel } from "@/hooks/use-option-label";
 import { productCategoryHref } from "@/lib/categories";
 import { isCustomOrderCategory } from "@/lib/custom-order";
-import { productConfigurations, productFabrics, productSizes } from "@/lib/product-options";
-import { localizedProductDescription, localizedProductName } from "@/lib/storefront-pages";
-import { buildProductQuoteMessage, buildSofaQuoteMessage, whatsappHref } from "@/lib/whatsapp";
-import type { StorefrontOptionGroup, StorefrontProduct } from "@/lib/storefront-pages";
+import {
+  productConfigurations,
+  productFabrics,
+  productSizes,
+} from "@/lib/product-options";
+import {
+  localizedProductDescription,
+  localizedProductName,
+} from "@/lib/storefront-pages";
+import {
+  buildProductQuoteMessage,
+  buildSofaQuoteMessage,
+  whatsappHref,
+} from "@/lib/whatsapp";
+import type {
+  StorefrontOptionGroup,
+  StorefrontProduct,
+} from "@/lib/storefront-pages";
 
 type ProductDetailHeroProps = {
   product: StorefrontProduct;
@@ -55,9 +69,15 @@ function parseDescription(description?: string) {
   return { intro: intro.join(" "), specs };
 }
 
-function findColorImageIndex(product: StorefrontProduct, images: string[], colorName: string) {
+function findColorImageIndex(
+  product: StorefrontProduct,
+  images: string[],
+  colorName: string,
+) {
   const variant = product.variantMedia?.find((media) =>
-    Object.values(media.options).some((value) => value.toLowerCase() === colorName.toLowerCase()),
+    Object.values(media.options).some(
+      (value) => value.toLowerCase() === colorName.toLowerCase(),
+    ),
   );
 
   return variant ? images.findIndex((image) => image === variant.image) : -1;
@@ -73,7 +93,10 @@ function configurationSummary(groups?: StorefrontOptionGroup[]) {
   }
 
   return relevant
-    .map((group) => `${group.name}: ${group.values.map((value) => value.label).join(", ")}`)
+    .map(
+      (group) =>
+        `${group.name}: ${group.values.map((value) => value.label).join(", ")}`,
+    )
     .join(" · ");
 }
 
@@ -88,7 +111,9 @@ export function ProductDetailHero({ product, images }: ProductDetailHeroProps) {
     () => parseDescription(description),
     [description],
   );
-  const materials = specs.find((spec) => /material|care|fabric/i.test(spec.label))?.value;
+  const materials = specs.find((spec) =>
+    /material|care|fabric/i.test(spec.label),
+  )?.value;
 
   const [activeImage, setActiveImage] = useState(0);
   const [selectedColor, setSelectedColor] = useState(0);
@@ -98,37 +123,75 @@ export function ProductDetailHero({ product, images }: ProductDetailHeroProps) {
   const heroImage = images[activeImage] ?? images[0] ?? product.image;
   const isSofa = product.category === "sofas";
   const isCustomOrder = isCustomOrderCategory(product.category);
-  const selectedColorName = product.colorNames?.[selectedColor] ?? product.colors?.[selectedColor];
+  const selectedColorName =
+    product.colorNames?.[selectedColor] ?? product.colors?.[selectedColor];
   const quoteMessage = isSofa
     ? buildSofaQuoteMessage({
         productName: product.name,
         productId: product.slug,
         fabric: fabricChoices[selectedFabric]?.label,
-        color: selectedColorName
+        color: selectedColorName,
       })
-    : buildProductQuoteMessage({ productName: product.name, productId: product.slug, category: product.subcategory, colorNames: product.colorNames });
+    : buildProductQuoteMessage({
+        productName: product.name,
+        productId: product.slug,
+        category: product.subcategory,
+        colorNames: product.colorNames,
+      });
   const quoteHref = whatsappHref(quoteMessage);
-  const sizeChoices = productSizes(product).filter((size) => size !== "Custom Size");
+  const sizeChoices = productSizes(product).filter(
+    (size) => size !== "Custom Size",
+  );
   const configurationChoices = productConfigurations(product);
   const configuration = isSofa
     ? configurationChoices.map((item) => optionLabel(item)).join(", ")
     : configurationSummary(product.optionGroups);
 
   const accordionItems = [
-    { key: "dimensions", label: t("dimensions"), content: product.dimensions || t("dimensionsFallback") },
-    ...(isSofa && sizeChoices.length ? [{ key: "sizes", label: t("sizesLabel"), content: sizeChoices.join(", ") }] : []),
-    { key: "configuration", label: t("configurationLabel"), content: configuration || t("configurationFallback") },
-    { key: "materials", label: t("materialsLabel"), content: materials || t("materialsFallback") },
+    {
+      key: "dimensions",
+      label: t("dimensions"),
+      content: product.dimensions || t("dimensionsFallback"),
+    },
+    ...(isSofa && sizeChoices.length
+      ? [
+          {
+            key: "sizes",
+            label: t("sizesLabel"),
+            content: sizeChoices.join(", "),
+          },
+        ]
+      : []),
+    {
+      key: "configuration",
+      label: t("configurationLabel"),
+      content: configuration || t("configurationFallback"),
+    },
+    {
+      key: "materials",
+      label: t("materialsLabel"),
+      content: materials || t("materialsFallback"),
+    },
     ...(isCustomOrder
       ? [
-          { key: "delivery", label: t("deliveryLabel"), content: t("deliveryInfo") },
-          { key: "installation", label: t("installationLabel"), content: t("installationInfo") },
+          {
+            key: "delivery",
+            label: t("deliveryLabel"),
+            content: t("deliveryInfo"),
+          },
+          {
+            key: "installation",
+            label: t("installationLabel"),
+            content: t("installationInfo"),
+          },
         ]
       : []),
   ];
 
   return (
-    <div className={`grid gap-8 lg:grid-cols-[1.1fr_0.9fr] ${isCustomOrder ? "pb-24 lg:pb-0" : ""}`}>
+    <div
+      className={`grid gap-8 lg:grid-cols-[1.1fr_0.9fr] ${isCustomOrder ? "pb-24 lg:pb-0" : ""}`}
+    >
       <section className="min-w-0 self-start lg:sticky lg:top-24">
         <div className="relative aspect-square overflow-hidden rounded-lg bg-neutral-100 sm:aspect-[1.15/1] dark:bg-neutral-900">
           <AppImage
@@ -145,18 +208,30 @@ export function ProductDetailHero({ product, images }: ProductDetailHeroProps) {
               <button
                 type="button"
                 aria-label={common("previous")}
-                onClick={() => setActiveImage((current) => (current - 1 + images.length) % images.length)}
+                onClick={() =>
+                  setActiveImage(
+                    (current) => (current - 1 + images.length) % images.length,
+                  )
+                }
                 className="absolute start-3 top-1/2 grid -translate-y-1/2 place-items-center rounded-full border border-neutral-200 bg-white/90 p-2.5 shadow-[var(--shadow-elevation-2)] transition hover:bg-white dark:border-white/15 dark:bg-neutral-900/90 dark:hover:bg-neutral-900"
               >
-                <SiteIcon name="chevron-left" className="size-4 rtl:rotate-180" />
+                <SiteIcon
+                  name="chevron-left"
+                  className="size-4 rtl:rotate-180"
+                />
               </button>
               <button
                 type="button"
                 aria-label={common("next")}
-                onClick={() => setActiveImage((current) => (current + 1) % images.length)}
+                onClick={() =>
+                  setActiveImage((current) => (current + 1) % images.length)
+                }
                 className="absolute end-3 top-1/2 grid -translate-y-1/2 place-items-center rounded-full border border-neutral-200 bg-white/90 p-2.5 shadow-[var(--shadow-elevation-2)] transition hover:bg-white dark:border-white/15 dark:bg-neutral-900/90 dark:hover:bg-neutral-900"
               >
-                <SiteIcon name="chevron-right" className="size-4 rtl:rotate-180" />
+                <SiteIcon
+                  name="chevron-right"
+                  className="size-4 rtl:rotate-180"
+                />
               </button>
               <span className="absolute bottom-3 end-3 rounded-full bg-black/60 px-2.5 py-1 text-[11px] font-bold text-white">
                 {activeImage + 1} / {images.length}
@@ -166,7 +241,12 @@ export function ProductDetailHero({ product, images }: ProductDetailHeroProps) {
         </div>
 
         {images.length > 1 ? (
-          <AppCarousel ariaLabel={t("gallery")} className="mt-3" loop railClassName="gap-2">
+          <AppCarousel
+            ariaLabel={t("gallery")}
+            className="mt-3"
+            loop
+            railClassName="gap-2"
+          >
             {images.map((image, index) => (
               <button
                 key={`${image}-${index}`}
@@ -180,22 +260,32 @@ export function ProductDetailHero({ product, images }: ProductDetailHeroProps) {
                     : "border-neutral-200 hover:border-neutral-400 dark:border-white/10"
                 }`}
               >
-                <AppImage src={image} alt="" className="absolute inset-0" sizes="80px" />
+                <AppImage
+                  src={image}
+                  alt=""
+                  className="absolute inset-0"
+                  sizes="80px"
+                />
               </button>
             ))}
           </AppCarousel>
         ) : null}
       </section>
 
-      <aside className="min-w-0" data-shiputzai-product="" data-product-id={product.slug} data-sku={product.slug}>
+      <aside
+        className="min-w-0"
+        data-shiputzai-product=""
+        data-product-id={product.slug}
+        data-sku={product.slug}
+      >
         <nav className="mb-4 flex flex-wrap items-center gap-2 text-xs font-bold text-neutral-600 sm:mb-6 dark:text-neutral-400">
           <Link href="/">{t("home")}</Link>
           <SiteIcon name="chevron-right" className="size-3 rtl:rotate-180" />
-          <Link href={productCategoryHref[product.category] ?? "/sofas"}>{t(`collectionLabels.${product.category}`)}</Link>
+          <Link href={productCategoryHref[product.category] ?? "/sofas"}>
+            {t(`collectionLabels.${product.category}`)}
+          </Link>
           <SiteIcon name="chevron-right" className="size-3 rtl:rotate-180" />
-          <span className="text-neutral-950 dark:text-neutral-50">
-            {name}
-          </span>
+          <span className="text-neutral-950 dark:text-neutral-50">{name}</span>
         </nav>
 
         <h1 className="font-serif text-3xl leading-tight font-bold sm:text-4xl lg:text-5xl">
@@ -227,19 +317,20 @@ export function ProductDetailHero({ product, images }: ProductDetailHeroProps) {
                   type="button"
                   onClick={() => setSelectedFabric(index)}
                   aria-current={index === selectedFabric}
-                  className="group w-14 text-center text-xs font-bold"
+                  className="group w-20 shrink-0 text-center text-xs font-bold"
                 >
                   <AppImage
                     src={item.image ?? ""}
                     alt={optionLabel(item.label)}
-                    className={`size-14 rounded-md border transition group-hover:scale-105 ${
+                    className={`mx-auto size-14 rounded-md border transition group-hover:scale-105 ${
                       index === selectedFabric
                         ? "border-neutral-950 ring-2 ring-neutral-950/15 dark:border-white dark:ring-white/25"
                         : "border-neutral-200 dark:border-white/10"
                     }`}
                     sizes="56px"
                   />
-                  <span className="mt-1.5 block leading-tight text-neutral-700 dark:text-neutral-300">
+
+                  <span className="mt-1.5 block h-8 leading-4 text-neutral-700 dark:text-neutral-300">
                     {optionLabel(item.label)}
                   </span>
                 </button>
@@ -263,7 +354,11 @@ export function ProductDetailHero({ product, images }: ProductDetailHeroProps) {
                     type="button"
                     onClick={() => {
                       setSelectedColor(index);
-                      const imageIndex = findColorImageIndex(product, images, colorName);
+                      const imageIndex = findColorImageIndex(
+                        product,
+                        images,
+                        colorName,
+                      );
 
                       if (imageIndex >= 0) {
                         setActiveImage(imageIndex);
@@ -287,7 +382,10 @@ export function ProductDetailHero({ product, images }: ProductDetailHeroProps) {
               })}
             </div>
             <p className="mt-2 text-xs text-neutral-600 dark:text-neutral-400">
-              {optionLabel(product.colorNames?.[selectedColor] ?? product.colors[selectedColor])}
+              {optionLabel(
+                product.colorNames?.[selectedColor] ??
+                  product.colors[selectedColor],
+              )}
             </p>
           </div>
         ) : null}
@@ -297,9 +395,14 @@ export function ProductDetailHero({ product, images }: ProductDetailHeroProps) {
             <details key={item.key} className="group py-3.5">
               <summary className="flex cursor-pointer list-none items-center justify-between gap-3 font-bold marker:hidden">
                 {item.label}
-                <SiteIcon name="chevron-down" className="size-4 shrink-0 transition group-open:rotate-180" />
+                <SiteIcon
+                  name="chevron-down"
+                  className="size-4 shrink-0 transition group-open:rotate-180"
+                />
               </summary>
-              <p className="mt-2.5 leading-6 text-neutral-700 dark:text-neutral-300">{item.content}</p>
+              <p className="mt-2.5 leading-6 text-neutral-700 dark:text-neutral-300">
+                {item.content}
+              </p>
             </details>
           ))}
         </div>
