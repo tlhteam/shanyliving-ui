@@ -4,7 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { useTranslations } from "next-intl";
-import { CreditCard, Gift, Heart, Home, Mail, MapPin, Menu, Package, PanelLeftClose, PanelLeftOpen, Settings, ShoppingCart, Sofa, User } from "lucide-react";
+import { CreditCard, Gift, Heart, Home, Mail, MapPin, Menu, Package, PanelLeftClose, PanelLeftOpen, Settings, Sofa, User } from "lucide-react";
 import { useState } from "react";
 import { AppAccountMenu } from "@/components/app/AppAccountMenu";
 import { AppNotificationBell } from "@/components/app/AppNotificationBell";
@@ -20,7 +20,6 @@ import { customer } from "@/lib/customer-panel";
 const navItems = [
   { label: "Dashboard", labelKey: "dashboard", href: "/customer", icon: Home },
   { label: "My Orders", labelKey: "orders", href: "/customer/orders", icon: Package },
-  { label: "Cart & Checkout", labelKey: "cart", href: "/cart", icon: ShoppingCart },
   { label: "Saved Designs", labelKey: "savedDesigns", href: "/customer/saved-designs", icon: Sofa },
   { label: "Wishlist", labelKey: "wishlist", href: "/customer/wishlist", icon: Heart },
   { label: "Messages", labelKey: "messages", href: "/customer/messages", icon: Mail },

@@ -397,10 +397,7 @@
       "cta": "Parler au showroom"
     },
     "card": {
-      "add": "Ajouter",
       "quote": "Devis",
-      "viewCart": "Voir le panier",
-      "addToCart": "Ajouter au panier",
       "requestQuote": "Demander un devis",
       "ask": "Poser une question",
       "availableIn": "Disponible en {range}",
@@ -408,9 +405,7 @@
       "customMade": "Sur mesure",
       "viewCustomize": "Voir et personnaliser",
       "wishlist": "Enregistrer {name}",
-      "quoteOnly": "Cet article est disponible sur devis du showroom. Posez-nous une question.",
-      "adminBlocked": "Les comptes admin ne peuvent pas passer commande. Utilisez un compte client.",
-      "added": "{name} ajoute au panier."
+      "viewDetails": "Voir les details"
     },
     "detail": {
       "home": "Accueil",
@@ -537,54 +532,6 @@
       "Forest": "Foret"
     }
   },
-  "cart": {
-    "title": "Mon panier ({count})",
-    "subtitle": "Verifiez vos pieces avant le paiement.",
-    "continueShopping": "Continuer mes achats",
-    "empty": "Votre panier est vide.",
-    "browse": "Parcourir les produits",
-    "remove": "Retirer",
-    "subtotal": "Sous-total",
-    "checkout": "Paiement",
-    "alsoLike": "Vous aimerez aussi",
-    "signInTitle": "Connectez-vous pour commander",
-    "signInText": "Les commandes sont enregistrees sur votre compte pour suivre la production et la livraison.",
-    "google": "Continuer avec Google",
-    "emailSignIn": "Se connecter par e-mail",
-    "close": "Fermer le panier",
-    "standard": "Standard",
-    "shipping": "Livraison",
-    "shippingNote": "Calculee au paiement",
-    "total": "Total",
-    "editCart": "Modifier le panier",
-    "increase": "Augmenter la quantite",
-    "decrease": "Diminuer la quantite",
-    "summary": "Recapitulatif",
-    "shippingReview": "Calculee apres verification",
-    "added": "{name} ajoute au panier."
-  },
-  "checkout": {
-    "title": "Paiement",
-    "subtitle": "Ajoutez vos coordonnees et l adresse de livraison pour creer la commande.",
-    "contact": "Coordonnees",
-    "fullName": "Nom complet",
-    "email": "E-mail",
-    "phone": "Telephone",
-    "address": "Adresse de livraison",
-    "apartment": "Appartement, etage, etc.",
-    "saveDetails": "Enregistrer mes informations",
-    "adminBlocked": "Les comptes administrateur ne peuvent pas creer de commandes. Utilisez un compte client.",
-    "continue": "Continuer",
-    "summary": "Recapitulatif",
-    "paymentPending": "Le paiement se fait avec votre conseiller. La commande est enregistree et vous pouvez la suivre dans votre compte.",
-    "signInTitle": "Connectez-vous pour passer commande",
-    "signInText": "Nous enregistrons la commande sur votre compte pour que vous et votre conseiller puissiez la suivre.",
-    "google": "Continuer avec Google",
-    "total": "Total",
-    "secureNote": "Creation de commande securisee. La passerelle de paiement se connecte depuis les reglages.",
-    "preview": "Apercu avec ShiputzAI",
-    "each": "{quantity} x {price}"
-  },
   "customer": {
     "nav": {
       "dashboard": "Tableau de bord",
@@ -596,8 +543,7 @@
       "giftCards": "Cartes cadeaux",
       "messages": "Messages",
       "profile": "Profil",
-      "settings": "Parametres",
-      "cart": "Panier et paiement"
+      "settings": "Parametres"
     },
     "orders": {
       "title": "Commandes",
@@ -1810,24 +1756,6 @@
         "text": "Nous vous accompagnons pour la livraison et le montage."
       }
     }
-  },
-  "orderConfirmation": {
-    "title": "Merci!",
-    "subtitle": "Votre commande est confirmee.",
-    "reference": "Commande",
-    "received": "Nous avons recu votre demande et votre conseiller confirmera les details avec vous.",
-    "paymentNote": "Le paiement se fait avec votre conseiller par lien securise, virement ou telephone.",
-    "steps": {
-      "confirmed": "Commande confirmee",
-      "payment": "Paiement avec le conseiller",
-      "production": "En production",
-      "delivery": "Livraison planifiee"
-    },
-    "track": "Suivre ma commande",
-    "continue": "Continuer mes achats",
-    "empty": "Aucune commande recente a afficher.",
-    "summary": "Recapitulatif de la commande",
-    "standard": "Standard"
   },
   "auth": {
     "or": "ou",

@@ -397,10 +397,7 @@
       "cta": "Talk to the showroom"
     },
     "card": {
-      "add": "Add",
       "quote": "Quote",
-      "viewCart": "View Cart",
-      "addToCart": "Add to Cart",
       "requestQuote": "Request Quote",
       "ask": "Ask about this piece",
       "availableIn": "Available in {range}",
@@ -408,9 +405,7 @@
       "customMade": "Custom Made",
       "viewCustomize": "View & Customize",
       "wishlist": "Save {name}",
-      "quoteOnly": "This item is available by showroom quote. Please ask about this piece.",
-      "adminBlocked": "Admin accounts cannot create storefront transactions. Please use a customer account.",
-      "added": "{name} added to cart."
+      "viewDetails": "View details"
     },
     "detail": {
       "home": "Home",
@@ -537,54 +532,6 @@
       "Forest": "Forest"
     }
   },
-  "cart": {
-    "title": "My Cart ({count})",
-    "subtitle": "Review your pieces before checkout.",
-    "continueShopping": "Continue shopping",
-    "empty": "Your cart is empty.",
-    "browse": "Browse Products",
-    "remove": "Remove",
-    "subtotal": "Subtotal",
-    "checkout": "Checkout",
-    "alsoLike": "You may also like",
-    "signInTitle": "Sign in to check out",
-    "signInText": "Orders are saved to your account, so you can follow production and delivery from the customer panel.",
-    "google": "Continue with Google",
-    "emailSignIn": "Sign in with email",
-    "close": "Close cart",
-    "standard": "Standard",
-    "shipping": "Shipping",
-    "shippingNote": "Calculated at checkout",
-    "total": "Total",
-    "editCart": "Edit Cart",
-    "increase": "Increase quantity",
-    "decrease": "Decrease quantity",
-    "summary": "Order summary",
-    "shippingReview": "Calculated after review",
-    "added": "{name} added to cart."
-  },
-  "checkout": {
-    "title": "Checkout",
-    "subtitle": "Add contact and delivery details to create the order.",
-    "contact": "Contact Information",
-    "fullName": "Full name",
-    "email": "Email",
-    "phone": "Phone",
-    "address": "Delivery address",
-    "apartment": "Apartment, floor, etc.",
-    "saveDetails": "Save my details for next time",
-    "adminBlocked": "Admin accounts cannot create storefront transactions. Please switch to a customer account.",
-    "continue": "Continue",
-    "summary": "Order Summary",
-    "paymentPending": "Payment is arranged with your advisor. The order is saved now and you can track it in your account.",
-    "signInTitle": "Sign in to place the order",
-    "signInText": "We save the order to your account so you and your advisor can follow it.",
-    "google": "Continue with Google",
-    "total": "Total",
-    "secureNote": "Secure order creation. Payment gateway can be connected from backend settings.",
-    "preview": "Preview with ShiputzAI",
-    "each": "{quantity} x {price}"
-  },
   "customer": {
     "nav": {
       "dashboard": "Dashboard",
@@ -596,8 +543,7 @@
       "giftCards": "Gift Cards",
       "messages": "Messages",
       "profile": "Profile",
-      "settings": "Settings",
-      "cart": "Cart & Checkout"
+      "settings": "Settings"
     },
     "orders": {
       "title": "Orders",
@@ -1810,24 +1756,6 @@
         "text": "We guide you through delivery and installation."
       }
     }
-  },
-  "orderConfirmation": {
-    "title": "Thank you!",
-    "subtitle": "Your order is confirmed.",
-    "reference": "Order",
-    "received": "We received your request and your advisor will confirm the details with you.",
-    "paymentNote": "Payment is arranged with your advisor by secure link, bank transfer or phone.",
-    "steps": {
-      "confirmed": "Order confirmed",
-      "payment": "Payment with advisor",
-      "production": "In production",
-      "delivery": "Delivery scheduled"
-    },
-    "track": "Track your order",
-    "continue": "Continue shopping",
-    "empty": "No recent order to show.",
-    "summary": "Order summary",
-    "standard": "Standard"
   },
   "auth": {
     "or": "or",

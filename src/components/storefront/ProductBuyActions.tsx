@@ -1,21 +1,18 @@
 "use client";
 
 import Link from "next/link";
-import { toast } from "sonner";
-import { useSession } from "next-auth/react";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { AppButton } from "@/components/app/AppButton";
 import { SiteIcon } from "@/components/icons/SiteIcon";
+import { WhatsappIcon } from "@/components/icons/WhatsappIcon";
 import { isCustomOrderCategory } from "@/lib/custom-order";
+import { localizedProductName } from "@/lib/storefront-pages";
+import { buildProductQuoteMessage, whatsappHref } from "@/lib/whatsapp";
 import type { StorefrontProduct } from "@/lib/storefront-pages";
-import { useCustomerCommerceStore } from "@/stores/customer-commerce-store";
 
 export function ProductBuyActions({ product, compact = false }: { product: StorefrontProduct; compact?: boolean }) {
   const t = useTranslations("storefront.card");
-  const { data: session } = useSession();
-  const addToCart = useCustomerCommerceStore((state) => state.addToCart);
-  const openCart = useCustomerCommerceStore((state) => state.openCart);
-  const isQuoteOnly = product.price <= 0;
+  const locale = useLocale();
 
   if (isCustomOrderCategory(product.category)) {
     return (
@@ -28,51 +25,50 @@ export function ProductBuyActions({ product, compact = false }: { product: Store
     );
   }
 
-  const handleAdd = () => {
-    if (isQuoteOnly) {
-      toast.info(t("quoteOnly"));
-      return;
-    }
-
-    if (session?.user?.role === "admin") {
-      toast.error(t("adminBlocked"));
-      return;
-    }
-
-    addToCart(product, {
-      size: product.seatRange ?? "Standard",
-      configuration: product.category === "sofas" ? "Standard sofa" : product.subcategory,
-      fabric: product.category === "sofas" ? "Boucle" : undefined,
-      color: product.colors?.[0]
-    });
-    toast.success(t("added", { name: product.name }));
-    openCart();
-  };
+  const quoteLink = whatsappHref(
+    buildProductQuoteMessage({
+      productName: localizedProductName(product, locale),
+      productId: product.slug,
+      category: product.category,
+      colorNames: product.colorNames
+    })
+  );
 
   if (compact) {
     return (
       <div className="grid grid-cols-[1fr_48px] gap-3">
-        <AppButton size="sm" className="w-full gap-2" onClick={handleAdd}>
-          <SiteIcon name="cart" className="size-4" />
-          {isQuoteOnly ? t("quote") : t("add")}
-        </AppButton>
-        <button type="button" onClick={openCart} aria-label={t("viewCart")} className="grid h-9 place-items-center rounded-md border border-neutral-300 transition hover:bg-neutral-100 dark:border-white/15 dark:hover:bg-white/10">
-          <SiteIcon name="bag" className="size-4" />
-        </button>
+        <Link href={quoteLink} target="_blank" rel="noreferrer noopener" className="block">
+          <AppButton size="sm" className="w-full gap-2">
+            <WhatsappIcon className="size-4" />
+            {t("quote")}
+          </AppButton>
+        </Link>
+        <Link
+          href={`/sofas/${product.slug}`}
+          aria-label={t("viewDetails")}
+          title={t("viewDetails")}
+          className="grid h-9 place-items-center rounded-md border border-neutral-300 transition hover:bg-neutral-100 dark:border-white/15 dark:hover:bg-white/10"
+        >
+          <SiteIcon name="arrow-right" className="size-4 rtl:rotate-180" />
+        </Link>
       </div>
     );
   }
 
   return (
     <div className="grid gap-3 sm:grid-cols-2">
-      <AppButton className="w-full gap-2" onClick={handleAdd}>
-        <SiteIcon name="cart" className="size-4" />
-        {isQuoteOnly ? t("requestQuote") : t("addToCart")}
-      </AppButton>
-      <AppButton variant="outline" className="w-full gap-2" onClick={openCart}>
-        <SiteIcon name="bag" className="size-4" />
-        {t("viewCart")}
-      </AppButton>
+      <Link href={quoteLink} target="_blank" rel="noreferrer noopener" className="block">
+        <AppButton className="w-full gap-2">
+          <WhatsappIcon className="size-4" />
+          {t("requestQuote")}
+        </AppButton>
+      </Link>
+      <Link href={`/sofas/${product.slug}`} className="block">
+        <AppButton variant="outline" className="w-full gap-2">
+          <SiteIcon name="arrow-right" className="size-4 rtl:rotate-180" />
+          {t("viewDetails")}
+        </AppButton>
+      </Link>
     </div>
   );
 }

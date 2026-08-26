@@ -397,10 +397,7 @@
       "cta": "Parla con lo showroom"
     },
     "card": {
-      "add": "Aggiungi",
       "quote": "Preventivo",
-      "viewCart": "Vedi carrello",
-      "addToCart": "Aggiungi al carrello",
       "requestQuote": "Richiedi preventivo",
       "ask": "Chiedi informazioni",
       "availableIn": "Disponibile in {range}",
@@ -408,9 +405,7 @@
       "customMade": "Su misura",
       "viewCustomize": "Vedi e personalizza",
       "wishlist": "Salva {name}",
-      "quoteOnly": "Questo articolo e disponibile su preventivo dello showroom. Scrivici pure.",
-      "adminBlocked": "Gli account admin non possono effettuare acquisti. Usa un account cliente.",
-      "added": "{name} aggiunto al carrello."
+      "viewDetails": "Vedi dettagli"
     },
     "detail": {
       "home": "Home",
@@ -537,54 +532,6 @@
       "Forest": "Foresta"
     }
   },
-  "cart": {
-    "title": "Il mio carrello ({count})",
-    "subtitle": "Controlla i pezzi prima del pagamento.",
-    "continueShopping": "Continua lo shopping",
-    "empty": "Il carrello e vuoto.",
-    "browse": "Sfoglia i prodotti",
-    "remove": "Rimuovi",
-    "subtotal": "Subtotale",
-    "checkout": "Pagamento",
-    "alsoLike": "Potrebbe piacerti",
-    "signInTitle": "Accedi per ordinare",
-    "signInText": "Gli ordini vengono salvati nel tuo account, cosi puoi seguire produzione e consegna dall area cliente.",
-    "google": "Continua con Google",
-    "emailSignIn": "Accedi con email",
-    "close": "Chiudi carrello",
-    "standard": "Standard",
-    "shipping": "Spedizione",
-    "shippingNote": "Calcolata al checkout",
-    "total": "Totale",
-    "editCart": "Modifica carrello",
-    "increase": "Aumenta quantita",
-    "decrease": "Riduci quantita",
-    "summary": "Riepilogo ordine",
-    "shippingReview": "Calcolata dopo la verifica",
-    "added": "{name} aggiunto al carrello."
-  },
-  "checkout": {
-    "title": "Pagamento",
-    "subtitle": "Aggiungi contatti e dettagli di consegna per creare l ordine.",
-    "contact": "Informazioni di contatto",
-    "fullName": "Nome completo",
-    "email": "Email",
-    "phone": "Telefono",
-    "address": "Indirizzo di consegna",
-    "apartment": "Appartamento, piano, ecc.",
-    "saveDetails": "Salva i miei dati",
-    "adminBlocked": "Gli account amministratore non possono creare ordini. Usa un account cliente.",
-    "continue": "Continua",
-    "summary": "Riepilogo ordine",
-    "paymentPending": "Il pagamento si concorda con il consulente. L ordine viene salvato e puoi seguirlo nel tuo account.",
-    "signInTitle": "Accedi per completare l ordine",
-    "signInText": "Salviamo l ordine nel tuo account cosi tu e il consulente potete seguirlo.",
-    "google": "Continua con Google",
-    "total": "Totale",
-    "secureNote": "Creazione ordine sicura. Il gateway di pagamento si collega dalle impostazioni.",
-    "preview": "Anteprima con ShiputzAI",
-    "each": "{quantity} x {price}"
-  },
   "customer": {
     "nav": {
       "dashboard": "Dashboard",
@@ -596,8 +543,7 @@
       "giftCards": "Carte regalo",
       "messages": "Messaggi",
       "profile": "Profilo",
-      "settings": "Impostazioni",
-      "cart": "Carrello e pagamento"
+      "settings": "Impostazioni"
     },
     "orders": {
       "title": "Ordini",
@@ -1810,24 +1756,6 @@
         "text": "Ti guidiamo in consegna e montaggio."
       }
     }
-  },
-  "orderConfirmation": {
-    "title": "Grazie!",
-    "subtitle": "Il tuo ordine e confermato.",
-    "reference": "Ordine",
-    "received": "Abbiamo ricevuto la richiesta e il consulente confermera i dettagli con te.",
-    "paymentNote": "Il pagamento si concorda con il consulente tramite link sicuro, bonifico o telefono.",
-    "steps": {
-      "confirmed": "Ordine confermato",
-      "payment": "Pagamento con il consulente",
-      "production": "In produzione",
-      "delivery": "Consegna programmata"
-    },
-    "track": "Segui l ordine",
-    "continue": "Continua lo shopping",
-    "empty": "Nessun ordine recente da mostrare.",
-    "summary": "Riepilogo ordine",
-    "standard": "Standard"
   },
   "auth": {
     "or": "oppure",
