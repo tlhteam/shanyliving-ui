@@ -12,6 +12,7 @@ import { AppImage } from "@/components/app/AppImage";
 import { SocialAuthButtons } from "@/components/auth/SocialAuthButtons";
 import { Check, Heart, Layers, Phone, Upload } from "lucide-react";
 import { WhatsappIcon } from "@/components/icons/WhatsappIcon";
+import { SofaLayeredPreview, widthRatioFor } from "@/components/sofa/SofaLayeredPreview";
 import { StickyContactBar } from "@/components/storefront/StickyContactBar";
 import { useCustomerMutation } from "@/hooks/use-customer";
 import { useOptionLabel } from "@/hooks/use-option-label";
@@ -51,18 +52,6 @@ function readFile(file: File) {
     reader.onerror = () => reject(reader.error);
     reader.readAsDataURL(file);
   });
-}
-
-function SofaPreview({ src, alt, className }: { src: string; alt: string; className?: string }) {
-  return (
-    <AppImage
-      src={src}
-      alt={alt}
-      className={`aspect-[1.35/1] rounded-lg border border-neutral-200 bg-white dark:border-white/10 dark:bg-neutral-900 ${className ?? ""}`}
-      sizes="(max-width: 1024px) 92vw, 820px"
-      imageClassName="object-contain"
-    />
-  );
 }
 
 export function SofaStepConfigurator({ sofaProducts }: { sofaProducts: StorefrontProduct[] }) {
@@ -109,8 +98,25 @@ export function SofaStepConfigurator({ sofaProducts }: { sofaProducts: Storefron
   const previewImage =
     variantImage(product, { Color: color?.label, Fabric: fabric?.label, Size: size, Configuration: configuration }) ??
     color?.image ??
-    fabric?.image ??
     product.image;
+
+  const sizeChoices = useMemo(() => sizes.filter((item) => item !== "Custom Size"), [sizes]);
+
+  const preview = (className?: string, compact = false) => (
+    <SofaLayeredPreview
+      alt={product.name}
+      baseImage={previewImage}
+      fabricImage={fabric?.image}
+      fabricLabel={fabric?.label}
+      colorSwatch={color?.swatch}
+      colorLabel={color?.label}
+      sizeLabel={size === "Custom Size" ? null : size}
+      widthRatio={widthRatioFor(size, sizeChoices)}
+      mirrored={configurations.indexOf(configuration) > 0}
+      compact={compact}
+      className={className}
+    />
+  );
 
   const canTransact = session?.user?.role !== "admin";
   const configId = useMemo(() => generateConfigId(), []);
@@ -449,7 +455,7 @@ export function SofaStepConfigurator({ sofaProducts }: { sofaProducts: Storefron
             <h1 className="font-bold">{t("sizeTitle")}</h1>
             <p className="mt-1 text-xs text-neutral-600 dark:text-neutral-400">{t("sizeHint")}</p>
             <div className="mt-8">{sizePicker}</div>
-            <SofaPreview src={previewImage} alt={product.name} className="mt-10" />
+            {preview("mt-10", true)}
           </section>
         ) : null}
 
@@ -460,7 +466,7 @@ export function SofaStepConfigurator({ sofaProducts }: { sofaProducts: Storefron
             <div className="mt-6 rounded-lg border border-neutral-200 bg-neutral-50 p-4 dark:border-white/10 dark:bg-neutral-900">
               <p className="text-xs font-bold uppercase tracking-[0.14em] text-neutral-500 dark:text-neutral-400">{t("preview")}</p>
               <p className="mt-1 text-sm font-bold">{t("previewCaption", { fabric: optionLabel(fabric?.label), color: optionLabel(color?.label) })}</p>
-              <SofaPreview src={previewImage} alt={product.name} className="mt-4" />
+              {preview("mt-4", true)}
             </div>
           </section>
         ) : null}
@@ -542,14 +548,7 @@ export function SofaStepConfigurator({ sofaProducts }: { sofaProducts: Storefron
 
         <div className="grid gap-10 lg:grid-cols-[1fr_420px] lg:items-start">
           <div className="sticky top-24 space-y-4">
-            <div className="rounded-lg border border-neutral-200 p-6 dark:border-white/10">
-              {step === 3 ? (
-                <p className="mb-4 text-center text-sm font-bold">
-                  {optionLabel(fabric?.label)} · {optionLabel(color?.label)}
-                </p>
-              ) : null}
-              <SofaPreview src={step === 1 ? product.image : previewImage} alt={product.name} />
-            </div>
+            {preview()}
           </div>
 
           <aside className="space-y-6 rounded-lg border border-neutral-200 p-6 dark:border-white/10">

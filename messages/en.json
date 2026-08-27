@@ -163,6 +163,18 @@
           "title": "Order confirmed",
           "text": "Your advisor keeps you updated, from production to the day it arrives."
         }
+      },
+      "preview": {
+        "eyebrow": "Live preview",
+        "title": "Build it while you read",
+        "text": "Pick a width, a layout, a fabric and a colour. The preview updates as you go, and the customizer picks up exactly where you left off.",
+        "cta": "Continue in the customizer",
+        "groups": {
+          "size": "Size",
+          "configuration": "Layout",
+          "fabric": "Fabric",
+          "color": "Colour"
+        }
       }
     },
     "featured": {
@@ -1997,6 +2009,7 @@
     "backTo": "Back to {step}",
     "customSizeLabel": "Tell us your measurements",
     "customSizePlaceholder": "e.g. 350 x 110 cm, or describe your space",
-    "customSizeHint": "Not sure of the exact measurements? Leave a note and a Shany Living advisor will help you get it right."
+    "customSizeHint": "Not sure of the exact measurements? Leave a note and a Shany Living advisor will help you get it right.",
+    "previewWidth": "Width {size}"
   }
 }

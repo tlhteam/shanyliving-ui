@@ -163,6 +163,18 @@
           "title": "Ordine confermato",
           "text": "Il tuo consulente ti tiene aggiornato, dalla produzione al giorno della consegna."
         }
+      },
+      "preview": {
+        "eyebrow": "Anteprima dal vivo",
+        "title": "Componi mentre leggi",
+        "text": "Scegli larghezza, disposizione, tessuto e colore. L'anteprima si aggiorna e il configuratore riprende esattamente da dove hai lasciato.",
+        "cta": "Continua nel configuratore",
+        "groups": {
+          "size": "Misura",
+          "configuration": "Disposizione",
+          "fabric": "Tessuto",
+          "color": "Colore"
+        }
       }
     },
     "featured": {
@@ -1997,6 +2009,7 @@
     "backTo": "Torna a {step}",
     "customSizeLabel": "Indica le tue misure",
     "customSizePlaceholder": "es. 350 x 110 cm, oppure descrivi il tuo spazio",
-    "customSizeHint": "Non conosci le misure esatte? Lascia una nota e un consulente Shany Living ti aiutera."
+    "customSizeHint": "Non conosci le misure esatte? Lascia una nota e un consulente Shany Living ti aiutera.",
+    "previewWidth": "Larghezza {size}"
   }
 }

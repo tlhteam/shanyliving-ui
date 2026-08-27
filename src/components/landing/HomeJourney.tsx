@@ -5,7 +5,9 @@ import { useState } from "react";
 import { useTranslations } from "next-intl";
 import { AppButton } from "@/components/app/AppButton";
 import { AppSection } from "@/components/app/AppSection";
+import { JourneyPreview } from "@/components/landing/JourneyPreview";
 import { journeyPhases, journeySteps, journeyStepNumber } from "@/lib/journey";
+import type { StorefrontProduct } from "@/lib/storefront-pages";
 import { cn } from "@/lib/utils";
 import {
   Award,
@@ -42,7 +44,7 @@ const stepIcons: Record<string, LucideIcon> = {
   award: Award
 };
 
-export function HomeJourney({ fromSocial = false }: { fromSocial?: boolean }) {
+export function HomeJourney({ product, fromSocial = false }: { product?: StorefrontProduct; fromSocial?: boolean }) {
   const t = useTranslations("home.journey");
   const [openPhase, setOpenPhase] = useState<string>(journeyPhases[0].key);
   const total = journeySteps.length;
@@ -66,6 +68,12 @@ export function HomeJourney({ fromSocial = false }: { fromSocial?: boolean }) {
           <h2 className="mt-3 font-serif text-2xl leading-tight sm:text-3xl lg:text-4xl">{t("title")}</h2>
           <p className="mt-3 text-sm leading-6 text-neutral-700 dark:text-neutral-300">{t("text")}</p>
         </div>
+
+        {product ? (
+          <div className="mt-8 lg:mt-10">
+            <JourneyPreview product={product} />
+          </div>
+        ) : null}
 
         <div className="mt-8 space-y-3 lg:mt-12 lg:grid lg:grid-cols-4 lg:gap-5 lg:space-y-0">
           {journeyPhases.map((phase, phaseIndex) => {

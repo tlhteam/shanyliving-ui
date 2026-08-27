@@ -169,7 +169,7 @@ export function HomeExperience({
         </AppCarousel>
       </AppSection>
 
-      <HomeJourney fromSocial={fromSocial} />
+      <HomeJourney product={featured[0]} fromSocial={fromSocial} />
 
       <section className="relative isolate overflow-hidden text-white">
         <AppImage
