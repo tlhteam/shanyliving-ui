@@ -6,7 +6,8 @@ import { useLocale, useTranslations } from "next-intl";
 import { useSession } from "next-auth/react";
 import { AnimatePresence, motion } from "motion/react";
 import { ChangeEvent, useEffect, useMemo, useRef, useState } from "react";
-import { Check, ChevronDown, Heart, MapPin, MessageSquare, Search, User, X } from "lucide-react";
+import { Check, ChevronDown, Heart, MapPin, Menu, MessageSquare, Search, User, X } from "lucide-react";
+import { AppMenu } from "@/components/app/AppMenu";
 import { AppLogo } from "@/components/layout/AppLogo";
 import { LanguageSwitcher } from "@/components/layout/LanguageSwitcher";
 import { categoryHref, productCategoryHref } from "@/lib/categories";
@@ -17,7 +18,8 @@ import { useCatalogProducts } from "@/hooks/use-catalog-products";
 const navItems = [
   { key: "collections", href: "/collections" },
   { key: "howItWorks", href: "/#journey" },
-  { key: "about", href: "/#about" }
+  { key: "about", href: "/#about" },
+  { key: "contact", href: "/contact" }
 ];
 
 const quickSearchCategories = ["sofas", "living-room", "dining", "bedroom"];
@@ -39,6 +41,8 @@ export function AppHeader() {
   const { products: catalogProducts } = useCatalogProducts();
   const { categories } = useCatalogCategories();
   const [categoriesOpen, setCategoriesOpen] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const isRtl = locale === "he";
   const categoriesRef = useRef<HTMLDivElement>(null);
   const categoryLinks = categories.map((category) => ({
     key: category.slug,
@@ -124,6 +128,14 @@ export function AppHeader() {
       </div>
       <div className="mx-auto flex min-h-18 max-w-7xl items-center justify-between gap-2 px-4 sm:min-h-20 sm:gap-4 sm:px-6 lg:px-8">
         <div className="flex items-center gap-4 sm:gap-6 xl:gap-7">
+          <button
+            type="button"
+            aria-label={t("openMenu")}
+            onClick={() => setMenuOpen(true)}
+            className="rounded-md p-2 text-neutral-950 transition hover:bg-neutral-100 lg:hidden dark:text-neutral-50 dark:hover:bg-white/10"
+          >
+            <Menu className="size-5" />
+          </button>
           <AppLogo className="shrink-0" />
           <nav className="hidden items-center gap-6 lg:flex xl:gap-7">
             {categoryLinks.length ? (
@@ -208,23 +220,65 @@ export function AppHeader() {
         </div>
       </div>
 
-      {categoryLinks.length ? (
-        <div className="border-t border-neutral-200 lg:hidden dark:border-white/10">
-          <div className="mx-auto flex max-w-7xl gap-2 overflow-x-auto px-4 py-2 [scrollbar-width:none] sm:px-6 [&::-webkit-scrollbar]:hidden">
-            {[...categoryLinks, ...menuItems.map((item) => ({ key: item.href, label: item.label, href: item.href }))].map(
-              (item) => (
-                <Link
-                  key={item.key}
-                  href={item.href}
-                  className="shrink-0 rounded-full border border-neutral-300 px-3.5 py-1.5 text-xs font-bold text-neutral-800 transition hover:border-neutral-950 hover:bg-neutral-950 hover:text-white dark:border-white/15 dark:text-neutral-200 dark:hover:border-white dark:hover:bg-white dark:hover:text-neutral-950"
+      <AnimatePresence>
+        {menuOpen ? (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.18 }}
+            className="fixed inset-0 z-[80] flex bg-black/45 lg:hidden"
+            onClick={() => setMenuOpen(false)}
+          >
+            <motion.div
+              initial={{ x: isRtl ? "100%" : "-100%" }}
+              animate={{ x: 0 }}
+              exit={{ x: isRtl ? "100%" : "-100%" }}
+              transition={{ duration: 0.22, ease: "easeOut" }}
+              onClick={(event) => event.stopPropagation()}
+              className="flex h-full w-80 max-w-[86vw] flex-col bg-white text-neutral-950 shadow-xl me-auto dark:bg-neutral-950 dark:text-neutral-50"
+            >
+              <div className="flex items-center justify-between border-b border-neutral-200 px-5 py-4 dark:border-white/10">
+                <AppLogo imageClassName="w-28" />
+                <button
+                  type="button"
+                  aria-label={t("closeMenu")}
+                  onClick={() => setMenuOpen(false)}
+                  className="rounded-md p-2 transition hover:bg-neutral-100 dark:hover:bg-white/10"
                 >
-                  {item.label}
-                </Link>
-              )
-            )}
-          </div>
-        </div>
-      ) : null}
+                  <X className="size-5" />
+                </button>
+              </div>
+
+              <div className="flex-1 overflow-y-auto px-5 py-5">
+                {categoryLinks.length ? (
+                  <div className="mb-6">
+                    <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-neutral-500 dark:text-neutral-400">
+                      {t("nav.categories")}
+                    </p>
+                    <AppMenu
+                      items={categoryLinks.map((category) => ({ label: category.label, href: category.href }))}
+                      className="mt-3 flex-col items-stretch gap-1"
+                      itemClassName="rounded-md px-3 py-2.5 hover:bg-neutral-100 dark:hover:bg-white/10"
+                      onNavigate={() => setMenuOpen(false)}
+                    />
+                  </div>
+                ) : null}
+
+                <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-neutral-500 dark:text-neutral-400">
+                  {t("menuTitle")}
+                </p>
+                <AppMenu
+                  items={menuItems}
+                  className="mt-3 flex-col items-stretch gap-1"
+                  itemClassName="rounded-md px-3 py-2.5 hover:bg-neutral-100 dark:hover:bg-white/10"
+                  onNavigate={() => setMenuOpen(false)}
+                />
+              </div>
+            </motion.div>
+          </motion.div>
+        ) : null}
+      </AnimatePresence>
 
       <AnimatePresence>
         {searchOpen ? (

@@ -60,7 +60,8 @@
       "categories": "Categorie",
       "collections": "Collezioni",
       "howItWorks": "Come funziona",
-      "about": "Chi è Shany Living"
+      "about": "Chi è Shany Living",
+      "contact": "Contatti"
     },
     "whatsappDialog": {
       "title": "Consulenza WhatsApp",
@@ -71,7 +72,8 @@
       "adviceText": "Condividi le dimensioni della stanza, il tessuto preferito e lo stile che ti ispira.",
       "followUpTitle": "Assistenza in showroom",
       "followUpText": "Prenota una visita oppure chiedi al team di preparare alcune opzioni di tessuto."
-    }
+    },
+    "menuTitle": "Menu"
   },
   "home": {
     "hero": {

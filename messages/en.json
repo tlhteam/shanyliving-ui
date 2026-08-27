@@ -60,7 +60,8 @@
       "categories": "Categories",
       "collections": "Collections",
       "howItWorks": "How It Works",
-      "about": "About Shany Living"
+      "about": "About Shany Living",
+      "contact": "Contact"
     },
     "whatsappDialog": {
       "title": "WhatsApp consultation",
@@ -71,7 +72,8 @@
       "adviceText": "Share your room size, preferred fabric, and inspiration style.",
       "followUpTitle": "Showroom follow-up",
       "followUpText": "Book a visit or ask the team to prepare fabric options."
-    }
+    },
+    "menuTitle": "Menu"
   },
   "home": {
     "hero": {
