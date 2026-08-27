@@ -114,13 +114,7 @@ export function SofaLayeredPreview({
             />
           </div>
         ) : (
-          <div
-            className="absolute inset-y-0 start-1/2 flex items-center justify-center transition-[width] duration-300"
-            style={{
-              width: `${Math.round(widthRatio * 100)}%`,
-              transform: `translateX(${mirrored ? "50%" : "-50%"}) scaleX(${mirrored ? -1 : 1})`
-            }}
-          >
+          <div className="absolute inset-0 p-3">
             <div className="relative h-full w-full">
               <AppImage
                 src={baseImage}

@@ -6,7 +6,7 @@ import { useTranslations } from "next-intl";
 import { AppButton } from "@/components/app/AppButton";
 import { SofaLayeredPreview, metresFor, widthRatioFor } from "@/components/sofa/SofaLayeredPreview";
 import { useOptionLabel } from "@/hooks/use-option-label";
-import { productColors, productConfigurations, productFabrics, productSizes, variantImage } from "@/lib/product-options";
+import { productColors, productConfigurations, productFabrics, productSizes, selectionImage } from "@/lib/product-options";
 import { cn } from "@/lib/utils";
 import type { StorefrontProduct } from "@/lib/storefront-pages";
 
@@ -43,10 +43,12 @@ export function JourneyPreview({ product }: { product: StorefrontProduct }) {
   const fabric = fabrics.find((item) => item.label === selection.fabric) ?? fabrics[0];
   const color = colors.find((item) => item.label === selection.color) ?? colors[0];
 
-  const baseImage =
-    variantImage(product, { Color: color?.label, Fabric: fabric?.label, Size: size, Configuration: configuration }) ??
-    color?.image ??
-    product.image;
+  const baseImage = selectionImage(product, {
+    color: color?.label,
+    fabric: fabric?.label,
+    size,
+    configuration
+  }) ?? product.image;
 
   const select = (patch: Partial<Selection>) => setSelection((current) => ({ ...current, ...patch }));
 

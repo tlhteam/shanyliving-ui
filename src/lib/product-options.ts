@@ -82,11 +82,41 @@ export function variantImage(product: StorefrontProduct | undefined, selection: 
       const matched = entries.filter(([name, value]) =>
         keys.some((key) => key.toLowerCase() === name.toLowerCase() && media.options[key] === value)
       );
+      const conflicts = entries.filter(([name, value]) =>
+        keys.some((key) => key.toLowerCase() === name.toLowerCase() && media.options[key] !== value)
+      );
 
-      return { image: media.image, score: matched.length, size: keys.length };
+      return { image: media.image, score: matched.length, conflicts: conflicts.length, size: keys.length };
     })
-    .filter((entry) => entry.score > 0)
-    .sort((a, b) => b.score - a.score || a.size - b.size);
+    .filter((entry) => entry.score > 0 && entry.conflicts === 0)
+    .sort((a, b) => b.score - a.score || b.size - a.size);
 
   return scored[0]?.image;
+}
+
+export function selectionImage(
+  product: StorefrontProduct | undefined,
+  selection: { size?: string; configuration?: string; fabric?: string; color?: string }
+) {
+  const matched = variantImage(product, {
+    Color: selection.color,
+    Fabric: selection.fabric,
+    Size: selection.size,
+    Configuration: selection.configuration
+  });
+
+  if (matched) {
+    return matched;
+  }
+
+  const byName = (group: string, label?: string) =>
+    label ? (optionChoices(product, group).find((choice) => choice.label === label)?.image ?? undefined) : undefined;
+
+  return (
+    byName("color", selection.color) ??
+    byName("configuration", selection.configuration) ??
+    byName("size", selection.size) ??
+    byName("fabric", selection.fabric) ??
+    product?.image
+  );
 }

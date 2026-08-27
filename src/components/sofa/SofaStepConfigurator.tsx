@@ -16,7 +16,7 @@ import { SofaLayeredPreview, metresFor, widthRatioFor } from "@/components/sofa/
 import { StickyContactBar } from "@/components/storefront/StickyContactBar";
 import { useCustomerMutation } from "@/hooks/use-customer";
 import { useOptionLabel } from "@/hooks/use-option-label";
-import { productColors, productConfigurations, productFabrics, productSizes, variantImage } from "@/lib/product-options";
+import { productColors, productConfigurations, productFabrics, productSizes, selectionImage } from "@/lib/product-options";
 import type { StorefrontProduct } from "@/lib/storefront-pages";
 import { buildSofaQuoteMessage, generateConfigId, whatsappHref } from "@/lib/whatsapp";
 import type { CustomerSavedDesign } from "@/types/customer";
@@ -95,10 +95,12 @@ export function SofaStepConfigurator({ sofaProducts }: { sofaProducts: Storefron
   const setFabric = (value: string) => setSelection((current) => ({ ...current, fabric: value }));
   const setColor = (value: string) => setSelection((current) => ({ ...current, color: value }));
 
-  const previewImage =
-    variantImage(product, { Color: color?.label, Fabric: fabric?.label, Size: size, Configuration: configuration }) ??
-    color?.image ??
-    product.image;
+  const previewImage = selectionImage(product, {
+    color: color?.label,
+    fabric: fabric?.label,
+    size,
+    configuration
+  }) ?? product.image;
 
   const sizeChoices = useMemo(() => sizes.filter((item) => item !== "Custom Size"), [sizes]);
 

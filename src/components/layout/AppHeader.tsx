@@ -6,18 +6,16 @@ import { useLocale, useTranslations } from "next-intl";
 import { useSession } from "next-auth/react";
 import { AnimatePresence, motion } from "motion/react";
 import { ChangeEvent, useEffect, useMemo, useRef, useState } from "react";
-import { AppMenu } from "@/components/app/AppMenu";
-import { Check, Heart, MapPin, MessageSquare, Search, User, X } from "lucide-react";
+import { Check, ChevronDown, Heart, MapPin, MessageSquare, Search, User, X } from "lucide-react";
 import { AppLogo } from "@/components/layout/AppLogo";
 import { LanguageSwitcher } from "@/components/layout/LanguageSwitcher";
-import { productCategoryHref } from "@/lib/categories";
+import { categoryHref, productCategoryHref } from "@/lib/categories";
 import { localizedProductName } from "@/lib/storefront-pages";
+import { useCatalogCategories } from "@/hooks/use-catalog-categories";
 import { useCatalogProducts } from "@/hooks/use-catalog-products";
 
 const navItems = [
-  { key: "home", href: "/#hero" },
-  { key: "categories", href: "/#categories" },
-  { key: "collections", href: "/#featured" },
+  { key: "collections", href: "/collections" },
   { key: "howItWorks", href: "/#journey" },
   { key: "about", href: "/#about" }
 ];
@@ -29,6 +27,7 @@ const announcementIcons = [Check, MessageSquare, MapPin, Check, MessageSquare] a
 export function AppHeader() {
   const t = useTranslations("header");
   const tDetail = useTranslations("storefront.detail");
+  const tCategories = useTranslations("categories");
   const locale = useLocale();
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchValue, setSearchValue] = useState("");
@@ -38,6 +37,14 @@ export function AppHeader() {
   const accountHref = status === "authenticated" ? "/customer" : "/login";
   const debouncedQuery = useMemo(() => debounce(setQuery, 220), []);
   const { products: catalogProducts } = useCatalogProducts();
+  const { categories } = useCatalogCategories();
+  const [categoriesOpen, setCategoriesOpen] = useState(false);
+  const categoriesRef = useRef<HTMLDivElement>(null);
+  const categoryLinks = categories.map((category) => ({
+    key: category.slug,
+    label: category.name || (tCategories.has(category.slug) ? tCategories(category.slug) : category.slug),
+    href: categoryHref(category.slug)
+  }));
   const announcements = (t.raw("announcements") as string[]).map((text, index) => ({
     text,
     icon: announcementIcons[index % announcementIcons.length]
@@ -61,6 +68,22 @@ export function AppHeader() {
   }));
 
   useEffect(() => () => debouncedQuery.cancel(), [debouncedQuery]);
+
+  useEffect(() => {
+    if (!categoriesOpen) {
+      return;
+    }
+
+    const close = (event: MouseEvent) => {
+      if (!categoriesRef.current?.contains(event.target as Node)) {
+        setCategoriesOpen(false);
+      }
+    };
+
+    document.addEventListener("pointerdown", close);
+
+    return () => document.removeEventListener("pointerdown", close);
+  }, [categoriesOpen]);
 
   useEffect(() => {
     if (searchOpen) {
@@ -102,7 +125,45 @@ export function AppHeader() {
       <div className="mx-auto flex min-h-18 max-w-7xl items-center justify-between gap-2 px-4 sm:min-h-20 sm:gap-4 sm:px-6 lg:px-8">
         <div className="flex items-center gap-4 sm:gap-6 xl:gap-7">
           <AppLogo className="shrink-0" />
-          <AppMenu items={menuItems} className="hidden gap-6 lg:flex xl:gap-7" />
+          <nav className="hidden items-center gap-6 lg:flex xl:gap-7">
+            {categoryLinks.length ? (
+              <div ref={categoriesRef} className="relative">
+                <button
+                  type="button"
+                  aria-expanded={categoriesOpen}
+                  aria-haspopup="true"
+                  onClick={() => setCategoriesOpen((open) => !open)}
+                  className="inline-flex items-center gap-1.5 text-sm font-bold text-neutral-800 transition hover:text-neutral-950 dark:text-neutral-200 dark:hover:text-white"
+                >
+                  {t("nav.categories")}
+                  <ChevronDown className={`size-3.5 transition ${categoriesOpen ? "rotate-180" : ""}`} />
+                </button>
+                {categoriesOpen ? (
+                  <div className="absolute top-full start-0 z-50 mt-3 w-56 overflow-hidden rounded-lg border border-neutral-200 bg-white py-1.5 shadow-[var(--shadow-elevation-2)] dark:border-white/15 dark:bg-neutral-950">
+                    {categoryLinks.map((category) => (
+                      <Link
+                        key={category.key}
+                        href={category.href}
+                        onClick={() => setCategoriesOpen(false)}
+                        className="block px-4 py-2.5 text-sm font-semibold transition hover:bg-neutral-100 dark:hover:bg-white/10"
+                      >
+                        {category.label}
+                      </Link>
+                    ))}
+                  </div>
+                ) : null}
+              </div>
+            ) : null}
+            {menuItems.map((item) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                className="text-sm font-bold text-neutral-800 transition hover:text-neutral-950 dark:text-neutral-200 dark:hover:text-white"
+              >
+                {item.label}
+              </Link>
+            ))}
+          </nav>
         </div>
         <div className="flex items-center gap-0.5 sm:gap-2">
           <div className="relative hidden items-center sm:flex">
@@ -146,6 +207,25 @@ export function AppHeader() {
           <LanguageSwitcher />
         </div>
       </div>
+
+      {categoryLinks.length ? (
+        <div className="border-t border-neutral-200 lg:hidden dark:border-white/10">
+          <div className="mx-auto flex max-w-7xl gap-2 overflow-x-auto px-4 py-2 [scrollbar-width:none] sm:px-6 [&::-webkit-scrollbar]:hidden">
+            {[...categoryLinks, ...menuItems.map((item) => ({ key: item.href, label: item.label, href: item.href }))].map(
+              (item) => (
+                <Link
+                  key={item.key}
+                  href={item.href}
+                  className="shrink-0 rounded-full border border-neutral-300 px-3.5 py-1.5 text-xs font-bold text-neutral-800 transition hover:border-neutral-950 hover:bg-neutral-950 hover:text-white dark:border-white/15 dark:text-neutral-200 dark:hover:border-white dark:hover:bg-white dark:hover:text-neutral-950"
+                >
+                  {item.label}
+                </Link>
+              )
+            )}
+          </div>
+        </div>
+      ) : null}
+
       <AnimatePresence>
         {searchOpen ? (
           <motion.div initial={{ opacity: 0, y: -12 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -12 }} transition={{ duration: 0.18 }} className="fixed inset-x-0 top-24 z-[70] border-t border-neutral-200 bg-white text-neutral-950 shadow-xl dark:border-white/10 dark:bg-neutral-950 dark:text-neutral-50 sm:top-28">
