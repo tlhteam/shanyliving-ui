@@ -5,9 +5,42 @@ import { useState } from "react";
 import { useTranslations } from "next-intl";
 import { AppButton } from "@/components/app/AppButton";
 import { AppSection } from "@/components/app/AppSection";
-import { SiteIcon } from "@/components/icons/SiteIcon";
 import { journeyPhases, journeySteps, journeyStepNumber } from "@/lib/journey";
 import { cn } from "@/lib/utils";
+import {
+  Award,
+  Check,
+  ChevronDown,
+  Image as ImageIcon,
+  LayoutGrid,
+  Lock,
+  Mail,
+  MessageSquare,
+  Move3d,
+  Palette,
+  Phone,
+  Ruler,
+  Search,
+  Sofa,
+  Sparkles,
+  type LucideIcon
+} from "lucide-react";
+
+const stepIcons: Record<string, LucideIcon> = {
+  grid: LayoutGrid,
+  search: Search,
+  sofa: Sofa,
+  "move-3d": Move3d,
+  ruler: Ruler,
+  palette: Palette,
+  check: Check,
+  image: ImageIcon,
+  message: MessageSquare,
+  phone: Phone,
+  mail: Mail,
+  lock: Lock,
+  award: Award
+};
 
 export function HomeJourney({ fromSocial = false }: { fromSocial?: boolean }) {
   const t = useTranslations("home.journey");
@@ -20,7 +53,7 @@ export function HomeJourney({ fromSocial = false }: { fromSocial?: boolean }) {
         {fromSocial ? (
           <div className="mb-8 rounded-xl border border-neutral-300 bg-white p-4 sm:p-6 dark:border-white/15 dark:bg-neutral-950">
             <span className="inline-flex items-center gap-2 rounded-full bg-neutral-950 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.16em] text-white dark:bg-white dark:text-neutral-950">
-              <SiteIcon name="sparkle" className="size-3.5" />
+              <Sparkles className="size-3.5" />
               {t("instagram.badge")}
             </span>
             <h2 className="mt-3 font-serif text-xl leading-tight sm:text-2xl">{t("instagram.title")}</h2>
@@ -58,21 +91,23 @@ export function HomeJourney({ fromSocial = false }: { fromSocial?: boolean }) {
                       {t("stepLabel", { number: journeyStepNumber(phase.steps[0].key), total })}
                     </span>
                   </span>
-                  <SiteIcon
-                    name="chevron-down"
+                  <ChevronDown
                     className={cn("size-4 shrink-0 text-neutral-500 transition lg:hidden", expanded && "rotate-180")}
                   />
                 </button>
 
                 <ol className={cn("px-4 pb-4 lg:block lg:px-5 lg:pb-5 lg:pt-4", expanded ? "block" : "hidden")}>
-                  {phase.steps.map((step, stepIndex) => (
+                  {phase.steps.map((step, stepIndex) => {
+                    const StepIcon = stepIcons[step.icon];
+
+                    return (
                     <li key={step.key} className="relative ps-11">
                       {stepIndex === phase.steps.length - 1 ? null : (
                         <span aria-hidden className="absolute start-4 top-9 bottom-0 w-px bg-neutral-200 dark:bg-white/10" />
                       )}
                       <Link href={step.href} className="group block py-2.5">
                         <span className="absolute start-0 top-2 grid size-8 place-items-center rounded-full border border-neutral-300 bg-white text-neutral-800 transition group-hover:border-neutral-950 group-hover:bg-neutral-950 group-hover:text-white dark:border-white/20 dark:bg-neutral-950 dark:text-neutral-100 dark:group-hover:bg-white dark:group-hover:text-neutral-950">
-                          <SiteIcon name={step.icon} className="size-4" />
+                          <StepIcon className="size-4" />
                         </span>
                         <span className="block text-[10px] font-bold uppercase tracking-[0.16em] text-neutral-400 dark:text-neutral-500">
                           {journeyStepNumber(step.key).toString().padStart(2, "0")}
@@ -81,7 +116,8 @@ export function HomeJourney({ fromSocial = false }: { fromSocial?: boolean }) {
                         <span className="mt-1 block text-xs leading-5 text-neutral-600 dark:text-neutral-400">{t(`steps.${step.key}.text`)}</span>
                       </Link>
                     </li>
-                  ))}
+                    );
+                  })}
                 </ol>
               </div>
             );

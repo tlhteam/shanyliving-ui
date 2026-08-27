@@ -9,8 +9,20 @@ import { AppCarousel } from "@/components/app/AppCarousel";
 import { AppImage } from "@/components/app/AppImage";
 import { AppSection } from "@/components/app/AppSection";
 import { HomeJourney } from "@/components/landing/HomeJourney";
-import { SiteIcon, SiteIconName } from "@/components/icons/SiteIcon";
 import { WhatsappIcon } from "@/components/icons/WhatsappIcon";
+import {
+  ArrowRight,
+  Check,
+  Gem,
+  Gift,
+  Image as ImageIcon,
+  Lock,
+  MapPin,
+  MessageSquare,
+  Palette,
+  Sofa,
+  Truck
+} from "lucide-react";
 import { ProductCard } from "@/components/storefront/ProductCard";
 import { Testimonials } from "@/components/storefront/Testimonials";
 import { categoryHref } from "@/lib/categories";
@@ -20,18 +32,18 @@ import { whatsappHref } from "@/lib/whatsapp";
 import type { HomeCatalog, CatalogCategory } from "@/lib/catalog";
 
 const clubPerks = [
-  { key: "offers", icon: "gift" },
-  { key: "arrivals", icon: "check" },
-  { key: "inspiration", icon: "image" }
+  { key: "offers", Icon: Gift },
+  { key: "arrivals", Icon: Check },
+  { key: "inspiration", Icon: ImageIcon }
 ];
 
 const features = [
-  { key: "craftsmanship", icon: "gem" },
-  { key: "delivery", icon: "truck" },
-  { key: "sizes", icon: "sofa" },
-  { key: "fabrics", icon: "palette" },
-  { key: "consultation", icon: "message" },
-  { key: "payments", icon: "lock" }
+  { key: "craftsmanship", Icon: Gem },
+  { key: "delivery", Icon: Truck },
+  { key: "sizes", Icon: Sofa },
+  { key: "fabrics", Icon: Palette },
+  { key: "consultation", Icon: MessageSquare },
+  { key: "payments", Icon: Lock }
 ];
 
 function CategoryTile({ category, index, circular = false }: { category: CatalogCategory; index: number; circular?: boolean }) {
@@ -140,7 +152,7 @@ export function HomeExperience({
         <div className="mb-7 flex flex-wrap items-end justify-between gap-3">
           <h2 className="font-serif text-2xl font-bold sm:text-3xl">{t("featured.title")}</h2>
           <Link href="/collections" className="inline-flex items-center gap-2 text-sm font-bold hover:underline">
-            {t("featured.viewAll")} <SiteIcon name="arrow-right" className="size-4 rtl:rotate-180" />
+            {t("featured.viewAll")} <ArrowRight className="size-4 rtl:rotate-180" />
           </Link>
         </div>
         <div className="hidden gap-5 sm:grid sm:grid-cols-2 lg:grid-cols-4">
@@ -172,7 +184,7 @@ export function HomeExperience({
           <div className="hidden lg:block" />
           <div className="text-center lg:text-end">
             <h2 className="font-serif text-3xl sm:text-4xl lg:text-5xl">{t("showroom.title")}</h2>
-            <p className="mt-5 flex items-center justify-center gap-2 text-sm lg:justify-end"><SiteIcon name="map-pin" className="size-4" /> <bdi>{t("showroom.address")}</bdi></p>
+            <p className="mt-5 flex items-center justify-center gap-2 text-sm lg:justify-end"><MapPin className="size-4" /> <bdi>{t("showroom.address")}</bdi></p>
             <p className="mt-4 text-sm leading-6 text-white/90"><bdi>{t("showroom.weekHours")}</bdi><br /><bdi>{t("showroom.weekendHours")}</bdi></p>
             <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:justify-center lg:justify-end">
               <Link href="/contact"><AppButton className="w-full sm:w-auto">{t("showroom.bookCta")}</AppButton></Link>
@@ -195,7 +207,7 @@ export function HomeExperience({
             <div className="mt-7 grid grid-cols-2 gap-5 sm:grid-cols-3">
               {features.map((feature) => (
                 <div key={feature.key} className="flex items-start gap-2.5">
-                  <SiteIcon name={feature.icon as SiteIconName} className="mt-0.5 size-5 shrink-0" />
+                  <feature.Icon className="mt-0.5 size-5 shrink-0" />
                   <div>
                     <p className="text-xs font-bold">{t(`features.${feature.key}.title`)}</p>
                     <p className="text-[11px] text-neutral-600 dark:text-neutral-400">{t(`features.${feature.key}.text`)}</p>
@@ -229,7 +241,7 @@ export function HomeExperience({
           </form>
           <div className="flex flex-wrap gap-4 text-xs sm:grid sm:grid-cols-3 sm:divide-x sm:divide-neutral-300 dark:sm:divide-white/15">
             {clubPerks.map((perk) => (
-              <span key={perk.key} className="flex items-center gap-2 sm:justify-center sm:px-3"><SiteIcon name={perk.icon as SiteIconName} className="size-5" /> {t(`club.perks.${perk.key}`)}</span>
+              <span key={perk.key} className="flex items-center gap-2 sm:justify-center sm:px-3"><perk.Icon className="size-5" /> {t(`club.perks.${perk.key}`)}</span>
             ))}
           </div>
         </AppSection>
