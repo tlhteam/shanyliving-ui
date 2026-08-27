@@ -1,8 +1,6 @@
-import type { SiteIconName } from "@/components/icons/SiteIcon";
-
 export type JourneyStep = {
   key: string;
-  icon: SiteIconName;
+  icon: string;
   href: string;
 };
 

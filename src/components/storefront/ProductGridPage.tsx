@@ -6,7 +6,7 @@ import { useTranslations } from "next-intl";
 import { AppButton } from "@/components/app/AppButton";
 import { AppImage } from "@/components/app/AppImage";
 import { AppSection } from "@/components/app/AppSection";
-import { SiteIcon } from "@/components/icons/SiteIcon";
+import { ChevronDown, X } from "lucide-react";
 import { ProductCard } from "@/components/storefront/ProductCard";
 import { isCustomOrderCategory } from "@/lib/custom-order";
 import { isUsableImagePath } from "@/lib/media";
@@ -302,7 +302,7 @@ export function ProductGridPage({ page, slug }: { page: StorefrontPage; slug?: s
                       <option key={option.value} value={option.value}>{t("filters." + option.key)}</option>
                     ))}
                   </select>
-                  <SiteIcon name="chevron-down" className="pointer-events-none absolute end-2.5 top-2.5 size-4 text-neutral-500" />
+                  <ChevronDown className="pointer-events-none absolute end-2.5 top-2.5 size-4 text-neutral-500" />
                 </div>
               </div>
             </div>
@@ -315,7 +315,7 @@ export function ProductGridPage({ page, slug }: { page: StorefrontPage; slug?: s
             </p>
             {hasFilters ? (
               <button type="button" onClick={clearFilters} className="inline-flex items-center gap-1.5 font-bold text-neutral-950 underline dark:text-white">
-                <SiteIcon name="x" className="size-3.5" /> {t("filters.clear")}
+                <X className="size-3.5" /> {t("filters.clear")}
               </button>
             ) : null}
           </div>

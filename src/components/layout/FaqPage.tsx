@@ -2,7 +2,7 @@ import Link from "next/link";
 import { getTranslations } from "next-intl/server";
 import { AppButton } from "@/components/app/AppButton";
 import { AppSection } from "@/components/app/AppSection";
-import { SiteIcon } from "@/components/icons/SiteIcon";
+import { ChevronDown } from "lucide-react";
 
 type FaqItem = {
   question: string;
@@ -34,7 +34,7 @@ export async function FaqPage() {
                   <details key={item.question} className="group px-4 py-3.5">
                     <summary className="flex cursor-pointer list-none items-start justify-between gap-3 text-sm font-bold marker:hidden">
                       {item.question}
-                      <SiteIcon name="chevron-down" className="mt-0.5 size-4 shrink-0 transition group-open:rotate-180" />
+                      <ChevronDown className="mt-0.5 size-4 shrink-0 transition group-open:rotate-180" />
                     </summary>
                     <p className="mt-2.5 text-sm leading-6 text-neutral-700 dark:text-neutral-300">{item.answer}</p>
                   </details>

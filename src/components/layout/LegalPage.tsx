@@ -1,6 +1,6 @@
 import { getTranslations } from "next-intl/server";
 import { AppSection } from "@/components/app/AppSection";
-import { SiteIcon } from "@/components/icons/SiteIcon";
+import { Shield } from "lucide-react";
 
 type LegalSection = {
   heading: string;
@@ -19,7 +19,7 @@ export async function LegalPage({ document }: { document: "privacy" | "terms" | 
         <p className="mt-4 text-sm leading-6 text-neutral-700 dark:text-neutral-300">{t(`${document}.intro`)}</p>
 
         <p className="mt-6 flex gap-3 rounded-lg border border-amber-200 bg-amber-50 p-4 text-xs leading-5 text-amber-900 dark:border-amber-400/30 dark:bg-amber-400/10 dark:text-amber-100">
-          <SiteIcon name="shield" className="mt-0.5 size-4 shrink-0" />
+          <Shield className="mt-0.5 size-4 shrink-0" />
           <span>{t("reviewNotice")}</span>
         </p>
 

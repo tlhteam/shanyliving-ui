@@ -3,8 +3,8 @@ import Link from "next/link";
 import { getTranslations } from "next-intl/server";
 import { AppImage } from "@/components/app/AppImage";
 import { InstagramIcon } from "@/components/icons/InstagramIcon";
-import { SiteIcon, SiteIconName } from "@/components/icons/SiteIcon";
 import { WhatsappIcon } from "@/components/icons/WhatsappIcon";
+import { Clock, Mail, MapPin, Phone } from "lucide-react";
 import { AppLogo } from "@/components/layout/AppLogo";
 import { paymentMethods, siteImages } from "@/lib/images";
 import { whatsappHref } from "@/lib/whatsapp";
@@ -29,12 +29,12 @@ const companyLinks = [
 ];
 
 const contactRows = [
-  { key: "address", icon: "map-pin" },
-  { key: "phone", icon: "phone" },
-  { key: "whatsapp", icon: "whatsapp" },
-  { key: "email", icon: "mail" },
-  { key: "weekHours", icon: "clock" },
-  { key: "weekendHours", icon: "clock" }
+  { key: "address", Icon: MapPin },
+  { key: "phone", Icon: Phone },
+  { key: "whatsapp", Icon: WhatsappIcon },
+  { key: "email", Icon: Mail },
+  { key: "weekHours", Icon: Clock },
+  { key: "weekendHours", Icon: Clock }
 ];
 
 export async function AppFooter() {
@@ -75,7 +75,7 @@ export async function AppFooter() {
           <h3 className="text-sm font-bold uppercase tracking-wide text-white">{t("contact")}</h3>
           <div className="mt-5 flex flex-col gap-3 text-sm">
             {contactRows.map((row) => {
-              const icon = row.icon === "whatsapp" ? <WhatsappIcon className="mt-0.5 size-4 shrink-0" /> : <SiteIcon name={row.icon as SiteIconName} className="mt-0.5 size-4" />;
+              const icon = <row.Icon className="mt-0.5 size-4 shrink-0" />;
               const href = contactRowHrefs[row.key];
 
               return href ? (

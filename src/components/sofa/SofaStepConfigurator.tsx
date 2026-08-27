@@ -10,7 +10,7 @@ import { AppButton } from "@/components/app/AppButton";
 import { AppDialog } from "@/components/app/AppDialog";
 import { AppImage } from "@/components/app/AppImage";
 import { SocialAuthButtons } from "@/components/auth/SocialAuthButtons";
-import { SiteIcon } from "@/components/icons/SiteIcon";
+import { Check, Heart, Layers, Phone, Upload } from "lucide-react";
 import { WhatsappIcon } from "@/components/icons/WhatsappIcon";
 import { StickyContactBar } from "@/components/storefront/StickyContactBar";
 import { useCustomerMutation } from "@/hooks/use-customer";
@@ -330,7 +330,7 @@ export function SofaStepConfigurator({ sofaProducts }: { sofaProducts: Storefron
             {aiGenerating ? (
               <div className="absolute inset-0 grid place-items-center bg-black/35 text-white">
                 <div className="rounded-lg bg-neutral-950/80 px-5 py-4 text-center shadow-xl">
-                  <SiteIcon name="fabric" className="mx-auto size-6 animate-pulse" />
+                  <Layers className="mx-auto size-6 animate-pulse" />
                   <p className="mt-2 text-sm font-bold">{t("room.generating")}</p>
                   <p className="mt-1 text-xs text-white/70">{t("room.generatingHint")}</p>
                 </div>
@@ -351,7 +351,7 @@ export function SofaStepConfigurator({ sofaProducts }: { sofaProducts: Storefron
         ) : (
           <label className="grid min-h-80 cursor-pointer place-items-center border border-dashed border-neutral-300 p-8 text-center transition hover:border-neutral-500 dark:border-white/15 lg:min-h-[420px]">
             <span>
-              <SiteIcon name="upload" className="mx-auto size-10" />
+              <Upload className="mx-auto size-10" />
               <span className="mt-3 block font-bold">{t("room.upload")}</span>
               <span className="mt-1 block text-xs text-neutral-500">{t("room.uploadHint")}</span>
             </span>
@@ -364,7 +364,7 @@ export function SofaStepConfigurator({ sofaProducts }: { sofaProducts: Storefron
     const tips = (
       <div className="space-y-3 text-sm">
         {(["light", "perspective", "clear"] as const).map((tip) => (
-          <p key={tip} className="flex items-center gap-2"><SiteIcon name="check" className="size-4 text-green-600" /> {t(`room.tips.${tip}`)}</p>
+          <p key={tip} className="flex items-center gap-2"><Check className="size-4 text-green-600" /> {t(`room.tips.${tip}`)}</p>
         ))}
       </div>
     );
@@ -378,7 +378,7 @@ export function SofaStepConfigurator({ sofaProducts }: { sofaProducts: Storefron
             </AppButton>
             <Link href={phoneHref} className="block">
               <AppButton variant="outline" className="w-full gap-2">
-                <SiteIcon name="phone" className="size-4" /> {t("callForPrice")}
+                <Phone className="size-4" /> {t("callForPrice")}
               </AppButton>
             </Link>
             <AppButton
@@ -506,10 +506,10 @@ export function SofaStepConfigurator({ sofaProducts }: { sofaProducts: Storefron
             </AppButton>
             <Link href={phoneHref} className="mt-3 block">
               <AppButton variant="outline" className="w-full gap-2">
-                <SiteIcon name="phone" className="size-4" /> {t("callForPrice")}
+                <Phone className="size-4" /> {t("callForPrice")}
               </AppButton>
             </Link>
-            <AppButton variant="outline" className="mt-3 w-full gap-2" loading={saveDesignMutation.isPending} onClick={saveDesign}><SiteIcon name="heart" className="size-4" /> {t("saveDesign")}</AppButton>
+            <AppButton variant="outline" className="mt-3 w-full gap-2" loading={saveDesignMutation.isPending} onClick={saveDesign}><Heart className="size-4" /> {t("saveDesign")}</AppButton>
             <AppButton variant="outline" className="mt-3 w-full" onClick={() => setRoomMode(true)}>{t("seeInRoom")}</AppButton>
           </section>
         ) : null}
@@ -609,10 +609,10 @@ export function SofaStepConfigurator({ sofaProducts }: { sofaProducts: Storefron
                   </AppButton>
                   <Link href={phoneHref} className="mt-3 block">
                     <AppButton variant="outline" className="w-full gap-2">
-                      <SiteIcon name="phone" className="size-4" /> {t("callForPrice")}
+                      <Phone className="size-4" /> {t("callForPrice")}
                     </AppButton>
                   </Link>
-                  <AppButton variant="outline" className="mt-3 w-full gap-2" loading={saveDesignMutation.isPending} onClick={saveDesign}><SiteIcon name="heart" className="size-4" /> {t("saveDesign")}</AppButton>
+                  <AppButton variant="outline" className="mt-3 w-full gap-2" loading={saveDesignMutation.isPending} onClick={saveDesign}><Heart className="size-4" /> {t("saveDesign")}</AppButton>
                   <AppButton variant="outline" className="mt-3 w-full" onClick={() => setRoomMode(true)}>{t("seeInRoom")}</AppButton>
                 </>
               )}

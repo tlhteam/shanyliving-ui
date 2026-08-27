@@ -2,7 +2,7 @@ import { notFound } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 import { AppCarousel } from "@/components/app/AppCarousel";
 import { AppSection } from "@/components/app/AppSection";
-import { SiteIcon, SiteIconName } from "@/components/icons/SiteIcon";
+import { Layers, Lock, Shield, Truck } from "lucide-react";
 import { ProductCard } from "@/components/storefront/ProductCard";
 import { ProductDetailHero } from "@/components/storefront/ProductDetailHero";
 import { Testimonials } from "@/components/storefront/Testimonials";
@@ -18,10 +18,10 @@ type ProductDetailPageProps = {
 };
 
 const benefits = [
-  { key: "quality", icon: "shield" },
-  { key: "custom", icon: "fabric" },
-  { key: "delivery", icon: "truck" },
-  { key: "payments", icon: "lock" }
+  { key: "quality", Icon: Shield },
+  { key: "custom", Icon: Layers },
+  { key: "delivery", Icon: Truck },
+  { key: "payments", Icon: Lock }
 ];
 
 export default async function ProductDetailPage({ params }: ProductDetailPageProps) {
@@ -53,7 +53,7 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
         <div className="mx-auto grid max-w-7xl grid-cols-2 gap-4 px-4 py-6 sm:px-6 lg:grid-cols-4 lg:px-8">
           {benefits.map((benefit) => (
             <div key={benefit.key} className="flex items-center gap-3">
-              <SiteIcon name={benefit.icon as SiteIconName} className="size-6 shrink-0 sm:size-7" />
+              <benefit.Icon className="size-6 shrink-0 sm:size-7" />
               <div className="min-w-0">
                 <p className="text-xs font-bold leading-tight">{benefitCopy(`${benefit.key}.title`)}</p>
                 <p className="text-[11px] text-neutral-600 dark:text-neutral-400">{benefitCopy(`${benefit.key}.text`)}</p>

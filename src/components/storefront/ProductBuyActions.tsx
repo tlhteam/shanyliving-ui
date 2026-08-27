@@ -3,8 +3,8 @@
 import Link from "next/link";
 import { useLocale, useTranslations } from "next-intl";
 import { AppButton } from "@/components/app/AppButton";
-import { SiteIcon } from "@/components/icons/SiteIcon";
 import { WhatsappIcon } from "@/components/icons/WhatsappIcon";
+import { ArrowRight, Sparkles } from "lucide-react";
 import { isCustomOrderCategory } from "@/lib/custom-order";
 import { localizedProductName } from "@/lib/storefront-pages";
 import { buildProductQuoteMessage, whatsappHref } from "@/lib/whatsapp";
@@ -18,7 +18,7 @@ export function ProductBuyActions({ product, compact = false }: { product: Store
     return (
       <Link href={`/sofas/${product.slug}`} className="block">
         <AppButton size={compact ? "sm" : "md"} className="w-full gap-2">
-          <SiteIcon name="sparkle" className="size-4" />
+          <Sparkles className="size-4" />
           {t("viewCustomize")}
         </AppButton>
       </Link>
@@ -49,7 +49,7 @@ export function ProductBuyActions({ product, compact = false }: { product: Store
           title={t("viewDetails")}
           className="grid h-9 place-items-center rounded-md border border-neutral-300 transition hover:bg-neutral-100 dark:border-white/15 dark:hover:bg-white/10"
         >
-          <SiteIcon name="arrow-right" className="size-4 rtl:rotate-180" />
+          <ArrowRight className="size-4 rtl:rotate-180" />
         </Link>
       </div>
     );
@@ -65,7 +65,7 @@ export function ProductBuyActions({ product, compact = false }: { product: Store
       </Link>
       <Link href={`/sofas/${product.slug}`} className="block">
         <AppButton variant="outline" className="w-full gap-2">
-          <SiteIcon name="arrow-right" className="size-4 rtl:rotate-180" />
+          <ArrowRight className="size-4 rtl:rotate-180" />
           {t("viewDetails")}
         </AppButton>
       </Link>

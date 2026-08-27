@@ -6,7 +6,7 @@ import { useLocale, useTranslations } from "next-intl";
 import { AppButton } from "@/components/app/AppButton";
 import { AppCarousel } from "@/components/app/AppCarousel";
 import { AppImage } from "@/components/app/AppImage";
-import { SiteIcon } from "@/components/icons/SiteIcon";
+import { ChevronDown, ChevronLeft, ChevronRight, Sparkles, Truck } from "lucide-react";
 import { WhatsappIcon } from "@/components/icons/WhatsappIcon";
 import { StickyContactBar } from "@/components/storefront/StickyContactBar";
 import { useOptionLabel } from "@/hooks/use-option-label";
@@ -215,10 +215,7 @@ export function ProductDetailHero({ product, images }: ProductDetailHeroProps) {
                 }
                 className="absolute start-3 top-1/2 grid -translate-y-1/2 place-items-center rounded-full border border-neutral-200 bg-white/90 p-2.5 shadow-[var(--shadow-elevation-2)] transition hover:bg-white dark:border-white/15 dark:bg-neutral-900/90 dark:hover:bg-neutral-900"
               >
-                <SiteIcon
-                  name="chevron-left"
-                  className="size-4 rtl:rotate-180"
-                />
+                <ChevronLeft className="size-4 rtl:rotate-180" />
               </button>
               <button
                 type="button"
@@ -228,10 +225,7 @@ export function ProductDetailHero({ product, images }: ProductDetailHeroProps) {
                 }
                 className="absolute end-3 top-1/2 grid -translate-y-1/2 place-items-center rounded-full border border-neutral-200 bg-white/90 p-2.5 shadow-[var(--shadow-elevation-2)] transition hover:bg-white dark:border-white/15 dark:bg-neutral-900/90 dark:hover:bg-neutral-900"
               >
-                <SiteIcon
-                  name="chevron-right"
-                  className="size-4 rtl:rotate-180"
-                />
+                <ChevronRight className="size-4 rtl:rotate-180" />
               </button>
               <span className="absolute bottom-3 end-3 rounded-full bg-black/60 px-2.5 py-1 text-[11px] font-bold text-white">
                 {activeImage + 1} / {images.length}
@@ -280,11 +274,11 @@ export function ProductDetailHero({ product, images }: ProductDetailHeroProps) {
       >
         <nav className="mb-4 flex flex-wrap items-center gap-2 text-xs font-bold text-neutral-600 sm:mb-6 dark:text-neutral-400">
           <Link href="/">{t("home")}</Link>
-          <SiteIcon name="chevron-right" className="size-3 rtl:rotate-180" />
+          <ChevronRight className="size-3 rtl:rotate-180" />
           <Link href={productCategoryHref[product.category] ?? "/sofas"}>
             {t(`collectionLabels.${product.category}`)}
           </Link>
-          <SiteIcon name="chevron-right" className="size-3 rtl:rotate-180" />
+          <ChevronRight className="size-3 rtl:rotate-180" />
           <span className="text-neutral-950 dark:text-neutral-50">{name}</span>
         </nav>
 
@@ -300,7 +294,7 @@ export function ProductDetailHero({ product, images }: ProductDetailHeroProps) {
 
         {isCustomOrder ? (
           <p className="mt-4 inline-flex items-center gap-2 text-xs font-bold text-neutral-700 dark:text-neutral-300">
-            <SiteIcon name="truck" className="size-4 shrink-0" />
+            <Truck className="size-4 shrink-0" />
             {t("deliveryEstimate")}
           </p>
         ) : null}
@@ -395,10 +389,7 @@ export function ProductDetailHero({ product, images }: ProductDetailHeroProps) {
             <details key={item.key} className="group py-3.5">
               <summary className="flex cursor-pointer list-none items-center justify-between gap-3 font-bold marker:hidden">
                 {item.label}
-                <SiteIcon
-                  name="chevron-down"
-                  className="size-4 shrink-0 transition group-open:rotate-180"
-                />
+                <ChevronDown className="size-4 shrink-0 transition group-open:rotate-180" />
               </summary>
               <p className="mt-2.5 leading-6 text-neutral-700 dark:text-neutral-300">
                 {item.content}
@@ -427,7 +418,7 @@ export function ProductDetailHero({ product, images }: ProductDetailHeroProps) {
               className="block sm:min-w-40 sm:flex-1"
             >
               <AppButton variant="outline" className="w-full gap-2">
-                <SiteIcon name="sparkle" className="size-4" />
+                <Sparkles className="size-4" />
                 {t("seeInRoom")}
               </AppButton>
             </Link>

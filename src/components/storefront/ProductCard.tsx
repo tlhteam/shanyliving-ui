@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useLocale, useTranslations } from "next-intl";
 import { AppImage } from "@/components/app/AppImage";
-import { SiteIcon } from "@/components/icons/SiteIcon";
+import { Heart, MessageSquare, Plus } from "lucide-react";
 import { ProductBuyActions } from "@/components/storefront/ProductBuyActions";
 import { isCustomOrderCategory } from "@/lib/custom-order";
 import { formatMoney } from "@/lib/format";
@@ -58,7 +58,7 @@ export function ProductCard({ product, className }: { product: StorefrontProduct
           aria-label={t("wishlist", { name })}
           className="absolute end-3 top-3 grid size-8 place-items-center rounded-full bg-white/80 text-neutral-900 shadow-[var(--shadow-elevation-1)] transition group-hover:bg-white"
         >
-          <SiteIcon name="heart" className="size-4" />
+          <Heart className="size-4" />
         </span>
       </Link>
       <div className="flex flex-1 flex-col p-2 pt-4 sm:p-3 sm:pt-5">
@@ -79,7 +79,7 @@ export function ProductCard({ product, className }: { product: StorefrontProduct
             />
           ))}
           <span className="grid size-4 place-items-center rounded-full border border-neutral-300 text-neutral-500 dark:border-white/30 dark:text-neutral-300">
-            <SiteIcon name="plus" className="size-3" />
+            <Plus className="size-3" />
           </span>
         </div>
         <div className="mt-auto pt-5">
@@ -91,7 +91,7 @@ export function ProductCard({ product, className }: { product: StorefrontProduct
           rel="noreferrer noopener"
           className="mt-3 inline-flex items-center gap-2 text-xs font-bold text-neutral-600 transition hover:text-neutral-950 dark:text-neutral-400 dark:hover:text-white"
         >
-          <SiteIcon name="message" className="size-3.5" />
+          <MessageSquare className="size-3.5" />
           {t("ask")}
         </Link>
       </div>

@@ -2,7 +2,7 @@
 
 import { useTranslations } from "next-intl";
 import { AppSection } from "@/components/app/AppSection";
-import { SiteIcon } from "@/components/icons/SiteIcon";
+import { Star } from "lucide-react";
 import { testimonials } from "@/lib/testimonials";
 
 export function Testimonials({ className }: { className?: string }) {
@@ -19,10 +19,9 @@ export function Testimonials({ className }: { className?: string }) {
           <div key={index} className="rounded-lg border border-neutral-200 bg-white p-5 dark:border-white/10 dark:bg-neutral-900">
             <div className="flex gap-0.5">
               {Array.from({ length: 5 }).map((_, star) => (
-                <SiteIcon
+                <Star
                   key={star}
-                  name="star"
-                  className={star < item.rating ? "size-4 text-amber-500" : "size-4 text-neutral-300 dark:text-neutral-700"}
+                  className={star < item.rating ? "size-4 fill-amber-500 text-amber-500" : "size-4 text-neutral-300 dark:text-neutral-700"}
                 />
               ))}
             </div>

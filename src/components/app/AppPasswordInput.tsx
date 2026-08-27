@@ -2,7 +2,7 @@
 
 import { InputHTMLAttributes, forwardRef, useState } from "react";
 import { useTranslations } from "next-intl";
-import { SiteIcon } from "@/components/icons/SiteIcon";
+import { Eye, EyeOff } from "lucide-react";
 
 export type AppPasswordInputProps = InputHTMLAttributes<HTMLInputElement>;
 
@@ -26,7 +26,7 @@ export const AppPasswordInput = forwardRef<HTMLInputElement, AppPasswordInputPro
           aria-label={visible ? t("hidePassword") : t("showPassword")}
           className="absolute inset-y-0 end-0 grid w-11 place-items-center text-neutral-500 transition hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-neutral-50"
         >
-          <SiteIcon name={visible ? "eye-off" : "eye"} className="size-4" />
+          {visible ? <EyeOff className="size-4" /> : <Eye className="size-4" />}
         </button>
       </div>
     );

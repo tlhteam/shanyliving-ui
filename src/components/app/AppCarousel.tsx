@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useTranslations } from "next-intl";
-import { SiteIcon } from "@/components/icons/SiteIcon";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 type AppCarouselProps = {
@@ -100,7 +100,7 @@ export function AppCarousel({
             onClick={() => scrollBy(-1)}
             className="absolute start-0 top-1/2 hidden -translate-y-1/2 place-items-center rounded-full border border-neutral-200 bg-white/90 p-2 shadow-[var(--shadow-elevation-2)] transition hover:bg-white sm:grid dark:border-white/15 dark:bg-neutral-900/90 dark:hover:bg-neutral-900"
           >
-            <SiteIcon name="chevron-left" className="size-4 rtl:rotate-180" />
+            <ChevronLeft className="size-4 rtl:rotate-180" />
           </button>
           <button
             type="button"
@@ -108,7 +108,7 @@ export function AppCarousel({
             onClick={() => scrollBy(1)}
             className="absolute end-0 top-1/2 hidden -translate-y-1/2 place-items-center rounded-full border border-neutral-200 bg-white/90 p-2 shadow-[var(--shadow-elevation-2)] transition hover:bg-white sm:grid dark:border-white/15 dark:bg-neutral-900/90 dark:hover:bg-neutral-900"
           >
-            <SiteIcon name="chevron-right" className="size-4 rtl:rotate-180" />
+            <ChevronRight className="size-4 rtl:rotate-180" />
           </button>
         </>
       ) : null}

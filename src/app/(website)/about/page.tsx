@@ -3,14 +3,14 @@ import { getTranslations } from "next-intl/server";
 import { AppButton } from "@/components/app/AppButton";
 import { AppImage } from "@/components/app/AppImage";
 import { AppSection } from "@/components/app/AppSection";
-import { SiteIcon, SiteIconName } from "@/components/icons/SiteIcon";
+import { Award, Palette, Ruler, Sofa } from "lucide-react";
 import { looks, siteImages } from "@/lib/images";
 
 const values = [
-  { key: "measure", icon: "ruler" },
-  { key: "fabrics", icon: "palette" },
-  { key: "durability", icon: "award" },
-  { key: "service", icon: "sofa" }
+  { key: "measure", Icon: Ruler },
+  { key: "fabrics", Icon: Palette },
+  { key: "durability", Icon: Award },
+  { key: "service", Icon: Sofa }
 ];
 
 export default async function AboutPage() {
@@ -50,7 +50,7 @@ export default async function AboutPage() {
           <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
             {values.map((value) => (
               <div key={value.key} className="rounded-lg bg-white p-6 text-neutral-950 shadow-sm dark:bg-neutral-950 dark:text-neutral-50">
-                <SiteIcon name={value.icon as SiteIconName} className="size-8" />
+                <value.Icon className="size-8" />
                 <h3 className="mt-5 font-bold">{t(`values.${value.key}.title`)}</h3>
                 <p className="mt-2 text-sm leading-6 text-neutral-600 dark:text-neutral-400">{t(`values.${value.key}.text`)}</p>
               </div>

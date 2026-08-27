@@ -4,15 +4,15 @@ import { whatsappHref } from "@/lib/whatsapp";
 import { AppButton } from "@/components/app/AppButton";
 import { AppImage } from "@/components/app/AppImage";
 import { AppSection } from "@/components/app/AppSection";
-import { SiteIcon, SiteIconName } from "@/components/icons/SiteIcon";
 import { WhatsappIcon } from "@/components/icons/WhatsappIcon";
+import { Clock, Mail, MapPin, Phone } from "lucide-react";
 import { siteImages } from "@/lib/images";
 
 const details = [
-  { key: "showroom", icon: "map-pin" },
-  { key: "phone", icon: "phone" },
-  { key: "email", icon: "mail" },
-  { key: "hours", icon: "clock" }
+  { key: "showroom", Icon: MapPin },
+  { key: "phone", Icon: Phone },
+  { key: "email", Icon: Mail },
+  { key: "hours", Icon: Clock }
 ];
 
 export default async function ContactPage() {
@@ -58,7 +58,7 @@ export default async function ContactPage() {
               return (
                 <div key={detail.key} className="flex items-start gap-4">
                   <span className="grid size-10 shrink-0 place-items-center rounded-full bg-neutral-100 text-neutral-950 dark:bg-white/10 dark:text-neutral-50">
-                    <SiteIcon name={detail.icon as SiteIconName} className="size-5" />
+                    <detail.Icon className="size-5" />
                   </span>
                   {href ? (
                     <a href={href} className="transition hover:text-neutral-600 dark:hover:text-neutral-300">
@@ -77,7 +77,7 @@ export default async function ContactPage() {
             </Link>
             <Link href={phoneHref} className="block">
               <AppButton variant="outline" className="w-full gap-2 sm:w-auto">
-                <SiteIcon name="phone" className="size-4" /> {t("callCta")}
+                <Phone className="size-4" /> {t("callCta")}
               </AppButton>
             </Link>
             <Link href="/collections"><AppButton variant="outline" className="w-full sm:w-auto">{t("browseCta")}</AppButton></Link>

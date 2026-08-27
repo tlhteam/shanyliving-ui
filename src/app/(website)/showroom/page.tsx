@@ -4,22 +4,22 @@ import { whatsappHref } from "@/lib/whatsapp";
 import { AppButton } from "@/components/app/AppButton";
 import { AppImage } from "@/components/app/AppImage";
 import { AppSection } from "@/components/app/AppSection";
-import { SiteIcon, SiteIconName } from "@/components/icons/SiteIcon";
+import { Check, MapPin, MessageSquare, Palette, Ruler, Sofa, Truck, Users } from "lucide-react";
 
 const stats = [
-  { key: "years", value: "15+", icon: "check" },
-  { key: "sofas", value: "500+", icon: "sofa" },
-  { key: "fabrics", value: "120+", icon: "palette" },
-  { key: "consultation", value: "1:1", icon: "users" }
+  { key: "years", value: "15+", Icon: Check },
+  { key: "sofas", value: "500+", Icon: Sofa },
+  { key: "fabrics", value: "120+", Icon: Palette },
+  { key: "consultation", value: "1:1", Icon: Users }
 ];
 
 const reasons = ["fabrics", "sofas", "design", "custom"];
 
 const services = [
-  { key: "consultation", icon: "users" },
-  { key: "fabric", icon: "palette" },
-  { key: "size", icon: "ruler" },
-  { key: "delivery", icon: "truck" }
+  { key: "consultation", Icon: Users },
+  { key: "fabric", Icon: Palette },
+  { key: "size", Icon: Ruler },
+  { key: "delivery", Icon: Truck }
 ];
 
 const gallery = [
@@ -44,7 +44,7 @@ export default async function ShowroomPage() {
           <p className="mt-4 max-w-xl text-sm leading-6 text-white/90">{t("subtitle")}</p>
           <div className="mt-6 flex flex-col gap-3 sm:flex-row">
             <Link href={whatsappHref(common("whatsappShowroomMessage"))} target="_blank" rel="noreferrer noopener" className="block">
-              <AppButton className="w-full gap-2 sm:w-auto"><SiteIcon name="message" className="size-4" /> {t("whatsapp")}</AppButton>
+              <AppButton className="w-full gap-2 sm:w-auto"><MessageSquare className="size-4" /> {t("whatsapp")}</AppButton>
             </Link>
             <Link href="#book" className="block">
               <AppButton variant="outline" className="w-full border-white bg-white/10 text-white hover:bg-white hover:text-neutral-950 sm:w-auto">{t("book")}</AppButton>
@@ -57,7 +57,7 @@ export default async function ShowroomPage() {
         <div className="mx-auto grid max-w-7xl grid-cols-2 gap-4 px-4 py-7 sm:px-6 lg:grid-cols-4 lg:px-8">
           {stats.map((stat) => (
             <div key={stat.key} className="flex items-center gap-3">
-              <SiteIcon name={stat.icon as SiteIconName} className="size-7 shrink-0 sm:size-8" />
+              <stat.Icon className="size-7 shrink-0 sm:size-8" />
               <div className="min-w-0">
                 <p className="font-serif text-xl font-bold sm:text-2xl">{stat.value}</p>
                 <p className="text-xs font-bold text-neutral-600 dark:text-neutral-400">{t(`statsLabels.${stat.key}`)}</p>
@@ -94,7 +94,7 @@ export default async function ShowroomPage() {
           <div>
             <h2 className="font-serif text-xl font-bold sm:text-2xl">{t("bookTitle")}</h2>
             <div className="mt-5 space-y-3 text-sm text-neutral-700 dark:text-neutral-300">
-              <p className="flex gap-2"><SiteIcon name="map-pin" className="size-4 shrink-0" /> <bdi>{contact("showroom.value")}</bdi></p>
+              <p className="flex gap-2"><MapPin className="size-4 shrink-0" /> <bdi>{contact("showroom.value")}</bdi></p>
               <p><bdi>{contact("phone.value")}</bdi></p>
               <p><bdi>{contact("email.value")}</bdi></p>
               <p><bdi>{contact("hours.value")}</bdi></p>
@@ -122,7 +122,7 @@ export default async function ShowroomPage() {
         <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {services.map((service) => (
             <div key={service.key} className="rounded-lg border border-neutral-200 bg-white p-5 text-neutral-950 dark:border-white/10 dark:bg-neutral-900 dark:text-neutral-50">
-              <SiteIcon name={service.icon as SiteIconName} className="size-7" />
+              <service.Icon className="size-7" />
               <h3 className="mt-4 font-bold">{t(`services.${service.key}.title`)}</h3>
               <p className="mt-2 text-sm leading-6 text-neutral-700 dark:text-neutral-300">{t(`services.${service.key}.text`)}</p>
             </div>
