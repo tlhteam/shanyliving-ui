@@ -249,12 +249,15 @@ export function HomeExperience({
 
       <Link
         aria-label={t("whatsappFloating")}
+        title={t("whatsappFloating")}
         href={whatsappLink}
         target="_blank"
-        className="fixed bottom-20 end-4 z-40 inline-flex items-center gap-2 whitespace-nowrap rounded-full bg-whatsapp-brand px-4 py-3 text-xs font-bold text-white shadow-lg transition hover:scale-105 sm:bottom-6 sm:end-6 sm:text-sm"
+        className="group fixed bottom-20 end-4 z-40 inline-flex items-center gap-0 whitespace-nowrap rounded-full bg-whatsapp-brand p-3.5 text-xs font-bold text-white shadow-lg transition-all duration-300 hover:gap-2 hover:ps-4 hover:pe-5 focus-visible:gap-2 focus-visible:ps-4 focus-visible:pe-5 sm:bottom-6 sm:end-6 sm:text-sm"
       >
         <WhatsappIcon className="size-6 shrink-0 sm:size-7" />
-        {t("whatsappFloating")}
+        <span className="max-w-0 overflow-hidden opacity-0 transition-all duration-300 group-hover:max-w-60 group-hover:opacity-100 group-focus-visible:max-w-60 group-focus-visible:opacity-100">
+          {t("whatsappFloating")}
+        </span>
       </Link>
     </>
   );

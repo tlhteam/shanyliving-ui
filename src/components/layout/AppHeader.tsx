@@ -178,17 +178,17 @@ export function AppHeader() {
           </nav>
         </div>
         <div className="flex items-center gap-0.5 sm:gap-2">
-          <div className="relative hidden items-center sm:flex">
-            <Search className="pointer-events-none absolute start-3 size-4 text-neutral-500 dark:text-neutral-300" />
-            <input
-              value={searchValue}
-              onChange={handleSearch}
-              onFocus={() => setSearchOpen(true)}
-              placeholder={t("explorePlaceholder")}
+          {searchOpen ? null : (
+            <button
+              type="button"
               aria-label={t("search")}
-              className="h-9 w-32 rounded-full border border-neutral-300 bg-neutral-50 ps-9 pe-3 text-sm text-neutral-950 outline-none placeholder:text-neutral-400 focus:border-neutral-900 dark:border-white/15 dark:bg-neutral-900 dark:text-neutral-50 dark:placeholder:text-neutral-500 dark:focus:border-white lg:w-44"
-            />
-          </div>
+              onClick={() => setSearchOpen(true)}
+              className="relative hidden h-9 w-32 items-center rounded-full border border-neutral-300 bg-neutral-50 ps-9 pe-3 text-start text-sm text-neutral-400 transition hover:border-neutral-900 sm:flex lg:w-44 dark:border-white/15 dark:bg-neutral-900 dark:text-neutral-500 dark:hover:border-white"
+            >
+              <Search className="pointer-events-none absolute start-3 size-4 text-neutral-500 dark:text-neutral-300" />
+              {t("explorePlaceholder")}
+            </button>
+          )}
           <button
             type="button"
             aria-label={t("search")}
