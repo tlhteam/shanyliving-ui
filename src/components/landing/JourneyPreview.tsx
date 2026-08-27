@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useMemo, useState } from "react";
 import { useTranslations } from "next-intl";
 import { AppButton } from "@/components/app/AppButton";
-import { SofaLayeredPreview, widthRatioFor } from "@/components/sofa/SofaLayeredPreview";
+import { SofaLayeredPreview, metresFor, widthRatioFor } from "@/components/sofa/SofaLayeredPreview";
 import { useOptionLabel } from "@/hooks/use-option-label";
 import { productColors, productConfigurations, productFabrics, productSizes, variantImage } from "@/lib/product-options";
 import { cn } from "@/lib/utils";
@@ -91,6 +91,8 @@ export function JourneyPreview({ product }: { product: StorefrontProduct }) {
           colorLabel={color?.label}
           sizeLabel={size}
           widthRatio={widthRatioFor(size, sizes)}
+          widthMetres={metresFor(size)}
+          vector
           mirrored={configurations.indexOf(configuration) > 0}
           compact
         />

@@ -12,7 +12,7 @@ import { AppImage } from "@/components/app/AppImage";
 import { SocialAuthButtons } from "@/components/auth/SocialAuthButtons";
 import { Check, Heart, Layers, Phone, Upload } from "lucide-react";
 import { WhatsappIcon } from "@/components/icons/WhatsappIcon";
-import { SofaLayeredPreview, widthRatioFor } from "@/components/sofa/SofaLayeredPreview";
+import { SofaLayeredPreview, metresFor, widthRatioFor } from "@/components/sofa/SofaLayeredPreview";
 import { StickyContactBar } from "@/components/storefront/StickyContactBar";
 import { useCustomerMutation } from "@/hooks/use-customer";
 import { useOptionLabel } from "@/hooks/use-option-label";
@@ -112,6 +112,8 @@ export function SofaStepConfigurator({ sofaProducts }: { sofaProducts: Storefron
       colorLabel={color?.label}
       sizeLabel={size === "Custom Size" ? null : size}
       widthRatio={widthRatioFor(size, sizeChoices)}
+      widthMetres={metresFor(size)}
+      vector
       mirrored={configurations.indexOf(configuration) > 0}
       compact={compact}
       className={className}

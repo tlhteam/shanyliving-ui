@@ -2010,6 +2010,8 @@
     "customSizeLabel": "Indiquez vos mesures",
     "customSizePlaceholder": "ex. 350 x 110 cm, ou decrivez votre espace",
     "customSizeHint": "Vous ne connaissez pas les mesures exactes ? Laissez une note et un conseiller Shany Living vous aidera.",
-    "previewWidth": "Largeur {size}"
+    "previewWidth": "Largeur {size}",
+    "previewDrawing": "Dessin",
+    "previewPhoto": "Photo"
   }
 }

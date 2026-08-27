@@ -2010,6 +2010,8 @@
     "customSizeLabel": "ספרו לנו את המידות",
     "customSizePlaceholder": "לדוגמה 350 x 110 ס״מ, או תארו את החלל",
     "customSizeHint": "לא בטוחים במידות המדויקות? השאירו הערה ויועץ של שני ליווינג יעזור לכם לדייק.",
-    "previewWidth": "רוחב {size}"
+    "previewWidth": "רוחב {size}",
+    "previewDrawing": "שרטוט",
+    "previewPhoto": "תמונה"
   }
 }
