@@ -67,6 +67,8 @@ function apiImagePatterns() {
 }
 
 const nextConfig: NextConfig = {
+  distDir: process.env.NEXT_BUILD_DIR || ".next",
+
   turbopack: {
     root: process.cwd(),
   },
