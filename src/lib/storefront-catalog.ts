@@ -95,7 +95,7 @@ export function mapCatalogProduct(
         : fallback?.badge,
     description: product.description ?? fallback?.description,
     seatRange: product.seat_range ?? fallback?.seatRange,
-    dimensions: fallback?.dimensions,
+    dimensions: product.dimensions ?? fallback?.dimensions,
     variants:
       fabricGroup?.values.map((value) => value.label) ?? fallback?.variants,
     colors:

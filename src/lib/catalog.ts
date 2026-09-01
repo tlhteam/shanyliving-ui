@@ -114,6 +114,14 @@ export type CatalogProduct = {
   is_best_seller?: boolean;
   is_customizable?: boolean;
   seat_range?: string;
+  short_description?: string | null;
+  highlights?: string[];
+  style?: string | null;
+  upholstery?: string | null;
+  legs?: string | null;
+  dimensions?: string | null;
+  configuration_note?: string | null;
+  is_made_to_measure?: boolean;
   colors?: string[];
   image?: string | null;
   image_url?: string | null;
